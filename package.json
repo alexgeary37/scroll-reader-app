@@ -8,7 +8,7 @@
     "server": "nodemon",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npx nodemon start\" \"npm run client\"",
-    "build": "npm run build --prefix client"
+    "build": "npm install && cd client && npm run prebuild && npm run build"
   },
   "author": "",
   "license": "ISC",

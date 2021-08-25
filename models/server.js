@@ -27,7 +27,6 @@ class Server {
     this.app.use(express.static(path.join(__dirname, "../client/build")));
   }
 
-  // Bind controllers to routes
   routes() {
     this.app.post("/addReadingSession", async (req, res) => {
       const newSession = req.body;
