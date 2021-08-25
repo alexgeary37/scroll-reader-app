@@ -1,38 +1,35 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.wrapper {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-between;
 }
 
-.App-link {
-  color: #61dafb;
+/* 'padding' is to allow space for the top menu.
+'minHeight' is screenheight - 200 because PageFooter is 200 */
+.page {
+  min-height: calc(100vh - 75px);
+  margin-top: 40px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.h1-sui {
+  margin-top: 3em;
+}
+
+.h2-sui {
+  margin: 4em 0em 2em;
+}
+
+.h3-sui {
+  margin-top: 2em;
+  padding: 2em 0em;
+}
+
+.last-sui {
+  margin-bottom: 300px;
+}
+
+.button-ui {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
 }

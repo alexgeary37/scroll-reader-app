@@ -7,7 +7,7 @@
     "start": "node app",
     "server": "nodemon",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently \"npx nodemon start\" \"npm run client\"",
     "build": "npm run build --prefix client"
   },
   "author": "",
@@ -17,9 +17,12 @@
     "cross-fetch": "^3.1.4",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-validator": "^6.10.0"
+    "express-validator": "^6.10.0",
+    "mongodb": "^4.1.0",
+    "mongoose": "^5.13.7"
   },
   "devDependencies": {
-    "concurrently": "^6.0.2"
+    "concurrently": "^6.0.2",
+    "nodemon": "^2.0.12"
   }
 }
