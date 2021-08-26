@@ -24,8 +24,8 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
         });
         setSessionOptions(options);
       })
-      .catch(() => {
-        console.log("Error fetching ReadingSessions");
+      .catch((error) => {
+        console.log("Error fetching ReadingSessions", error);
       });
   }
 
