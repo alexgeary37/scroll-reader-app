@@ -8,9 +8,8 @@ export const SessionProvider = ({ children }) => {
   const [inProgress, setInProgress] = useState(
     JSON.parse(localStorage.getItem("inProgress"))
   );
-  const [name, setName] = useState(
-    localStorage.getItem("name")
-  );
+  const [name, setName] = useState(localStorage.getItem("name"));
+  const [sessionID, setSessionID] = useState(localStorage.getItem("sessionID"));
 
   // If this is the first time the page has been loaded, set the initial value
   // of 'inProgress' to false. This will then cause the other effects to run
@@ -19,6 +18,7 @@ export const SessionProvider = ({ children }) => {
     if (JSON.parse(localStorage.getItem("inProgress")) === null) {
       setInProgress(false);
       setName("");
+      setSessionID("");
     }
   }, []);
 
@@ -30,6 +30,10 @@ export const SessionProvider = ({ children }) => {
     localStorage.setItem("name", name);
   }, [name]);
 
+  useEffect(() => {
+    localStorage.setItem("sessionID", sessionID);
+  }, [sessionID]);
+
   return (
     <SessionContext.Provider
       value={{
@@ -37,6 +41,8 @@ export const SessionProvider = ({ children }) => {
         setInProgress,
         name,
         setName,
+        sessionID,
+        setSessionID,
       }}
     >
       {children}

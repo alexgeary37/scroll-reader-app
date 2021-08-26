@@ -5,7 +5,7 @@ import { SessionContext } from "../contexts/SessionContext.jsx";
 import { useContext } from "react";
 import Axios from "axios";
 
-const MainText = ({ session }) => {
+const MainText = () => {
   const textContext = useContext(TextContext);
   const sessionContext = useContext(SessionContext);
 
@@ -24,7 +24,7 @@ const MainText = ({ session }) => {
       const scrollPosEntry = {
         yPos: parseInt(currPos.y),
         time: timestamp,
-        sessionID: session._id,
+        sessionID: sessionContext.sessionID,
       };
 
       Axios.post(

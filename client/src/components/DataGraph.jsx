@@ -46,7 +46,7 @@ const DataGraph = () => {
   };
 
   return (
-    <Container>
+    <div>
       <div className="wrapper">
         <Button
           primary
@@ -78,7 +78,7 @@ const DataGraph = () => {
           }}
         />
       </Container>
-    </Container>
+    </div>
   );
 };
 

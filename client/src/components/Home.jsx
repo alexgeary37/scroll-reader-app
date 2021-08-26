@@ -10,22 +10,6 @@ const Home = () => {
   const sessionContext = useContext(SessionContext);
   const textContext = useContext(TextContext);
   const [enableSession, setEnableSession] = useState(false);
-  const [session, setSession] = useState(
-    JSON.parse(localStorage.getItem("session"))
-  );
-
-  // If this is the first time the page has been loaded, set the initial value
-  // of 'session' to an empty object {}. This will then cause the variable to
-  // be set in localStorage when the effect runs.
-  useEffect(() => {
-    if (JSON.parse(localStorage.getItem("session")) === null) {
-      setSession({});
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("session", JSON.stringify(session));
-  }, [session]);
 
   const startStopLabel = () => {
     return sessionContext.inProgress ? "Stop Session" : "Start Session";
@@ -74,7 +58,7 @@ const Home = () => {
 
     Axios.post("http://localhost:3001/addReadingSession", newSession)
       .then((response) => {
-        setSession(response.data);
+        sessionContext.setSessionID(response.data._id);
       })
       .catch((error) => {
         console.log("Error adding session", error);
@@ -83,7 +67,7 @@ const Home = () => {
 
   // Update session with the time it finished.
   const stopSession = () => {
-    const sessionID = session._id;
+    const sessionID = sessionContext.sessionID;
     const date = new Date();
     const timestamp =
       date.getHours() +
@@ -101,7 +85,7 @@ const Home = () => {
       console.log("Error updating session", error);
     });
 
-    setSession({});
+    sessionContext.setSessionID("");
     sessionContext.setName("");
   };
 
@@ -145,7 +129,7 @@ const Home = () => {
         {displayStartStopButton(enableSession)}
       </div>
       <Divider />
-      <MainText session={session} />
+      <MainText />
     </Container>
   );
 };

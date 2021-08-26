@@ -1,27 +1,20 @@
 import { Route } from "react-router-dom";
 import "./App.css";
-import TopMenu from "./components/TopMenu.jsx";
-import PageFooter from "./components/PageFooter.jsx";
+import ResearcherView from "./components/ResearcherView.jsx";
 import Home from "./components/Home.jsx";
-import DataGraph from "./components/DataGraph.jsx";
+import PageFooter from "./components/PageFooter.jsx";
 import { SessionProvider } from "./contexts/SessionContext.jsx";
-import { TextProvider } from "./contexts/TextContext";
-import { Segment } from "semantic-ui-react";
+import { TextProvider } from "./contexts/TextContext.jsx";
 
 const App = () => {
   return (
     <div>
-      <TopMenu />
-      <div className="page">
+      <TextProvider>
         <SessionProvider>
-          <TextProvider>
-            <Segment>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/data" component={DataGraph} />
-            </Segment>
-          </TextProvider>
+          <Route path="/researcher/" component={ResearcherView} />
+          <Route exact path="/" component={Home} />
         </SessionProvider>
-      </div>
+      </TextProvider>
       <PageFooter />
     </div>
   );
