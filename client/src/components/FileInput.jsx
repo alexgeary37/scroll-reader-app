@@ -1,34 +1,29 @@
-import { useContext, useRef } from "react";
-import { TextContext } from "../contexts/TextContext.jsx";
-import { SessionContext } from "../contexts/SessionContext.jsx";
+import { useRef } from "react";
 import { Button } from "semantic-ui-react";
 
-const FileInput = () => {
-  const textContext = useContext(TextContext);
-  const sessionContext = useContext(SessionContext);
+const FileInput = ({ setFile }) => {
   const fileRef = useRef();
 
   const handleButtonClick = () => {
-    if (textContext.text === "") {
-      fileRef.current.click();
-    } else {
-      if (!sessionContext.inProgress) {
-        textContext.removeText();
-        fileRef.current.value = "";
-      }
-    }
+    fileRef.current.click();
   };
 
-  const handleFileSelect = (event) => {
+  async function handleFileSelect(event) {
     // https://stackoverflow.com/questions/51272255/how-to-use-filereader-in-react/51278185
     const file = event.target.files[0];
     if (typeof file !== `undefined`) {
       const reader = new FileReader();
-      reader.onload = (event) => textContext.setText(event.target.result);
+      reader.onload = (event) => {
+        const text = event.target.result;
+        const fileName = file.name;
+        setFile({
+          text: text,
+          fileName: fileName,
+        });
+      };
       reader.readAsText(file);
-      textContext.setFileName(file.name);
     }
-  };
+  }
 
   return (
     //https://stackoverflow.com/questions/55464274/react-input-type-file-semantic-ui-react
@@ -37,7 +32,6 @@ const FileInput = () => {
         primary
         content="Upload Text"
         icon="file"
-        disabled={sessionContext.inProgress}
         onClick={handleButtonClick}
       />
       <input

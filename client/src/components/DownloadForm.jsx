@@ -25,7 +25,7 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
         setSessionOptions(options);
       })
       .catch((error) => {
-        console.log("Error fetching ReadingSessions", error);
+        console.log("Error fetching ReadingSessions:", error);
       });
   }
 
@@ -45,7 +45,7 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
         toggleOpenDownloadForm();
       })
       .catch((error) => {
-        console.log("Error fetching scroll data", error);
+        console.log("Error fetching scroll data:", error);
       });
   }
 
@@ -60,7 +60,7 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
   };
 
   return (
-    <Modal open={open}>
+    <Modal open={open} style={{ padding: 10 }}>
       <Header
         as="h2"
         content="Select session to download"
@@ -75,9 +75,9 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
         options={sessionOptions}
         onChange={handleSelectSession}
       />
-      <div className="button-ui">
+      <div style={{ paddingTop: 10 }}>
         <Button primary content="Select" onClick={fetchScrollData} />
-        <Button negative content="Cancel" onClick={toggleOpenDownloadForm} />
+        <Button content="Cancel" onClick={toggleOpenDownloadForm} />
       </div>
     </Modal>
   );

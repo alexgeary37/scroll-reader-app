@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const ReadingSessionModel = require("./readingSessions");
 const ScrollPosEntryModel = require("./scrollPosEntries");
+const SessionTemplateModel = require("./sessionTemplates");
 
 class Server {
   constructor() {
@@ -28,6 +29,24 @@ class Server {
   }
 
   routes() {
+    this.app.post("/createSessionTemplate", async (req, res) => {
+      console.log("createSessionTemplate server", req);
+      const newTemplate = req.body;
+      const template = new SessionTemplateModel(newTemplate);
+      await template.save();
+      res.send(template);
+    });
+
+    this.app.get("/getSessionTemplates", async (req, res) => {
+      SessionTemplateModel.find({}, (err, result) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(result);
+        }
+      });
+    });
+
     this.app.post("/addReadingSession", async (req, res) => {
       const newSession = req.body;
       const session = new ReadingSessionModel(newSession);

@@ -6,7 +6,7 @@ const TopMenu = () => {
     <Menu inverted fixed="top">
       <Container>
         <Menu.Item>
-          <Link to="/researcher/create-session-template">Create Session Template</Link>
+          <Link to="/researcher/">Dashboard</Link>
         </Menu.Item>
         <Menu.Item>
           <Link to="/researcher/data">Data</Link>

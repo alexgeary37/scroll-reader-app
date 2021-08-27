@@ -1,21 +1,44 @@
 import { useState } from "react";
-import { Button, Divider, Form, Header, Segment } from "semantic-ui-react";
+import {
+  Button,
+  Divider,
+  Form,
+  Header,
+  Segment,
+  Modal,
+} from "semantic-ui-react";
 import FileInput from "./FileInput";
+import Axios from "axios";
 
-const CreateTemplate = () => {
+const CreateTemplate = ({ isOpen, close }) => {
   const [comprehension, setComprehension] = useState(true);
+  const [scrollFile, setScrollFile] = useState({});
+  const [speedFile, setSpeedFile] = useState({});
 
   const handleQuestionFormatChange = () => {
     setComprehension(!comprehension);
   };
 
-  const handleCreate = () => {
-    // Send sessiontemplate to db
-  };
+  async function handleCreate() {
+    const questionFormat = comprehension ? "comprehension" : "inline";
+    const template = {
+      scrollTextFile: scrollFile,
+      speedTextFile: speedFile,
+      questionFormat: questionFormat,
+    };
+
+    Axios.post("http://localhost:3001/createSessionTemplate", template).catch(
+      (error) => {
+        console.log("Error creating session template:", error);
+      }
+    );
+
+    close();
+  }
 
   return (
-    <div>
-      <h1>Create Session Template</h1>
+    <Modal open={isOpen} style={{ padding: 10 }}>
+      <h1>Create a Session Template</h1>
       <Divider />
       <div>
         <Segment basic>
@@ -25,14 +48,18 @@ const CreateTemplate = () => {
               content="Scrollable Text:"
               style={{ paddingTop: 5, marginRight: 10 }}
             />
-            <FileInput />
+            <FileInput setFile={setScrollFile} />
           </div>
         </Segment>
 
         <Segment basic>
           <div className="wrapper">
-            <Header as="h3" content="Speed Text:" style={{ paddingTop: 5, marginRight: 10 }} />
-            <FileInput />
+            <Header
+              as="h3"
+              content="Speed Text:"
+              style={{ paddingTop: 5, marginRight: 10 }}
+            />
+            <FileInput setFile={setSpeedFile} />
           </div>
         </Segment>
       </div>
@@ -68,7 +95,8 @@ const CreateTemplate = () => {
       </Segment>
 
       <Button positive content="Create" onClick={handleCreate} />
-    </div>
+      <Button content="Cancel" onClick={() => close()} />
+    </Modal>
   );
 };
 

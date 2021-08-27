@@ -60,7 +60,7 @@ const Home = () => {
         sessionContext.setSessionID(response.data._id);
       })
       .catch((error) => {
-        console.log("Error adding session", error);
+        console.log("Error adding session:", error);
       });
   };
 
@@ -81,7 +81,7 @@ const Home = () => {
       id: sessionID,
       endTime: timestamp,
     }).catch((error) => {
-      console.log("Error updating session", error);
+      console.log("Error updating session:", error);
     });
 
     sessionContext.setSessionID("");
