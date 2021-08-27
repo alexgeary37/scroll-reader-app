@@ -8,10 +8,6 @@ const FileInput = () => {
   const sessionContext = useContext(SessionContext);
   const fileRef = useRef();
 
-  const uploadRemoveLabel = (text) => {
-    return text === "" ? "Upload Text" : "Remove Text";
-  };
-
   const handleButtonClick = () => {
     if (textContext.text === "") {
       fileRef.current.click();
@@ -39,7 +35,7 @@ const FileInput = () => {
     <div>
       <Button
         primary
-        content={uploadRemoveLabel(textContext.text)}
+        content="Upload Text"
         icon="file"
         disabled={sessionContext.inProgress}
         onClick={handleButtonClick}

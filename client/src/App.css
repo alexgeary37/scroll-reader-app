@@ -1,6 +1,6 @@
 .wrapper {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 /* 'padding' is to allow space for the top menu.

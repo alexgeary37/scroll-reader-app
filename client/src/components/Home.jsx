@@ -1,6 +1,5 @@
 import { TextContext } from "../contexts/TextContext.jsx";
 import { SessionContext } from "../contexts/SessionContext.jsx";
-import FileInput from "./FileInput.jsx";
 import MainText from "./MainText.jsx";
 import { useContext, useEffect, useState } from "react";
 import { Form, Container, Divider } from "semantic-ui-react";
@@ -123,14 +122,13 @@ const Home = () => {
   };
 
   return (
-    <Container>
-      <div className="wrapper">
-        <FileInput />
+    <div className="page">
+      <Container>
         {displayStartStopButton(enableSession)}
-      </div>
-      <Divider />
-      <MainText />
-    </Container>
+        <Divider />
+        <MainText />
+      </Container>
+    </div>
   );
 };
 
