@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
 
 const ReadingSessionSchema = new mongoose.Schema({
-  name: {
+  userName: {
     type: String,
     required: true,
   },
-  fileName: {
-    type: String,
+  template: {
+    type: ,
     required: true,
   },
+  
   startTime: {
     type: String,
     required: true,

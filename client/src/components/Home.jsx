@@ -1,43 +1,36 @@
-import { TextContext } from "../contexts/TextContext.jsx";
-import { SessionContext } from "../contexts/SessionContext.jsx";
-import MainText from "./MainText.jsx";
-import { useContext, useEffect, useState } from "react";
-import { Form, Container, Divider } from "semantic-ui-react";
+import { Container, Header, Segment, Input, Button } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { createRef, useContext, useEffect, useState } from "react";
 import Axios from "axios";
+import { SessionContext } from "../contexts/SessionContext";
 
 const Home = () => {
+  const [userName, setUserName] = useState("");
   const sessionContext = useContext(SessionContext);
-  const textContext = useContext(TextContext);
-  const [enableSession, setEnableSession] = useState(false);
+  const startTask1Ref = createRef();
 
-  const startStopLabel = () => {
-    return sessionContext.inProgress ? "Stop Session" : "Start Session";
-  };
-
-  const startButtonDisabled = () => {
-    return sessionContext.name === "";
-  };
-
-  // Keep track of whether there is text ready for a session to begin.
   useEffect(() => {
-    setEnableSession(textContext.text !== null && textContext.text !== "");
-  }, [textContext]);
+    fetchSessionTemplate();
+  }, []);
 
-  const toggleSession = () => {
-    if (enableSession) {
-      if (!sessionContext.inProgress) {
-        // Session is about to start, so create new session.
-        startSession();
-        sessionContext.setInProgress(true);
-      } else {
-        stopSession();
-        sessionContext.setInProgress(false);
-      }
-    }
-  };
+  async function fetchSessionTemplate() {
+    const url = window.location.href.toString();
+    const templateId = url.substr(url.lastIndexOf("/") + 1);
+
+    // Get template from the database
+    Axios.get("http://localhost:3001/getSessionTemplate", {
+      params: { _id: templateId },
+    })
+      .then((response) => {
+        sessionContext.setTemplate(response.data);
+      })
+      .catch((error) => {
+        console.log("Error fetching SessionTemplate:", error);
+      });
+  }
 
   // Add new session to database.
-  const startSession = () => {
+  async function createSession() {
     const date = new Date();
     const timestamp =
       date.getHours() +
@@ -49,11 +42,13 @@ const Home = () => {
       date.getMilliseconds();
 
     const newSession = {
-      name: sessionContext.name,
-      fileName: textContext.fileName,
+      userName: sessionContext.userName,
+      template: sessionContext.template,
       startTime: timestamp,
       endTime: "",
     };
+
+    console.log(newSession);
 
     Axios.post("http://localhost:3001/addReadingSession", newSession)
       .then((response) => {
@@ -62,71 +57,44 @@ const Home = () => {
       .catch((error) => {
         console.log("Error adding session:", error);
       });
+  }
+
+  const handleStartTask1 = () => {
+    sessionContext.setUserName(userName);
+    sessionContext.setInProgress(true);
+    createSession();
+    startTask1Ref.current.click();
   };
 
-  // Update session with the time it finished.
-  const stopSession = () => {
-    const sessionID = sessionContext.sessionID;
-    const date = new Date();
-    const timestamp =
-      date.getHours() +
-      ":" +
-      date.getMinutes() +
-      ":" +
-      date.getSeconds() +
-      ":" +
-      date.getMilliseconds();
-
-    Axios.put("http://localhost:3001/updateReadingSession", {
-      id: sessionID,
-      endTime: timestamp,
-    }).catch((error) => {
-      console.log("Error updating session:", error);
-    });
-
-    sessionContext.setSessionID("");
-    sessionContext.setName("");
-  };
-
-  const handleSessionNameChange = (event) => {
-    sessionContext.setName(event.target.value);
-  };
-
-  const displayStartStopButton = (enableSession) => {
-    if (enableSession) {
-      return (
-        <div>
-          <Form>
-            <div className="wrapper">
-              <Form.Input
-                type="text"
-                name="sessionName"
-                value={sessionContext.name}
-                placeholder="Session Name"
-                disabled={sessionContext.inProgress}
-                onChange={handleSessionNameChange}
-              />
-              <Form.Button
-                positive={!sessionContext.inProgress}
-                negative={sessionContext.inProgress}
-                floated="right"
-                content={startStopLabel()}
-                disabled={startButtonDisabled()}
-                onClick={toggleSession}
-              />
-            </div>
-          </Form>
-        </div>
-      );
-    }
+  const handleUserNameChange = (event) => {
+    setUserName(event.target.value);
   };
 
   return (
-    <div className="page">
-      <Container>
-        {displayStartStopButton(enableSession)}
-        <Divider />
-        <MainText />
+    <div className="page" style={{ textAlign: "center" }}>
+      <Container text>
+        <Segment basic>
+          <Header as="h1" content="Welcome!" />
+          <p>
+            These are the instructions for this experiment. They will tell you
+            what to do, and how to use this website. Please type your name
+            below, and click on the button to continue to task 1 when you are
+            ready.
+          </p>
+          <div className="wrapper" style={{ justifyContent: "center" }}>
+            <Input
+              type="text"
+              placeholder="Type your name here..."
+              onChange={handleUserNameChange}
+            />
+            <Button
+              positive
+              content="Start Task 1"
+              onClick={handleStartTask1}
+            />
+            <Link to="/ScrollText" hidden ref={startTask1Ref}></Link>
+          </div>
+        </Segment>
       </Container>
     </div>
   );

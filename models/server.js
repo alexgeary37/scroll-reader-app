@@ -37,6 +37,17 @@ class Server {
       res.send(template);
     });
 
+    this.app.get("/getSessionTemplate", async (req, res) => {
+      const id = req.query;
+      SessionTemplateModel.find({ _id: id }, (err, result) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(result);
+        }
+      });
+    });
+
     this.app.get("/getSessionTemplates", async (req, res) => {
       SessionTemplateModel.find({}, (err, result) => {
         if (err) {

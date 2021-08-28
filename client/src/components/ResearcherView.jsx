@@ -24,11 +24,14 @@ const ResearcherView = () => {
     fetchSessionTemplates();
   }, []);
 
-  const handleNewSessionTemplate = () => {
+  const handleCreateTemplate = () => {
     setOpenTemplateCreator(true);
   };
 
-  const closeTemplateCreator = () => {
+  const closeTemplateCreator = (templateCreated) => {
+    if (templateCreated) {
+      fetchSessionTemplates();
+    }
     setOpenTemplateCreator(false);
   };
 
@@ -41,7 +44,8 @@ const ResearcherView = () => {
           options.push({
             key: template._id,
             value: template._id,
-            fileName: template.scrollTextFile.fileName,
+            scrollFileName: template.scrollTextFile.fileName,
+            speedFileName: template.speedTextFile.fileName,
           });
         });
         setTemplates(options);
@@ -63,14 +67,19 @@ const ResearcherView = () => {
               <List relaxed divided>
                 {templates.map((template) => (
                   <Item key={template.key}>
-                    <Icon size="large" name="github" />
+                    <Icon size="large" name="file outline" />
                     <Item.Content>
                       <Header
-                        as="a"
+                        style={{ margin: 5 }}
                         size="small"
-                        content={`Filename: ${template.fileName}`}
+                        content={`ScrollText: ${template.scrollFileName}`}
                       />
-                      <ItemDescription content={`URL: ${template.value}`} />
+                      <Header
+                        style={{ margin: 5 }}
+                        size="small"
+                        content={`SpeedText: ${template.speedFileName}`}
+                      />
+                      <ItemDescription style={{margin: 5}} content={`URL: ${template.value}`} />
                     </Item.Content>
                   </Item>
                 ))}
@@ -78,10 +87,10 @@ const ResearcherView = () => {
             </Segment>
           </div>
           <Button
-          style={{marginTop: 10}}
+            style={{ marginTop: 10 }}
             positive
             content="Create Template"
-            onClick={handleNewSessionTemplate}
+            onClick={handleCreateTemplate}
           />
         </div>
       );
@@ -94,7 +103,7 @@ const ResearcherView = () => {
       <div className="page">
         <Segment>
           <Container>
-            <Route exact path="/researcher/data" component={DataGraph} />
+            <Route path="/researcher/data" component={DataGraph} />
             {sessionTemplates()}
             <CreateTemplate
               isOpen={openTemplateCreator}

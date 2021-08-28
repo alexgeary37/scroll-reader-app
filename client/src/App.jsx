@@ -9,10 +9,10 @@ import { TextProvider } from "./contexts/TextContext.jsx";
 const App = () => {
   return (
     <div>
+      <Route path="/researcher" component={ResearcherView} />
       <TextProvider>
         <SessionProvider>
-          <Route path="/researcher/" component={ResearcherView} />
-          <Route exact path="/" component={Home} />
+          <Route path="/" component={Home} />
         </SessionProvider>
       </TextProvider>
       <PageFooter />

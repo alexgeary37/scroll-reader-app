@@ -1,11 +1,12 @@
 import { useRef } from "react";
 import { Button } from "semantic-ui-react";
 
-const FileInput = ({ setFile }) => {
+const FileInput = ({ setFile, openDialog }) => {
   const fileRef = useRef();
 
   const handleButtonClick = () => {
     fileRef.current.click();
+    openDialog();
   };
 
   async function handleFileSelect(event) {
