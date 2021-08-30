@@ -1,6 +1,6 @@
 import { Route } from "react-router-dom";
 import "./App.css";
-import ResearcherView from "./components/ResearcherView.jsx";
+import ResearcherView from "./components/researcher/ResearcherView.jsx";
 import Home from "./components/Home.jsx";
 import PageFooter from "./components/PageFooter.jsx";
 import { SessionProvider } from "./contexts/SessionContext.jsx";
@@ -10,11 +10,11 @@ const App = () => {
   return (
     <div>
       <Route path="/researcher" component={ResearcherView} />
-      <TextProvider>
+      {/* <TextProvider>
         <SessionProvider>
-          <Route path="/" component={Home} />
+          <Route exact path="/" component={Home} />
         </SessionProvider>
-      </TextProvider>
+      </TextProvider> */}
       <PageFooter />
     </div>
   );

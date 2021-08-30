@@ -5,6 +5,7 @@ const path = require("path");
 const ReadingSessionModel = require("./readingSessions");
 const ScrollPosEntryModel = require("./scrollPosEntries");
 const SessionTemplateModel = require("./sessionTemplates");
+const TextFileModel = require("./textFiles");
 
 class Server {
   constructor() {
@@ -17,7 +18,8 @@ class Server {
 
   middlewares() {
     this.app.use(cors());
-    this.app.use(express.json());
+    this.app.use(express.json({ limit: "50mb" }));
+    this.app.use(express.urlencoded({ extended: false, limit: "50mb" }));
 
     mongoose.connect(this.mongoUrl, {
       useNewUrlParser: true,
@@ -29,6 +31,36 @@ class Server {
   }
 
   routes() {
+    this.app.post("/uploadTextFile", async (req, res) => {
+      console.log("uploadingTextFile server", req);
+      const newTextFile = req.body;
+      const textFile = new TextFileModel(newTextFile);
+      await textFile.save();
+      res.send(textFile);
+    });
+
+    this.app.get("/getTextFile", async (req, res) => {
+      const id = req.query;
+      console.log(id);
+      TextFileModel.findOne({ _id: id }, (err, result) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(result.fileName);
+        }
+      });
+    });
+
+    this.app.get("/getTextFiles", async (req, res) => {
+      TextFileModel.find({}, (err, result) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(result);
+        }
+      });
+    });
+
     this.app.post("/createSessionTemplate", async (req, res) => {
       console.log("createSessionTemplate server", req);
       const newTemplate = req.body;

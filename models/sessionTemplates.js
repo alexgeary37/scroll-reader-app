@@ -1,27 +1,20 @@
 const mongoose = require("mongoose");
 
-const textFileSchema = {
-  text: {
-    type: String,
-    required: true,
-  },
-  fileName: {
-    type: String,
-    required: true,
-  },
-};
-
 const SessionTemplateSchema = mongoose.Schema({
-  scrollTextFile: {
-    type: textFileSchema,
+  scrollTextFileID: {
+    type: String,
     required: true,
   },
-  speedTextFile: {
-    type: textFileSchema,
+  speedTextFileID: {
+    type: String,
     required: true,
   },
   questionFormat: {
     type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
     required: true,
   },
 });

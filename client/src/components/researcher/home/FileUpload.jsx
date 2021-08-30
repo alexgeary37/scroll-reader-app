@@ -1,12 +1,12 @@
+import Axios from "axios";
 import { useRef } from "react";
 import { Button } from "semantic-ui-react";
 
-const FileInput = ({ setFile, openDialog }) => {
+const FileUpload = ({ uploadSubmitted }) => {
   const fileRef = useRef();
 
   const handleButtonClick = () => {
     fileRef.current.click();
-    openDialog();
   };
 
   async function handleFileSelect(event) {
@@ -15,12 +15,19 @@ const FileInput = ({ setFile, openDialog }) => {
     if (typeof file !== `undefined`) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        const text = event.target.result;
-        const fileName = file.name;
-        setFile({
-          text: text,
-          fileName: fileName,
-        });
+        const textFile = {
+          text: event.target.result,
+          fileName: file.name,
+          createdAt: new Date(),
+        };
+        Axios.post("http://localhost:3001/uploadTextFile", textFile)
+          .then((response) => {
+            console.log("uploadTextFile response::", response);
+            uploadSubmitted();
+          })
+          .catch((error) => {
+            console.log("Error uploading text file:", error);
+          });
       };
       reader.readAsText(file);
     }
@@ -30,6 +37,7 @@ const FileInput = ({ setFile, openDialog }) => {
     //https://stackoverflow.com/questions/55464274/react-input-type-file-semantic-ui-react
     <div>
       <Button
+        style={{ marginTop: 10 }}
         primary
         content="Upload Text"
         icon="file"
@@ -47,4 +55,4 @@ const FileInput = ({ setFile, openDialog }) => {
   );
 };
 
-export default FileInput;
+export default FileUpload;

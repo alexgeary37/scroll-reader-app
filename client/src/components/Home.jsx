@@ -9,9 +9,9 @@ const Home = () => {
   const sessionContext = useContext(SessionContext);
   const startTask1Ref = createRef();
 
-  useEffect(() => {
-    fetchSessionTemplate();
-  }, []);
+  // useEffect(() => {
+  //   fetchSessionTemplate();
+  // }, []);
 
   async function fetchSessionTemplate() {
     const url = window.location.href.toString();
@@ -73,7 +73,7 @@ const Home = () => {
   return (
     <div className="page" style={{ textAlign: "center" }}>
       <Container text>
-        <Segment basic>
+        <Segment>
           <Header as="h1" content="Welcome!" />
           <p>
             These are the instructions for this experiment. They will tell you
@@ -88,7 +88,7 @@ const Home = () => {
               onChange={handleUserNameChange}
             />
             <Button
-              positive
+              primary
               content="Start Task 1"
               onClick={handleStartTask1}
             />

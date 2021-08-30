@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   Divider,
@@ -6,35 +6,60 @@ import {
   Header,
   Segment,
   Modal,
+  Dropdown,
 } from "semantic-ui-react";
-import FileInput from "./FileInput";
 import Axios from "axios";
 
 const CreateTemplate = ({ isOpen, close }) => {
+  const [scrollTextID, setScrollTextID] = useState("");
+  const [speedTextID, setSpeedTextID] = useState("");
   const [comprehension, setComprehension] = useState(true);
-  const [scrollFile, setScrollFile] = useState({});
-  const [speedFile, setSpeedFile] = useState({});
-  const [displayScrollFileError, setDisplayScrollFileError] = useState(false);
-  const [displaySpeedFileError, setDisplaySpeedFileError] = useState(false);
+  const [textOptions, setTextOptions] = useState([]);
+  const [displayScrollTextError, setDisplayScrollTextError] = useState(false);
+  const [displaySpeedTextError, setDisplaySpeedTextError] = useState(false);
+
+  useEffect(() => {
+    fetchTextFiles();
+  }, []);
+
+  async function fetchTextFiles() {
+    Axios.get("http://localhost:3001/getTextFiles")
+      .then((response) => {
+        const files = response.data;
+        const options = [];
+        files.forEach((file) => {
+          options.push({
+            key: file._id,
+            value: file._id,
+            text: file.fileName,
+          });
+        });
+        setTextOptions(options);
+      })
+      .catch((error) => {
+        console.log("Error fetching text files:", error);
+      });
+  }
 
   async function handleCreate() {
-    if (scrollFile.fileName === undefined) {
-      setDisplayScrollFileError(true);
-      if (speedFile.fileName === undefined) {
-        setDisplaySpeedFileError(true);
+    if (scrollTextID === "") {
+      setDisplayScrollTextError(true);
+      if (speedTextID === "") {
+        setDisplaySpeedTextError(true);
       }
       return;
     }
-    if (speedFile.fileName === undefined) {
-      setDisplaySpeedFileError(true);
+    if (speedTextID === "") {
+      setDisplaySpeedTextError(true);
       return;
     }
 
     const questionFormat = comprehension ? "comprehension" : "inline";
     const template = {
-      scrollTextFile: scrollFile,
-      speedTextFile: speedFile,
+      scrollTextFileID: scrollTextID,
+      speedTextFileID: speedTextID,
       questionFormat: questionFormat,
+      createdAt: new Date(),
     };
 
     Axios.post("http://localhost:3001/createSessionTemplate", template)
@@ -46,15 +71,7 @@ const CreateTemplate = ({ isOpen, close }) => {
       });
   }
 
-  const fileText = (file) => {
-    if (file.fileName !== undefined) {
-      return (
-        <label style={{ padding: 10, float: "right" }}>{file.fileName}</label>
-      );
-    }
-  };
-
-  const fileError = (testType, displayError) => {
+  const textError = (testType, displayError) => {
     if (displayError) {
       return (
         <label style={{ padding: 10, float: "right", color: "red" }}>
@@ -64,54 +81,72 @@ const CreateTemplate = ({ isOpen, close }) => {
     }
   };
 
+  const handleSelectScrollText = (e, data) => {
+    setScrollTextID(data.value);
+    setDisplayScrollTextError(false);
+  };
+
+  const handleSelectSpeedText = (e, data) => {
+    setSpeedTextID(data.value);
+    setDisplaySpeedTextError(false);
+  };
+
   const handleClose = (templateCreated) => {
-    setScrollFile({});
-    setSpeedFile({});
+    setScrollTextID("");
+    setSpeedTextID("");
     setComprehension(true);
-    setDisplayScrollFileError(false);
-    setDisplaySpeedFileError(false);
+    setDisplayScrollTextError(false);
+    setDisplaySpeedTextError(false);
     close(templateCreated);
   };
+
+  const textSelectionPlaceholder = textOptions[0] ? textOptions[0].text : "";
 
   return (
     <Modal open={isOpen} style={{ padding: 10 }}>
       <h1>Create a Session Template</h1>
       <Divider />
       <div>
-        <Segment basic compact>
+        <Segment compact>
           <div className="wrapper">
             <Header
               as="h3"
               content="Scrollable Text:"
               style={{ paddingTop: 5, marginRight: 10 }}
             />
-            <FileInput
-              setFile={setScrollFile}
-              openDialog={() => setDisplayScrollFileError(false)}
+            <Dropdown
+              placeholder={textSelectionPlaceholder}
+              fluid
+              search
+              selection
+              options={textOptions}
+              onChange={handleSelectScrollText}
             />
           </div>
-          {fileText(scrollFile)}
-          {fileError("scroll", displayScrollFileError)}
+          {textError("scroll", displayScrollTextError)}
         </Segment>
 
-        <Segment basic compact>
+        <Segment compact>
           <div className="wrapper">
             <Header
               as="h3"
               content="Speed Text:"
               style={{ paddingTop: 5, marginRight: 10 }}
             />
-            <FileInput
-              setFile={setSpeedFile}
-              openDialog={() => setDisplaySpeedFileError(false)}
+            <Dropdown
+              placeholder={textSelectionPlaceholder}
+              fluid
+              search
+              selection
+              options={textOptions}
+              onChange={handleSelectSpeedText}
             />
           </div>
-          {fileText(speedFile)}
-          {fileError("speed", displaySpeedFileError)}
+          {textError("speed", displaySpeedTextError)}
         </Segment>
       </div>
 
-      <Segment basic>
+      <Segment>
         <Form>
           <div className="grouped fields">
             <Header as="h3" content="Question Format:" />
@@ -139,7 +174,7 @@ const CreateTemplate = ({ isOpen, close }) => {
         </Form>
       </Segment>
 
-      <Button positive content="Create" onClick={handleCreate} />
+      <Button primary content="Create" onClick={handleCreate} />
       <Button content="Cancel" onClick={() => handleClose(false)} />
     </Modal>
   );
