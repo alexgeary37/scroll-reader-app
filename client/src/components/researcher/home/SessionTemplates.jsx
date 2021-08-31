@@ -39,23 +39,24 @@ const SessionTemplates = () => {
       );
       templatesResponse = templatesResponse.data;
       for (let i = 0; i < templatesResponse.length; i++) {
-        let scrollTextFileResponse = await Axios.get(
+        const scrollTextFileResponse = await Axios.get(
           "http://localhost:3001/getTextFile",
           { params: { _id: templatesResponse[i].scrollTextFileID } }
         );
-        scrollTextFileResponse = scrollTextFileResponse.data;
+        const scrollTextFileName = scrollTextFileResponse.data.fileName;
 
-        let speedTextFileResponse = await Axios.get(
+        const speedTextFileResponse = await Axios.get(
           "http://localhost:3001/getTextFile",
           { params: { _id: templatesResponse[i].speedTextFileID } }
         );
-        speedTextFileResponse = speedTextFileResponse.data;
+        const speedTextFileName = speedTextFileResponse.data.fileName;
         options.push({
           key: templatesResponse[i]._id,
           name: templatesResponse[i].name,
-          scrollFileName: scrollTextFileResponse,
-          speedFileName: speedTextFileResponse,
+          scrollFileName: scrollTextFileName,
+          speedFileName: speedTextFileName,
           questionFormat: templatesResponse[i].questionFormat,
+          url: templatesResponse[i]._id,
         });
       }
       setTemplates(options);
@@ -88,6 +89,10 @@ const SessionTemplates = () => {
                 <ItemDescription
                   style={{ margin: 5 }}
                   content={`Question Format: ${template.questionFormat}`}
+                />
+                <ItemDescription
+                  style={{ margin: 5 }}
+                  content={`URL: ${template.url}`}
                 />
               </Item.Content>
             </Item>

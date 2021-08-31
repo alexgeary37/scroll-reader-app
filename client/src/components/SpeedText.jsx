@@ -11,7 +11,7 @@ import {
 import Axios from "axios";
 import { Link } from "react-router-dom";
 
-const ScrollText = () => {
+const SpeedText = () => {
   const sessionContext = useContext(SessionContext);
   const startTask2Ref = createRef();
 
@@ -71,4 +71,4 @@ const ScrollText = () => {
   );
 };
 
-export default ScrollText;
+export default SpeedText;

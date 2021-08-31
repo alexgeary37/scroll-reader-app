@@ -1,13 +1,28 @@
 import { Container } from "semantic-ui-react";
 import useScrollPosition from "./scrollPosition.jsx";
-import { TextContext } from "../contexts/TextContext.jsx";
 import { SessionContext } from "../contexts/SessionContext.jsx";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Axios from "axios";
 
 const MainText = () => {
-  const textContext = useContext(TextContext);
   const sessionContext = useContext(SessionContext);
+  const [text, setText] = useState("");
+
+  useEffect(() => {
+    fetchText();
+  }, []);
+
+  async function fetchText() {
+    Axios.get("http://localhost:3001/getTextFile", {
+      params: { _id: sessionContext.template.scrollTextFileID },
+    })
+      .then((response) => {
+        setText(response.data.text);
+      })
+      .catch((error) => {
+        console.error("Error fetching text in ScrollText:", error);
+      });
+  }
 
   async function addScrollPosEntry(currPos) {
     if (sessionContext.inProgress) {
@@ -41,7 +56,7 @@ const MainText = () => {
 
   return (
     <Container text>
-      <p>{textContext.text}</p>
+      <p>{text}</p>
     </Container>
   );
 };

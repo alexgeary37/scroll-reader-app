@@ -32,11 +32,13 @@ const Home = () => {
 
   // Add new session to database.
   async function createSession() {
+    const date = new Date();
+
     const newSession = {
-      userName: sessionContext.userName,
+      userName: userName,
       template: sessionContext.template,
-      startTime: new Date(),
-      endTime: "",
+      startTime: date,
+      endTime: date,
     };
 
     Axios.post("http://localhost:3001/addReadingSession", newSession)
@@ -53,9 +55,9 @@ const Home = () => {
       setDisplayUserNameError(true);
       return;
     }
+    createSession();
     sessionContext.setUserName(userName);
     sessionContext.setInProgress(true);
-    createSession();
     startTask1Ref.current.click();
   };
 
@@ -92,7 +94,7 @@ const Home = () => {
               onChange={handleUserNameChange}
             />
             <Button primary content="Start Task 1" onClick={handleStartTask1} />
-            <Link to="/ScrollText" hidden ref={startTask1Ref}></Link>
+            <Link to="/scrolltext" hidden ref={startTask1Ref}></Link>
             {userNameError()}
           </div>
         </Segment>

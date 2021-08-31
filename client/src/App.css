@@ -10,25 +10,10 @@
   margin-top: 40px;
 }
 
-.h1-sui {
-  margin-top: 3em;
-}
-
 .h2-sui {
   margin: 4em 0em 2em;
 }
 
-.h3-sui {
-  margin-top: 2em;
-  padding: 2em 0em;
-}
-
-.last-sui {
-  margin-bottom: 300px;
-}
-
-.button-ui {
-  margin-top: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
+.fixed-button {
+  position: fixed;
 }

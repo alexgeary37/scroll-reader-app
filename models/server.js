@@ -44,7 +44,7 @@ class Server {
         if (err) {
           res.send(err);
         } else {
-          res.send(result.fileName);
+          res.send(result);
         }
       });
     });
@@ -68,7 +68,7 @@ class Server {
 
     this.app.get("/getSessionTemplate", async (req, res) => {
       const id = req.query;
-      SessionTemplateModel.find({ _id: id }, (err, result) => {
+      SessionTemplateModel.findOne({ _id: id }, (err, result) => {
         if (err) {
           res.send(err);
         } else {

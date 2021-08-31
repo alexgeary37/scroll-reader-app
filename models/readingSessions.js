@@ -15,7 +15,7 @@ const ReadingSessionSchema = new mongoose.Schema({
     required: true,
   },
   endTime: {
-    type: String,
+    type: Date,
     required: false,
   },
 });
