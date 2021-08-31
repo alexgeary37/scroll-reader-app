@@ -1,4 +1,11 @@
-import { List, Item, Header, Segment, Icon } from "semantic-ui-react";
+import {
+  List,
+  Item,
+  Header,
+  Segment,
+  Icon,
+  ItemDescription,
+} from "semantic-ui-react";
 import FileUpload from "./FileUpload";
 import { useEffect, useState } from "react";
 import Axios from "axios";
@@ -8,7 +15,6 @@ const TextFiles = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Run! Like go get some data from an API.
     fetchTextFiles();
   }, []);
 
@@ -20,8 +26,8 @@ const TextFiles = () => {
       files.forEach((file) => {
         options.push({
           key: file._id,
-          value: file._id,
           name: file.fileName,
+          uploadedAt: file.createdAt,
         });
       });
       setTextFiles(options);
@@ -42,6 +48,10 @@ const TextFiles = () => {
                   size="small"
                   content={`Filename: ${file.name}`}
                 />
+                <ItemDescription
+                  style={{ margin: 5 }}
+                  content={`Uploaded: ${file.uploadedAt}`}
+                />
               </Item.Content>
             </Item>
           ))}
@@ -53,7 +63,7 @@ const TextFiles = () => {
     <div>
       <Header as="h2" textAlign="center" content="Uploaded Text Documents:" />
       <div>
-        <Segment>{displayTextFiles()}</Segment>
+        <Segment basic>{displayTextFiles()}</Segment>
       </div>
       <FileUpload uploadSubmitted={() => fetchTextFiles()} />
     </div>

@@ -31,7 +31,7 @@ const MainText = () => {
         "http://localhost:3001/addScrollPosEntry",
         scrollPosEntry
       ).catch((error) => {
-        console.log("Error adding scrollPosEntry:", error);
+        console.error("Error adding scrollPosEntry:", error);
       });
     }
   }

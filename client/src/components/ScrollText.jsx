@@ -38,7 +38,7 @@ const ScrollText = () => {
       id: sessionID,
       endTime: timestamp,
     }).catch((error) => {
-      console.log("Error updating session:", error);
+      console.error("Error updating session:", error);
     });
 
     sessionContext.setSessionID("");

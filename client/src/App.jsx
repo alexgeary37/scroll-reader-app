@@ -10,11 +10,11 @@ const App = () => {
   return (
     <div>
       <Route path="/researcher" component={ResearcherView} />
-      {/* <TextProvider>
+      <TextProvider>
         <SessionProvider>
           <Route exact path="/" component={Home} />
         </SessionProvider>
-      </TextProvider> */}
+      </TextProvider>
       <PageFooter />
     </div>
   );

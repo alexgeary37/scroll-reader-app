@@ -1,18 +1,17 @@
 const mongoose = require("mongoose");
-// const SessionTemplateSchema = require("./sessionTemplates");
+const SessionTemplate = require("./sessionTemplates");
 
 const ReadingSessionSchema = new mongoose.Schema({
   userName: {
     type: String,
     required: true,
   },
-  // template: {
-  //   type: SessionTemplateSchema,
-  //   required: true,
-  // },
-
+  template: {
+    type: SessionTemplate.SessionTemplateStructure,
+    required: true,
+  },
   startTime: {
-    type: String,
+    type: Date,
     required: true,
   },
   endTime: {

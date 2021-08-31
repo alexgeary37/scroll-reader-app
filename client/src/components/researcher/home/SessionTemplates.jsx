@@ -32,33 +32,37 @@ const SessionTemplates = () => {
 
   async function fetchSessionTemplates() {
     setIsLoading(true);
-    Axios.get("http://localhost:3001/getSessionTemplates")
-      .then((response) => {
-        const sessionTemplates = response.data;
-        const options = [];
-        sessionTemplates.forEach((template) => {
-          Axios.get("http://localhost:3001/getTextFile", {
-            params: { _id: template.scrollTextFileID },
-          }).then((scrollTextFileName) => {
-            Axios.get("http://localhost:3001/getTextFile", {
-              params: { _id: template.speedTextFileID },
-            }).then((speedTextFileName) => {
-              console.log(scrollTextFileName.data);
-              options.push({
-                key: template._id,
-                value: template._id,
-                scrollFileName: scrollTextFileName.data,
-                speedFileName: speedTextFileName.data,
-              });
-            });
-          });
+    try {
+      const options = [];
+      let templatesResponse = await Axios.get(
+        "http://localhost:3001/getSessionTemplates"
+      );
+      templatesResponse = templatesResponse.data;
+      for (let i = 0; i < templatesResponse.length; i++) {
+        let scrollTextFileResponse = await Axios.get(
+          "http://localhost:3001/getTextFile",
+          { params: { _id: templatesResponse[i].scrollTextFileID } }
+        );
+        scrollTextFileResponse = scrollTextFileResponse.data;
+
+        let speedTextFileResponse = await Axios.get(
+          "http://localhost:3001/getTextFile",
+          { params: { _id: templatesResponse[i].speedTextFileID } }
+        );
+        speedTextFileResponse = speedTextFileResponse.data;
+        options.push({
+          key: templatesResponse[i]._id,
+          name: templatesResponse[i].name,
+          scrollFileName: scrollTextFileResponse,
+          speedFileName: speedTextFileResponse,
+          questionFormat: templatesResponse[i].questionFormat,
         });
-        setTemplates(options);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log("Error fetching session templates:", error);
-      });
+      }
+      setTemplates(options);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching session templates:", error);
+    }
   }
 
   const displaySessionTemplates = () => {
@@ -71,7 +75,19 @@ const SessionTemplates = () => {
                 <Header
                   style={{ margin: 5 }}
                   size="small"
+                  content={template.name}
+                />
+                <ItemDescription
+                  style={{ margin: 5 }}
                   content={`Scroll Text File: ${template.scrollFileName}`}
+                />
+                <ItemDescription
+                  style={{ margin: 5 }}
+                  content={`Speed Text File: ${template.speedFileName}`}
+                />
+                <ItemDescription
+                  style={{ margin: 5 }}
+                  content={`Question Format: ${template.questionFormat}`}
                 />
               </Item.Content>
             </Item>
@@ -85,7 +101,7 @@ const SessionTemplates = () => {
     <div>
       <Header as="h2" textAlign="center" content="Existing Templates:" />
       <div>
-        <Segment>{displaySessionTemplates()}</Segment>
+        <Segment basic>{displaySessionTemplates()}</Segment>
       </div>
       <Button
         style={{ marginTop: 10 }}

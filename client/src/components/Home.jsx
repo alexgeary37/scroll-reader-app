@@ -6,12 +6,13 @@ import { SessionContext } from "../contexts/SessionContext";
 
 const Home = () => {
   const [userName, setUserName] = useState("");
+  const [displayUserNameError, setDisplayUserNameError] = useState(false);
   const sessionContext = useContext(SessionContext);
   const startTask1Ref = createRef();
 
-  // useEffect(() => {
-  //   fetchSessionTemplate();
-  // }, []);
+  useEffect(() => {
+    fetchSessionTemplate();
+  }, []);
 
   async function fetchSessionTemplate() {
     const url = window.location.href.toString();
@@ -25,41 +26,33 @@ const Home = () => {
         sessionContext.setTemplate(response.data);
       })
       .catch((error) => {
-        console.log("Error fetching SessionTemplate:", error);
+        console.error("Error fetching SessionTemplate:", error);
       });
   }
 
   // Add new session to database.
   async function createSession() {
-    const date = new Date();
-    const timestamp =
-      date.getHours() +
-      ":" +
-      date.getMinutes() +
-      ":" +
-      date.getSeconds() +
-      ":" +
-      date.getMilliseconds();
-
     const newSession = {
       userName: sessionContext.userName,
       template: sessionContext.template,
-      startTime: timestamp,
+      startTime: new Date(),
       endTime: "",
     };
-
-    console.log(newSession);
 
     Axios.post("http://localhost:3001/addReadingSession", newSession)
       .then((response) => {
         sessionContext.setSessionID(response.data._id);
       })
       .catch((error) => {
-        console.log("Error adding session:", error);
+        console.error("Error adding session:", error);
       });
   }
 
   const handleStartTask1 = () => {
+    if (userName === "") {
+      setDisplayUserNameError(true);
+      return;
+    }
     sessionContext.setUserName(userName);
     sessionContext.setInProgress(true);
     createSession();
@@ -67,7 +60,18 @@ const Home = () => {
   };
 
   const handleUserNameChange = (event) => {
+    setDisplayUserNameError(false);
     setUserName(event.target.value);
+  };
+
+  const userNameError = () => {
+    if (displayUserNameError) {
+      return (
+        <label style={{ padding: 10, float: "right", color: "red" }}>
+          Please enter a username!
+        </label>
+      );
+    }
   };
 
   return (
@@ -87,12 +91,9 @@ const Home = () => {
               placeholder="Type your name here..."
               onChange={handleUserNameChange}
             />
-            <Button
-              primary
-              content="Start Task 1"
-              onClick={handleStartTask1}
-            />
+            <Button primary content="Start Task 1" onClick={handleStartTask1} />
             <Link to="/ScrollText" hidden ref={startTask1Ref}></Link>
+            {userNameError()}
           </div>
         </Segment>
       </Container>

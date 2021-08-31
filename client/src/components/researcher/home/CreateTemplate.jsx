@@ -7,14 +7,18 @@ import {
   Segment,
   Modal,
   Dropdown,
+  Input,
 } from "semantic-ui-react";
 import Axios from "axios";
 
 const CreateTemplate = ({ isOpen, close }) => {
+  const [templateName, setTemplateName] = useState("");
   const [scrollTextID, setScrollTextID] = useState("");
   const [speedTextID, setSpeedTextID] = useState("");
   const [comprehension, setComprehension] = useState(true);
   const [textOptions, setTextOptions] = useState([]);
+  const [displayTemplateNameError, setDisplayTemplateNameError] =
+    useState(false);
   const [displayScrollTextError, setDisplayScrollTextError] = useState(false);
   const [displaySpeedTextError, setDisplaySpeedTextError] = useState(false);
 
@@ -37,25 +41,33 @@ const CreateTemplate = ({ isOpen, close }) => {
         setTextOptions(options);
       })
       .catch((error) => {
-        console.log("Error fetching text files:", error);
+        console.error("Error fetching text files:", error);
       });
   }
 
   async function handleCreate() {
+    let emptyFields = false;
+
+    if (templateName === "") {
+      setDisplayTemplateNameError(true);
+      emptyFields = true;
+    }
     if (scrollTextID === "") {
       setDisplayScrollTextError(true);
-      if (speedTextID === "") {
-        setDisplaySpeedTextError(true);
-      }
-      return;
+      emptyFields = true;
     }
     if (speedTextID === "") {
       setDisplaySpeedTextError(true);
+      emptyFields = true;
+    }
+
+    if (emptyFields) {
       return;
     }
 
     const questionFormat = comprehension ? "comprehension" : "inline";
     const template = {
+      name: templateName,
       scrollTextFileID: scrollTextID,
       speedTextFileID: speedTextID,
       questionFormat: questionFormat,
@@ -67,9 +79,19 @@ const CreateTemplate = ({ isOpen, close }) => {
         handleClose(true);
       })
       .catch((error) => {
-        console.log("Error creating session template:", error);
+        console.error("Error creating session template:", error);
       });
   }
+
+  const nameError = () => {
+    if (displayTemplateNameError) {
+      return (
+        <label style={{ padding: 10, float: "right", color: "red" }}>
+          Template must be given a name!
+        </label>
+      );
+    }
+  };
 
   const textError = (testType, displayError) => {
     if (displayError) {
@@ -79,6 +101,11 @@ const CreateTemplate = ({ isOpen, close }) => {
         </label>
       );
     }
+  };
+
+  const handleTemplateNameChange = (event) => {
+    setTemplateName(event.target.value);
+    setDisplayTemplateNameError(false);
   };
 
   const handleSelectScrollText = (e, data) => {
@@ -92,9 +119,11 @@ const CreateTemplate = ({ isOpen, close }) => {
   };
 
   const handleClose = (templateCreated) => {
+    setTemplateName("");
     setScrollTextID("");
     setSpeedTextID("");
     setComprehension(true);
+    setDisplayTemplateNameError(false);
     setDisplayScrollTextError(false);
     setDisplaySpeedTextError(false);
     close(templateCreated);
@@ -107,7 +136,23 @@ const CreateTemplate = ({ isOpen, close }) => {
       <h1>Create a Session Template</h1>
       <Divider />
       <div>
-        <Segment compact>
+        <Segment basic compact>
+          <div className="wrapper">
+            <Header
+              as="h3"
+              content="Template Name:"
+              style={{ paddingTop: 5, marginRight: 10 }}
+            />
+            <Input
+              type="text"
+              placeholder="Type template name here..."
+              onChange={handleTemplateNameChange}
+            />
+          </div>
+          {nameError()}
+        </Segment>
+
+        <Segment basic compact>
           <div className="wrapper">
             <Header
               as="h3"
@@ -126,7 +171,7 @@ const CreateTemplate = ({ isOpen, close }) => {
           {textError("scroll", displayScrollTextError)}
         </Segment>
 
-        <Segment compact>
+        <Segment basic compact>
           <div className="wrapper">
             <Header
               as="h3"
@@ -146,7 +191,7 @@ const CreateTemplate = ({ isOpen, close }) => {
         </Segment>
       </div>
 
-      <Segment>
+      <Segment basic>
         <Form>
           <div className="grouped fields">
             <Header as="h3" content="Question Format:" />

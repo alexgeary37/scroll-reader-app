@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const ReadingSessionModel = require("./readingSessions");
 const ScrollPosEntryModel = require("./scrollPosEntries");
-const SessionTemplateModel = require("./sessionTemplates");
+const SessionTemplateModel = require("./sessionTemplates").SessionTemplateModel;
 const TextFileModel = require("./textFiles");
 
 class Server {
@@ -32,7 +32,6 @@ class Server {
 
   routes() {
     this.app.post("/uploadTextFile", async (req, res) => {
-      console.log("uploadingTextFile server", req);
       const newTextFile = req.body;
       const textFile = new TextFileModel(newTextFile);
       await textFile.save();
@@ -41,7 +40,6 @@ class Server {
 
     this.app.get("/getTextFile", async (req, res) => {
       const id = req.query;
-      console.log(id);
       TextFileModel.findOne({ _id: id }, (err, result) => {
         if (err) {
           res.send(err);
@@ -62,7 +60,6 @@ class Server {
     });
 
     this.app.post("/createSessionTemplate", async (req, res) => {
-      console.log("createSessionTemplate server", req);
       const newTemplate = req.body;
       const template = new SessionTemplateModel(newTemplate);
       await template.save();
@@ -102,8 +99,12 @@ class Server {
       const newEndTime = req.body.endTime;
 
       await ReadingSessionModel.findById(id, (err, session) => {
-        session.endTime = newEndTime;
-        session.save();
+        if (err) {
+          res.send(err);
+        } else {
+          session.endTime = newEndTime;
+          session.save();
+        }
       });
 
       res.send("Updated");

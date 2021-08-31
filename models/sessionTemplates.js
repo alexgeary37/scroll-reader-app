@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
-const SessionTemplateSchema = mongoose.Schema({
+const SessionTemplateStructure = {
+  name: {
+    type: String,
+    required: true,
+  },
   scrollTextFileID: {
     type: String,
     required: true,
@@ -17,11 +21,15 @@ const SessionTemplateSchema = mongoose.Schema({
     type: Date,
     required: true,
   },
-});
+};
+const SessionTemplateSchema = mongoose.Schema(SessionTemplateStructure);
 
 const SessionTemplateModel = mongoose.model(
   "sessionTemplates",
   SessionTemplateSchema
 );
 
-module.exports = SessionTemplateModel;
+module.exports = {
+  SessionTemplateStructure,
+  SessionTemplateModel,
+};

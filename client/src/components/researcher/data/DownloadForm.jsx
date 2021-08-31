@@ -25,7 +25,7 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
         setSessionOptions(options);
       })
       .catch((error) => {
-        console.log("Error fetching ReadingSessions:", error);
+        console.error("Error fetching ReadingSessions:", error);
       });
   }
 
@@ -45,7 +45,7 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
         toggleOpenDownloadForm();
       })
       .catch((error) => {
-        console.log("Error fetching scroll data:", error);
+        console.error("Error fetching scroll data:", error);
       });
   }
 

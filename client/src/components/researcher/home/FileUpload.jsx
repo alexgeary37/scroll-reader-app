@@ -21,12 +21,11 @@ const FileUpload = ({ uploadSubmitted }) => {
           createdAt: new Date(),
         };
         Axios.post("http://localhost:3001/uploadTextFile", textFile)
-          .then((response) => {
-            console.log("uploadTextFile response::", response);
+          .then(() => {
             uploadSubmitted();
           })
           .catch((error) => {
-            console.log("Error uploading text file:", error);
+            console.error("Error uploading text file:", error);
           });
       };
       reader.readAsText(file);
