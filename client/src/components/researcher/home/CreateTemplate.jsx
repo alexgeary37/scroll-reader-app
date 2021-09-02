@@ -85,13 +85,11 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   };
 
   const handleSelectScrollText = (e, data) => {
-    console.log(e, data);
     setScrollTextID(data.value);
     setDisplayScrollTextError(false);
   };
 
   const handleSelectSpeedText = (e, data) => {
-    console.log(e, data);
     setSpeedTextID(data.value);
     setDisplaySpeedTextError(false);
   };

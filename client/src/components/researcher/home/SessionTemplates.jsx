@@ -34,36 +34,36 @@ const SessionTemplates = ({ textFiles }) => {
     try {
       setIsLoading(true);
       const options = [];
-      const templatesResponse = await Axios.get(
-        "http://localhost:3001/getSessionTemplates"
+      Axios.get("http://localhost:3001/getSessionTemplates").then(
+        (templatesResponse) => {
+          const templatesData = templatesResponse.data;
+          templatesData.forEach((temp) => {
+            Axios.get("http://localhost:3001/getTextFile", {
+              params: { _id: temp.scrollTextFileID },
+            }).then((scrollTextFileResponse) => {
+              const scrollTextFileName = scrollTextFileResponse.data.fileName;
+              Axios.get("http://localhost:3001/getTextFile", {
+                params: { _id: temp.speedTextFileID },
+              }).then((speedTextFileResponse) => {
+                const speedTextFileName = speedTextFileResponse.data.fileName;
+                options.push({
+                  key: temp._id,
+                  name: temp.name,
+                  scrollFileName: scrollTextFileName,
+                  speedFileName: speedTextFileName,
+                  questionFormat: temp.questionFormat,
+                  url: temp._id,
+                });
+              });
+            });
+          });
+        }
       );
-      const templatesData = templatesResponse.data;
-
-      for (let i = 0; i < templatesData.length; i++) {
-        const scrollTextFileResponse = await Axios.get(
-          "http://localhost:3001/getTextFile",
-          { params: { _id: templatesData[i].scrollTextFileID } }
-        );
-        const scrollTextFileName = scrollTextFileResponse.data.fileName;
-
-        const speedTextFileResponse = await Axios.get(
-          "http://localhost:3001/getTextFile",
-          { params: { _id: templatesData[i].speedTextFileID } }
-        );
-        const speedTextFileName = speedTextFileResponse.data.fileName;
-
-        options.push({
-          key: templatesData[i]._id,
-          name: templatesData[i].name,
-          scrollFileName: scrollTextFileName,
-          speedFileName: speedTextFileName,
-          questionFormat: templatesData[i].questionFormat,
-          url: templatesData[i]._id,
-        });
-      }
 
       setTemplates(options);
-      setIsLoading(false);
+      if (templates.length > 0) {
+        setIsLoading(false);
+      }
     } catch (error) {
       console.error("Error fetching session templates:", error);
     }
@@ -71,6 +71,7 @@ const SessionTemplates = ({ textFiles }) => {
 
   const displaySessionTemplates = () => {
     if (!isLoading) {
+      console.log(templates);
       return (
         <List relaxed divided>
           {templates.map((template) => (
