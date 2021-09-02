@@ -11,39 +11,15 @@ import {
 } from "semantic-ui-react";
 import Axios from "axios";
 
-const CreateTemplate = ({ isOpen, close }) => {
+const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [templateName, setTemplateName] = useState("");
   const [scrollTextID, setScrollTextID] = useState("");
   const [speedTextID, setSpeedTextID] = useState("");
   const [comprehension, setComprehension] = useState(true);
-  const [textOptions, setTextOptions] = useState([]);
   const [displayTemplateNameError, setDisplayTemplateNameError] =
     useState(false);
   const [displayScrollTextError, setDisplayScrollTextError] = useState(false);
   const [displaySpeedTextError, setDisplaySpeedTextError] = useState(false);
-
-  useEffect(() => {
-    fetchTextFiles();
-  }, []);
-
-  async function fetchTextFiles() {
-    Axios.get("http://localhost:3001/getTextFiles")
-      .then((response) => {
-        const files = response.data;
-        const options = [];
-        files.forEach((file) => {
-          options.push({
-            key: file._id,
-            value: file._id,
-            text: file.fileName,
-          });
-        });
-        setTextOptions(options);
-      })
-      .catch((error) => {
-        console.error("Error fetching text files:", error);
-      });
-  }
 
   async function handleCreate() {
     let emptyFields = false;
@@ -109,11 +85,13 @@ const CreateTemplate = ({ isOpen, close }) => {
   };
 
   const handleSelectScrollText = (e, data) => {
+    console.log(e, data);
     setScrollTextID(data.value);
     setDisplayScrollTextError(false);
   };
 
   const handleSelectSpeedText = (e, data) => {
+    console.log(e, data);
     setSpeedTextID(data.value);
     setDisplaySpeedTextError(false);
   };
@@ -129,7 +107,7 @@ const CreateTemplate = ({ isOpen, close }) => {
     close(templateCreated);
   };
 
-  const textSelectionPlaceholder = textOptions[0] ? textOptions[0].text : "";
+  const textSelectionPlaceholder = textFiles[0] ? textFiles[0].text : "";
 
   return (
     <Modal open={isOpen} style={{ padding: 10 }}>
@@ -164,7 +142,7 @@ const CreateTemplate = ({ isOpen, close }) => {
               fluid
               search
               selection
-              options={textOptions}
+              options={textFiles}
               onChange={handleSelectScrollText}
             />
           </div>
@@ -183,7 +161,7 @@ const CreateTemplate = ({ isOpen, close }) => {
               fluid
               search
               selection
-              options={textOptions}
+              options={textFiles}
               onChange={handleSelectSpeedText}
             />
           </div>

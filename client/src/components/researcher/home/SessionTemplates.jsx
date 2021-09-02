@@ -10,7 +10,7 @@ import {
 } from "semantic-ui-react";
 import CreateTemplate from "./CreateTemplate";
 
-const SessionTemplates = () => {
+const SessionTemplates = ({ textFiles }) => {
   const [templates, setTemplates] = useState([]);
   const [openTemplateCreator, setOpenTemplateCreator] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,34 +31,37 @@ const SessionTemplates = () => {
   };
 
   async function fetchSessionTemplates() {
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       const options = [];
-      let templatesResponse = await Axios.get(
+      const templatesResponse = await Axios.get(
         "http://localhost:3001/getSessionTemplates"
       );
-      templatesResponse = templatesResponse.data;
-      for (let i = 0; i < templatesResponse.length; i++) {
+      const templatesData = templatesResponse.data;
+
+      for (let i = 0; i < templatesData.length; i++) {
         const scrollTextFileResponse = await Axios.get(
           "http://localhost:3001/getTextFile",
-          { params: { _id: templatesResponse[i].scrollTextFileID } }
+          { params: { _id: templatesData[i].scrollTextFileID } }
         );
         const scrollTextFileName = scrollTextFileResponse.data.fileName;
 
         const speedTextFileResponse = await Axios.get(
           "http://localhost:3001/getTextFile",
-          { params: { _id: templatesResponse[i].speedTextFileID } }
+          { params: { _id: templatesData[i].speedTextFileID } }
         );
         const speedTextFileName = speedTextFileResponse.data.fileName;
+
         options.push({
-          key: templatesResponse[i]._id,
-          name: templatesResponse[i].name,
+          key: templatesData[i]._id,
+          name: templatesData[i].name,
           scrollFileName: scrollTextFileName,
           speedFileName: speedTextFileName,
-          questionFormat: templatesResponse[i].questionFormat,
-          url: templatesResponse[i]._id,
+          questionFormat: templatesData[i].questionFormat,
+          url: templatesData[i]._id,
         });
       }
+
       setTemplates(options);
       setIsLoading(false);
     } catch (error) {
@@ -117,6 +120,7 @@ const SessionTemplates = () => {
       <CreateTemplate
         isOpen={openTemplateCreator}
         close={closeTemplateCreator}
+        textFiles={textFiles}
       />
     </div>
   );
