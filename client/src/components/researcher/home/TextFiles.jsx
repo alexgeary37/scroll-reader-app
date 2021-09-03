@@ -8,7 +8,7 @@ import {
 } from "semantic-ui-react";
 import FileUpload from "./FileUpload";
 
-const TextFiles = ({ textFiles, fetchTextFiles }) => {
+const TextFiles = ({ textFiles, appendTextFile }) => {
   const displayTextFiles = () => {
     return (
       <List relaxed divided>
@@ -38,7 +38,7 @@ const TextFiles = ({ textFiles, fetchTextFiles }) => {
       <div>
         <Segment basic>{displayTextFiles()}</Segment>
       </div>
-      <FileUpload uploadSubmitted={() => fetchTextFiles()} />
+      <FileUpload uploadSubmitted={(file) => appendTextFile(file)} />
     </div>
   );
 };

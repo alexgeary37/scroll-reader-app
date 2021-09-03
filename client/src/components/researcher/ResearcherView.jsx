@@ -18,14 +18,16 @@ const ResearcherView = () => {
   });
 
   useEffect(() => {
+    // Fetch text files only on first render.
     fetchTextFiles();
   }, []);
 
   useEffect(() => {
+    // Fetch session templates only after text files have been fetched.
     if (!textFiles.isFetching) {
       fetchSessionTemplates();
     }
-  }, [textFiles.textFiles]);
+  }, [textFiles.isFetching]);
 
   const fetchTextFiles = () => {
     try {
@@ -43,6 +45,7 @@ const ResearcherView = () => {
           };
           files.push(textFile);
         });
+        // Set text files for rendering, and indicate that they are no longer being fetched.
         setTextFiles({ textFiles: files, isFetching: false });
       });
     } catch (error) {
@@ -58,6 +61,7 @@ const ResearcherView = () => {
           const options = [];
           const data = templatesResponse.data;
           data.forEach((temp) => {
+            // Get names of text files this template references.
             const scrollTextFileName = textFiles.textFiles.find(
               (tf) => tf.key === temp.scrollTextFileID
             ).name;
@@ -77,6 +81,7 @@ const ResearcherView = () => {
 
             options.push(option);
           });
+          // Set templates for rendering, and indicate that they are no longer being fetched.
           setTemplates({ templates: options, isFetching: false });
         }
       );
@@ -87,12 +92,20 @@ const ResearcherView = () => {
 
   const textDocuments = () => {
     const curUrl = window.location.href;
+
+    // Do not render text files if the researcher is looking at the data page,
+    // or if the files are still being fetched from the database.
     if (curUrl.substr(curUrl.length - 5) !== "/data" && !textFiles.isFetching) {
       return (
         <div>
           <TextFiles
             textFiles={textFiles.textFiles}
-            fetchTextFiles={() => fetchTextFiles()}
+            appendTextFile={(file) =>
+              setTextFiles({
+                textFiles: [...textFiles.textFiles, file],
+                isFetching: false,
+              })
+            }
           />
         </div>
       );
@@ -101,6 +114,9 @@ const ResearcherView = () => {
 
   const sessionTemplates = () => {
     const curUrl = window.location.href;
+
+    // Do not render session templates if the researcher is looking at the data page,
+    // or if the session templates are still being fetched from the database.
     if (curUrl.substr(curUrl.length - 5) !== "/data" && !templates.isFetching) {
       return (
         <div>

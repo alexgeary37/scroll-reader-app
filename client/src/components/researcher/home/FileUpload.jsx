@@ -21,8 +21,15 @@ const FileUpload = ({ uploadSubmitted }) => {
           createdAt: new Date(),
         };
         Axios.post("http://localhost:3001/uploadTextFile", textFile)
-          .then(() => {
-            uploadSubmitted();
+          .then((response) => {
+            const doc = {
+              key: response.data._id,
+              value: response.data._id,
+              name: textFile.fileName,
+              text: textFile.fileName, // This is for the Dropdown in CreateTemplate.jsx
+              uploadedAt: textFile.createdAt,
+            };
+            uploadSubmitted(doc);
           })
           .catch((error) => {
             console.error("Error uploading text file:", error);
