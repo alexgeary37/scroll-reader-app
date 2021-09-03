@@ -15,6 +15,8 @@ const Home = () => {
   }, []);
 
   const fetchSessionTemplate = () => {
+
+    // Get sessionTemplateID from the url.
     const url = window.location.href.toString();
     const templateId = url.substr(url.lastIndexOf("/") + 1);
 
