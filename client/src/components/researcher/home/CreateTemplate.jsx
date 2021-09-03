@@ -103,15 +103,15 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setDisplayScrollTextError(false);
     setDisplaySpeedTextError(false);
 
-    const scrollTextFileName = textFiles.find(
-      (tf) => tf.key === responseData.scrollTextFileID
-    ).name;
-
-    const speedTextFileName = textFiles.find(
-      (tf) => tf.key === responseData.speedTextFileID
-    ).name;
-
     if (templateCreated) {
+      const scrollTextFileName = textFiles.find(
+        (tf) => tf.key === responseData.scrollTextFileID
+      ).name;
+
+      const speedTextFileName = textFiles.find(
+        (tf) => tf.key === responseData.speedTextFileID
+      ).name;
+
       const template = {
         key: responseData._id,
         name: responseData.name,
