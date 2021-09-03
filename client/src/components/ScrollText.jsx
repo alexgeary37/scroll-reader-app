@@ -1,6 +1,6 @@
 import { SessionContext } from "../contexts/SessionContext.jsx";
 import MainText from "./MainText.jsx";
-import { useContext, useEffect, createRef, useState } from "react";
+import { useContext, useEffect, createRef } from "react";
 import {
   Container,
   Segment,

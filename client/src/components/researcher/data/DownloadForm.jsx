@@ -10,7 +10,7 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
     fetchSessions();
   }, []);
 
-  async function fetchSessions() {
+  const fetchSessions = () => {
     Axios.get("http://localhost:3001/getReadingSessions")
       .then((response) => {
         const readingSessions = response.data;
@@ -27,9 +27,9 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
       .catch((error) => {
         console.error("Error fetching ReadingSessions:", error);
       });
-  }
+  };
 
-  async function fetchScrollData() {
+  const fetchScrollData = () => {
     Axios.get("http://localhost:3001/getScrollPosEntries", {
       params: { sessionID: sessionID },
     })
@@ -47,7 +47,7 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
       .catch((error) => {
         console.error("Error fetching scroll data:", error);
       });
-  }
+  };
 
   // https://www.codegrepper.com/code-examples/javascript/semantic+ui+react+how+to+get+dropdown+value
   const handleSelectSession = (e, data) => {

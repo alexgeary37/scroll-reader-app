@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Button,
   Divider,
@@ -21,7 +21,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [displayScrollTextError, setDisplayScrollTextError] = useState(false);
   const [displaySpeedTextError, setDisplaySpeedTextError] = useState(false);
 
-  async function handleCreate() {
+  const handleCreate = () => {
     let emptyFields = false;
 
     if (templateName === "") {
@@ -51,13 +51,13 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     };
 
     Axios.post("http://localhost:3001/createSessionTemplate", template)
-      .then(() => {
-        handleClose(true);
+      .then((response) => {
+        handleClose(true, response.data);
       })
       .catch((error) => {
         console.error("Error creating session template:", error);
       });
-  }
+  };
 
   const nameError = () => {
     if (displayTemplateNameError) {
@@ -94,7 +94,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setDisplaySpeedTextError(false);
   };
 
-  const handleClose = (templateCreated) => {
+  const handleClose = (templateCreated, responseData) => {
     setTemplateName("");
     setScrollTextID("");
     setSpeedTextID("");
@@ -102,7 +102,21 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setDisplayTemplateNameError(false);
     setDisplayScrollTextError(false);
     setDisplaySpeedTextError(false);
-    close(templateCreated);
+
+    if (templateCreated) {
+      const template = {
+        key: responseData._id,
+        name: responseData.name,
+        scrollFileName: responseData.scrollTextFileID,
+        speedFileName: responseData.speedTextFileID,
+        questionFormat: responseData.questionFormat,
+        url: responseData._id,
+      };
+
+      close(true, template);
+    } else {
+      close(false, null);
+    }
   };
 
   const textSelectionPlaceholder = textFiles[0] ? textFiles[0].text : "";
@@ -196,7 +210,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       </Segment>
 
       <Button primary content="Create" onClick={handleCreate} />
-      <Button content="Cancel" onClick={() => handleClose(false)} />
+      <Button content="Cancel" onClick={() => handleClose(false, null)} />
     </Modal>
   );
 };

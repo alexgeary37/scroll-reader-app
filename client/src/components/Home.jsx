@@ -14,7 +14,7 @@ const Home = () => {
     fetchSessionTemplate();
   }, []);
 
-  async function fetchSessionTemplate() {
+  const fetchSessionTemplate = () => {
     const url = window.location.href.toString();
     const templateId = url.substr(url.lastIndexOf("/") + 1);
 
@@ -28,10 +28,10 @@ const Home = () => {
       .catch((error) => {
         console.error("Error fetching SessionTemplate:", error);
       });
-  }
+  };
 
   // Add new session to database.
-  async function createSession() {
+  const createSession = () => {
     const date = new Date();
 
     const newSession = {
@@ -48,7 +48,7 @@ const Home = () => {
       .catch((error) => {
         console.error("Error adding session:", error);
       });
-  }
+  };
 
   const handleStartTask1 = () => {
     if (userName === "") {

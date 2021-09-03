@@ -12,7 +12,7 @@ const MainText = () => {
     fetchText();
   }, []);
 
-  async function fetchText() {
+  const fetchText = () => {
     Axios.get("http://localhost:3001/getTextFile", {
       params: { _id: sessionContext.template.scrollTextFileID },
     })
@@ -22,9 +22,9 @@ const MainText = () => {
       .catch((error) => {
         console.error("Error fetching text in ScrollText:", error);
       });
-  }
+  };
 
-  async function addScrollPosEntry(currPos) {
+  const addScrollPosEntry = (currPos) => {
     if (sessionContext.inProgress) {
       const date = new Date();
       const timestamp =
@@ -49,7 +49,7 @@ const MainText = () => {
         console.error("Error adding scrollPosEntry:", error);
       });
     }
-  }
+  };
 
   // This is a useLayoutEffect function.
   useScrollPosition(addScrollPosEntry, 50);

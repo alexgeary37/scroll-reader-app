@@ -9,7 +9,7 @@ const FileUpload = ({ uploadSubmitted }) => {
     fileRef.current.click();
   };
 
-  async function handleFileSelect(event) {
+  const handleFileSelect = (event) => {
     // https://stackoverflow.com/questions/51272255/how-to-use-filereader-in-react/51278185
     const file = event.target.files[0];
     if (typeof file !== `undefined`) {
@@ -30,7 +30,7 @@ const FileUpload = ({ uploadSubmitted }) => {
       };
       reader.readAsText(file);
     }
-  }
+  };
 
   return (
     //https://stackoverflow.com/questions/55464274/react-input-type-file-semantic-ui-react
