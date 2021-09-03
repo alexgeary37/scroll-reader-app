@@ -19,16 +19,13 @@ const ResearcherView = () => {
 
   useEffect(() => {
     fetchTextFiles();
-    fetchSessionTemplates();
   }, []);
 
-  // useEffect(() => {
-  //   console.log("B4", textFiles.textFiles);
-  //   if (textFiles.textFiles.length > 0) {
-  //     console.log("In", textFiles.textFiles);
-  //     fetchSessionTemplates();
-  //   }
-  // }, [textFiles.textFiles]);
+  useEffect(() => {
+    if (!textFiles.isFetching) {
+      fetchSessionTemplates();
+    }
+  }, [textFiles.textFiles]);
 
   const fetchTextFiles = () => {
     try {
@@ -61,25 +58,24 @@ const ResearcherView = () => {
           const options = [];
           const data = templatesResponse.data;
           data.forEach((temp) => {
-            Axios.get("http://localhost:3001/getTextFile", {
-              params: { _id: temp.scrollTextFileID },
-            }).then((scrollTextFileResponse) => {
-              const scrollTextFileName = scrollTextFileResponse.data.fileName;
-              Axios.get("http://localhost:3001/getTextFile", {
-                params: { _id: temp.speedTextFileID },
-              }).then((speedTextFileResponse) => {
-                const speedTextFileName = speedTextFileResponse.data.fileName;
-                const option = {
-                  key: temp._id,
-                  name: temp.name,
-                  scrollFileName: scrollTextFileName,
-                  speedFileName: speedTextFileName,
-                  questionFormat: temp.questionFormat,
-                  url: temp._id,
-                };
-                options.push(option);
-              });
-            });
+            const scrollTextFileName = textFiles.textFiles.find(
+              (tf) => tf.key === temp.scrollTextFileID
+            ).name;
+
+            const speedTextFileName = textFiles.textFiles.find(
+              (tf) => tf.key === temp.speedTextFileID
+            ).name;
+
+            const option = {
+              key: temp._id,
+              name: temp.name,
+              scrollFileName: scrollTextFileName,
+              speedFileName: speedTextFileName,
+              questionFormat: temp.questionFormat,
+              url: temp._id,
+            };
+
+            options.push(option);
           });
           setTemplates({ templates: options, isFetching: false });
         }
