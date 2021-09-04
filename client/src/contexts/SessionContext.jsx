@@ -12,6 +12,8 @@ export const SessionProvider = ({ children }) => {
   const [inProgress, setInProgress] = useState(
     JSON.parse(localStorage.getItem("inProgress"))
   );
+
+  // This sessionID enables the session to be accessed from db for updates.
   const [sessionID, setSessionID] = useState(localStorage.getItem("sessionID"));
 
   // If this is the first time the page has been loaded, set the initial value
@@ -20,7 +22,7 @@ export const SessionProvider = ({ children }) => {
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("inProgress")) === null) {
       setUserName("");
-      setTemplate({});
+      setTemplate(null);
       setInProgress(false);
       setSessionID("");
     }

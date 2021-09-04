@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const SessionTemplateStructure = {
+const SessionTemplateSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -21,15 +21,11 @@ const SessionTemplateStructure = {
     type: Date,
     required: true,
   },
-};
-const SessionTemplateSchema = mongoose.Schema(SessionTemplateStructure);
+});
 
 const SessionTemplateModel = mongoose.model(
   "sessionTemplates",
   SessionTemplateSchema
 );
 
-module.exports = {
-  SessionTemplateStructure,
-  SessionTemplateModel,
-};
+module.exports = SessionTemplateModel;

@@ -1,6 +1,6 @@
 import { Container } from "semantic-ui-react";
 import useScrollPosition from "./scrollPosition.jsx";
-import { SessionContext } from "../contexts/SessionContext.jsx";
+import { SessionContext } from "../../contexts/SessionContext.jsx";
 import { useContext, useEffect, useState } from "react";
 import Axios from "axios";
 

@@ -1,13 +1,12 @@
 const mongoose = require("mongoose");
-const SessionTemplate = require("./sessionTemplates");
 
 const ReadingSessionSchema = new mongoose.Schema({
   userName: {
     type: String,
     required: true,
   },
-  template: {
-    type: SessionTemplate.SessionTemplateStructure,
+  templateID: {
+    type: String,
     required: true,
   },
   startTime: {
@@ -16,6 +15,32 @@ const ReadingSessionSchema = new mongoose.Schema({
   },
   endTime: {
     type: Date,
+    required: false,
+  },
+  scrollTest: {
+    type: {
+      startTime: {
+        type: Date,
+        required: false,
+      },
+      endTime: {
+        type: Date,
+        required: false,
+      },
+    },
+    required: false,
+  },
+  speedTest: {
+    type: {
+      startTime: {
+        type: Date,
+        required: false,
+      },
+      endTime: {
+        type: Date,
+        required: false,
+      },
+    },
     required: false,
   },
 });

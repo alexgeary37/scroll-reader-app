@@ -4,7 +4,7 @@ import { Button, Container, Divider } from "semantic-ui-react";
 import DownloadForm from "./DownloadForm.jsx";
 
 const DataGraph = () => {
-  const [scrollData, setScrollData] = useState({});
+  const [scrollData, setScrollData] = useState(null);
   const [openDownloadForm, setOpenDownloadForm] = useState(false);
   const [pointRadius, setPointRadius] = useState(0);
 

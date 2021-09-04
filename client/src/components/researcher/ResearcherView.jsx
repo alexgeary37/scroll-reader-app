@@ -30,9 +30,9 @@ const ResearcherView = () => {
   }, [textFiles.isFetching]);
 
   const fetchTextFiles = () => {
-    try {
-      setTextFiles({ textFiles: textFiles.textFiles, isFetching: true });
-      Axios.get("http://localhost:3001/getTextFiles").then((response) => {
+    setTextFiles({ textFiles: textFiles.textFiles, isFetching: true });
+    Axios.get("http://localhost:3001/getTextFiles")
+      .then((response) => {
         const data = response.data;
         const files = [];
         data.forEach((file) => {
@@ -47,47 +47,45 @@ const ResearcherView = () => {
         });
         // Set text files for rendering, and indicate that they are no longer being fetched.
         setTextFiles({ textFiles: files, isFetching: false });
+      })
+      .catch((error) => {
+        console.error("Error fetching files:", error);
       });
-    } catch (error) {
-      console.error("Error fetching files:", error);
-    }
   };
 
   const fetchSessionTemplates = () => {
-    try {
-      setTemplates({ templates: templates.templates, isFetching: true });
-      Axios.get("http://localhost:3001/getSessionTemplates").then(
-        (templatesResponse) => {
-          const options = [];
-          const data = templatesResponse.data;
-          data.forEach((temp) => {
-            // Get names of text files this template references.
-            const scrollTextFileName = textFiles.textFiles.find(
-              (tf) => tf.key === temp.scrollTextFileID
-            ).name;
+    setTemplates({ templates: templates.templates, isFetching: true });
+    Axios.get("http://localhost:3001/getSessionTemplates")
+      .then((templatesResponse) => {
+        const options = [];
+        const data = templatesResponse.data;
+        data.forEach((temp) => {
+          // Get names of text files this template references.
+          const scrollTextFileName = textFiles.textFiles.find(
+            (tf) => tf.key === temp.scrollTextFileID
+          ).name;
 
-            const speedTextFileName = textFiles.textFiles.find(
-              (tf) => tf.key === temp.speedTextFileID
-            ).name;
+          const speedTextFileName = textFiles.textFiles.find(
+            (tf) => tf.key === temp.speedTextFileID
+          ).name;
 
-            const option = {
-              key: temp._id,
-              name: temp.name,
-              scrollFileName: scrollTextFileName,
-              speedFileName: speedTextFileName,
-              questionFormat: temp.questionFormat,
-              url: temp._id,
-            };
+          const option = {
+            key: temp._id,
+            name: temp.name,
+            scrollFileName: scrollTextFileName,
+            speedFileName: speedTextFileName,
+            questionFormat: temp.questionFormat,
+            url: temp._id,
+          };
 
-            options.push(option);
-          });
-          // Set templates for rendering, and indicate that they are no longer being fetched.
-          setTemplates({ templates: options, isFetching: false });
-        }
-      );
-    } catch (error) {
-      console.error("Error fetching session templates:", error);
-    }
+          options.push(option);
+        });
+        // Set templates for rendering, and indicate that they are no longer being fetched.
+        setTemplates({ templates: options, isFetching: false });
+      })
+      .catch((error) => {
+        console.error("Error fetching session templates:", error);
+      });
   };
 
   const textDocuments = () => {

@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const ReadingSessionModel = require("./readingSessions");
 const ScrollPosEntryModel = require("./scrollPosEntries");
-const SessionTemplateModel = require("./sessionTemplates").SessionTemplateModel;
+const SessionTemplateModel = require("./sessionTemplates");
 const TextFileModel = require("./textFiles");
 
 class Server {
@@ -24,6 +24,7 @@ class Server {
     mongoose.connect(this.mongoUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false,
     });
 
     // Pick up React index.html file
@@ -87,27 +88,11 @@ class Server {
       });
     });
 
-    this.app.post("/addReadingSession", async (req, res) => {
+    this.app.post("/createReadingSession", async (req, res) => {
       const newSession = req.body;
       const session = new ReadingSessionModel(newSession);
       await session.save();
       res.send(session);
-    });
-
-    this.app.put("/updateReadingSession", async (req, res) => {
-      const id = req.body.id;
-      const newEndTime = req.body.endTime;
-
-      await ReadingSessionModel.findById(id, (err, session) => {
-        if (err) {
-          res.send(err);
-        } else {
-          session.endTime = newEndTime;
-          session.save();
-        }
-      });
-
-      res.send("Updated");
     });
 
     this.app.get("/getReadingSessions", async (req, res) => {
@@ -118,6 +103,78 @@ class Server {
           res.send(result);
         }
       });
+    });
+
+    this.app.put("/startReadingSessionScrollTest", async (req, res) => {
+      const id = req.body.id;
+      const startTime = req.body.startTime;
+
+      ReadingSessionModel.findByIdAndUpdate(
+        id,
+        { $set: { scrollTest: { startTime: startTime } } },
+        (err, session) => {
+          if (err) {
+            res.send(err);
+          } else {
+            session.save();
+            res.send("Added scrollText.startTime");
+          }
+        }
+      );
+    });
+
+    this.app.put("/startReadingSessionSpeedTest", async (req, res) => {
+      const id = req.body.id;
+      const startTime = req.body.startTime;
+
+      ReadingSessionModel.findByIdAndUpdate(
+        id,
+        { $set: { speedTest: { startTime: startTime } } },
+        (err, session) => {
+          if (err) {
+            res.send(err);
+          } else {
+            session.save();
+            res.send("Added speedText.startTime");
+          }
+        }
+      );
+    });
+
+    this.app.put("/finishReadingSessionScrollTest", async (req, res) => {
+      const id = req.body.id;
+      const endTime = req.body.endTime;
+
+      ReadingSessionModel.findByIdAndUpdate(
+        id,
+        { $set: { scrollText: { endTime: endTime } } },
+        (err, session) => {
+          if (err) {
+            res.send(err);
+          } else {
+            session.save();
+            res.send("Added scrollText.endTime");
+          }
+        }
+      );
+    });
+
+    this.app.put("/finishReadingSessionSpeedTest", async (req, res) => {
+      const id = req.body.id;
+      const endTime = req.body.endTime;
+
+      ReadingSessionModel.findByIdAndUpdate(
+        id,
+        { $set: { speedText: { endTime: endTime } } },
+        (err, session) => {
+          if (err) {
+            res.send(err);
+          } else {
+            session.save();
+            res.send("Added speedText.endTime");
+          }
+        }
+      );
     });
 
     this.app.post("/addScrollPosEntry", async (req, res) => {
