@@ -111,7 +111,7 @@ class Server {
 
       ReadingSessionModel.findByIdAndUpdate(
         id,
-        { $set: { scrollTest: { startTime: startTime } } },
+        { $set: { "scrollTest.startTime": startTime } },
         (err, session) => {
           if (err) {
             res.send(err);
@@ -129,13 +129,13 @@ class Server {
 
       ReadingSessionModel.findByIdAndUpdate(
         id,
-        { $set: { speedTest: { startTime: startTime } } },
+        { $set: { "speedTest.startTime": startTime } },
         (err, session) => {
           if (err) {
             res.send(err);
           } else {
             session.save();
-            res.send("Added speedText.startTime");
+            res.send("Added speedTest.startTime");
           }
         }
       );
@@ -147,13 +147,14 @@ class Server {
 
       ReadingSessionModel.findByIdAndUpdate(
         id,
-        { $set: { scrollText: { endTime: endTime } } },
+        { $set: { "scrollTest.endTime": endTime } },
+        { new: true },
         (err, session) => {
           if (err) {
             res.send(err);
           } else {
             session.save();
-            res.send("Added scrollText.endTime");
+            res.send("Added scrollTest.endTime");
           }
         }
       );
@@ -165,7 +166,7 @@ class Server {
 
       ReadingSessionModel.findByIdAndUpdate(
         id,
-        { $set: { speedText: { endTime: endTime } } },
+        { $set: { "speedTest.endTime": endTime } },
         (err, session) => {
           if (err) {
             res.send(err);

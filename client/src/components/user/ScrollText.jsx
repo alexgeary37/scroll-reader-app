@@ -16,14 +16,6 @@ const ScrollText = () => {
   const sessionContext = useContext(SessionContext);
   const startTask2Ref = createRef();
 
-  // const template = {
-  //   name: templateName,
-  //   scrollTextFileID: scrollTextID,
-  //   speedTextFileID: speedTextID,
-  //   questionFormat: questionFormat,
-  //   createdAt: new Date(),
-  // };
-
   const updateSession = async () => {
     let sessionUpdated = false;
     const sessionID = sessionContext.sessionID;
@@ -36,7 +28,10 @@ const ScrollText = () => {
         sessionUpdated = true;
       })
       .catch((error) => {
-        console.error("Error updating readingSession.scrollTest.endTime:", error);
+        console.error(
+          "Error updating readingSession.scrollTest.endTime:",
+          error
+        );
       });
 
     return sessionUpdated;
