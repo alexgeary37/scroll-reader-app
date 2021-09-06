@@ -19,7 +19,7 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
           options.push({
             key: session._id,
             value: session._id,
-            text: session.name,
+            text: session.userName,
           });
         });
         setSessionOptions(options);

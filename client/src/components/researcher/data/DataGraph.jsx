@@ -9,7 +9,7 @@ const DataGraph = () => {
   const [pointRadius, setPointRadius] = useState(0);
 
   const graphData = {
-    labels: scrollData.timestamps,
+    labels: scrollData !== null ? scrollData.timestamps : [],
     datasets: [
       {
         radius: pointRadius,
@@ -19,7 +19,7 @@ const DataGraph = () => {
         backgroundColor: "rgba(75,192,192,1)",
         borderColor: "rgba(0,0,0,1)",
         borderWidth: 1,
-        data: scrollData.yPositions,
+        data: scrollData !== null ? scrollData.yPositions : [],
       },
     ],
   };
@@ -28,12 +28,17 @@ const DataGraph = () => {
     setPointRadius(pointRadius === 0 ? 2 : 0);
   };
 
-  const toggleOpenDownloadForm = () => {
-    setOpenDownloadForm(!openDownloadForm);
+  const openForm = () => {
+    setOpenDownloadForm(true);
+    setPointRadius(0);
+  };
+
+  const closeForm = () => {
+    setOpenDownloadForm(false);
   };
 
   const displayShowButton = () => {
-    if (!openDownloadForm && typeof scrollData.yPositions !== `undefined`) {
+    if (!openDownloadForm && typeof scrollData !== null) {
       return (
         <Button
           content="Show Points"
@@ -45,24 +50,9 @@ const DataGraph = () => {
     }
   };
 
-  return (
-    <div>
-      <div className="wrapper">
-        <Button
-          primary
-          icon="download"
-          content="Download Data"
-          onClick={toggleOpenDownloadForm}
-        />
-        {displayShowButton()}
-      </div>
-      <Divider />
-      <DownloadForm
-        open={openDownloadForm}
-        closeForm={toggleOpenDownloadForm}
-        setScrollData={setScrollData}
-      />
-      <Container>
+  const displayLineGraph = () => {
+    if (scrollData !== null) {
+      return (
         <Line
           data={graphData}
           options={{
@@ -77,7 +67,28 @@ const DataGraph = () => {
             },
           }}
         />
-      </Container>
+      );
+    }
+  };
+
+  return (
+    <div>
+      <div className="wrapper">
+        <Button
+          primary
+          icon="download"
+          content="Download Data"
+          onClick={openForm}
+        />
+        {displayShowButton()}
+      </div>
+      <Divider />
+      <DownloadForm
+        open={openDownloadForm}
+        closeForm={closeForm}
+        setScrollData={setScrollData}
+      />
+      <Container>{displayLineGraph()}</Container>
     </div>
   );
 };
