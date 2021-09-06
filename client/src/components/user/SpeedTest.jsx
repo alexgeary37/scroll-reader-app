@@ -1,6 +1,6 @@
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import SpeedText from "./SpeedText.jsx";
-import { useContext, createRef } from "react";
+import { useContext, createRef, useState, useEffect } from "react";
 import {
   Container,
   Segment,
@@ -9,12 +9,17 @@ import {
   GridColumn,
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import SpeedTestInstructions from "./SpeedTestInstructions.jsx";
+import TestInstructions from "./TestInstructions.jsx";
 import Axios from "axios";
 
 const SpeedTest = () => {
   const sessionContext = useContext(SessionContext);
-  const endPageRef = createRef();
+  const startTask2Ref = createRef();
+  const [instructions, setInstructions] = useState("");
+
+  useEffect(() => {
+    setInstructions(sessionContext.template.speedTest.instructions);
+  }, []);
 
   const updateSession = async () => {
     let sessionUpdated = false;
@@ -43,7 +48,14 @@ const SpeedTest = () => {
     const sessionUpdated = updateSession();
 
     if (sessionUpdated) {
-      endPageRef.current.click();
+      sessionContext.setInProgress(false);
+      startTask2Ref.current.click();
+    }
+  };
+
+  const displaySpeedText = () => {
+    if (sessionContext.inProgress) {
+      return <SpeedText />;
     }
   };
 
@@ -57,21 +69,23 @@ const SpeedTest = () => {
                 compact
                 negative
                 className="fixed-button"
-                content="Finish"
+                content="Done"
                 floated="right"
                 onClick={handleFinish}
               />
-              <Link to="/end" hidden ref={endPageRef}></Link>
+              <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
             </div>
           </GridColumn>
-          <GridColumn width="12">
-            <SpeedText />
-          </GridColumn>
+          <GridColumn width="12">{displaySpeedText()}</GridColumn>
           <GridColumn width="2">
             <Segment></Segment>
           </GridColumn>
         </Grid>
-        <SpeedTestInstructions isOpen={sessionContext.inProgress === false} />
+        <TestInstructions
+          isOpen={sessionContext.inProgress === false}
+          task={"speedTest"}
+          instructions={instructions}
+        />
       </Container>
     </div>
   );

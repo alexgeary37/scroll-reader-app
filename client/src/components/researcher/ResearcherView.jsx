@@ -61,19 +61,18 @@ const ResearcherView = () => {
         const data = templatesResponse.data;
         data.forEach((temp) => {
           // Get names of text files this template references.
-          const scrollTextFileName = textFiles.textFiles.find(
-            (tf) => tf.key === temp.scrollTextFileID
-          ).name;
-
           const speedTextFileName = textFiles.textFiles.find(
-            (tf) => tf.key === temp.speedTextFileID
+            (tf) => tf.key === temp.speedTest.fileID
+          ).name;
+          const scrollTextFileName = textFiles.textFiles.find(
+            (tf) => tf.key === temp.scrollTest.fileID
           ).name;
 
           const option = {
             key: temp._id,
             name: temp.name,
-            scrollFileName: scrollTextFileName,
             speedFileName: speedTextFileName,
+            scrollFileName: scrollTextFileName,
             questionFormat: temp.questionFormat,
             url: temp._id,
           };

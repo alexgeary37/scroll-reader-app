@@ -12,7 +12,7 @@ const SpeedText = () => {
   }, []);
 
   const fetchText = () => {
-    const speedTextFileID = sessionContext.template.speedTextFileID;
+    const speedTextFileID = sessionContext.template.speedTest.fileID;
 
     Axios.get("http://localhost:3001/getTextFile", {
       params: { _id: speedTextFileID },

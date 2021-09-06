@@ -75,7 +75,7 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
         options={sessionOptions}
         onChange={handleSelectSession}
       />
-      <div style={{ paddingTop: 10 }}>
+      <div style={{ float: "right", paddingTop: 10 }}>
         <Button primary content="Select" onClick={fetchScrollData} />
         <Button content="Cancel" onClick={toggleOpenDownloadForm} />
       </div>

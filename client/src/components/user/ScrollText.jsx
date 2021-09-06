@@ -13,7 +13,7 @@ const ScrollText = () => {
   }, []);
 
   const fetchText = () => {
-    const scrollTextFileID = sessionContext.template.scrollTextFileID;
+    const scrollTextFileID = sessionContext.template.scrollTest.fileID;
 
     Axios.get("http://localhost:3001/getTextFile", {
       params: { _id: scrollTextFileID },

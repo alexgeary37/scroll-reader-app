@@ -5,13 +5,29 @@ const SessionTemplateSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  scrollTextFileID: {
-    type: String,
-    required: true,
+  speedTest: {
+    type: {
+      fileID: {
+        type: String,
+        required: true,
+      },
+      instructions: {
+        type: String,
+        required: true,
+      },
+    },
   },
-  speedTextFileID: {
-    type: String,
-    required: true,
+  scrollTest: {
+    type: {
+      fileID: {
+        type: String,
+        required: true,
+      },
+      instructions: {
+        type: String,
+        required: true,
+      },
+    },
   },
   questionFormat: {
     type: String,

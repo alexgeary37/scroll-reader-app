@@ -36,11 +36,11 @@ const SessionTemplates = ({ templates, textFiles, appendTemplate }) => {
               />
               <ItemDescription
                 style={{ margin: 5 }}
-                content={`Scroll Text File: ${template.scrollFileName}`}
+                content={`Speed Text File: ${template.speedFileName}`}
               />
               <ItemDescription
                 style={{ margin: 5 }}
-                content={`Speed Text File: ${template.speedFileName}`}
+                content={`Scroll Text File: ${template.scrollFileName}`}
               />
               <ItemDescription
                 style={{ margin: 5 }}

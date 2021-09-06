@@ -1,6 +1,6 @@
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import ScrollText from "./ScrollText.jsx";
-import { useContext, createRef } from "react";
+import { useContext, useState, useEffect, createRef } from "react";
 import {
   Container,
   Segment,
@@ -9,12 +9,17 @@ import {
   GridColumn,
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
+import TestInstructions from "./TestInstructions.jsx";
 import Axios from "axios";
 
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
-  const startTask2Ref = createRef();
+  const endPageRef = createRef();
+  const [instructions, setInstructions] = useState("");
+
+  useEffect(() => {
+    setInstructions(sessionContext.template.scrollTest.instructions);
+  }, []);
 
   const updateSession = async () => {
     let sessionUpdated = false;
@@ -42,8 +47,13 @@ const ScrollTest = () => {
     const sessionUpdated = updateSession();
 
     if (sessionUpdated) {
-      sessionContext.setInProgress(false);
-      startTask2Ref.current.click();
+      endPageRef.current.click();
+    }
+  };
+
+  const displayScrollText = () => {
+    if (sessionContext.inProgress) {
+      return <ScrollText />;
     }
   };
 
@@ -57,21 +67,23 @@ const ScrollTest = () => {
                 compact
                 negative
                 className="fixed-button"
-                content="Finish"
+                content="Done"
                 floated="right"
                 onClick={handleFinish}
               />
-              <Link to="/speedtext" hidden ref={startTask2Ref}></Link>
+              <Link to="/end" hidden ref={endPageRef}></Link>
             </div>
           </GridColumn>
-          <GridColumn width="12">
-            <ScrollText />
-          </GridColumn>
+          <GridColumn width="12">{displayScrollText()}</GridColumn>
           <GridColumn width="2">
             <Segment></Segment>
           </GridColumn>
         </Grid>
-        <ScrollTestInstructions isOpen={sessionContext.inProgress === false} />
+        <TestInstructions
+          isOpen={sessionContext.inProgress === false}
+          task={"scrollTest"}
+          instructions={instructions}
+        />
       </Container>
     </div>
   );

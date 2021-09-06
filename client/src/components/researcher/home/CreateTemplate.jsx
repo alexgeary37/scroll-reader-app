@@ -13,13 +13,27 @@ import Axios from "axios";
 
 const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [templateName, setTemplateName] = useState("");
-  const [scrollTextID, setScrollTextID] = useState("");
   const [speedTextID, setSpeedTextID] = useState("");
+  const [scrollTextID, setScrollTextID] = useState("");
+  const [speedTestInstructions, setSpeedTestInstructions] = useState(
+    "SpeedTest Instructions"
+  );
+  const [scrollTestInstructions, setScrollTestInstructions] = useState(
+    "ScrollTest Instructions"
+  );
   const [comprehension, setComprehension] = useState(true);
   const [displayTemplateNameError, setDisplayTemplateNameError] =
     useState(false);
-  const [displayScrollTextError, setDisplayScrollTextError] = useState(false);
   const [displaySpeedTextError, setDisplaySpeedTextError] = useState(false);
+  const [displayScrollTextError, setDisplayScrollTextError] = useState(false);
+  const [
+    displaySpeedTestInstructionsError,
+    setDisplaySpeedTestInstructionsError,
+  ] = useState(false);
+  const [
+    displayScrollTestInstructionsError,
+    setDisplayScrollTestInstructionsError,
+  ] = useState(false);
 
   const handleCreate = () => {
     let emptyFields = false;
@@ -28,12 +42,20 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       setDisplayTemplateNameError(true);
       emptyFields = true;
     }
+    if (speedTextID === "") {
+      setDisplaySpeedTextError(true);
+      emptyFields = true;
+    }
     if (scrollTextID === "") {
       setDisplayScrollTextError(true);
       emptyFields = true;
     }
-    if (speedTextID === "") {
-      setDisplaySpeedTextError(true);
+    if (speedTestInstructions === "") {
+      setDisplaySpeedTestInstructionsError(true);
+      emptyFields = true;
+    }
+    if (scrollTestInstructions === "") {
+      setDisplayScrollTestInstructionsError(true);
       emptyFields = true;
     }
 
@@ -44,8 +66,14 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     const questionFormat = comprehension ? "comprehension" : "inline";
     const template = {
       name: templateName,
-      scrollTextFileID: scrollTextID,
-      speedTextFileID: speedTextID,
+      speedTest: {
+        fileID: speedTextID,
+        instructions: speedTestInstructions,
+      },
+      scrollTest: {
+        fileID: scrollTextID,
+        instructions: scrollTestInstructions,
+      },
       questionFormat: questionFormat,
       createdAt: new Date(),
     };
@@ -79,14 +107,19 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     }
   };
 
+  const instructionsError = (testType, displayError) => {
+    if (displayError) {
+      return (
+        <label style={{ padding: 10, float: "right", color: "red" }}>
+          Please write instructions for the {testType} test!
+        </label>
+      );
+    }
+  };
+
   const handleTemplateNameChange = (event) => {
     setTemplateName(event.target.value);
     setDisplayTemplateNameError(false);
-  };
-
-  const handleSelectScrollText = (e, data) => {
-    setScrollTextID(data.value);
-    setDisplayScrollTextError(false);
   };
 
   const handleSelectSpeedText = (e, data) => {
@@ -94,29 +127,47 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setDisplaySpeedTextError(false);
   };
 
+  const handleSpeedTestInstructionsChange = (event) => {
+    setSpeedTestInstructions(event.target.value);
+    setDisplaySpeedTestInstructionsError(false);
+  };
+
+  const handleSelectScrollText = (e, data) => {
+    setScrollTextID(data.value);
+    setDisplayScrollTextError(false);
+  };
+
+  const handleScrollTestInstructionsChange = (event) => {
+    setScrollTestInstructions(event.target.value);
+    setDisplayScrollTestInstructionsError(false);
+  };
+
   const handleClose = (templateCreated, responseData) => {
     setTemplateName("");
-    setScrollTextID("");
     setSpeedTextID("");
+    setScrollTextID("");
+    setSpeedTestInstructions("");
+    setScrollTestInstructions("");
     setComprehension(true);
     setDisplayTemplateNameError(false);
-    setDisplayScrollTextError(false);
     setDisplaySpeedTextError(false);
+    setDisplayScrollTextError(false);
+    setDisplaySpeedTestInstructionsError(false);
+    setDisplayScrollTestInstructionsError(false);
 
     if (templateCreated) {
-      const scrollTextFileName = textFiles.find(
-        (tf) => tf.key === responseData.scrollTextFileID
-      ).name;
-
       const speedTextFileName = textFiles.find(
-        (tf) => tf.key === responseData.speedTextFileID
+        (tf) => tf.key === responseData.speedTest.fileID
+      ).name;
+      const scrollTextFileName = textFiles.find(
+        (tf) => tf.key === responseData.scrollTest.fileID
       ).name;
 
       const template = {
         key: responseData._id,
         name: responseData.name,
-        scrollFileName: scrollTextFileName,
         speedFileName: speedTextFileName,
+        scrollFileName: scrollTextFileName,
         questionFormat: responseData.questionFormat,
         url: responseData._id,
       };
@@ -153,25 +204,6 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           <div className="wrapper">
             <Header
               as="h3"
-              content="Scrollable Text:"
-              style={{ paddingTop: 5, marginRight: 10 }}
-            />
-            <Dropdown
-              placeholder={textSelectionPlaceholder}
-              fluid
-              search
-              selection
-              options={textFiles}
-              onChange={handleSelectScrollText}
-            />
-          </div>
-          {textError("scroll", displayScrollTextError)}
-        </Segment>
-
-        <Segment basic compact>
-          <div className="wrapper">
-            <Header
-              as="h3"
               content="Speed Text:"
               style={{ paddingTop: 5, marginRight: 10 }}
             />
@@ -185,6 +217,25 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             />
           </div>
           {textError("speed", displaySpeedTextError)}
+        </Segment>
+
+        <Segment basic compact>
+          <div className="wrapper">
+            <Header
+              as="h3"
+              content="Scrollable Text:"
+              style={{ paddingTop: 5, marginRight: 10 }}
+            />
+            <Dropdown
+              placeholder={textSelectionPlaceholder}
+              fluid
+              search
+              selection
+              options={textFiles}
+              onChange={handleSelectScrollText}
+            />
+          </div>
+          {textError("scroll", displayScrollTextError)}
         </Segment>
       </div>
 
@@ -216,8 +267,12 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         </Form>
       </Segment>
 
-      <Button primary content="Create" onClick={handleCreate} />
-      <Button content="Cancel" onClick={() => handleClose(false, null)} />
+      <Button floated="right" primary content="Create" onClick={handleCreate} />
+      <Button
+        floated="right"
+        content="Cancel"
+        onClick={() => handleClose(false, null)}
+      />
     </Modal>
   );
 };

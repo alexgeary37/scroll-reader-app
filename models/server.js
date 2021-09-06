@@ -105,24 +105,6 @@ class Server {
       });
     });
 
-    this.app.put("/startReadingSessionScrollTest", async (req, res) => {
-      const id = req.body.id;
-      const startTime = req.body.startTime;
-
-      ReadingSessionModel.findByIdAndUpdate(
-        id,
-        { $set: { "scrollTest.startTime": startTime } },
-        (err, session) => {
-          if (err) {
-            res.send(err);
-          } else {
-            session.save();
-            res.send("Added scrollText.startTime");
-          }
-        }
-      );
-    });
-
     this.app.put("/startReadingSessionSpeedTest", async (req, res) => {
       const id = req.body.id;
       const startTime = req.body.startTime;
@@ -141,20 +123,19 @@ class Server {
       );
     });
 
-    this.app.put("/finishReadingSessionScrollTest", async (req, res) => {
+    this.app.put("/startReadingSessionScrollTest", async (req, res) => {
       const id = req.body.id;
-      const endTime = req.body.endTime;
+      const startTime = req.body.startTime;
 
       ReadingSessionModel.findByIdAndUpdate(
         id,
-        { $set: { "scrollTest.endTime": endTime } },
-        { new: true },
+        { $set: { "scrollTest.startTime": startTime } },
         (err, session) => {
           if (err) {
             res.send(err);
           } else {
             session.save();
-            res.send("Added scrollTest.endTime");
+            res.send("Added scrollText.startTime");
           }
         }
       );
@@ -173,6 +154,24 @@ class Server {
           } else {
             session.save();
             res.send("Added speedText.endTime");
+          }
+        }
+      );
+    });
+
+    this.app.put("/finishReadingSessionScrollTest", async (req, res) => {
+      const id = req.body.id;
+      const endTime = req.body.endTime;
+
+      ReadingSessionModel.findByIdAndUpdate(
+        id,
+        { $set: { "scrollTest.endTime": endTime } },
+        (err, session) => {
+          if (err) {
+            res.send(err);
+          } else {
+            session.save();
+            res.send("Added scrollTest.endTime");
           }
         }
       );

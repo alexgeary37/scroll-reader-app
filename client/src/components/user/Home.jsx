@@ -94,10 +94,8 @@ const Home = () => {
         <Container text>
           <Header as="h1" content="Welcome!" />
           <Segment>
-            These are the instructions for this experiment. They will tell you
-            what to do, and how to use this website. Please type your name
-            below, and click on the button to continue to task 1 when you are
-            ready.
+            Please type your name below, and click on the button to begin the
+            session!
           </Segment>
           <div className="wrapper" style={{ justifyContent: "center" }}>
             <Input
@@ -106,7 +104,7 @@ const Home = () => {
               onChange={handleUserNameChange}
             />
             <Button primary content="Start Task 1" onClick={handleStartTask1} />
-            <Link to="/scrolltext" hidden ref={startTask1Ref}></Link>
+            <Link to="/speedtest" hidden ref={startTask1Ref}></Link>
             {userNameError()}
           </div>
         </Container>
