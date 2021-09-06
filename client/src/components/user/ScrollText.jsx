@@ -1,79 +1,65 @@
+import { Container } from "semantic-ui-react";
+import useScrollPosition from "./scrollPosition.jsx";
 import { SessionContext } from "../../contexts/SessionContext.jsx";
-import MainText from "./MainText.jsx";
-import { useContext, createRef } from "react";
-import {
-  Container,
-  Segment,
-  Button,
-  Grid,
-  GridColumn,
-} from "semantic-ui-react";
-import { Link } from "react-router-dom";
-import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
+import { useContext, useEffect, useState } from "react";
 import Axios from "axios";
 
 const ScrollText = () => {
   const sessionContext = useContext(SessionContext);
-  const startTask2Ref = createRef();
+  const [text, setText] = useState("");
 
-  const updateSession = async () => {
-    let sessionUpdated = false;
-    const sessionID = sessionContext.sessionID;
+  useEffect(() => {
+    fetchText();
+  }, []);
 
-    await Axios.put("http://localhost:3001/finishReadingSessionScrollTest", {
-      id: sessionID,
-      endTime: new Date(),
+  const fetchText = () => {
+    const scrollTextFileID = sessionContext.template.scrollTextFileID;
+
+    Axios.get("http://localhost:3001/getTextFile", {
+      params: { _id: scrollTextFileID },
     })
-      .then(() => {
-        sessionUpdated = true;
+      .then((response) => {
+        setText(response.data.text);
       })
       .catch((error) => {
-        console.error(
-          "Error updating readingSession.scrollTest.endTime:",
-          error
-        );
+        console.error("Error fetching text in ScrollText:", error);
       });
-
-    return sessionUpdated;
   };
 
-  const handleFinish = () => {
-    // Update session.scrollTest with an end time.
-    const sessionUpdated = updateSession();
+  const addScrollPosEntry = (currPos) => {
+    if (sessionContext.inProgress) {
+      const date = new Date();
+      const timestamp =
+        date.getHours() +
+        ":" +
+        date.getMinutes() +
+        ":" +
+        date.getSeconds() +
+        ":" +
+        date.getMilliseconds();
 
-    if (sessionUpdated) {
-      sessionContext.setInProgress(false);
-      startTask2Ref.current.click();
+      const scrollPosEntry = {
+        yPos: parseInt(currPos.y),
+        time: timestamp,
+        sessionID: sessionContext.sessionID,
+      };
+
+      Axios.post(
+        "http://localhost:3001/addScrollPosEntry",
+        scrollPosEntry
+      ).catch((error) => {
+        console.error("Error adding scrollPosEntry:", error);
+      });
     }
   };
 
+  // This is a useLayoutEffect function.
+  useScrollPosition(addScrollPosEntry, 50);
+
   return (
-    <div className="page">
-      <Container>
-        <Grid columns="3">
-          <GridColumn width="2">
-            <div className="wrapper">
-              <Button
-                compact
-                negative
-                className="fixed-button"
-                content="Finish"
-                floated="right"
-                onClick={handleFinish}
-              />
-              <Link to="/speedtext" hidden ref={startTask2Ref}></Link>
-            </div>
-          </GridColumn>
-          <GridColumn width="12">
-            <MainText />
-          </GridColumn>
-          <GridColumn width="2">
-            <Segment></Segment>
-          </GridColumn>
-        </Grid>
-        <ScrollTestInstructions isOpen={sessionContext.inProgress === false} />
-      </Container>
-    </div>
+    <Container text>
+      <p>{text}</p>
+    </Container>
   );
 };
 
