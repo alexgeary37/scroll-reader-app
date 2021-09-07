@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Dropdown, Header } from "semantic-ui-react";
-import Axios from "axios";
+import axios from "axios";
 
 const DownloadForm = ({ open, closeForm, setScrollData }) => {
   const [sessionOptions, setSessionOptions] = useState([]);
@@ -11,7 +11,7 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
   }, []);
 
   const fetchSessions = () => {
-    Axios.get("http://localhost:3001/getReadingSessions")
+    axios.get("http://localhost:3001/getReadingSessions")
       .then((response) => {
         const readingSessions = response.data;
         const options = [];
@@ -30,7 +30,7 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
   };
 
   const fetchScrollData = () => {
-    Axios.get("http://localhost:3001/getScrollPosEntries", {
+    axios.get("http://localhost:3001/getScrollPosEntries", {
       params: { sessionID: sessionID },
     })
       .then((response) => {

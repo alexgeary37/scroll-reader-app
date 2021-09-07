@@ -1,10 +1,10 @@
 import { Container } from "semantic-ui-react";
 import useScrollPosition from "./scrollPosition.jsx";
-import { SessionContext } from "../../contexts/SessionContext.jsx";
 import { useContext, useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
+import { SessionContext } from "../../contexts/SessionContext.jsx";
 
-const ScrollText = () => {
+const ScrollText = ({ fileID }) => {
   const sessionContext = useContext(SessionContext);
   const [text, setText] = useState("");
 
@@ -13,11 +13,10 @@ const ScrollText = () => {
   }, []);
 
   const fetchText = () => {
-    const scrollTextFileID = sessionContext.template.scrollTest.fileID;
-
-    Axios.get("http://localhost:3001/getTextFile", {
-      params: { _id: scrollTextFileID },
-    })
+    axios
+      .get("http://localhost:3001/getTextFile", {
+        params: { _id: fileID },
+      })
       .then((response) => {
         setText(response.data.text);
       })
@@ -44,12 +43,11 @@ const ScrollText = () => {
         sessionID: sessionContext.sessionID,
       };
 
-      Axios.post(
-        "http://localhost:3001/addScrollPosEntry",
-        scrollPosEntry
-      ).catch((error) => {
-        console.error("Error adding scrollPosEntry:", error);
-      });
+      axios
+        .post("http://localhost:3001/addScrollPosEntry", scrollPosEntry)
+        .catch((error) => {
+          console.error("Error adding scrollPosEntry:", error);
+        });
     }
   };
 

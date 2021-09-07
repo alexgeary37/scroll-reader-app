@@ -1,11 +1,4 @@
-import {
-  List,
-  Item,
-  Header,
-  Segment,
-  Icon,
-  ItemDescription,
-} from "semantic-ui-react";
+import { List, Item, Header, Segment, Icon } from "semantic-ui-react";
 import FileUpload from "./FileUpload";
 
 const TextFiles = ({ textFiles, appendTextFile }) => {
@@ -16,12 +9,8 @@ const TextFiles = ({ textFiles, appendTextFile }) => {
           <Item key={file.key}>
             <Icon size="large" name="file outline" />
             <Item.Content>
-              <Header
-                style={{ margin: 5 }}
-                size="small"
-                content={`Filename: ${file.name}`}
-              />
-              <ItemDescription
+              <Item.Header as="h4" style={{ margin: 5 }} content={file.name} />
+              <Item.Description
                 style={{ margin: 5 }}
                 content={`Uploaded: ${file.uploadedAt}`}
               />

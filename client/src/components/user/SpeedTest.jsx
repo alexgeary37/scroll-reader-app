@@ -10,12 +10,15 @@ import {
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import TestInstructions from "./TestInstructions.jsx";
-import Axios from "axios";
+import axios from "axios";
 
 const SpeedTest = () => {
   const sessionContext = useContext(SessionContext);
   const startTask2Ref = createRef();
   const [instructions, setInstructions] = useState("");
+  const [currentFileID, setCurrentFileID] = useState(
+    sessionContext.template.speedTest.fileIDs[sessionContext.fileNumber]
+  );
 
   useEffect(() => {
     setInstructions(sessionContext.template.speedTest.instructions);
@@ -25,12 +28,15 @@ const SpeedTest = () => {
     let sessionUpdated = false;
     const sessionID = sessionContext.sessionID;
 
-    // Update session with the time it finished.
-    Axios.put("http://localhost:3001/finishReadingSessionSpeedTest", {
-      id: sessionID,
-      endTime: new Date(),
-    })
-      .then(() => {
+    // Update session with the time the current file was finished.
+    axios
+      .put("http://localhost:3001/finishReadingSessionSpeedTest", {
+        id: sessionID,
+        fileID: currentFileID,
+        endTime: new Date(),
+      })
+      .then((response) => {
+        console.log(response);
         sessionUpdated = true;
       })
       .catch((error) => {
@@ -43,7 +49,7 @@ const SpeedTest = () => {
     return sessionUpdated;
   };
 
-  const handleFinish = () => {
+  const handleFinishText = () => {
     // Update session.speedTest with an end time.
     const sessionUpdated = updateSession();
 
@@ -55,7 +61,7 @@ const SpeedTest = () => {
 
   const displaySpeedText = () => {
     if (sessionContext.inProgress) {
-      return <SpeedText />;
+      return <SpeedText fileID={currentFileID} />;
     }
   };
 
@@ -71,7 +77,7 @@ const SpeedTest = () => {
                 className="fixed-button"
                 content="Done"
                 floated="right"
-                onClick={handleFinish}
+                onClick={handleFinishText}
               />
               <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
             </div>
@@ -85,6 +91,7 @@ const SpeedTest = () => {
           isOpen={sessionContext.inProgress === false}
           task={"speedTest"}
           instructions={instructions}
+          fileID={currentFileID}
         />
       </Container>
     </div>

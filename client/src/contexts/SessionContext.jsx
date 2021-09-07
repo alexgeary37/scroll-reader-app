@@ -12,6 +12,9 @@ export const SessionProvider = ({ children }) => {
   const [inProgress, setInProgress] = useState(
     JSON.parse(localStorage.getItem("inProgress"))
   );
+  const [fileNumber, setFileNumber] = useState(
+    JSON.parse(localStorage.getItem("fileNumber"))
+  );
 
   // This sessionID enables the session to be accessed from db for updates.
   const [sessionID, setSessionID] = useState(localStorage.getItem("sessionID"));
@@ -24,6 +27,7 @@ export const SessionProvider = ({ children }) => {
       setUserName("");
       setTemplate(null);
       setInProgress(false);
+      setFileNumber(0);
       setSessionID("");
     }
   }, []);
@@ -41,6 +45,10 @@ export const SessionProvider = ({ children }) => {
   }, [inProgress]);
 
   useEffect(() => {
+    localStorage.setItem("fileNumber", JSON.stringify(fileNumber));
+  }, [fileNumber]);
+
+  useEffect(() => {
     localStorage.setItem("sessionID", sessionID);
   }, [sessionID]);
 
@@ -53,6 +61,8 @@ export const SessionProvider = ({ children }) => {
         setTemplate,
         inProgress,
         setInProgress,
+        fileNumber,
+        setFileNumber,
         sessionID,
         setSessionID,
       }}

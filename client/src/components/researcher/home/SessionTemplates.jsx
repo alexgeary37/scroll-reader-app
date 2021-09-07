@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Header,
-  Segment,
-  List,
-  Item,
-  ItemDescription,
-  Button,
-} from "semantic-ui-react";
+import { Header, Segment, List, Item, Button } from "semantic-ui-react";
 import CreateTemplate from "./CreateTemplate";
 
 const SessionTemplates = ({ templates, textFiles, appendTemplate }) => {
@@ -29,24 +22,56 @@ const SessionTemplates = ({ templates, textFiles, appendTemplate }) => {
         {templates.map((template) => (
           <Item key={template.key}>
             <Item.Content>
-              <Header
+              <Item.Header
+                as="h4"
                 style={{ margin: 5 }}
-                size="small"
-                content={`Template name: ${template.name}`}
+                content={template.name}
               />
-              <ItemDescription
+
+              <Item.Description
+                as="h5"
                 style={{ margin: 5 }}
-                content={`Speed Text File: ${template.speedFileName}`}
+                content="Speedtest texts:"
               />
-              <ItemDescription
+              <List style={{ marginLeft: 10 }} horizontal divided>
+                {template.speedFileNames.map((name) => (
+                  <Item key={name}>
+                    <Item.Content>
+                      <Item.Description
+                        content={`${
+                          template.speedFileNames.indexOf(name) + 1
+                        }. ${name}`}
+                      />
+                    </Item.Content>
+                  </Item>
+                ))}
+              </List>
+
+              <Item.Description
+                as="h5"
                 style={{ margin: 5 }}
-                content={`Scroll Text File: ${template.scrollFileName}`}
+                content="Scrolltest texts:"
               />
-              <ItemDescription
+              <List style={{ marginLeft: 10 }} horizontal divided>
+                {template.scrollFileNames.map((name) => (
+                  <Item key={name}>
+                    <Item.Content>
+                      <Item.Description
+                        content={`${
+                          template.scrollFileNames.indexOf(name) + 1
+                        }. ${name}`}
+                      />
+                    </Item.Content>
+                  </Item>
+                ))}
+              </List>
+
+              <Item.Description
                 style={{ margin: 5 }}
                 content={`Question Format: ${template.questionFormat}`}
               />
-              <ItemDescription
+
+              <Item.Description
                 style={{ margin: 5 }}
                 content={`URL: ${template.url}`}
               />

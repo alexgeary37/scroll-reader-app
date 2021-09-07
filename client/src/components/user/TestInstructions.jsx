@@ -1,9 +1,9 @@
 import { Button, Modal } from "semantic-ui-react";
 import { SessionContext } from "../../contexts/SessionContext";
-import Axios from "axios";
+import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 
-const TestInstructions = ({ isOpen, task, instructions }) => {
+const TestInstructions = ({ isOpen, task, instructions, fileID }) => {
   const sessionContext = useContext(SessionContext);
   const [reqUrl, setReqUrl] = useState("");
 
@@ -33,10 +33,12 @@ const TestInstructions = ({ isOpen, task, instructions }) => {
     const sessionID = sessionContext.sessionID;
     const startTime = new Date();
 
-    Axios.put(reqUrl, {
-      id: sessionID,
-      startTime: startTime,
-    })
+    axios
+      .put(reqUrl, {
+        id: sessionID,
+        fileID: fileID,
+        startTime: startTime,
+      })
       .then(() => {
         // Set sessionContext to be in progress, this will close modal.
         sessionContext.setInProgress(true);

@@ -5,7 +5,7 @@ import { Segment, Container, Divider } from "semantic-ui-react";
 import { useState, useEffect } from "react";
 import { Route } from "react-router";
 import SessionTemplates from "./home/SessionTemplates.jsx";
-import Axios from "axios";
+import axios from "axios";
 
 const ResearcherView = () => {
   const [textFiles, setTextFiles] = useState({
@@ -31,7 +31,7 @@ const ResearcherView = () => {
 
   const fetchTextFiles = () => {
     setTextFiles({ textFiles: textFiles.textFiles, isFetching: true });
-    Axios.get("http://localhost:3001/getTextFiles")
+    axios.get("http://localhost:3001/getTextFiles")
       .then((response) => {
         const data = response.data;
         const files = [];
@@ -55,24 +55,30 @@ const ResearcherView = () => {
 
   const fetchSessionTemplates = () => {
     setTemplates({ templates: templates.templates, isFetching: true });
-    Axios.get("http://localhost:3001/getSessionTemplates")
+    axios.get("http://localhost:3001/getSessionTemplates")
       .then((templatesResponse) => {
         const options = [];
         const data = templatesResponse.data;
         data.forEach((temp) => {
           // Get names of text files this template references.
-          const speedTextFileName = textFiles.textFiles.find(
-            (tf) => tf.key === temp.speedTest.fileID
-          ).name;
-          const scrollTextFileName = textFiles.textFiles.find(
-            (tf) => tf.key === temp.scrollTest.fileID
-          ).name;
+          const speedTextFileNames = [];
+          temp.speedTest.fileIDs.forEach((fileID) => {
+            speedTextFileNames.push(
+              textFiles.textFiles.find((tf) => tf.key === fileID).name
+            );
+          });
+          const scrollTextFileNames = [];
+          temp.scrollTest.fileIDs.forEach((fileID) => {
+            scrollTextFileNames.push(
+              textFiles.textFiles.find((tf) => tf.key === fileID).name
+            );
+          });
 
           const option = {
             key: temp._id,
             name: temp.name,
-            speedFileName: speedTextFileName,
-            scrollFileName: scrollTextFileName,
+            speedFileNames: speedTextFileNames,
+            scrollFileNames: scrollTextFileNames,
             questionFormat: temp.questionFormat,
             url: temp._id,
           };

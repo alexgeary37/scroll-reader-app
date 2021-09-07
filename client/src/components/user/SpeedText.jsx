@@ -1,10 +1,8 @@
 import { Container } from "semantic-ui-react";
-import { SessionContext } from "../../contexts/SessionContext.jsx";
-import { useContext, useEffect, useState } from "react";
-import Axios from "axios";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-const SpeedText = () => {
-  const sessionContext = useContext(SessionContext);
+const SpeedText = ({ fileID }) => {
   const [text, setText] = useState("");
 
   useEffect(() => {
@@ -12,11 +10,10 @@ const SpeedText = () => {
   }, []);
 
   const fetchText = () => {
-    const speedTextFileID = sessionContext.template.speedTest.fileID;
-
-    Axios.get("http://localhost:3001/getTextFile", {
-      params: { _id: speedTextFileID },
-    })
+    axios
+      .get("http://localhost:3001/getTextFile", {
+        params: { _id: fileID },
+      })
       .then((response) => {
         setText(response.data.text);
       })

@@ -107,11 +107,19 @@ class Server {
 
     this.app.put("/startReadingSessionSpeedTest", async (req, res) => {
       const id = req.body.id;
+      const fileID = req.body.fileID;
       const startTime = req.body.startTime;
 
       ReadingSessionModel.findByIdAndUpdate(
         id,
-        { $set: { "speedTest.startTime": startTime } },
+        {
+          $push: {
+            "speedTest.texts": {
+              fileID: fileID,
+              startTime: startTime,
+            },
+          },
+        },
         (err, session) => {
           if (err) {
             res.send(err);
@@ -125,11 +133,19 @@ class Server {
 
     this.app.put("/startReadingSessionScrollTest", async (req, res) => {
       const id = req.body.id;
+      const fileID = req.body.fileID;
       const startTime = req.body.startTime;
 
       ReadingSessionModel.findByIdAndUpdate(
         id,
-        { $set: { "scrollTest.startTime": startTime } },
+        {
+          $push: {
+            "scrollTest.texts": {
+              fileID: fileID,
+              startTime: startTime,
+            },
+          },
+        },
         (err, session) => {
           if (err) {
             res.send(err);
@@ -143,17 +159,18 @@ class Server {
 
     this.app.put("/finishReadingSessionSpeedTest", async (req, res) => {
       const id = req.body.id;
+      const fileID = req.body.fileID;
       const endTime = req.body.endTime;
 
       ReadingSessionModel.findByIdAndUpdate(
-        id,
-        { $set: { "speedTest.endTime": endTime } },
+        { _id: id, "speedTest.texts.fileID": fileID },
+        { $set: { "speedTest.texts.$.endTime": endTime } },
         (err, session) => {
           if (err) {
             res.send(err);
           } else {
             session.save();
-            res.send("Added speedText.endTime");
+            res.send(session);
           }
         }
       );
@@ -161,11 +178,12 @@ class Server {
 
     this.app.put("/finishReadingSessionScrollTest", async (req, res) => {
       const id = req.body.id;
+      const index = req.body.index;
       const endTime = req.body.endTime;
 
       ReadingSessionModel.findByIdAndUpdate(
         id,
-        { $set: { "scrollTest.endTime": endTime } },
+        { $set: { "scrollTest.texts.index.endTime": endTime } },
         (err, session) => {
           if (err) {
             res.send(err);

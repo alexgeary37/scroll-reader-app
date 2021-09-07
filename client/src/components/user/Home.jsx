@@ -1,7 +1,7 @@
 import { Container, Header, Segment, Input, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { createRef, useContext, useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { SessionContext } from "../../contexts/SessionContext";
 
 const Home = () => {
@@ -21,7 +21,7 @@ const Home = () => {
     const templateId = url.substr(url.lastIndexOf("/") + 1);
 
     // Get template from the database
-    Axios.get("http://localhost:3001/getSessionTemplate", {
+    axios.get("http://localhost:3001/getSessionTemplate", {
       params: { _id: templateId },
     })
       .then((response) => {
@@ -43,7 +43,7 @@ const Home = () => {
       startTime: date,
     };
 
-    await Axios.post(
+    await axios.post(
       "http://localhost:3001/createReadingSession",
       newReadingSession
     )

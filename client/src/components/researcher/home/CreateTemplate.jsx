@@ -9,12 +9,12 @@ import {
   Dropdown,
   Input,
 } from "semantic-ui-react";
-import Axios from "axios";
+import axios from "axios";
 
 const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [templateName, setTemplateName] = useState("");
-  const [speedTextID, setSpeedTextID] = useState("");
-  const [scrollTextID, setScrollTextID] = useState("");
+  const [speedTextIDs, setSpeedTextIDs] = useState([]);
+  const [scrollTextIDs, setScrollTextIDs] = useState([]);
   const [speedTestInstructions, setSpeedTestInstructions] = useState(
     "SpeedTest Instructions"
   );
@@ -42,11 +42,11 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       setDisplayTemplateNameError(true);
       emptyFields = true;
     }
-    if (speedTextID === "") {
+    if (speedTextIDs.length === 0) {
       setDisplaySpeedTextError(true);
       emptyFields = true;
     }
-    if (scrollTextID === "") {
+    if (scrollTextIDs.length === 0) {
       setDisplayScrollTextError(true);
       emptyFields = true;
     }
@@ -67,18 +67,18 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     const template = {
       name: templateName,
       speedTest: {
-        fileID: speedTextID,
+        fileIDs: speedTextIDs,
         instructions: speedTestInstructions,
       },
       scrollTest: {
-        fileID: scrollTextID,
+        fileIDs: scrollTextIDs,
         instructions: scrollTestInstructions,
       },
       questionFormat: questionFormat,
       createdAt: new Date(),
     };
 
-    Axios.post("http://localhost:3001/createSessionTemplate", template)
+    axios.post("http://localhost:3001/createSessionTemplate", template)
       .then((response) => {
         handleClose(true, response.data);
       })
@@ -123,7 +123,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   };
 
   const handleSelectSpeedText = (e, data) => {
-    setSpeedTextID(data.value);
+    setSpeedTextIDs(data.value);
     setDisplaySpeedTextError(false);
   };
 
@@ -133,7 +133,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   };
 
   const handleSelectScrollText = (e, data) => {
-    setScrollTextID(data.value);
+    setScrollTextIDs(data.value);
     setDisplayScrollTextError(false);
   };
 
@@ -144,8 +144,8 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
 
   const handleClose = (templateCreated, responseData) => {
     setTemplateName("");
-    setSpeedTextID("");
-    setScrollTextID("");
+    setSpeedTextIDs([]);
+    setScrollTextIDs([]);
     setSpeedTestInstructions("");
     setScrollTestInstructions("");
     setComprehension(true);
@@ -156,21 +156,27 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setDisplayScrollTestInstructionsError(false);
 
     if (templateCreated) {
-      const speedTextFileName = textFiles.find(
-        (tf) => tf.key === responseData.speedTest.fileID
-      ).name;
-      const scrollTextFileName = textFiles.find(
-        (tf) => tf.key === responseData.scrollTest.fileID
-      ).name;
+      const speedTextFileNames = [];
+      responseData.speedTest.fileIDs.forEach((fileID) => {
+        speedTextFileNames.push(textFiles.find((tf) => tf.key === fileID).name);
+      });
+
+      const scrollTextFileNames = [];
+      responseData.scrollTest.fileIDs.forEach((fileID) => {
+        scrollTextFileNames.push(
+          textFiles.find((tf) => tf.key === fileID).name
+        );
+      });
 
       const template = {
         key: responseData._id,
         name: responseData.name,
-        speedFileName: speedTextFileName,
-        scrollFileName: scrollTextFileName,
+        speedFileNames: speedTextFileNames,
+        scrollFileNames: scrollTextFileNames,
         questionFormat: responseData.questionFormat,
         url: responseData._id,
       };
+
       close(true, template);
     } else {
       close(false, null);
@@ -212,6 +218,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               fluid
               search
               selection
+              multiple
               options={textFiles}
               onChange={handleSelectSpeedText}
             />
@@ -231,6 +238,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               fluid
               search
               selection
+              multiple
               options={textFiles}
               onChange={handleSelectScrollText}
             />

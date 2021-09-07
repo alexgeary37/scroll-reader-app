@@ -1,4 +1,4 @@
-import Axios from "axios";
+import axios from "axios";
 import { useRef } from "react";
 import { Button } from "semantic-ui-react";
 
@@ -20,7 +20,7 @@ const FileUpload = ({ uploadSubmitted }) => {
           fileName: file.name,
           createdAt: new Date(),
         };
-        Axios.post("http://localhost:3001/uploadTextFile", textFile)
+        axios.post("http://localhost:3001/uploadTextFile", textFile)
           .then((response) => {
             const doc = {
               key: response.data._id,
