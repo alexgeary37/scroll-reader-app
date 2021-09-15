@@ -114,7 +114,8 @@ class Server {
         id,
         {
           $push: {
-            "speedTest.texts": {
+            speedTexts: {
+              _id: fileID,
               fileID: fileID,
               startTime: startTime,
             },
@@ -140,7 +141,7 @@ class Server {
         id,
         {
           $push: {
-            "scrollTest.texts": {
+            scrollTexts: {
               fileID: fileID,
               startTime: startTime,
             },
@@ -163,14 +164,15 @@ class Server {
       const endTime = req.body.endTime;
 
       ReadingSessionModel.findByIdAndUpdate(
-        { _id: id, "speedTest.texts.fileID": fileID },
-        { $set: { "speedTest.texts.$.endTime": endTime } },
+        id,
+        { $set: { "speedTexts.$[elem].endTime": endTime } },
+        { arrayFilters: [{ "elem.fileID": fileID }] },
         (err, session) => {
           if (err) {
             res.send(err);
           } else {
             session.save();
-            res.send(session);
+            res.send("Added endTime to current speedText");
           }
         }
       );
@@ -178,18 +180,19 @@ class Server {
 
     this.app.put("/finishReadingSessionScrollTest", async (req, res) => {
       const id = req.body.id;
-      const index = req.body.index;
+      const fileID = req.body.fileID;
       const endTime = req.body.endTime;
 
       ReadingSessionModel.findByIdAndUpdate(
         id,
-        { $set: { "scrollTest.texts.index.endTime": endTime } },
+        { $set: { "scrollTexts.$[elem].endTime": endTime } },
+        { arrayFilters: [{ "elem.fileID": fileID }] },
         (err, session) => {
           if (err) {
             res.send(err);
           } else {
             session.save();
-            res.send("Added scrollTest.endTime");
+            res.send("Added endTime to current scrollText");
           }
         }
       );

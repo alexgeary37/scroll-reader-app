@@ -27,16 +27,16 @@ const SpeedTest = () => {
   const updateSession = async () => {
     let sessionUpdated = false;
     const sessionID = sessionContext.sessionID;
+    const endTime = new Date();
 
     // Update session with the time the current file was finished.
     axios
       .put("http://localhost:3001/finishReadingSessionSpeedTest", {
         id: sessionID,
         fileID: currentFileID,
-        endTime: new Date(),
+        endTime: endTime,
       })
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         sessionUpdated = true;
       })
       .catch((error) => {

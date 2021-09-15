@@ -27,14 +27,14 @@ const ScrollTest = () => {
   const updateSession = async () => {
     let sessionUpdated = false;
     const sessionID = sessionContext.sessionID;
-    const fileNumber = sessionContext.fileNumber;
+    const endTime = new Date();
 
     // Update session with the time the current file was finished.
     await axios
       .put("http://localhost:3001/finishReadingSessionScrollTest", {
         id: sessionID,
-        index: fileNumber,
-        endTime: new Date(),
+        fileID: currentFileID,
+        endTime: endTime,
       })
       .then(() => {
         sessionUpdated = true;
