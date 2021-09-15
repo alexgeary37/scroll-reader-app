@@ -15,12 +15,8 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [templateName, setTemplateName] = useState("");
   const [speedTextIDs, setSpeedTextIDs] = useState([]);
   const [scrollTextIDs, setScrollTextIDs] = useState([]);
-  const [speedTestInstructions, setSpeedTestInstructions] = useState(
-    "SpeedTest Instructions"
-  );
-  const [scrollTestInstructions, setScrollTestInstructions] = useState(
-    "ScrollTest Instructions"
-  );
+  const [speedTestInstructions, setSpeedTestInstructions] = useState("");
+  const [scrollTestInstructions, setScrollTestInstructions] = useState("");
   const [comprehension, setComprehension] = useState(true);
   const [displayTemplateNameError, setDisplayTemplateNameError] =
     useState(false);
@@ -35,7 +31,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setDisplayScrollTestInstructionsError,
   ] = useState(false);
 
-  const handleCreate = () => {
+  const checkFormInputs = () => {
     let emptyFields = false;
 
     if (templateName === "") {
@@ -59,9 +55,11 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       emptyFields = true;
     }
 
-    if (emptyFields) {
-      return;
-    }
+    return emptyFields;
+  };
+
+  const handleCreate = () => {
+    checkFormInputs();
 
     const questionFormat = comprehension ? "comprehension" : "inline";
     const template = {
@@ -78,7 +76,8 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       createdAt: new Date(),
     };
 
-    axios.post("http://localhost:3001/createSessionTemplate", template)
+    axios
+      .post("http://localhost:3001/createSessionTemplate", template)
       .then((response) => {
         handleClose(true, response.data);
       })
@@ -127,14 +126,14 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setDisplaySpeedTextError(false);
   };
 
-  const handleSpeedTestInstructionsChange = (event) => {
-    setSpeedTestInstructions(event.target.value);
-    setDisplaySpeedTestInstructionsError(false);
-  };
-
   const handleSelectScrollText = (e, data) => {
     setScrollTextIDs(data.value);
     setDisplayScrollTextError(false);
+  };
+
+  const handleSpeedTestInstructionsChange = (event) => {
+    setSpeedTestInstructions(event.target.value);
+    setDisplaySpeedTestInstructionsError(false);
   };
 
   const handleScrollTestInstructionsChange = (event) => {
@@ -183,71 +182,95 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     }
   };
 
-  const textSelectionPlaceholder = textFiles[0] ? textFiles[0].text : "";
-
   return (
     <Modal open={isOpen} style={{ padding: 10 }}>
       <h1>Create a Session Template</h1>
       <Divider />
       <div>
-        <Segment basic compact>
-          <div className="wrapper">
-            <Header
-              as="h3"
-              content="Template Name:"
-              style={{ paddingTop: 5, marginRight: 10 }}
-            />
-            <Input
-              type="text"
-              placeholder="Type template name here..."
-              onChange={handleTemplateNameChange}
-            />
-          </div>
+        <Segment>
+          <Header
+            as="h3"
+            content="Template Name:"
+            style={{ paddingTop: 5, marginRight: 10 }}
+          />
+          <Input
+            type="text"
+            fluid
+            placeholder="Type template name here..."
+            onChange={handleTemplateNameChange}
+          />
           {nameError()}
         </Segment>
 
-        <Segment basic compact>
-          <div className="wrapper">
-            <Header
-              as="h3"
-              content="Speed Text:"
-              style={{ paddingTop: 5, marginRight: 10 }}
-            />
-            <Dropdown
-              placeholder={textSelectionPlaceholder}
-              fluid
-              search
-              selection
-              multiple
-              options={textFiles}
-              onChange={handleSelectSpeedText}
-            />
-          </div>
+        <Segment>
+          <Header
+            as="h3"
+            content="Speed Test Instructions:"
+            style={{ paddingTop: 5, marginRight: 10 }}
+          />
+          <Input
+            type="text"
+            fluid
+            placeholder="Write instructions for the speed test here..."
+            onChange={handleSpeedTestInstructionsChange}
+          />
+          {instructionsError("speed", displaySpeedTestInstructionsError)}
+        </Segment>
+
+        <Segment>
+          <Header
+            as="h3"
+            content="Speed Texts:"
+            style={{ paddingTop: 5, marginRight: 10 }}
+          />
+          <Dropdown
+            placeholder="Select texts for the speed test"
+            fluid
+            search
+            selection
+            multiple
+            options={textFiles}
+            onChange={handleSelectSpeedText}
+          />
           {textError("speed", displaySpeedTextError)}
         </Segment>
 
-        <Segment basic compact>
-          <div className="wrapper">
-            <Header
-              as="h3"
-              content="Scrollable Text:"
-              style={{ paddingTop: 5, marginRight: 10 }}
-            />
-            <Dropdown
-              placeholder={textSelectionPlaceholder}
-              fluid
-              search
-              selection
-              multiple
-              options={textFiles}
-              onChange={handleSelectScrollText}
-            />
-          </div>
+        <Segment>
+          <Header
+            as="h3"
+            content="Scroll Test Instructions:"
+            style={{ paddingTop: 5, marginRight: 10 }}
+          />
+          <Input
+            type="text"
+            fluid
+            placeholder="Write instructions for the scroll test here..."
+            onChange={handleScrollTestInstructionsChange}
+          />
+          {instructionsError("scroll", displayScrollTestInstructionsError)}
+        </Segment>
+
+        <Segment>
+          <Header
+            as="h3"
+            content="Scrollable Texts:"
+            style={{ paddingTop: 5, marginRight: 10 }}
+          />
+          <Dropdown
+            placeholder="Select texts for the scroll test"
+            fluid
+            search
+            selection
+            multiple
+            options={textFiles}
+            onChange={handleSelectScrollText}
+          />
+
           {textError("scroll", displayScrollTextError)}
         </Segment>
       </div>
 
-      <Segment basic>
+      <Segment>
         <Form>
           <div className="grouped fields">
             <Header as="h3" content="Question Format:" />
