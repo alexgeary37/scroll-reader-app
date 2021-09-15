@@ -24,6 +24,37 @@ const SpeedTest = () => {
     setInstructions(sessionContext.template.speedTest.instructions);
   }, []);
 
+  useEffect(() => {
+    setCurrentFileID(
+      sessionContext.template.speedTest.fileIDs[sessionContext.fileNumber]
+    );
+  }, [sessionContext.fileNumber]);
+
+  const isLastText = () => {
+    return (
+      sessionContext.fileNumber ===
+      sessionContext.template.speedTest.fileIDs.length - 1
+    );
+  };
+
+  const startNextText = (fileID) => {
+    const sessionID = sessionContext.sessionID;
+    const startTime = new Date();
+
+    axios
+      .put("http://localhost:3001/startReadingSessionSpeedTest", {
+        id: sessionID,
+        fileID: fileID,
+        startTime: startTime,
+      })
+      .catch((error) => {
+        console.error(
+          `Error updating readingSession.speedTest[currentFileID].startTime:`,
+          error
+        );
+      });
+  };
+
   const updateSession = async () => {
     let sessionUpdated = false;
     const sessionID = sessionContext.sessionID;
@@ -41,7 +72,7 @@ const SpeedTest = () => {
       })
       .catch((error) => {
         console.error(
-          "Error updating readingSession.speedTest.endTime:",
+          "Error updating readingSession.speedTexts[currentFileID].endTime:",
           error
         );
       });
@@ -50,12 +81,23 @@ const SpeedTest = () => {
   };
 
   const handleFinishText = () => {
-    // Update session.speedTest with an end time.
+    // Update session.speedTexts[currentFileID] with an end time.
     const sessionUpdated = updateSession();
 
+    const fileNumber = sessionContext.fileNumber;
+
     if (sessionUpdated) {
-      sessionContext.setInProgress(false);
-      startTask2Ref.current.click();
+      if (isLastText()) {
+        sessionContext.setFileNumber(0);
+        sessionContext.setInProgress(false);
+        startTask2Ref.current.click();
+      } else {
+        // Add a new entry to session.speedTexts.
+        startNextText(
+          sessionContext.template.speedTest.fileIDs[fileNumber + 1]
+        );
+        sessionContext.setFileNumber(fileNumber + 1);
+      }
     }
   };
 

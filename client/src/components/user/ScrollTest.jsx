@@ -24,6 +24,12 @@ const ScrollTest = () => {
     setInstructions(sessionContext.template.scrollTest.instructions);
   }, []);
 
+  useEffect(() => {
+    setCurrentFileID(
+      sessionContext.template.scrollTest.fileIDs[sessionContext.fileNumber]
+    );
+  }, [sessionContext.fileNumber]);
+
   const updateSession = async () => {
     let sessionUpdated = false;
     const sessionID = sessionContext.sessionID;
@@ -41,7 +47,7 @@ const ScrollTest = () => {
       })
       .catch((error) => {
         console.error(
-          "Error updating readingSession.scrollTest.endTime:",
+          "Error updating readingSession.scrollTexts[currentFileID].endTime:",
           error
         );
       });
@@ -50,11 +56,20 @@ const ScrollTest = () => {
   };
 
   const handleFinishText = () => {
-    // Update session.scrollTest with an end time.
+    // Update session.scrollTexts[currentFileID] with an end time.
     const sessionUpdated = updateSession();
 
+    const fileNumber = sessionContext.fileNumber;
+
     if (sessionUpdated) {
-      endPageRef.current.click();
+      if (
+        fileNumber ===
+        sessionContext.template.scrollTest.fileIDs.length - 1
+      ) {
+        endPageRef.current.click();
+      } else {
+        sessionContext.setFileNumber(fileNumber + 1);
+      }
     }
   };
 

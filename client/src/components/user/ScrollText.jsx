@@ -10,7 +10,7 @@ const ScrollText = ({ fileID }) => {
 
   useEffect(() => {
     fetchText();
-  }, []);
+  }, [fileID]);
 
   const fetchText = () => {
     axios

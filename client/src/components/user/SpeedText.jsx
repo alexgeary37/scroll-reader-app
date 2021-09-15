@@ -7,7 +7,7 @@ const SpeedText = ({ fileID }) => {
 
   useEffect(() => {
     fetchText();
-  }, []);
+  }, [fileID]);
 
   const fetchText = () => {
     axios
