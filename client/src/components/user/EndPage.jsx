@@ -9,7 +9,8 @@ const EndPage = () => {
   const clearSessionVariables = () => {
     localStorage.removeItem("userName");
     localStorage.removeItem("sessionTemplate");
-    localStorage.removeItem("inProgress");
+    localStorage.removeItem("isPaused");
+    localStorage.removeItem("hasStartedReading");
     localStorage.removeItem("fileNumber");
     localStorage.removeItem("sessionID");
   };

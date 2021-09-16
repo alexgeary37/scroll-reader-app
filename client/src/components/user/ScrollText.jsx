@@ -26,7 +26,7 @@ const ScrollText = ({ fileID }) => {
   };
 
   const addScrollPosEntry = (currPos) => {
-    if (sessionContext.inProgress) {
+    if (sessionContext.isPaused === false) {
       const date = new Date();
       const timestamp =
         date.getHours() +

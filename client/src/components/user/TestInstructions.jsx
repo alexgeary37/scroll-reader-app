@@ -9,10 +9,10 @@ const TestInstructions = ({ isOpen, task, instructions, fileID }) => {
 
   useEffect(() => {
     if (task === "speedTest") {
-      setReqUrl("http://localhost:3001/startReadingSessionSpeedTest");
+      setReqUrl("http://localhost:3001/addNewSpeedText");
     }
     if (task === "scrollTest") {
-      setReqUrl("http://localhost:3001/startReadingSessionScrollTest");
+      setReqUrl("http://localhost:3001/addNewScrollText");
     }
   }, []);
 
@@ -41,7 +41,7 @@ const TestInstructions = ({ isOpen, task, instructions, fileID }) => {
       })
       .then(() => {
         // Set sessionContext to be in progress, this will close modal.
-        sessionContext.setInProgress(true);
+        sessionContext.setHasStartedReading(true);
       })
       .catch((error) => {
         console.error(
@@ -52,7 +52,11 @@ const TestInstructions = ({ isOpen, task, instructions, fileID }) => {
   };
 
   return (
-    <Modal size="tiny" open={isOpen} style={{ padding: 10 }}>
+    <Modal
+      size="tiny"
+      open={isOpen}
+      style={{ minHeight: "30vh", overflow: "auto", padding: 10 }}
+    >
       <p>{instructions}</p>
       {displayScrollTestInstructions()}
       <Button

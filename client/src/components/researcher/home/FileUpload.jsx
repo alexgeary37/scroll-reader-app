@@ -20,14 +20,15 @@ const FileUpload = ({ uploadSubmitted }) => {
           fileName: file.name,
           createdAt: new Date(),
         };
-        axios.post("http://localhost:3001/uploadTextFile", textFile)
+        axios
+          .post("http://localhost:3001/uploadTextFile", textFile)
           .then((response) => {
             const doc = {
               key: response.data._id,
               value: response.data._id,
-              name: textFile.fileName,
-              text: textFile.fileName, // This is for the Dropdown in CreateTemplate.jsx
-              uploadedAt: textFile.createdAt,
+              name: response.data.fileName,
+              text: response.data.fileName, // This is for the Dropdown in CreateTemplate.jsx
+              uploadedAt: response.data.createdAt,
             };
             uploadSubmitted(doc);
           })

@@ -105,7 +105,7 @@ class Server {
       });
     });
 
-    this.app.put("/startReadingSessionSpeedTest", async (req, res) => {
+    this.app.put("/addNewSpeedText", async (req, res) => {
       const id = req.body.id;
       const fileID = req.body.fileID;
       const startTime = req.body.startTime;
@@ -126,13 +126,13 @@ class Server {
             res.send(err);
           } else {
             session.save();
-            res.send("Added speedTest.startTime");
+            res.send("Added speedText[fileID].startTime");
           }
         }
       );
     });
 
-    this.app.put("/startReadingSessionScrollTest", async (req, res) => {
+    this.app.put("/addNewScrollText", async (req, res) => {
       const id = req.body.id;
       const fileID = req.body.fileID;
       const startTime = req.body.startTime;
@@ -152,13 +152,13 @@ class Server {
             res.send(err);
           } else {
             session.save();
-            res.send("Added scrollText.startTime");
+            res.send("Added scrollText[fileID].startTime");
           }
         }
       );
     });
 
-    this.app.put("/finishReadingSessionSpeedTest", async (req, res) => {
+    this.app.put("/updateCurrentSpeedText", async (req, res) => {
       const id = req.body.id;
       const fileID = req.body.fileID;
       const endTime = req.body.endTime;
@@ -178,7 +178,7 @@ class Server {
       );
     });
 
-    this.app.put("/finishReadingSessionScrollTest", async (req, res) => {
+    this.app.put("/updateCurrentScrollText", async (req, res) => {
       const id = req.body.id;
       const fileID = req.body.fileID;
       const endTime = req.body.endTime;

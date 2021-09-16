@@ -31,7 +31,8 @@ const ResearcherView = () => {
 
   const fetchTextFiles = () => {
     setTextFiles({ textFiles: textFiles.textFiles, isFetching: true });
-    axios.get("http://localhost:3001/getTextFiles")
+    axios
+      .get("http://localhost:3001/getTextFiles")
       .then((response) => {
         const data = response.data;
         const files = [];
@@ -55,7 +56,8 @@ const ResearcherView = () => {
 
   const fetchSessionTemplates = () => {
     setTemplates({ templates: templates.templates, isFetching: true });
-    axios.get("http://localhost:3001/getSessionTemplates")
+    axios
+      .get("http://localhost:3001/getSessionTemplates")
       .then((templatesResponse) => {
         const options = [];
         const data = templatesResponse.data;

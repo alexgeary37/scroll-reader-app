@@ -10,7 +10,9 @@ import {
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import TestInstructions from "./TestInstructions.jsx";
+import PauseWindow from "./PauseWindow.jsx";
 import axios from "axios";
+import { isLastText, scrollToTop } from "../../utilityFunctions.js";
 
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
@@ -30,14 +32,32 @@ const ScrollTest = () => {
     );
   }, [sessionContext.fileNumber]);
 
-  const updateSession = async () => {
+  const startNextText = (fileID) => {
+    const sessionID = sessionContext.sessionID;
+    const startTime = new Date();
+
+    axios
+      .put("http://localhost:3001/addNewScrollText", {
+        id: sessionID,
+        fileID: fileID,
+        startTime: startTime,
+      })
+      .catch((error) => {
+        console.error(
+          `Error updating readingSession.scrollTest[currentFileID].startTime:`,
+          error
+        );
+      });
+  };
+
+  const finishCurrentText = async () => {
     let sessionUpdated = false;
     const sessionID = sessionContext.sessionID;
     const endTime = new Date();
 
     // Update session with the time the current file was finished.
-    await axios
-      .put("http://localhost:3001/finishReadingSessionScrollTest", {
+    axios
+      .put("http://localhost:3001/updateCurrentScrollText", {
         id: sessionID,
         fileID: currentFileID,
         endTime: endTime,
@@ -57,24 +77,30 @@ const ScrollTest = () => {
 
   const handleFinishText = () => {
     // Update session.scrollTexts[currentFileID] with an end time.
-    const sessionUpdated = updateSession();
+    const sessionUpdated = finishCurrentText();
 
     const fileNumber = sessionContext.fileNumber;
 
     if (sessionUpdated) {
-      if (
-        fileNumber ===
-        sessionContext.template.scrollTest.fileIDs.length - 1
-      ) {
+      if (isLastText("scroll", sessionContext)) {
         endPageRef.current.click();
       } else {
+        // Add a new entry to session.scrollTexts.
+        startNextText(
+          sessionContext.template.scrollTest.fileIDs[fileNumber + 1]
+        );
         sessionContext.setFileNumber(fileNumber + 1);
+        scrollToTop();
       }
     }
   };
 
+  const handlePauseResume = () => {
+    sessionContext.setIsPaused(!sessionContext.isPaused);
+  };
+
   const displayScrollText = () => {
-    if (sessionContext.inProgress) {
+    if (sessionContext.isPaused === false) {
       return <ScrollText fileID={currentFileID} />;
     }
   };
@@ -84,16 +110,19 @@ const ScrollTest = () => {
       <Container>
         <Grid columns="3">
           <GridColumn width="2">
-            <div className="wrapper">
+            <div className="fixed-button">
+              <div className="wrapper">
+                <Button compact content="Done" onClick={handleFinishText} />
+                <Link to="/end" hidden ref={endPageRef}></Link>
+              </div>
               <Button
                 compact
-                negative
+                negative={sessionContext.isPaused === false}
+                disabled={sessionContext.isPaused}
                 className="fixed-button"
-                content="Done"
-                floated="right"
-                onClick={handleFinishText}
+                content="Paused"
+                onClick={handlePauseResume}
               />
-              <Link to="/end" hidden ref={endPageRef}></Link>
             </div>
           </GridColumn>
           <GridColumn width="12">{displayScrollText()}</GridColumn>
@@ -102,11 +131,12 @@ const ScrollTest = () => {
           </GridColumn>
         </Grid>
         <TestInstructions
-          isOpen={sessionContext.inProgress === false}
+          isOpen={sessionContext.hasStartedReading === false}
           task={"scrollTest"}
           instructions={instructions}
           fileID={currentFileID}
         />
+        <PauseWindow isOpen={sessionContext.isPaused} />
       </Container>
     </div>
   );

@@ -183,7 +183,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   };
 
   return (
-    <Modal open={isOpen} style={{ padding: 10 }}>
+    <Modal
+      open={isOpen}
+      style={{ height: "75vh", overflow: "auto", padding: 10 }}
+    >
       <h1>Create a Session Template</h1>
       <Divider />
       <div>

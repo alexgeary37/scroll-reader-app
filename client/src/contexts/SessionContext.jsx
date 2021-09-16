@@ -9,8 +9,11 @@ export const SessionProvider = ({ children }) => {
   const [template, setTemplate] = useState(
     JSON.parse(localStorage.getItem("sessionTemplate"))
   );
-  const [inProgress, setInProgress] = useState(
-    JSON.parse(localStorage.getItem("inProgress"))
+  const [isPaused, setIsPaused] = useState(
+    JSON.parse(localStorage.getItem("isPaused"))
+  );
+  const [hasStartedReading, setHasStartedReading] = useState(
+    JSON.parse(localStorage.getItem("hasStartedReading"))
   );
   const [fileNumber, setFileNumber] = useState(
     JSON.parse(localStorage.getItem("fileNumber"))
@@ -23,10 +26,11 @@ export const SessionProvider = ({ children }) => {
   // of all hooks to default values. This will then cause the other effects to run
   // and initialise them in localStorage.
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem("inProgress")) === null) {
+    if (JSON.parse(localStorage.getItem("isPaused")) === null) {
       setUserName("");
       setTemplate(null);
-      setInProgress(false);
+      setIsPaused(false);
+      setHasStartedReading(false);
       setFileNumber(0);
       setSessionID("");
     }
@@ -41,8 +45,12 @@ export const SessionProvider = ({ children }) => {
   }, [template]);
 
   useEffect(() => {
-    localStorage.setItem("inProgress", JSON.stringify(inProgress));
-  }, [inProgress]);
+    localStorage.setItem("isPaused", JSON.stringify(isPaused));
+  }, [isPaused]);
+
+  useEffect(() => {
+    localStorage.setItem("hasStartedReading", JSON.stringify(hasStartedReading));
+  }, [hasStartedReading]);
 
   useEffect(() => {
     localStorage.setItem("fileNumber", JSON.stringify(fileNumber));
@@ -59,8 +67,10 @@ export const SessionProvider = ({ children }) => {
         setUserName,
         template,
         setTemplate,
-        inProgress,
-        setInProgress,
+        isPaused,
+        setIsPaused,
+        hasStartedReading,
+        setHasStartedReading,
         fileNumber,
         setFileNumber,
         sessionID,
