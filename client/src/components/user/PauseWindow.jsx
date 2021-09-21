@@ -1,16 +1,9 @@
-import { useContext } from "react";
 import { Button, Modal } from "semantic-ui-react";
-import { SessionContext } from "../../contexts/SessionContext";
 
-const PauseWindow = ({ isOpen }) => {
-  const sessionContext = useContext(SessionContext);
-
+const PauseWindow = ({ isOpen, resume }) => {
   return (
     <Modal open={isOpen}>
-      <Button
-        content="Reume"
-        onClick={() => sessionContext.setIsPaused(false)}
-      />
+      <Button content="Reume" onClick={resume} />
     </Modal>
   );
 };

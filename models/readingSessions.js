@@ -4,6 +4,12 @@ const textSchema = mongoose.Schema(
   {
     fileID: { type: String, required: true },
     startTime: { type: Date, required: true },
+    pauses: [
+      {
+        action: { type: String, required: true },
+        time: { type: Date, required: true },
+      },
+    ],
     endTime: { type: Date, required: false },
   },
   { _id: false }

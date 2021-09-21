@@ -97,8 +97,36 @@ const SpeedTest = () => {
     }
   };
 
-  const handlePauseResume = () => {
-    sessionContext.setIsPaused(!sessionContext.isPaused);
+  // Add either a pause or resume action with a timestamp to the session's pauses array.
+  const updateSpeedTextPauses = async (isPaused) => {
+    const sessionID = sessionContext.sessionID;
+    const currentTime = new Date();
+    const action = isPaused ? "pause" : "resume";
+
+    // Update session with the time the current file was finished.
+    axios
+      .put("http://localhost:3001/updateCurrentSpeedTextPauses", {
+        id: sessionID,
+        fileID: currentFileID,
+        action: action,
+        time: currentTime,
+      })
+      .catch((error) => {
+        console.error(
+          "Error updating readingSession.speedTexts[fileID].pauses",
+          error
+        );
+      });
+  };
+
+  const pauseSession = () => {
+    updateSpeedTextPauses(true);
+    sessionContext.setIsPaused(true);
+  };
+
+  const resumeSession = () => {
+    updateSpeedTextPauses(false);
+    sessionContext.setIsPaused(false);
   };
 
   const displaySpeedText = () => {
@@ -123,7 +151,7 @@ const SpeedTest = () => {
                 disabled={sessionContext.isPaused}
                 className="fixed-button"
                 content="Pause"
-                onClick={handlePauseResume}
+                onClick={() => pauseSession(sessionContext)}
               />
             </div>
           </GridColumn>
@@ -138,7 +166,7 @@ const SpeedTest = () => {
           instructions={instructions}
           fileID={currentFileID}
         />
-        <PauseWindow isOpen={sessionContext.isPaused} />
+        <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
       </Container>
     </div>
   );

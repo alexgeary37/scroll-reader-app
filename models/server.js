@@ -198,6 +198,56 @@ class Server {
       );
     });
 
+    this.app.put("/updateCurrentSpeedTextPauses", async (req, res) => {
+      const id = req.body.id;
+      const fileID = req.body.fileID;
+      const action = req.body.action;
+      const time = req.body.time;
+
+      ReadingSessionModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            "speedTexts.$[elem].pauses": { action: action, time: time },
+          },
+        },
+        { arrayFilters: [{ "elem.fileID": fileID }] },
+        (err, session) => {
+          if (err) {
+            res.send(err);
+          } else {
+            session.save();
+            res.send("Updated pauses in current speedText");
+          }
+        }
+      );
+    });
+
+    this.app.put("/updateCurrentScrollTextPauses", async (req, res) => {
+      const id = req.body.id;
+      const fileID = req.body.fileID;
+      const action = req.body.action;
+      const time = req.body.time;
+
+      ReadingSessionModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            "scrollTexts.$[elem].pauses": { action: action, time: time },
+          },
+        },
+        { arrayFilters: [{ "elem.fileID": fileID }] },
+        (err, session) => {
+          if (err) {
+            res.send(err);
+          } else {
+            session.save();
+            res.send("Updated pauses in current scrollText");
+          }
+        }
+      );
+    });
+
     this.app.post("/addScrollPosEntry", async (req, res) => {
       const newScrollPosEntry = req.body;
       const scrollPosEntry = new ScrollPosEntryModel(newScrollPosEntry);

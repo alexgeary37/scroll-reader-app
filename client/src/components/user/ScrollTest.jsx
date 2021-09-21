@@ -95,8 +95,36 @@ const ScrollTest = () => {
     }
   };
 
-  const handlePauseResume = () => {
-    sessionContext.setIsPaused(!sessionContext.isPaused);
+  // Add either a pause or resume action with a timestamp to the session's pauses array.
+  const updateScrollTextPauses = async (isPaused) => {
+    const sessionID = sessionContext.sessionID;
+    const currentTime = new Date();
+    const action = isPaused ? "pause" : "resume";
+
+    // Update session with the time the current file was finished.
+    axios
+      .put("http://localhost:3001/updateCurrentScrollTextPauses", {
+        id: sessionID,
+        fileID: currentFileID,
+        action: action,
+        time: currentTime,
+      })
+      .catch((error) => {
+        console.error(
+          "Error updating readingSession.scrollTexts[fileID].pauses",
+          error
+        );
+      });
+  };
+
+  const pauseSession = () => {
+    updateScrollTextPauses(true);
+    sessionContext.setIsPaused(true);
+  };
+
+  const resumeSession = () => {
+    updateScrollTextPauses(false);
+    sessionContext.setIsPaused(false);
   };
 
   const displayScrollText = () => {
@@ -121,7 +149,7 @@ const ScrollTest = () => {
                 disabled={sessionContext.isPaused}
                 className="fixed-button"
                 content="Paused"
-                onClick={handlePauseResume}
+                onClick={() => pauseSession(sessionContext)}
               />
             </div>
           </GridColumn>
@@ -136,7 +164,7 @@ const ScrollTest = () => {
           instructions={instructions}
           fileID={currentFileID}
         />
-        <PauseWindow isOpen={sessionContext.isPaused} />
+        <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
       </Container>
     </div>
   );

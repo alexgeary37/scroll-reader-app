@@ -21,9 +21,10 @@ const Home = () => {
     const templateId = url.substr(url.lastIndexOf("/") + 1);
 
     // Get template from the database
-    axios.get("http://localhost:3001/getSessionTemplate", {
-      params: { _id: templateId },
-    })
+    axios
+      .get("http://localhost:3001/getSessionTemplate", {
+        params: { _id: templateId },
+      })
       .then((response) => {
         setTemplate(response.data);
       })
@@ -43,10 +44,8 @@ const Home = () => {
       startTime: date,
     };
 
-    await axios.post(
-      "http://localhost:3001/createReadingSession",
-      newReadingSession
-    )
+    await axios
+      .post("http://localhost:3001/createReadingSession", newReadingSession)
       .then((response) => {
         sessionContext.setSessionID(response.data._id);
         sessionCreated = true;
