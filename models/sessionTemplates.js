@@ -7,7 +7,12 @@ const SessionTemplateSchema = mongoose.Schema({
     instructions: { type: String, required: true },
   },
   scrollTest: {
-    fileIDs: [{ type: String, required: true }],
+    files: [
+      {
+        id: { type: String, required: true },
+        questionIDs: [{ type: String, required: true }],
+      },
+    ],
     instructions: { type: String, required: true },
   },
   questionFormat: { type: String, required: true },

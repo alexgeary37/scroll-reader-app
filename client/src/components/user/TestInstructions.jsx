@@ -1,4 +1,4 @@
-import { Button, Modal } from "semantic-ui-react";
+import { Button, Modal, Segment } from "semantic-ui-react";
 import { SessionContext } from "../../contexts/SessionContext";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
@@ -52,12 +52,8 @@ const TestInstructions = ({ isOpen, task, instructions, fileID }) => {
   };
 
   return (
-    <Modal
-      size="tiny"
-      open={isOpen}
-      style={{ minHeight: "30vh", overflow: "auto", padding: 10 }}
-    >
-      <p>{instructions}</p>
+    <Modal size="tiny" open={isOpen} style={{ overflow: "auto", padding: 10 }}>
+      <Segment>{instructions}</Segment>
       {displayScrollTestInstructions()}
       <Button
         floated="right"

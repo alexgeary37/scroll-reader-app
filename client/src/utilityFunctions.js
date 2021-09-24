@@ -16,7 +16,6 @@ export const isLastText = (testType, context) => {
 // Scroll to the top of the page.
 // Used in SpeedTest and ScrollTest for when the next text is loaded.
 export const scrollToTop = () => {
-  console.log("scrollToTop");
   window.scrollTo({
     top: 0,
     behavior: "smooth",

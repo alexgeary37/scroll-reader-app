@@ -140,25 +140,20 @@ const SpeedTest = () => {
       <Container>
         <Grid columns="3">
           <GridColumn width="2">
-            <div className="fixed-button">
-              <div className="wrapper">
-                <Button compact content="Done" onClick={handleFinishText} />
-                <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
-              </div>
+            <div className="fixed-position">
+              <Button compact content="Done" onClick={handleFinishText} />
+              <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
               <Button
                 compact
                 negative={sessionContext.isPaused === false}
                 disabled={sessionContext.isPaused}
-                className="fixed-button"
+                className="fixed-position"
                 content="Pause"
                 onClick={() => pauseSession(sessionContext)}
               />
             </div>
           </GridColumn>
-          <GridColumn width="12">{displaySpeedText()}</GridColumn>
-          <GridColumn width="2">
-            <Segment></Segment>
-          </GridColumn>
+          <GridColumn width="14">{displaySpeedText()}</GridColumn>
         </Grid>
         <TestInstructions
           isOpen={sessionContext.hasStartedReading === false}

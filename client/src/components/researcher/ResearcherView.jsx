@@ -46,6 +46,7 @@ const ResearcherView = () => {
           };
           files.push(textFile);
         });
+
         // Set text files for rendering, and indicate that they are no longer being fetched.
         setTextFiles({ textFiles: files, isFetching: false });
       })
@@ -70,9 +71,9 @@ const ResearcherView = () => {
             );
           });
           const scrollTextFileNames = [];
-          temp.scrollTest.fileIDs.forEach((fileID) => {
+          temp.scrollTest.fileIDs.forEach((fileIDObj) => {
             scrollTextFileNames.push(
-              textFiles.textFiles.find((tf) => tf.key === fileID).name
+              textFiles.textFiles.find((tf) => tf.key === fileIDObj.id).name
             );
           });
 
@@ -87,6 +88,7 @@ const ResearcherView = () => {
 
           options.push(option);
         });
+
         // Set templates for rendering, and indicate that they are no longer being fetched.
         setTemplates({ templates: options, isFetching: false });
       })

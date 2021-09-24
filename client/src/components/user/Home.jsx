@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { createRef, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { SessionContext } from "../../contexts/SessionContext";
+import PageError from "../PageError";
 
 const Home = () => {
   const [userName, setUserName] = useState("");
   const [template, setTemplate] = useState(null);
+  const [templateError, setTemplateError] = useState(false);
   const [displayUserNameError, setDisplayUserNameError] = useState(false);
   const sessionContext = useContext(SessionContext);
   const startTask1Ref = createRef();
@@ -26,7 +28,11 @@ const Home = () => {
         params: { _id: templateId },
       })
       .then((response) => {
-        setTemplate(response.data);
+        if (response.data.name === "CastError") {
+          setTemplateError(true);
+        } else {
+          setTemplate(response.data);
+        }
       })
       .catch((error) => {
         console.error("Error fetching SessionTemplate:", error);
@@ -87,10 +93,12 @@ const Home = () => {
     }
   };
 
-  return (
-    <div className="page" style={{ textAlign: "center" }}>
-      <Segment>
-        <Container text>
+  const displayContent = () => {
+    if (templateError) {
+      return <PageError />;
+    } else {
+      return (
+        <div>
           <Header as="h1" content="Welcome!" />
           <Segment>
             Please type your name below, and click on the button to begin the
@@ -106,7 +114,15 @@ const Home = () => {
             <Link to="/speedtest" hidden ref={startTask1Ref}></Link>
             {userNameError()}
           </div>
-        </Container>
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div className="page" style={{ textAlign: "center" }}>
+      <Segment>
+        <Container text>{displayContent()}</Container>
       </Segment>
     </div>
   );

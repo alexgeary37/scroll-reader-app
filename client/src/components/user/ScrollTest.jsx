@@ -13,13 +13,18 @@ import TestInstructions from "./TestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
 import axios from "axios";
 import { isLastText, scrollToTop } from "../../utilityFunctions.js";
+import Question from "./Question.jsx";
 
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
   const endPageRef = createRef();
   const [instructions, setInstructions] = useState("");
+  const [questions, setQuestions] = useState([
+    "Question 1: blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
+    "Question 2: blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
+  ]);
   const [currentFileID, setCurrentFileID] = useState(
-    sessionContext.template.scrollTest.fileIDs[sessionContext.fileNumber]
+    sessionContext.template.scrollTest.fileIDs[sessionContext.fileNumber].id
   );
 
   useEffect(() => {
@@ -28,7 +33,7 @@ const ScrollTest = () => {
 
   useEffect(() => {
     setCurrentFileID(
-      sessionContext.template.scrollTest.fileIDs[sessionContext.fileNumber]
+      sessionContext.template.scrollTest.fileIDs[sessionContext.fileNumber].id
     );
   }, [sessionContext.fileNumber]);
 
@@ -86,9 +91,9 @@ const ScrollTest = () => {
         endPageRef.current.click();
       } else {
         // Add a new entry to session.scrollTexts.
-        startNextText(
-          sessionContext.template.scrollTest.fileIDs[fileNumber + 1]
-        );
+        const nextFileID =
+          sessionContext.template.scrollTest.fileIDs[fileNumber + 1].id;
+        startNextText(nextFileID);
         sessionContext.setFileNumber(fileNumber + 1);
         scrollToTop();
       }
@@ -135,27 +140,28 @@ const ScrollTest = () => {
 
   return (
     <div className="page">
-      <Container>
+      <Segment>
         <Grid columns="3">
-          <GridColumn width="2">
-            <div className="fixed-button">
-              <div className="wrapper">
-                <Button compact content="Done" onClick={handleFinishText} />
+          <GridColumn width="4">
+            <div style={{ textAlign: "center" }}>
+              <div style={{ position: "fixed" }}>
+                <Button primary content="Done" onClick={handleFinishText} />
                 <Link to="/end" hidden ref={endPageRef}></Link>
+                <div>
+                  <Button
+                    negative={sessionContext.isPaused === false}
+                    disabled={sessionContext.isPaused}
+                    content="Paused"
+                    onClick={() => pauseSession(sessionContext)}
+                  />
+                </div>
               </div>
-              <Button
-                compact
-                negative={sessionContext.isPaused === false}
-                disabled={sessionContext.isPaused}
-                className="fixed-button"
-                content="Paused"
-                onClick={() => pauseSession(sessionContext)}
-              />
             </div>
           </GridColumn>
-          <GridColumn width="12">{displayScrollText()}</GridColumn>
-          <GridColumn width="2">
-            <Segment></Segment>
+
+          <GridColumn width="8">{displayScrollText()}</GridColumn>
+          <GridColumn width="4">
+            <Question question={questions[0]} />
           </GridColumn>
         </Grid>
         <TestInstructions
@@ -165,7 +171,7 @@ const ScrollTest = () => {
           fileID={currentFileID}
         />
         <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
-      </Container>
+      </Segment>
     </div>
   );
 };
