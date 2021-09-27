@@ -12,6 +12,7 @@ const EndPage = () => {
     localStorage.removeItem("isPaused");
     localStorage.removeItem("hasStartedReading");
     localStorage.removeItem("fileNumber");
+    localStorage.removeItem("scrollQuestionNumber");
     localStorage.removeItem("sessionID");
   };
 

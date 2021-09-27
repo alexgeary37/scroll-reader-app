@@ -141,11 +141,16 @@ const SpeedTest = () => {
         <Grid columns="3">
           <GridColumn width="2">
             <div className="fixed-position">
-              <Button compact content="Done" onClick={handleFinishText} />
+              <Button
+                compact
+                primary
+                content="Done"
+                onClick={handleFinishText}
+              />
               <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
               <Button
                 compact
-                negative={sessionContext.isPaused === false}
+                negative
                 disabled={sessionContext.isPaused}
                 className="fixed-position"
                 content="Pause"

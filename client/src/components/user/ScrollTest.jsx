@@ -26,35 +26,27 @@ const ScrollTest = () => {
   const instructions = sessionContext.template.scrollTest.instructions;
 
   useEffect(() => {
-    // if (localStorage.getItem("scrollQuestionNumber") === null) {
-    localStorage.setItem("scrollQuestionNumber", JSON.stringify(0));
-    // setScrollQuestion(sessionContext.template.scrollTest.files[sessionContext.fileNumber]
-    //   .questions[0])
-    // }
-    setScrollQuestion(
-      sessionContext.template.scrollTest.files[sessionContext.fileNumber]
-        .questions[JSON.parse(localStorage.getItem("scrollQuestionNumber"))]
-    );
-    console.log(scrollQuestion)
-    console.log(localStorage.getItem("scrollQuestionNumber"));
+    if (localStorage.getItem("scrollQuestionNumber") === null) {
+      setScrollQuestionNumber(0);
+      setScrollQuestion(
+        sessionContext.template.scrollTest.files[sessionContext.fileNumber]
+          .questions[0]
+      );
+    }
   }, []);
-
-  useEffect(() => {
-    setCurrentFileID(
-      sessionContext.template.scrollTest.files[sessionContext.fileNumber]._id
-    );
-  }, [sessionContext.fileNumber]);
 
   useEffect(() => {
     localStorage.setItem(
       "scrollQuestionNumber",
       JSON.stringify(scrollQuestionNumber)
     );
-    setScrollQuestion(
-      sessionContext.template.scrollTest.files[sessionContext.fileNumber]
-        .questions[scrollQuestionNumber]
-    );
   }, [scrollQuestionNumber]);
+
+  useEffect(() => {
+    setCurrentFileID(
+      sessionContext.template.scrollTest.files[sessionContext.fileNumber]._id
+    );
+  }, [sessionContext.fileNumber]);
 
   const startNextText = (fileID) => {
     const sessionID = sessionContext.sessionID;
@@ -91,7 +83,7 @@ const ScrollTest = () => {
       })
       .catch((error) => {
         console.error(
-          "Error updating readingSession.scrollTexts[currentFileID].endTime:",
+          "Error updating readingSession.scrollTest[currentFileID].endTime:",
           error
         );
       });
@@ -113,6 +105,10 @@ const ScrollTest = () => {
         const nextFileID =
           sessionContext.template.scrollTest.files[fileNumber + 1]._id;
         startNextText(nextFileID);
+        setScrollQuestionNumber(0);
+        setScrollQuestion(
+          sessionContext.template.scrollTest.files[fileNumber + 1].questions[0]
+        );
         sessionContext.setFileNumber(fileNumber + 1);
         scrollToTop();
       }
@@ -161,9 +157,13 @@ const ScrollTest = () => {
     if (
       scrollQuestionNumber <
       sessionContext.template.scrollTest.files[sessionContext.fileNumber]
-        .questions.length
+        .questions.length -
+        1
     ) {
-      console.log("Hello");
+      setScrollQuestion(
+        sessionContext.template.scrollTest.files[sessionContext.fileNumber]
+          .questions[scrollQuestionNumber + 1]
+      );
       setScrollQuestionNumber(scrollQuestionNumber + 1);
     }
   };
@@ -179,9 +179,9 @@ const ScrollTest = () => {
                 <Link to="/end" hidden ref={endPageRef}></Link>
                 <div>
                   <Button
-                    negative={sessionContext.isPaused === false}
+                    negative
                     disabled={sessionContext.isPaused}
-                    content="Paused"
+                    content="Pause"
                     onClick={() => pauseSession(sessionContext)}
                   />
                 </div>
@@ -193,6 +193,13 @@ const ScrollTest = () => {
           <GridColumn width="4">
             <Question
               question={scrollQuestion}
+              disable={
+                scrollQuestionNumber >=
+                sessionContext.template.scrollTest.files[
+                  sessionContext.fileNumber
+                ].questions.length -
+                  1
+              }
               skip={incrementScrollQuestion}
             />
           </GridColumn>
