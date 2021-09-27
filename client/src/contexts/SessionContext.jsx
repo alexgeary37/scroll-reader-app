@@ -49,7 +49,10 @@ export const SessionProvider = ({ children }) => {
   }, [isPaused]);
 
   useEffect(() => {
-    localStorage.setItem("hasStartedReading", JSON.stringify(hasStartedReading));
+    localStorage.setItem(
+      "hasStartedReading",
+      JSON.stringify(hasStartedReading)
+    );
   }, [hasStartedReading]);
 
   useEffect(() => {

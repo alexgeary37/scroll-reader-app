@@ -9,8 +9,8 @@ const SessionTemplateSchema = mongoose.Schema({
   scrollTest: {
     files: [
       {
-        id: { type: String, required: true },
-        questionIDs: [{ type: String, required: true }],
+        _id: { type: String, required: true },
+        questions: [{ type: String, required: true }],
       },
     ],
     instructions: { type: String, required: true },

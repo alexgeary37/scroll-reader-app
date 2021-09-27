@@ -23,7 +23,7 @@ const TextFiles = ({ textFiles, appendTextFile }) => {
 
   return (
     <div>
-      <Header as="h2" textAlign="center" content="Uploaded Text Documents:" />
+      <Header as="h2" textAlign="center" content="Uploaded Texts:" />
       <div>
         <Segment basic>{displayTextFiles()}</Segment>
       </div>

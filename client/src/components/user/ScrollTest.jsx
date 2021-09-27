@@ -1,13 +1,7 @@
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import ScrollText from "./ScrollText.jsx";
 import { useContext, useState, useEffect, createRef } from "react";
-import {
-  Container,
-  Segment,
-  Button,
-  Grid,
-  GridColumn,
-} from "semantic-ui-react";
+import { Segment, Button, Grid, GridColumn } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import TestInstructions from "./TestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
@@ -18,24 +12,49 @@ import Question from "./Question.jsx";
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
   const endPageRef = createRef();
-  const [instructions, setInstructions] = useState("");
-  const [questions, setQuestions] = useState([
-    "Question 1: blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
-    "Question 2: blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
-  ]);
   const [currentFileID, setCurrentFileID] = useState(
-    sessionContext.template.scrollTest.fileIDs[sessionContext.fileNumber].id
+    sessionContext.template.scrollTest.files[sessionContext.fileNumber]._id
+  );
+  const [scrollQuestionNumber, setScrollQuestionNumber] = useState(
+    JSON.parse(localStorage.getItem("scrollQuestionNumber"))
+  );
+  const [scrollQuestion, setScrollQuestion] = useState(
+    sessionContext.template.scrollTest.files[sessionContext.fileNumber]
+      .questions[JSON.parse(localStorage.getItem("scrollQuestionNumber"))]
   );
 
+  const instructions = sessionContext.template.scrollTest.instructions;
+
   useEffect(() => {
-    setInstructions(sessionContext.template.scrollTest.instructions);
+    // if (localStorage.getItem("scrollQuestionNumber") === null) {
+    localStorage.setItem("scrollQuestionNumber", JSON.stringify(0));
+    // setScrollQuestion(sessionContext.template.scrollTest.files[sessionContext.fileNumber]
+    //   .questions[0])
+    // }
+    setScrollQuestion(
+      sessionContext.template.scrollTest.files[sessionContext.fileNumber]
+        .questions[JSON.parse(localStorage.getItem("scrollQuestionNumber"))]
+    );
+    console.log(scrollQuestion)
+    console.log(localStorage.getItem("scrollQuestionNumber"));
   }, []);
 
   useEffect(() => {
     setCurrentFileID(
-      sessionContext.template.scrollTest.fileIDs[sessionContext.fileNumber].id
+      sessionContext.template.scrollTest.files[sessionContext.fileNumber]._id
     );
   }, [sessionContext.fileNumber]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "scrollQuestionNumber",
+      JSON.stringify(scrollQuestionNumber)
+    );
+    setScrollQuestion(
+      sessionContext.template.scrollTest.files[sessionContext.fileNumber]
+        .questions[scrollQuestionNumber]
+    );
+  }, [scrollQuestionNumber]);
 
   const startNextText = (fileID) => {
     const sessionID = sessionContext.sessionID;
@@ -92,7 +111,7 @@ const ScrollTest = () => {
       } else {
         // Add a new entry to session.scrollTexts.
         const nextFileID =
-          sessionContext.template.scrollTest.fileIDs[fileNumber + 1].id;
+          sessionContext.template.scrollTest.files[fileNumber + 1]._id;
         startNextText(nextFileID);
         sessionContext.setFileNumber(fileNumber + 1);
         scrollToTop();
@@ -138,6 +157,17 @@ const ScrollTest = () => {
     }
   };
 
+  const incrementScrollQuestion = () => {
+    if (
+      scrollQuestionNumber <
+      sessionContext.template.scrollTest.files[sessionContext.fileNumber]
+        .questions.length
+    ) {
+      console.log("Hello");
+      setScrollQuestionNumber(scrollQuestionNumber + 1);
+    }
+  };
+
   return (
     <div className="page">
       <Segment>
@@ -161,7 +191,10 @@ const ScrollTest = () => {
 
           <GridColumn width="8">{displayScrollText()}</GridColumn>
           <GridColumn width="4">
-            <Question question={questions[0]} />
+            <Question
+              question={scrollQuestion}
+              skip={incrementScrollQuestion}
+            />
           </GridColumn>
         </Grid>
         <TestInstructions

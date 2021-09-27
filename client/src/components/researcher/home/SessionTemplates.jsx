@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Header, Segment, List, Item, Button } from "semantic-ui-react";
-import CreateTemplate from "./CreateTemplate";
+import CreateTemplate from "./templateCreation/CreateTemplate";
 
 const SessionTemplates = ({ templates, textFiles, appendTemplate }) => {
   const [openTemplateCreator, setOpenTemplateCreator] = useState(false);

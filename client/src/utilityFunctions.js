@@ -8,7 +8,7 @@ export const isLastText = (testType, context) => {
   }
   if (testType === "scroll") {
     return (
-      context.fileNumber === context.template.scrollTest.fileIDs.length - 1
+      context.fileNumber === context.template.scrollTest.files.length - 1
     );
   }
 };

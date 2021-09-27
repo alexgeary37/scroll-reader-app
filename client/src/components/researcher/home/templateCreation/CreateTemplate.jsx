@@ -9,15 +9,14 @@ import {
   Dropdown,
   List,
   Input,
-  Item,
 } from "semantic-ui-react";
 import axios from "axios";
+import ScrollTextListItem from "./ScrollTextListItem";
 
 const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [templateName, setTemplateName] = useState("");
   const [speedTextIDs, setSpeedTextIDs] = useState([]);
-  const [scrollTextIDs, setScrollTextIDs] = useState([]);
-  const [questionIDs, setQuestionIDs] = useState([]);
+  const [scrollTexts, setScrollTexts] = useState([]);
   const [speedTestInstructions, setSpeedTestInstructions] = useState("");
   const [scrollTestInstructions, setScrollTestInstructions] = useState("");
   const [comprehension, setComprehension] = useState(true);
@@ -33,7 +32,6 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     displayScrollTestInstructionsError,
     setDisplayScrollTestInstructionsError,
   ] = useState(false);
-  const [openAddScrollText, setOpenAddScrollText] = useState(false);
 
   const checkFormInputs = () => {
     let emptyFields = false;
@@ -46,7 +44,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       setDisplaySpeedTextError(true);
       emptyFields = true;
     }
-    if (scrollTextIDs.length === 0) {
+    if (scrollTexts.length === 0) {
       setDisplayScrollTextError(true);
       emptyFields = true;
     }
@@ -66,12 +64,12 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     const emptyFields = checkFormInputs();
 
     if (!emptyFields) {
-      // Set fileIDs field.
-      let files = [];
-      for (let i = 0; i < scrollTextIDs.length; i++) {
+      // Set files field.
+      const files = [];
+      for (let i = 0; i < scrollTexts.length; i++) {
         files.push({
-          id: scrollTextIDs[i]._id,
-          questionIDs: [questionIDs[i]],
+          _id: scrollTexts[i]._id,
+          questions: scrollTexts[i].questions,
         });
       }
 
@@ -147,37 +145,37 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         const optionIndex = data.value.indexOf(data.options[i].value);
 
         // IF this element is not found in data.value array, and it is still
-        // in scrollTextIDs, remove it from scrollTextIDs.
+        // in scrollTexts, remove it from scrollTexts.
         if (
           optionIndex === -1 &&
-          scrollTextIDs.some((elem) => elem._id === data.options[i].value)
+          scrollTexts.some((elem) => elem._id === data.options[i].value)
         ) {
-          setScrollTextIDs(
-            scrollTextIDs.filter((elem) => elem._id !== data.options[i].value)
+          setScrollTexts(
+            scrollTexts.filter((elem) => elem._id !== data.options[i].value)
           );
           break;
         }
       }
     } else if (data.value.length > 0) {
-      setScrollTextIDs([
-        ...scrollTextIDs,
+      setScrollTexts([
+        ...scrollTexts,
         {
+          _id: data.value[data.value.length - 1],
           fileName: data.options.find(
             (file) => file.value === data.value[data.value.length - 1]
           ).name,
-          _id: data.value[data.value.length - 1],
+          questions: [],
         },
       ]);
       setDisplayScrollTextError(false);
     }
   };
 
-  const handleAddScrollText = () => {
-    setOpenAddScrollText(true);
-  };
-
-  const closeAddScrollText = () => {
-    setOpenAddScrollText(false);
+  const handleAddQuestion = (text, question) => {
+    const index = scrollTexts.indexOf(text);
+    let tempScrollTexts = scrollTexts;
+    tempScrollTexts[index].questions.push(question);
+    setScrollTexts(tempScrollTexts);
   };
 
   const handleSpeedTestInstructionsChange = (event) => {
@@ -193,7 +191,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const clearData = () => {
     setTemplateName("");
     setSpeedTextIDs([]);
-    setScrollTextIDs([]);
+    setScrollTexts([]);
     setSpeedTestInstructions("");
     setScrollTestInstructions("");
     setComprehension(true);
@@ -214,9 +212,9 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       });
 
       const scrollTextFileNames = [];
-      responseData.scrollTest.fileIDs.forEach((fileIDObj) => {
+      responseData.scrollTest.files.forEach((fileObj) => {
         scrollTextFileNames.push(
-          textFiles.find((tf) => tf.key === fileIDObj.id).name
+          textFiles.find((tf) => tf.key === fileObj._id).name
         );
       });
 
@@ -233,6 +231,20 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     } else {
       close(false, null);
     }
+  };
+
+  const displayScrollTexts = () => {
+    return (
+      <List relaxed divided>
+        {scrollTexts.map((text) => (
+          <ScrollTextListItem
+            key={text._id}
+            text={text}
+            addQuestion={handleAddQuestion}
+          />
+        ))}
+      </List>
+    );
   };
 
   return (
@@ -322,30 +334,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               options={textFiles}
               onChange={handleSelectScrollText}
             />
-            <List relaxed divided>
-              {scrollTextIDs.map((text) => (
-                <Item key={text._id}>
-                  <Item.Content>
-                    <Item.Header
-                      as="h4"
-                      style={{ margin: 5 }}
-                      content={text.fileName}
-                    />
-                    <Item.Description
-                      style={{ margin: 5 }}
-                      content={`Uploaded:`}
-                    />
-                  </Item.Content>
-                </Item>
-              ))}
-            </List>
-            {/*
-            <Button content="Add Scroll text" onClick={handleAddScrollText} />
-             <Modal size="tiny" open={openAddScrollText}>
-              
-              <Button content="Add" />
-              <Button content="Cancel" onClick={closeAddScrollText} />
-            </Modal> */}
+            {displayScrollTexts()}
             {textError("scroll", displayScrollTextError)}
           </Segment>
         </div>
@@ -380,14 +369,14 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
 
         <Button
           floated="right"
-          primary
-          content="Create"
-          onClick={handleCreate}
+          content="Cancel"
+          onClick={() => handleClose(false, null)}
         />
         <Button
           floated="right"
-          content="Cancel"
-          onClick={() => handleClose(false, null)}
+          primary
+          content="Create"
+          onClick={handleCreate}
         />
       </Modal>
     </div>

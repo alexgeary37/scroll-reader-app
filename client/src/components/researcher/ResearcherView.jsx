@@ -71,9 +71,9 @@ const ResearcherView = () => {
             );
           });
           const scrollTextFileNames = [];
-          temp.scrollTest.fileIDs.forEach((fileIDObj) => {
+          temp.scrollTest.files.forEach((fileObj) => {
             scrollTextFileNames.push(
-              textFiles.textFiles.find((tf) => tf.key === fileIDObj.id).name
+              textFiles.textFiles.find((tf) => tf.key === fileObj._id).name
             );
           });
 
