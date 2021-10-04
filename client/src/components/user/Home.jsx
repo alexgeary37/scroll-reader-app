@@ -113,7 +113,6 @@ const Home = () => {
     if (templateError) {
       return <PageError />;
     } else {
-      console.log("sessionID::", sessionContext.sessionID);
       if (sessionContext.sessionID === "") {
         return (
           <div>

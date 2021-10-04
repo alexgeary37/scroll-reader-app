@@ -18,6 +18,9 @@ export const SessionProvider = ({ children }) => {
   const [fileNumber, setFileNumber] = useState(
     JSON.parse(localStorage.getItem("fileNumber"))
   );
+  const [scrollPosEntries, setScrollPosEntries] = useState(
+    JSON.parse(localStorage.getItem("scrollPosEntries"))
+  );
 
   // This sessionID enables the session to be accessed from db for updates.
   const [sessionID, setSessionID] = useState(localStorage.getItem("sessionID"));
@@ -32,6 +35,7 @@ export const SessionProvider = ({ children }) => {
       setIsPaused(false);
       setHasStartedReading(false);
       setFileNumber(0);
+      setScrollPosEntries([]);
       setSessionID("");
     }
   }, []);
@@ -60,6 +64,10 @@ export const SessionProvider = ({ children }) => {
   }, [fileNumber]);
 
   useEffect(() => {
+    localStorage.setItem("scrollPosEntries", JSON.stringify(scrollPosEntries));
+  }, [scrollPosEntries]);
+
+  useEffect(() => {
     localStorage.setItem("sessionID", sessionID);
   }, [sessionID]);
 
@@ -76,6 +84,8 @@ export const SessionProvider = ({ children }) => {
         setHasStartedReading,
         fileNumber,
         setFileNumber,
+        scrollPosEntries,
+        setScrollPosEntries,
         sessionID,
         setSessionID,
       }}

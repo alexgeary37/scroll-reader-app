@@ -34,9 +34,13 @@ class Server {
   routes() {
     this.app.post("/uploadTextFile", async (req, res) => {
       const newTextFile = req.body;
-      const textFile = new TextFileModel(newTextFile);
-      await textFile.save();
-      res.send(textFile);
+      TextFileModel.create(newTextFile, (err, textFile) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(textFile);
+        }
+      });
     });
 
     this.app.get("/getTextFile", async (req, res) => {
@@ -62,9 +66,13 @@ class Server {
 
     this.app.post("/createSessionTemplate", async (req, res) => {
       const newTemplate = req.body;
-      const template = new SessionTemplateModel(newTemplate);
-      await template.save();
-      res.send(template);
+      SessionTemplateModel.create(newTemplate, (err, template) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(template);
+        }
+      });
     });
 
     this.app.get("/getSessionTemplate", async (req, res) => {
@@ -90,9 +98,13 @@ class Server {
 
     this.app.post("/createReadingSession", async (req, res) => {
       const newSession = req.body;
-      const session = new ReadingSessionModel(newSession);
-      await session.save();
-      res.send(session);
+      ReadingSessionModel.create(newSession, (err, session) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(session);
+        }
+      });
     });
 
     this.app.get("/getCurrentSession", async (req, res) => {
@@ -259,11 +271,15 @@ class Server {
       );
     });
 
-    this.app.post("/addScrollPosEntry", async (req, res) => {
-      const newScrollPosEntry = req.body;
-      const scrollPosEntry = new ScrollPosEntryModel(newScrollPosEntry);
-      await scrollPosEntry.save();
-      res.send(scrollPosEntry);
+    this.app.post("/insertScrollPosEntries", async (req, res) => {
+      const newScrollPosEntries = req.body;
+      ScrollPosEntryModel.insertMany(newScrollPosEntries, (err, entries) => {
+        if (err) {
+          res.send(error);
+        } else {
+          res.send(entries);
+        }
+      });
     });
 
     this.app.get("/getScrollPosEntries", async (req, res) => {

@@ -1,6 +1,6 @@
 import { Container } from "semantic-ui-react";
 import useScrollPosition from "./scrollPosition.jsx";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 
@@ -11,6 +11,23 @@ const ScrollText = ({ fileID }) => {
   useEffect(() => {
     fetchText();
   }, [fileID]);
+
+  // This useEffect runs whenever sessionContext.scrollPosEntries changes.
+  // It also runs once the user has finished scrolling.
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const entriesToInsert = sessionContext.scrollPosEntries;
+      if (entriesToInsert.length > 0) {
+        sessionContext.setScrollPosEntries([]);
+        axios
+          .post("http://localhost:3001/insertScrollPosEntries", entriesToInsert)
+          .catch((error) => {
+            console.error("Error adding scrollPosEntry:", error);
+          });
+      }
+    }, 500);
+    return () => clearInterval(intervalId);
+  }, [sessionContext.scrollPosEntries]);
 
   const fetchText = () => {
     axios
@@ -43,11 +60,10 @@ const ScrollText = ({ fileID }) => {
         sessionID: sessionContext.sessionID,
       };
 
-      axios
-        .post("http://localhost:3001/addScrollPosEntry", scrollPosEntry)
-        .catch((error) => {
-          console.error("Error adding scrollPosEntry:", error);
-        });
+      sessionContext.setScrollPosEntries([
+        ...sessionContext.scrollPosEntries,
+        scrollPosEntry,
+      ]);
     }
   };
 
