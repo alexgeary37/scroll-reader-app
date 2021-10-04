@@ -11,7 +11,8 @@ const Home = () => {
   const [templateError, setTemplateError] = useState(false);
   const [displayUserNameError, setDisplayUserNameError] = useState(false);
   const sessionContext = useContext(SessionContext);
-  const startTask1Ref = createRef();
+  const speedTestRef = createRef();
+  const scrollTestRef = createRef();
 
   useEffect(() => {
     fetchSessionTemplate();
@@ -74,8 +75,23 @@ const Home = () => {
     if (sessionCreated) {
       sessionContext.setUserName(userName);
       sessionContext.setTemplate(template);
-      startTask1Ref.current.click();
+      speedTestRef.current.click();
     }
+  };
+
+  const handleResumeSession = () => {
+    axios
+      .get("http://localhost:3001/getCurrentSession", {
+        params: { _id: sessionContext.sessionID },
+      })
+      .then((response) => {
+        const currentSession = response.data;
+        if (currentSession.scrollTexts.length > 0) {
+          scrollTestRef.current.click();
+        } else {
+          speedTestRef.current.click();
+        }
+      });
   };
 
   const handleUserNameChange = (event) => {
@@ -97,25 +113,48 @@ const Home = () => {
     if (templateError) {
       return <PageError />;
     } else {
-      return (
-        <div>
-          <Header as="h1" content="Welcome!" />
-          <Segment>
-            Please type your name below, and click on the button to begin the
-            session!
-          </Segment>
-          <div className="wrapper" style={{ justifyContent: "center" }}>
-            <Input
-              type="text"
-              placeholder="Type your name here..."
-              onChange={handleUserNameChange}
-            />
-            <Button primary content="Start Task 1" onClick={handleStartTask1} />
-            <Link to="/speedtest" hidden ref={startTask1Ref}></Link>
-            {userNameError()}
+      console.log("sessionID::", sessionContext.sessionID);
+      if (sessionContext.sessionID === "") {
+        return (
+          <div>
+            <Header as="h1" content="Welcome!" />
+            <Segment>
+              Please type your name below, and click on the button to begin the
+              session!
+            </Segment>
+            <div className="wrapper" style={{ justifyContent: "center" }}>
+              <Input
+                type="text"
+                placeholder="Type your name here..."
+                onChange={handleUserNameChange}
+              />
+              <Button
+                primary
+                content="Start Task 1"
+                onClick={handleStartTask1}
+              />
+              <Link to="/speedtest" hidden ref={speedTestRef}></Link>
+              {userNameError()}
+            </div>
           </div>
-        </div>
-      );
+        );
+      } else {
+        return (
+          <div>
+            <Segment>
+              You are currently in an active session, Click the button to
+              resume!
+            </Segment>
+            <Button
+              primary
+              content="Resume Session"
+              onClick={handleResumeSession}
+            />
+            <Link to="/speedtest" hidden ref={speedTestRef}></Link>
+            <Link to="/scrolltest" hidden ref={scrollTestRef}></Link>
+          </div>
+        );
+      }
     }
   };
 

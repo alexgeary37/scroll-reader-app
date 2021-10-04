@@ -95,6 +95,17 @@ class Server {
       res.send(session);
     });
 
+    this.app.get("/getCurrentSession", async (req, res) => {
+      const id = req.query;
+      ReadingSessionModel.findOne({ _id: id }, (err, result) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(result);
+        }
+      });
+    });
+
     this.app.get("/getReadingSessions", async (req, res) => {
       ReadingSessionModel.find({}, (err, result) => {
         if (err) {

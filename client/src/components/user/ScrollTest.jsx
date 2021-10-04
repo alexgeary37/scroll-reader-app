@@ -1,13 +1,14 @@
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import ScrollText from "./ScrollText.jsx";
 import { useContext, useState, useEffect, createRef } from "react";
-import { Segment, Button, Grid, GridColumn } from "semantic-ui-react";
+import { Segment, Button, Grid, GridColumn, Modal } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import TestInstructions from "./TestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
 import axios from "axios";
 import { isLastText, scrollToTop } from "../../utilityFunctions.js";
 import Question from "./Question.jsx";
+import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
 
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
@@ -22,6 +23,9 @@ const ScrollTest = () => {
     sessionContext.template.scrollTest.files[sessionContext.fileNumber]
       .questions[JSON.parse(localStorage.getItem("scrollQuestionNumber"))]
   );
+  const [displayConfirmSkipMessage, setDisplayConfirmSkipMessage] =
+    useState(false);
+  const [textIsComplete, setTextIsComplete] = useState(false);
 
   const instructions = sessionContext.template.scrollTest.instructions;
 
@@ -33,6 +37,7 @@ const ScrollTest = () => {
           .questions[0]
       );
     }
+    initialiseTextIsComplete();
   }, []);
 
   useEffect(() => {
@@ -47,6 +52,26 @@ const ScrollTest = () => {
       sessionContext.template.scrollTest.files[sessionContext.fileNumber]._id
     );
   }, [sessionContext.fileNumber]);
+
+  const initialiseTextIsComplete = () => {
+    axios
+      .get("http://localhost:3001/getCurrentSession", {
+        params: { _id: sessionContext.sessionID },
+      })
+      .then((response) => {
+        const currentSession = response.data;
+
+        // Set to true if this text contains an endTime, false otherwise.
+        if (currentSession.scrollTexts !== undefined) {
+          const currentText = currentSession.scrollTexts.find(
+            (text) => text.fileID === currentFileID
+          );
+          if (currentText !== undefined) {
+            setTextIsComplete(currentText.endTime !== undefined);
+          }
+        }
+      });
+  };
 
   const startNextText = (fileID) => {
     const sessionID = sessionContext.sessionID;
@@ -153,19 +178,13 @@ const ScrollTest = () => {
     }
   };
 
-  const incrementScrollQuestion = () => {
-    if (
-      scrollQuestionNumber <
+  const skipQuestion = () => {
+    setScrollQuestion(
       sessionContext.template.scrollTest.files[sessionContext.fileNumber]
-        .questions.length -
-        1
-    ) {
-      setScrollQuestion(
-        sessionContext.template.scrollTest.files[sessionContext.fileNumber]
-          .questions[scrollQuestionNumber + 1]
-      );
-      setScrollQuestionNumber(scrollQuestionNumber + 1);
-    }
+        .questions[scrollQuestionNumber + 1]
+    );
+    setScrollQuestionNumber(scrollQuestionNumber + 1);
+    setDisplayConfirmSkipMessage(false);
   };
 
   return (
@@ -175,12 +194,17 @@ const ScrollTest = () => {
           <GridColumn width="4">
             <div style={{ textAlign: "center" }}>
               <div style={{ position: "fixed" }}>
-                <Button primary content="Done" onClick={handleFinishText} />
+                <Button
+                  primary
+                  disabled={textIsComplete}
+                  content="Done"
+                  onClick={handleFinishText}
+                />
                 <Link to="/end" hidden ref={endPageRef}></Link>
                 <div>
                   <Button
                     negative
-                    disabled={sessionContext.isPaused}
+                    disabled={sessionContext.isPaused || textIsComplete}
                     content="Pause"
                     onClick={() => pauseSession(sessionContext)}
                   />
@@ -195,12 +219,18 @@ const ScrollTest = () => {
               question={scrollQuestion}
               disable={
                 scrollQuestionNumber >=
-                sessionContext.template.scrollTest.files[
-                  sessionContext.fileNumber
-                ].questions.length -
-                  1
+                  sessionContext.template.scrollTest.files[
+                    sessionContext.fileNumber
+                  ].questions.length -
+                    1 || textIsComplete
               }
-              skip={incrementScrollQuestion}
+              skip={() => setDisplayConfirmSkipMessage(true)}
+            />
+
+            <ConfirmSkipQuestionWindow
+              isOpen={displayConfirmSkipMessage}
+              skip={skipQuestion}
+              cancel={() => setDisplayConfirmSkipMessage(false)}
             />
           </GridColumn>
         </Grid>

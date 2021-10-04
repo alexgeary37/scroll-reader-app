@@ -1,13 +1,7 @@
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import SpeedText from "./SpeedText.jsx";
 import { useContext, createRef, useState, useEffect } from "react";
-import {
-  Container,
-  Segment,
-  Button,
-  Grid,
-  GridColumn,
-} from "semantic-ui-react";
+import { Container, Button, Grid, GridColumn } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import TestInstructions from "./TestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
@@ -21,9 +15,11 @@ const SpeedTest = () => {
   const [currentFileID, setCurrentFileID] = useState(
     sessionContext.template.speedTest.fileIDs[sessionContext.fileNumber]
   );
+  const [textIsComplete, setTextIsComplete] = useState(false);
 
   useEffect(() => {
     setInstructions(sessionContext.template.speedTest.instructions);
+    initialiseTextIsComplete();
   }, []);
 
   useEffect(() => {
@@ -31,6 +27,26 @@ const SpeedTest = () => {
       sessionContext.template.speedTest.fileIDs[sessionContext.fileNumber]
     );
   }, [sessionContext.fileNumber]);
+
+  const initialiseTextIsComplete = () => {
+    axios
+      .get("http://localhost:3001/getCurrentSession", {
+        params: { _id: sessionContext.sessionID },
+      })
+      .then((response) => {
+        const currentSession = response.data;
+
+        // Set to true if this text contains an endTime, false otherwise.
+        if (currentSession.speedTexts !== undefined) {
+          const currentText = currentSession.speedTexts.find(
+            (text) => text.fileID === currentFileID
+          );
+          if (currentText !== undefined) {
+            setTextIsComplete(currentText.endTime !== undefined);
+          }
+        }
+      });
+  };
 
   const startNextText = (fileID) => {
     const sessionID = sessionContext.sessionID;
@@ -75,7 +91,7 @@ const SpeedTest = () => {
     return sessionUpdated;
   };
 
-  const handleFinishText = () => {
+  const handleFinishText = async () => {
     // Update session.speedTexts[currentFileID] with an end time.
     const sessionUpdated = finishCurrentText();
 
@@ -144,6 +160,7 @@ const SpeedTest = () => {
               <Button
                 compact
                 primary
+                disabled={textIsComplete}
                 content="Done"
                 onClick={handleFinishText}
               />
@@ -151,7 +168,7 @@ const SpeedTest = () => {
               <Button
                 compact
                 negative
-                disabled={sessionContext.isPaused}
+                disabled={sessionContext.isPaused || textIsComplete}
                 className="fixed-position"
                 content="Pause"
                 onClick={() => pauseSession(sessionContext)}
