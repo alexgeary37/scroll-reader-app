@@ -37,12 +37,12 @@ const SpeedTest = () => {
         const currentSession = response.data;
 
         // Set to true if this text contains an endTime, false otherwise.
-        if (currentSession.speedTexts !== undefined) {
+        if (currentSession.hasOwnProperty("speedTexts")) {
           const currentText = currentSession.speedTexts.find(
             (text) => text.fileID === currentFileID
           );
           if (currentText !== undefined) {
-            setTextIsComplete(currentText.endTime !== undefined);
+            setTextIsComplete(currentText.hasOwnProperty("endTime"));
           }
         }
       });

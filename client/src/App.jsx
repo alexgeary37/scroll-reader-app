@@ -1,4 +1,4 @@
-import { Route, useHistory } from "react-router-dom";
+import { Route } from "react-router-dom";
 import "./App.css";
 import ResearcherView from "./components/researcher/ResearcherView.jsx";
 import Home from "./components/user/Home.jsx";

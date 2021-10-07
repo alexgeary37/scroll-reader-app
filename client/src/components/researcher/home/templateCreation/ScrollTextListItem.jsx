@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Item, Button, Label } from "semantic-ui-react";
+import { Item, Button } from "semantic-ui-react";
 import AddQuestion from "./AddQuestion";
 import QuestionsView from "./QuestionsView";
 

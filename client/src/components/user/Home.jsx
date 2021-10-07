@@ -13,6 +13,7 @@ const Home = () => {
   const sessionContext = useContext(SessionContext);
   const speedTestRef = createRef();
   const scrollTestRef = createRef();
+  const endPageRef = createRef();
 
   useEffect(() => {
     fetchSessionTemplate();
@@ -86,7 +87,13 @@ const Home = () => {
       })
       .then((response) => {
         const currentSession = response.data;
-        if (currentSession.scrollTexts.length > 0) {
+        if (
+          currentSession.scrollTexts.length ===
+            template.scrollTest.files.length &&
+          currentSession.scrollTexts.at(-1).hasOwnProperty("endTime")
+        ) {
+          endPageRef.current.click();
+        } else if (currentSession.scrollTexts.length > 0) {
           scrollTestRef.current.click();
         } else {
           speedTestRef.current.click();
@@ -151,6 +158,7 @@ const Home = () => {
             />
             <Link to="/speedtest" hidden ref={speedTestRef}></Link>
             <Link to="/scrolltest" hidden ref={scrollTestRef}></Link>
+            <Link to="/end" hidden ref={endPageRef}></Link>
           </div>
         );
       }

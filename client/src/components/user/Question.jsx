@@ -1,11 +1,6 @@
-import { useEffect } from "react";
 import { Card, Button } from "semantic-ui-react";
 
 const Question = ({ question, disable, skip }) => {
-  // useEffect(() => {
-  //   console.log("question::", question);
-  // }, [question]);
-
   return (
     <Card>
       <Card.Content>

@@ -1,7 +1,7 @@
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import ScrollText from "./ScrollText.jsx";
 import { useContext, useState, useEffect, createRef } from "react";
-import { Segment, Button, Grid, GridColumn, Modal } from "semantic-ui-react";
+import { Segment, Button, Grid, GridColumn } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import TestInstructions from "./TestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
@@ -62,12 +62,12 @@ const ScrollTest = () => {
         const currentSession = response.data;
 
         // Set to true if this text contains an endTime, false otherwise.
-        if (currentSession.scrollTexts !== undefined) {
+        if (currentSession.hasOwnProperty("scrollTexts")) {
           const currentText = currentSession.scrollTexts.find(
             (text) => text.fileID === currentFileID
           );
           if (currentText !== undefined) {
-            setTextIsComplete(currentText.endTime !== undefined);
+            setTextIsComplete(currentText.hasOwnProperty("endTime"));
           }
         }
       });
