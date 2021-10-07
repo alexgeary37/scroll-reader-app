@@ -1,16 +1,27 @@
 import { useState } from "react";
-import { Item, Button } from "semantic-ui-react";
+import { Input, Item, Button } from "semantic-ui-react";
 import AddQuestion from "./AddQuestion";
 import QuestionsView from "./QuestionsView";
 
-const ScrollTextListItem = ({ text, addQuestion }) => {
+const ScrollTextListItem = ({
+  text,
+  addQuestion,
+  setInstructions,
+  instructionsError,
+}) => {
   const [openAddQuestion, setOpenAddQuestion] = useState(false);
   const [viewQuestions, setViewQuestions] = useState(false);
+  const [instructionsAreEmpty, setInstructionsAreEmpty] = useState(true);
 
   const handleQuestionsClick = () => {
     if (text.questions.length > 0) {
       setViewQuestions(true);
     }
+  };
+
+  const handleInstructionsChange = (text, instructions) => {
+    setInstructionsAreEmpty(instructions === "");
+    setInstructions(text, instructions);
   };
 
   return (
@@ -25,8 +36,14 @@ const ScrollTextListItem = ({ text, addQuestion }) => {
             />
           </div>
 
+          <Input
+            type="text"
+            error={instructionsError && instructionsAreEmpty}
+            placeholder="Write instructions here..."
+            onChange={(e) => handleInstructionsChange(text, e.target.value)}
+          />
+
           <Button
-            primary
             disabled={text.questions.length === 0}
             content={`Questions: ${text.questions.length}`}
             onClick={handleQuestionsClick}

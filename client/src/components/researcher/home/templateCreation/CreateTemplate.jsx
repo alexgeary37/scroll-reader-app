@@ -18,43 +18,35 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [speedTextIDs, setSpeedTextIDs] = useState([]);
   const [scrollTexts, setScrollTexts] = useState([]);
   const [speedTestInstructions, setSpeedTestInstructions] = useState("");
-  const [scrollTestInstructions, setScrollTestInstructions] = useState("");
   const [comprehension, setComprehension] = useState(true);
-  const [displayTemplateNameError, setDisplayTemplateNameError] =
+  const [displayMissingInputError, setDisplayMissingInputError] =
     useState(false);
-  const [displaySpeedTextError, setDisplaySpeedTextError] = useState(false);
-  const [displayScrollTextError, setDisplayScrollTextError] = useState(false);
-  const [
-    displaySpeedTestInstructionsError,
-    setDisplaySpeedTestInstructionsError,
-  ] = useState(false);
-  const [
-    displayScrollTestInstructionsError,
-    setDisplayScrollTestInstructionsError,
-  ] = useState(false);
 
   const checkFormInputs = () => {
     let emptyFields = false;
 
     if (templateName === "") {
-      setDisplayTemplateNameError(true);
+      setDisplayMissingInputError(true);
       emptyFields = true;
     }
     if (speedTextIDs.length === 0) {
-      setDisplaySpeedTextError(true);
+      setDisplayMissingInputError(true);
       emptyFields = true;
     }
     if (scrollTexts.length === 0) {
-      setDisplayScrollTextError(true);
+      setDisplayMissingInputError(true);
       emptyFields = true;
     }
     if (speedTestInstructions === "") {
-      setDisplaySpeedTestInstructionsError(true);
+      setDisplayMissingInputError(true);
       emptyFields = true;
     }
-    if (scrollTestInstructions === "") {
-      setDisplayScrollTestInstructionsError(true);
-      emptyFields = true;
+    for (let i = 0; i < scrollTexts.length; i++) {
+      if (scrollTexts[i].instructions === "") {
+        setDisplayMissingInputError(true);
+        emptyFields = true;
+        break;
+      }
     }
 
     return emptyFields;
@@ -69,6 +61,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       for (let i = 0; i < scrollTexts.length; i++) {
         files.push({
           _id: scrollTexts[i]._id,
+          instructions: scrollTexts[i].instructions,
           questions: scrollTexts[i].questions,
         });
       }
@@ -80,10 +73,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           fileIDs: speedTextIDs,
           instructions: speedTestInstructions,
         },
-        scrollTest: {
-          files: files,
-          instructions: scrollTestInstructions,
-        },
+        scrollTexts: files,
         questionFormat: questionFormat,
         createdAt: new Date(),
       };
@@ -97,46 +87,6 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           console.error("Error creating session template:", error);
         });
     }
-  };
-
-  const nameError = () => {
-    if (displayTemplateNameError) {
-      return (
-        <label style={{ padding: 10, float: "right", color: "red" }}>
-          Template must be given a name!
-        </label>
-      );
-    }
-  };
-
-  const textError = (testType, displayError) => {
-    if (displayError) {
-      return (
-        <label style={{ padding: 10, float: "right", color: "red" }}>
-          Please select a file for the {testType} test!
-        </label>
-      );
-    }
-  };
-
-  const instructionsError = (testType, displayError) => {
-    if (displayError) {
-      return (
-        <label style={{ padding: 10, float: "right", color: "red" }}>
-          Please write instructions for the {testType} test!
-        </label>
-      );
-    }
-  };
-
-  const handleTemplateNameChange = (event) => {
-    setTemplateName(event.target.value);
-    setDisplayTemplateNameError(false);
-  };
-
-  const handleSelectSpeedText = (e, data) => {
-    setSpeedTextIDs(data.value);
-    setDisplaySpeedTextError(false);
   };
 
   const handleSelectScrollText = (e, data) => {
@@ -164,10 +114,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           fileName: data.options.find(
             (file) => file.value === data.value[data.value.length - 1]
           ).name,
+          instructions: "",
           questions: [],
         },
       ]);
-      setDisplayScrollTextError(false);
     }
   };
 
@@ -178,14 +128,11 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setScrollTexts(tempScrollTexts);
   };
 
-  const handleSpeedTestInstructionsChange = (event) => {
-    setSpeedTestInstructions(event.target.value);
-    setDisplaySpeedTestInstructionsError(false);
-  };
-
-  const handleScrollTestInstructionsChange = (event) => {
-    setScrollTestInstructions(event.target.value);
-    setDisplayScrollTestInstructionsError(false);
+  const setScrollTextInstructions = (text, instructions) => {
+    const index = scrollTexts.indexOf(text);
+    let tempScrollTexts = scrollTexts;
+    tempScrollTexts[index].instructions = instructions;
+    setScrollTexts(tempScrollTexts);
   };
 
   const clearData = () => {
@@ -193,13 +140,8 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setSpeedTextIDs([]);
     setScrollTexts([]);
     setSpeedTestInstructions("");
-    setScrollTestInstructions("");
     setComprehension(true);
-    setDisplayTemplateNameError(false);
-    setDisplaySpeedTextError(false);
-    setDisplayScrollTextError(false);
-    setDisplaySpeedTestInstructionsError(false);
-    setDisplayScrollTestInstructionsError(false);
+    setDisplayMissingInputError(false);
   };
 
   const handleClose = (templateCreated, responseData) => {
@@ -212,7 +154,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       });
 
       const scrollTextFileNames = [];
-      responseData.scrollTest.files.forEach((fileObj) => {
+      responseData.scrollTexts.forEach((fileObj) => {
         scrollTextFileNames.push(
           textFiles.find((tf) => tf.key === fileObj._id).name
         );
@@ -241,6 +183,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             key={text._id}
             text={text}
             addQuestion={handleAddQuestion}
+            setInstructions={setScrollTextInstructions}
+            instructionsError={
+              text.instructions === "" && displayMissingInputError
+            }
           />
         ))}
       </List>
@@ -264,11 +210,11 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             />
             <Input
               type="text"
+              error={templateName === "" && displayMissingInputError}
               fluid
               placeholder="Type template name here..."
-              onChange={handleTemplateNameChange}
+              onChange={(e) => setTemplateName(e.target.value)}
             />
-            {nameError()}
           </Segment>
 
           <Segment>
@@ -279,11 +225,11 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             />
             <Input
               type="text"
+              error={speedTestInstructions === "" && displayMissingInputError}
               fluid
               placeholder="Write instructions for the speed test here..."
-              onChange={handleSpeedTestInstructionsChange}
+              onChange={(e) => setSpeedTestInstructions(e.target.value)}
             />
-            {instructionsError("speed", displaySpeedTestInstructionsError)}
           </Segment>
 
           <Segment>
@@ -294,29 +240,14 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             />
             <Dropdown
               placeholder="Select texts for the speed test"
+              error={speedTextIDs.length === 0 && displayMissingInputError}
               fluid
               search
               selection
               multiple
               options={textFiles}
-              onChange={handleSelectSpeedText}
+              onChange={(e, data) => setSpeedTextIDs(data.value)}
             />
-            {textError("speed", displaySpeedTextError)}
-          </Segment>
-
-          <Segment>
-            <Header
-              as="h3"
-              content="Scroll Test Instructions:"
-              style={{ paddingTop: 5, marginRight: 10 }}
-            />
-            <Input
-              type="text"
-              fluid
-              placeholder="Write instructions for the scroll test here..."
-              onChange={handleScrollTestInstructionsChange}
-            />
-            {instructionsError("scroll", displayScrollTestInstructionsError)}
           </Segment>
 
           <Segment>
@@ -327,6 +258,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             />
             <Dropdown
               placeholder="Select texts for the scroll test"
+              error={scrollTexts.length === 0 && displayMissingInputError}
               fluid
               search
               selection
@@ -335,7 +267,6 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               onChange={handleSelectScrollText}
             />
             {displayScrollTexts()}
-            {textError("scroll", displayScrollTextError)}
           </Segment>
         </div>
 
@@ -348,7 +279,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
                   <input
                     type="radio"
                     checked={comprehension}
-                    onChange={() => setComprehension(!comprehension)}
+                    onChange={() => setComprehension(true)}
                   />
                   <label>Comprehension</label>
                 </div>
@@ -358,7 +289,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
                   <input
                     type="radio"
                     checked={!comprehension}
-                    onChange={() => setComprehension(!comprehension)}
+                    onChange={() => setComprehension(false)}
                   />
                   <label>Inline</label>
                 </div>

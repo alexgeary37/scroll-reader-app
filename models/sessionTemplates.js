@@ -6,15 +6,14 @@ const SessionTemplateSchema = mongoose.Schema({
     fileIDs: [{ type: String, required: true }],
     instructions: { type: String, required: true },
   },
-  scrollTest: {
-    files: [
-      {
-        _id: { type: String, required: true },
-        questions: [{ type: String, required: true }],
-      },
-    ],
-    instructions: { type: String, required: true },
-  },
+  scrollTexts: [
+    {
+      _id: { type: String, required: true },
+      instructions: { type: String, required: true },
+      questions: [{ type: String, required: true }],
+    },
+  ],
+
   questionFormat: { type: String, required: true },
   createdAt: { type: Date, required: true },
 });

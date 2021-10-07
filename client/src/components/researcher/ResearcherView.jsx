@@ -71,7 +71,7 @@ const ResearcherView = () => {
             );
           });
           const scrollTextFileNames = [];
-          temp.scrollTest.files.forEach((fileObj) => {
+          temp.scrollTexts.forEach((fileObj) => {
             scrollTextFileNames.push(
               textFiles.textFiles.find((tf) => tf.key === fileObj._id).name
             );

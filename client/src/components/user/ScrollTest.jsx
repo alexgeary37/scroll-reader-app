@@ -14,26 +14,29 @@ const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
   const endPageRef = createRef();
   const [currentFileID, setCurrentFileID] = useState(
-    sessionContext.template.scrollTest.files[sessionContext.fileNumber]._id
+    sessionContext.template.scrollTexts[sessionContext.fileNumber]._id
   );
   const [scrollQuestionNumber, setScrollQuestionNumber] = useState(
     JSON.parse(localStorage.getItem("scrollQuestionNumber"))
   );
   const [scrollQuestion, setScrollQuestion] = useState(
-    sessionContext.template.scrollTest.files[sessionContext.fileNumber]
-      .questions[JSON.parse(localStorage.getItem("scrollQuestionNumber"))]
+    sessionContext.template.scrollTexts[sessionContext.fileNumber].questions[
+      JSON.parse(localStorage.getItem("scrollQuestionNumber"))
+    ]
   );
   const [displayConfirmSkipMessage, setDisplayConfirmSkipMessage] =
     useState(false);
   const [textIsComplete, setTextIsComplete] = useState(false);
 
-  const instructions = sessionContext.template.scrollTest.instructions;
+  const [instructions, setInstructions] = useState(
+    sessionContext.template.scrollTexts[sessionContext.fileNumber].instructions
+  );
 
   useEffect(() => {
     if (localStorage.getItem("scrollQuestionNumber") === null) {
       setScrollQuestionNumber(0);
       setScrollQuestion(
-        sessionContext.template.scrollTest.files[sessionContext.fileNumber]
+        sessionContext.template.scrollTexts[sessionContext.fileNumber]
           .questions[0]
       );
     }
@@ -49,7 +52,7 @@ const ScrollTest = () => {
 
   useEffect(() => {
     setCurrentFileID(
-      sessionContext.template.scrollTest.files[sessionContext.fileNumber]._id
+      sessionContext.template.scrollTexts[sessionContext.fileNumber]._id
     );
   }, [sessionContext.fileNumber]);
 
@@ -85,7 +88,7 @@ const ScrollTest = () => {
       })
       .catch((error) => {
         console.error(
-          `Error updating readingSession.scrollTest[currentFileID].startTime:`,
+          `Error updating readingSession.scrollTexts[currentFileID].startTime:`,
           error
         );
       });
@@ -108,7 +111,7 @@ const ScrollTest = () => {
       })
       .catch((error) => {
         console.error(
-          "Error updating readingSession.scrollTest[currentFileID].endTime:",
+          "Error updating readingSession.scrollTexts[currentFileID].endTime:",
           error
         );
       });
@@ -126,16 +129,15 @@ const ScrollTest = () => {
       if (isLastText("scroll", sessionContext)) {
         endPageRef.current.click();
       } else {
-        // Add a new entry to session.scrollTexts.
-        const nextFileID =
-          sessionContext.template.scrollTest.files[fileNumber + 1]._id;
-        startNextText(nextFileID);
+        // Adjust hooks and context for the next scrollText.
+        const nextText = sessionContext.template.scrollTexts[fileNumber + 1];
+        startNextText(nextText._id);
+        setScrollQuestion(nextText.questions[0]);
+        setInstructions(nextText.instructions);
         setScrollQuestionNumber(0);
-        setScrollQuestion(
-          sessionContext.template.scrollTest.files[fileNumber + 1].questions[0]
-        );
         sessionContext.setFileNumber(fileNumber + 1);
         scrollToTop();
+        sessionContext.setHasStartedReading(false);
       }
     }
   };
@@ -173,15 +175,16 @@ const ScrollTest = () => {
   };
 
   const displayScrollText = () => {
-    if (sessionContext.isPaused === false) {
+    if (sessionContext.isPaused === false && sessionContext.hasStartedReading) {
       return <ScrollText fileID={currentFileID} />;
     }
   };
 
   const skipQuestion = () => {
     setScrollQuestion(
-      sessionContext.template.scrollTest.files[sessionContext.fileNumber]
-        .questions[scrollQuestionNumber + 1]
+      sessionContext.template.scrollTexts[sessionContext.fileNumber].questions[
+        scrollQuestionNumber + 1
+      ]
     );
     setScrollQuestionNumber(scrollQuestionNumber + 1);
     setDisplayConfirmSkipMessage(false);
@@ -219,9 +222,8 @@ const ScrollTest = () => {
               question={scrollQuestion}
               disable={
                 scrollQuestionNumber >=
-                  sessionContext.template.scrollTest.files[
-                    sessionContext.fileNumber
-                  ].questions.length -
+                  sessionContext.template.scrollTexts[sessionContext.fileNumber]
+                    .questions.length -
                     1 || textIsComplete
               }
               skip={() => setDisplayConfirmSkipMessage(true)}

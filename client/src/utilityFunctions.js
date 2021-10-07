@@ -7,9 +7,7 @@ export const isLastText = (testType, context) => {
     return context.fileNumber === context.template.speedTest.fileIDs.length - 1;
   }
   if (testType === "scroll") {
-    return (
-      context.fileNumber === context.template.scrollTest.files.length - 1
-    );
+    return context.fileNumber === context.template.scrollTexts.length - 1;
   }
 };
 

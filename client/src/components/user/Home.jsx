@@ -89,7 +89,7 @@ const Home = () => {
         const currentSession = response.data;
         if (
           currentSession.scrollTexts.length ===
-            template.scrollTest.files.length &&
+            template.scrollTexts.length &&
           currentSession.scrollTexts.at(-1).hasOwnProperty("endTime")
         ) {
           endPageRef.current.click();

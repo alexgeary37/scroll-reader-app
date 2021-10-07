@@ -146,7 +146,7 @@ const SpeedTest = () => {
   };
 
   const displaySpeedText = () => {
-    if (sessionContext.isPaused === false) {
+    if (sessionContext.isPaused === false && sessionContext.hasStartedReading) {
       return <SpeedText fileID={currentFileID} />;
     }
   };
