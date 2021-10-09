@@ -1,11 +1,20 @@
 import TopMenu from "./TopMenu.jsx";
 import DataGraph from "./data/DataGraph.jsx";
-import TextFiles from "./home/TextFiles.jsx";
-import { Segment, Container, Divider } from "semantic-ui-react";
+import TextFile from "./home/TextFile.jsx";
+import {
+  Segment,
+  Container,
+  Divider,
+  Header,
+  List,
+  Button,
+} from "semantic-ui-react";
 import { useState, useEffect } from "react";
 import { Route } from "react-router";
-import SessionTemplates from "./home/SessionTemplates.jsx";
+import SessionTemplateListItem from "./home/SessionTemplateListItem.jsx";
 import axios from "axios";
+import CreateTemplate from "./home/templateCreation/CreateTemplate.jsx";
+import FileUpload from "./home/FileUpload.jsx";
 
 const ResearcherView = () => {
   const [textFiles, setTextFiles] = useState({
@@ -16,6 +25,7 @@ const ResearcherView = () => {
     templates: [],
     isFetching: true,
   });
+  const [openTemplateCreator, setOpenTemplateCreator] = useState(false);
 
   useEffect(() => {
     // Fetch text files only on first render.
@@ -97,7 +107,21 @@ const ResearcherView = () => {
       });
   };
 
-  const textDocuments = () => {
+  const handleCreateTemplate = () => {
+    setOpenTemplateCreator(true);
+  };
+
+  const closeTemplateCreator = (templateCreated, template) => {
+    if (templateCreated) {
+      setTemplates({
+        templates: [...templates.templates, template],
+        isFetching: false,
+      });
+    }
+    setOpenTemplateCreator(false);
+  };
+
+  const displayTextFiles = () => {
     const curUrl = window.location.href;
 
     // Do not render text files if the researcher is looking at the data page,
@@ -105,9 +129,18 @@ const ResearcherView = () => {
     if (curUrl.substr(curUrl.length - 5) !== "/data" && !textFiles.isFetching) {
       return (
         <div>
-          <TextFiles
-            textFiles={textFiles.textFiles}
-            appendTextFile={(file) =>
+          <Header as="h2" textAlign="center" content="Uploaded Texts:" />
+          <div>
+            <Segment>
+              <List relaxed divided>
+                {textFiles.textFiles.map((file) => (
+                  <TextFile key={file.key} file={file} />
+                ))}
+              </List>
+            </Segment>
+          </div>
+          <FileUpload
+            uploadSubmitted={(file) =>
               setTextFiles({
                 textFiles: [...textFiles.textFiles, file],
                 isFetching: false,
@@ -119,7 +152,7 @@ const ResearcherView = () => {
     }
   };
 
-  const sessionTemplates = () => {
+  const displaySessionTemplates = () => {
     const curUrl = window.location.href;
 
     // Do not render session templates if the researcher is looking at the data page,
@@ -127,15 +160,29 @@ const ResearcherView = () => {
     if (curUrl.substr(curUrl.length - 5) !== "/data" && !templates.isFetching) {
       return (
         <div>
-          <SessionTemplates
-            templates={templates.templates}
+          <Header as="h2" textAlign="center" content="Existing Templates:" />
+          <div>
+            <Segment>
+              <div className="ui link divided relaxed items">
+                {templates.templates.map((template) => (
+                  <SessionTemplateListItem
+                    key={template.key}
+                    template={template}
+                  />
+                ))}
+              </div>
+            </Segment>
+          </div>
+          <Button
+            style={{ marginTop: 10 }}
+            positive
+            content="Create Template"
+            onClick={handleCreateTemplate}
+          />
+          <CreateTemplate
+            isOpen={openTemplateCreator}
+            close={closeTemplateCreator}
             textFiles={textFiles.textFiles}
-            appendTemplate={(template) =>
-              setTemplates({
-                templates: [...templates.templates, template],
-                isFetching: false,
-              })
-            }
           />
         </div>
       );
@@ -149,9 +196,9 @@ const ResearcherView = () => {
         <Segment>
           <Container>
             <Route path="/researcher/data" component={DataGraph} />
-            {textDocuments()}
+            {displayTextFiles()}
             <Divider />
-            {sessionTemplates()}
+            {displaySessionTemplates()}
           </Container>
         </Segment>
       </div>
