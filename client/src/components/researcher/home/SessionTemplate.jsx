@@ -1,8 +1,8 @@
-import { List, Item, Segment, Button } from "semantic-ui-react";
+import { List, Item } from "semantic-ui-react";
 import SessionTemplateView from "./SessionTemplateView";
 import { useState } from "react";
 
-const SessionTemplateListItem = ({ template }) => {
+const SessionTemplate = ({ template }) => {
   const [openTemplateView, setOpenTemplateView] = useState(false);
 
   return (
@@ -17,12 +17,12 @@ const SessionTemplateListItem = ({ template }) => {
             content="Speedtest texts:"
           />
           <List style={{ marginLeft: 10 }} horizontal divided>
-            {template.speedFileNames.map((name) => (
+            {template.speedTest.fileNames.map((name) => (
               <Item key={name}>
                 <Item.Content>
                   <Item.Description
                     content={`${
-                      template.speedFileNames.indexOf(name) + 1
+                      template.speedTest.fileNames.indexOf(name) + 1
                     }. ${name}`}
                   />
                 </Item.Content>
@@ -36,13 +36,13 @@ const SessionTemplateListItem = ({ template }) => {
             content="Scrolltest texts:"
           />
           <List style={{ marginLeft: 10 }} horizontal divided>
-            {template.scrollFileNames.map((name) => (
-              <Item key={name}>
+            {template.scrollTexts.map((text) => (
+              <Item key={text.name}>
                 <Item.Content>
                   <Item.Description
-                    content={`${
-                      template.scrollFileNames.indexOf(name) + 1
-                    }. ${name}`}
+                    content={`${template.scrollTexts.indexOf(text) + 1}. ${
+                      text.name
+                    }`}
                   />
                 </Item.Content>
               </Item>
@@ -69,4 +69,4 @@ const SessionTemplateListItem = ({ template }) => {
   );
 };
 
-export default SessionTemplateListItem;
+export default SessionTemplate;

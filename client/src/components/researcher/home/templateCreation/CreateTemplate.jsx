@@ -153,19 +153,25 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         speedTextFileNames.push(textFiles.find((tf) => tf.key === fileID).name);
       });
 
-      const scrollTextFileNames = [];
-      responseData.scrollTexts.forEach((fileObj) => {
-        scrollTextFileNames.push(
-          textFiles.find((tf) => tf.key === fileObj._id).name
-        );
-      });
+      const scrollTexts = [];
+      responseData.scrollTexts.forEach((fileObj) =>
+        scrollTexts.push({
+          name: textFiles.find((tf) => tf.key === fileObj._id).name,
+          instructions: fileObj.instructions,
+          questions: fileObj.questions,
+        })
+      );
 
       const template = {
         key: responseData._id,
         name: responseData.name,
-        speedFileNames: speedTextFileNames,
-        scrollFileNames: scrollTextFileNames,
+        speedTest: {
+          fileNames: speedTextFileNames,
+          instructions: responseData.speedTest.instructions,
+        },
+        scrollTexts: scrollTexts,
         questionFormat: responseData.questionFormat,
+        createdAt: responseData.createdAt,
         url: responseData._id,
       };
 

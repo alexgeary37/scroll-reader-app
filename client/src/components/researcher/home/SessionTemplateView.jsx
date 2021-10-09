@@ -1,68 +1,73 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Button, Header, Modal, List, Item, Segment } from "semantic-ui-react";
+import {
+  Button,
+  Header,
+  Modal,
+  List,
+  Item,
+  ItemDescription,
+  Segment,
+} from "semantic-ui-react";
 
 const SessionTemplateView = ({ template, isOpen, close }) => {
-  const [completeTemplate, setCompleteTemplate] = useState(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      fetchTemplate();
-    } else {
-      setCompleteTemplate(null);
-    }
-  }, [isOpen]);
-
-  const fetchTemplate = () => {
-    axios
-      .get("http://localhost:3001/getSessionTemplate", {
-        params: { _id: template.key },
-      })
-      .then((response) => {
-        setCompleteTemplate(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching SessionTemplate:", error);
-      });
-  };
-
   const displayTemplateInfo = () => {
-    if (completeTemplate !== null) {
-      return (
-        <div>
-          <Header content={completeTemplate.name} />
-          <Header
-            content={`Question format: ${completeTemplate.questionFormat}`}
-          />
-          <Header content={`Created: ${completeTemplate.createdAt}`} />
+    return (
+      <div>
+        <Segment>
+          <Header content={template.name} />
+          <p>{`Question format: ${template.questionFormat}`}</p>
+          <p>{`Created: ${template.createdAt}`}</p>
+        </Segment>
+        <Segment>
+          <Header content="Speedtest" />
+          <p>{`Instructions: ${template.speedTest.instructions}`}</p>
+          <List style={{ marginLeft: 10 }} horizontal divided>
+            {template.speedTest.fileNames.map((name) => (
+              <Item key={name}>
+                <Item.Content>
+                  <Item.Description
+                    content={`${
+                      template.speedTest.fileNames.indexOf(name) + 1
+                    }. ${name}`}
+                  />
+                </Item.Content>
+              </Item>
+            ))}
+          </List>
+        </Segment>
 
-          <Segment>
-            <Header content="Speedtest" />
-            <Header
-              as="h4"
-              content={`Instructions: ${completeTemplate.speedTest.instructions}`}
-            />
-            <List style={{ marginLeft: 10 }} horizontal divided>
-              {template.speedFileNames.map((name) => (
-                <Item key={name}>
-                  <Item.Content>
-                    <Item.Description
-                      content={`${
-                        template.speedFileNames.indexOf(name) + 1
-                      }. ${name}`}
-                    />
-                  </Item.Content>
-                </Item>
-              ))}
-            </List>
-          </Segment>
-
-          <Segment>
-            <Header content="Scrolltest" />
-          </Segment>
-        </div>
-      );
-    }
+        <Segment>
+          <Header content="ScrollTexts" />
+          <List style={{ marginLeft: 10 }} divided relaxed>
+            {template.scrollTexts.map((text) => (
+              <Item key={text.name}>
+                <Item.Content>
+                  <Item.Header
+                    content={`${template.scrollTexts.indexOf(text) + 1}. ${
+                      text.name
+                    }`}
+                  />
+                  <p>{text.instructions} </p>
+                  <p>Questions:</p>
+                  <List relaxed>
+                    {text.questions.map((question) => (
+                      <Item key={text.questions.indexOf(question)}>
+                        <Item.Content>
+                          <Item.Description
+                            content={`${
+                              text.questions.indexOf(question) + 1
+                            }. ${question}`}
+                          />
+                        </Item.Content>
+                      </Item>
+                    ))}
+                  </List>
+                </Item.Content>
+              </Item>
+            ))}
+          </List>
+        </Segment>
+      </div>
+    );
   };
 
   return (
@@ -71,8 +76,6 @@ const SessionTemplateView = ({ template, isOpen, close }) => {
       style={{ height: "70vh", overflow: "auto", padding: 10 }}
     >
       {displayTemplateInfo()}
-
-      <Button content="Click" onClick={() => console.log(completeTemplate)} />
       <Button floated="right" content="Close" onClick={close} />
     </Modal>
   );

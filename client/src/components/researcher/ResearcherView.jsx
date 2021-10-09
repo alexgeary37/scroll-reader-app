@@ -11,7 +11,7 @@ import {
 } from "semantic-ui-react";
 import { useState, useEffect } from "react";
 import { Route } from "react-router";
-import SessionTemplateListItem from "./home/SessionTemplateListItem.jsx";
+import SessionTemplate from "./home/SessionTemplate.jsx";
 import axios from "axios";
 import CreateTemplate from "./home/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./home/FileUpload.jsx";
@@ -80,19 +80,26 @@ const ResearcherView = () => {
               textFiles.textFiles.find((tf) => tf.key === fileID).name
             );
           });
-          const scrollTextFileNames = [];
+          const scrollTexts = [];
           temp.scrollTexts.forEach((fileObj) => {
-            scrollTextFileNames.push(
-              textFiles.textFiles.find((tf) => tf.key === fileObj._id).name
-            );
+            scrollTexts.push({
+              name: textFiles.textFiles.find((tf) => tf.key === fileObj._id)
+                .name,
+              instructions: fileObj.instructions,
+              questions: fileObj.questions,
+            });
           });
 
           const option = {
             key: temp._id,
             name: temp.name,
-            speedFileNames: speedTextFileNames,
-            scrollFileNames: scrollTextFileNames,
+            speedTest: {
+              fileNames: speedTextFileNames,
+              instructions: temp.speedTest.instructions,
+            },
+            scrollTexts: scrollTexts,
             questionFormat: temp.questionFormat,
+            createdAt: temp.createdAt,
             url: temp._id,
           };
 
@@ -165,7 +172,7 @@ const ResearcherView = () => {
             <Segment>
               <div className="ui link divided relaxed items">
                 {templates.templates.map((template) => (
-                  <SessionTemplateListItem
+                  <SessionTemplate
                     key={template.key}
                     template={template}
                   />
