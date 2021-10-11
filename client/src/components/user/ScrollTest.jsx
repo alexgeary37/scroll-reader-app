@@ -14,7 +14,7 @@ const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
   const endPageRef = createRef();
   const [currentFileID, setCurrentFileID] = useState(
-    sessionContext.template.scrollTexts[sessionContext.fileNumber]._id
+    sessionContext.template.scrollTexts[sessionContext.fileNumber].fileID
   );
   const [scrollQuestionNumber, setScrollQuestionNumber] = useState(
     JSON.parse(localStorage.getItem("scrollQuestionNumber"))
@@ -52,7 +52,7 @@ const ScrollTest = () => {
 
   useEffect(() => {
     setCurrentFileID(
-      sessionContext.template.scrollTexts[sessionContext.fileNumber]._id
+      sessionContext.template.scrollTexts[sessionContext.fileNumber].fileID
     );
   }, [sessionContext.fileNumber]);
 
@@ -131,7 +131,6 @@ const ScrollTest = () => {
       } else {
         // Adjust hooks and context for the next scrollText.
         const nextText = sessionContext.template.scrollTexts[fileNumber + 1];
-        // startNextText(nextText._id);
         setScrollQuestion(nextText.questions[0]);
         setInstructions(nextText.instructions);
         setScrollQuestionNumber(0);

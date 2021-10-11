@@ -60,7 +60,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       const files = [];
       for (let i = 0; i < scrollTexts.length; i++) {
         files.push({
-          _id: scrollTexts[i]._id,
+          fileID: scrollTexts[i].fileID,
           instructions: scrollTexts[i].instructions,
           questions: scrollTexts[i].questions,
         });
@@ -98,10 +98,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         // in scrollTexts, remove it from scrollTexts.
         if (
           optionIndex === -1 &&
-          scrollTexts.some((elem) => elem._id === data.options[i].value)
+          scrollTexts.some((elem) => elem.fileID === data.options[i].value)
         ) {
           setScrollTexts(
-            scrollTexts.filter((elem) => elem._id !== data.options[i].value)
+            scrollTexts.filter((elem) => elem.fileID !== data.options[i].value)
           );
           break;
         }
@@ -110,7 +110,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       setScrollTexts([
         ...scrollTexts,
         {
-          _id: data.value[data.value.length - 1],
+          fileID: data.value[data.value.length - 1],
           fileName: data.options.find(
             (file) => file.value === data.value[data.value.length - 1]
           ).name,
@@ -174,7 +174,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       const scrollTexts = [];
       responseData.scrollTexts.forEach((fileObj) =>
         scrollTexts.push({
-          name: textFiles.find((tf) => tf.key === fileObj._id).name,
+          name: textFiles.find((tf) => tf.key === fileObj.fileID).name,
           instructions: fileObj.instructions,
           questions: fileObj.questions,
         })
@@ -204,7 +204,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       <List relaxed divided>
         {scrollTexts.map((text) => (
           <ScrollTextListItem
-            key={text._id}
+            key={text.fileID}
             text={text}
             addQuestion={handleAddQuestion}
             setInstructions={setScrollTextInstructions}

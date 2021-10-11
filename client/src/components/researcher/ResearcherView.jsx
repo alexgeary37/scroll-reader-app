@@ -83,7 +83,7 @@ const ResearcherView = () => {
           const scrollTexts = [];
           temp.scrollTexts.forEach((fileObj) => {
             scrollTexts.push({
-              name: textFiles.textFiles.find((tf) => tf.key === fileObj._id)
+              name: textFiles.textFiles.find((tf) => tf.key === fileObj.fileID)
                 .name,
               instructions: fileObj.instructions,
               questions: fileObj.questions,
@@ -172,10 +172,7 @@ const ResearcherView = () => {
             <Segment>
               <div className="ui link divided relaxed items">
                 {templates.templates.map((template) => (
-                  <SessionTemplate
-                    key={template.key}
-                    template={template}
-                  />
+                  <SessionTemplate key={template.key} template={template} />
                 ))}
               </div>
             </Segment>

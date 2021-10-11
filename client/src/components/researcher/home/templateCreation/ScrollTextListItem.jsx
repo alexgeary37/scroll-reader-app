@@ -55,7 +55,7 @@ const ScrollTextListItem = ({
               <label>Ask user about their familiarity</label>
             </div>
 
-            <div class="ui checkbox">
+            <div className="ui checkbox">
               <input
                 type="checkbox"
                 defaultChecked

@@ -138,7 +138,6 @@ class Server {
         {
           $push: {
             speedTexts: {
-              _id: fileID,
               fileID: fileID,
               startTime: startTime,
             },
