@@ -3,7 +3,7 @@ import SpeedText from "./SpeedText.jsx";
 import { useContext, createRef, useState, useEffect } from "react";
 import { Container, Button, Grid, GridColumn } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import TestInstructions from "./TestInstructions.jsx";
+import SpeedTestInstructions from "./SpeedTestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
 import axios from "axios";
 import { isLastText, scrollToTop } from "../../utilityFunctions.js";
@@ -177,9 +177,8 @@ const SpeedTest = () => {
           </GridColumn>
           <GridColumn width="14">{displaySpeedText()}</GridColumn>
         </Grid>
-        <TestInstructions
+        <SpeedTestInstructions
           isOpen={sessionContext.hasStartedReading === false}
-          task={"speedTest"}
           instructions={instructions}
           fileID={currentFileID}
         />

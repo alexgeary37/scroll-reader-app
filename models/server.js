@@ -159,6 +159,8 @@ class Server {
       const id = req.body.id;
       const fileID = req.body.fileID;
       const startTime = req.body.startTime;
+      const familiarity = req.body.familiarity;
+      const interest = req.body.interest;
 
       ReadingSessionModel.findByIdAndUpdate(
         id,
@@ -167,6 +169,8 @@ class Server {
             scrollTexts: {
               fileID: fileID,
               startTime: startTime,
+              familiarity: familiarity,
+              interest: interest,
             },
           },
         },

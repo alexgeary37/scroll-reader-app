@@ -3,7 +3,7 @@ import ScrollText from "./ScrollText.jsx";
 import { useContext, useState, useEffect, createRef } from "react";
 import { Segment, Button, Grid, GridColumn } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import TestInstructions from "./TestInstructions.jsx";
+import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
 import axios from "axios";
 import { isLastText, scrollToTop } from "../../utilityFunctions.js";
@@ -78,20 +78,20 @@ const ScrollTest = () => {
 
   const startNextText = (fileID) => {
     const sessionID = sessionContext.sessionID;
-    const startTime = new Date();
+    // const startTime = new Date();
 
-    axios
-      .put("http://localhost:3001/addNewScrollText", {
-        id: sessionID,
-        fileID: fileID,
-        startTime: startTime,
-      })
-      .catch((error) => {
-        console.error(
-          `Error updating readingSession.scrollTexts[currentFileID].startTime:`,
-          error
-        );
-      });
+    // axios
+    //   .put("http://localhost:3001/addNewScrollText", {
+    //     id: sessionID,
+    //     fileID: fileID,
+    //     startTime: startTime,
+    //   })
+    //   .catch((error) => {
+    //     console.error(
+    //       `Error updating readingSession.scrollTexts[currentFileID].startTime:`,
+    //       error
+    //     );
+    //   });
   };
 
   const finishCurrentText = async () => {
@@ -131,7 +131,7 @@ const ScrollTest = () => {
       } else {
         // Adjust hooks and context for the next scrollText.
         const nextText = sessionContext.template.scrollTexts[fileNumber + 1];
-        startNextText(nextText._id);
+        // startNextText(nextText._id);
         setScrollQuestion(nextText.questions[0]);
         setInstructions(nextText.instructions);
         setScrollQuestionNumber(0);
@@ -236,9 +236,8 @@ const ScrollTest = () => {
             />
           </GridColumn>
         </Grid>
-        <TestInstructions
+        <ScrollTestInstructions
           isOpen={sessionContext.hasStartedReading === false}
-          task={"scrollTest"}
           instructions={instructions}
           fileID={currentFileID}
         />

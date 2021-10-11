@@ -1,40 +1,17 @@
 import { Button, Modal, Segment } from "semantic-ui-react";
 import { SessionContext } from "../../contexts/SessionContext";
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 
-const TestInstructions = ({ isOpen, task, instructions, fileID }) => {
+const SpeedTestInstructions = ({ isOpen, instructions, fileID }) => {
   const sessionContext = useContext(SessionContext);
-  const [reqUrl, setReqUrl] = useState("");
-
-  useEffect(() => {
-    if (task === "speedTest") {
-      setReqUrl("http://localhost:3001/addNewSpeedText");
-    }
-    if (task === "scrollTest") {
-      setReqUrl("http://localhost:3001/addNewScrollText");
-    }
-  }, []);
-
-  const displayScrollTestInstructions = () => {
-    if (task === "scrollTest") {
-      return (
-        <div>
-          <p>How familiar are you with this topic?</p>
-          {/* Add checkbox options here */}
-          <p>How interested are you in this topic?</p>
-          {/* Add checkbox options here */}
-        </div>
-      );
-    }
-  };
 
   const handleStartTest = () => {
     const sessionID = sessionContext.sessionID;
     const startTime = new Date();
 
     axios
-      .put(reqUrl, {
+      .put("http://localhost:3001/addNewSpeedText", {
         id: sessionID,
         fileID: fileID,
         startTime: startTime,
@@ -45,7 +22,7 @@ const TestInstructions = ({ isOpen, task, instructions, fileID }) => {
       })
       .catch((error) => {
         console.error(
-          `Error updating readingSession.${task}.startTime:`,
+          `Error updating readingSession.speedTest.startTime:`,
           error
         );
       });
@@ -54,7 +31,6 @@ const TestInstructions = ({ isOpen, task, instructions, fileID }) => {
   return (
     <Modal size="tiny" open={isOpen} style={{ overflow: "auto", padding: 10 }}>
       <Segment>{instructions}</Segment>
-      {displayScrollTestInstructions()}
       <Button
         floated="right"
         primary
@@ -65,4 +41,4 @@ const TestInstructions = ({ isOpen, task, instructions, fileID }) => {
   );
 };
 
-export default TestInstructions;
+export default SpeedTestInstructions;

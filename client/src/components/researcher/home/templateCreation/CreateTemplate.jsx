@@ -16,8 +16,8 @@ import ScrollTextListItem from "./ScrollTextListItem";
 const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [templateName, setTemplateName] = useState("");
   const [speedTextIDs, setSpeedTextIDs] = useState([]);
-  const [scrollTexts, setScrollTexts] = useState([]);
   const [speedTestInstructions, setSpeedTestInstructions] = useState("");
+  const [scrollTexts, setScrollTexts] = useState([]);
   const [comprehension, setComprehension] = useState(true);
   const [displayMissingInputError, setDisplayMissingInputError] =
     useState(false);
@@ -42,7 +42,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       emptyFields = true;
     }
     for (let i = 0; i < scrollTexts.length; i++) {
-      if (scrollTexts[i].instructions === "") {
+      if (scrollTexts[i].instructions.main === "") {
         setDisplayMissingInputError(true);
         emptyFields = true;
         break;
@@ -114,7 +114,11 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           fileName: data.options.find(
             (file) => file.value === data.value[data.value.length - 1]
           ).name,
-          instructions: "",
+          instructions: {
+            main: "",
+            familiarityQuestion: true,
+            interestQuestion: true,
+          },
           questions: [],
         },
       ]);
@@ -131,7 +135,21 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const setScrollTextInstructions = (text, instructions) => {
     const index = scrollTexts.indexOf(text);
     let tempScrollTexts = scrollTexts;
-    tempScrollTexts[index].instructions = instructions;
+    tempScrollTexts[index].instructions.main = instructions;
+    setScrollTexts(tempScrollTexts);
+  };
+
+  const setAskQuestion = (text, question) => {
+    const index = scrollTexts.indexOf(text);
+    let tempScrollTexts = scrollTexts;
+    if (question === "familiarity") {
+      const ask = !tempScrollTexts[index].instructions.familiarityQuestion;
+      tempScrollTexts[index].instructions.familiarityQuestion = ask;
+    }
+    if (question === "interest") {
+      const ask = !tempScrollTexts[index].instructions.interestQuestion;
+      tempScrollTexts[index].instructions.interestQuestion = ask;
+    }
     setScrollTexts(tempScrollTexts);
   };
 
@@ -191,8 +209,12 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             addQuestion={handleAddQuestion}
             setInstructions={setScrollTextInstructions}
             instructionsError={
-              text.instructions === "" && displayMissingInputError
+              text.instructions.main === "" && displayMissingInputError
             }
+            toggleFamiliarityQuestion={() =>
+              setAskQuestion(text, "familiarity")
+            }
+            toggleInterestQuestion={() => setAskQuestion(text, "interest")}
           />
         ))}
       </List>

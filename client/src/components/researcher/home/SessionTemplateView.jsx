@@ -1,12 +1,4 @@
-import {
-  Button,
-  Header,
-  Modal,
-  List,
-  Item,
-  ItemDescription,
-  Segment,
-} from "semantic-ui-react";
+import { Button, Header, Modal, List, Item, Segment } from "semantic-ui-react";
 
 const SessionTemplateView = ({ template, isOpen, close }) => {
   const displayTemplateInfo = () => {
@@ -46,7 +38,7 @@ const SessionTemplateView = ({ template, isOpen, close }) => {
                       text.name
                     }`}
                   />
-                  <p>{text.instructions} </p>
+                  <p>{text.instructions.main} </p>
                   <p>Questions:</p>
                   <List relaxed>
                     {text.questions.map((question) => (

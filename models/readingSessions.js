@@ -4,6 +4,8 @@ const textSchema = mongoose.Schema(
   {
     fileID: { type: String, required: true },
     startTime: { type: Date, required: true },
+    familiarity: { type: String, required: false },
+    interest: { type: String, required: false },
     pauses: [
       {
         action: { type: String, required: true },

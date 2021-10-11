@@ -1,4 +1,4 @@
-import { List, Item } from "semantic-ui-react";
+import { List, Item, Button } from "semantic-ui-react";
 import SessionTemplateView from "./SessionTemplateView";
 import { useState } from "react";
 
@@ -53,10 +53,16 @@ const SessionTemplate = ({ template }) => {
             style={{ margin: 5 }}
             content={`Question Format: ${template.questionFormat}`}
           />
-
+        </div>
+        <div className="wrapper">
           <Item.Description
             style={{ margin: 5 }}
             content={`URL: ${template.url}`}
+          />
+
+          <Button
+            content="Copy URL"
+            onClick={() => navigator.clipboard.writeText(template.url)}
           />
         </div>
         <SessionTemplateView

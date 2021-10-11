@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Input, Item, Button } from "semantic-ui-react";
+import { Input, Item, Button, Checkbox } from "semantic-ui-react";
 import AddQuestion from "./AddQuestion";
 import QuestionsView from "./QuestionsView";
 
@@ -8,6 +8,8 @@ const ScrollTextListItem = ({
   addQuestion,
   setInstructions,
   instructionsError,
+  toggleFamiliarityQuestion,
+  toggleInterestQuestion,
 }) => {
   const [openAddQuestion, setOpenAddQuestion] = useState(false);
   const [viewQuestions, setViewQuestions] = useState(false);
@@ -42,6 +44,26 @@ const ScrollTextListItem = ({
             placeholder="Write instructions here..."
             onChange={(e) => handleInstructionsChange(text, e.target.value)}
           />
+
+          <div>
+            <div className="ui checkbox">
+              <input
+                type="checkbox"
+                defaultChecked
+                onClick={toggleFamiliarityQuestion}
+              />
+              <label>Ask user about their familiarity</label>
+            </div>
+
+            <div class="ui checkbox">
+              <input
+                type="checkbox"
+                defaultChecked
+                onClick={toggleInterestQuestion}
+              />
+              <label>Ask user about their interest</label>
+            </div>
+          </div>
 
           <Button
             disabled={text.questions.length === 0}
