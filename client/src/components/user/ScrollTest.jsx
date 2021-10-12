@@ -1,7 +1,16 @@
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import ScrollText from "./ScrollText.jsx";
 import { useContext, useState, useEffect, createRef } from "react";
-import { Segment, Button, Grid, GridColumn } from "semantic-ui-react";
+import {
+  Menu,
+  Grid,
+  Rail,
+  Sticky,
+  Header,
+  Image,
+  Ref,
+  Segment,
+} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
@@ -10,7 +19,13 @@ import { isLastText, scrollToTop } from "../../utilityFunctions.js";
 import Question from "./Question.jsx";
 import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
 
+const Placeholder = () => (
+  <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
+);
+
 const ScrollTest = () => {
+  // const contextRef = createRef();
+
   const sessionContext = useContext(SessionContext);
   const endPageRef = createRef();
   const [currentFileID, setCurrentFileID] = useState(
@@ -74,24 +89,6 @@ const ScrollTest = () => {
           }
         }
       });
-  };
-
-  const startNextText = (fileID) => {
-    const sessionID = sessionContext.sessionID;
-    // const startTime = new Date();
-
-    // axios
-    //   .put("http://localhost:3001/addNewScrollText", {
-    //     id: sessionID,
-    //     fileID: fileID,
-    //     startTime: startTime,
-    //   })
-    //   .catch((error) => {
-    //     console.error(
-    //       `Error updating readingSession.scrollTexts[currentFileID].startTime:`,
-    //       error
-    //     );
-    //   });
   };
 
   const finishCurrentText = async () => {
@@ -190,58 +187,70 @@ const ScrollTest = () => {
   };
 
   return (
-    <div className="page">
-      <Segment>
-        <Grid columns="3">
-          <GridColumn width="4">
-            <div style={{ textAlign: "center" }}>
-              <div style={{ position: "fixed" }}>
-                <Button
-                  primary
-                  disabled={textIsComplete}
-                  content="Done"
-                  onClick={handleFinishText}
-                />
-                <Link to="/end" hidden ref={endPageRef}></Link>
-                <div>
-                  <Button
-                    negative
-                    disabled={sessionContext.isPaused || textIsComplete}
-                    content="Pause"
-                    onClick={() => pauseSession(sessionContext)}
-                  />
-                </div>
-              </div>
-            </div>
-          </GridColumn>
+    <div className="page-text">
+      <div
+        style={{
+          top: 0,
+          left: 0,
+          minWidth: "15vw",
+          position: "fixed",
+          // height: 500,
+          // backgroundColor: "red",
+        }}
+      >
+        <Menu vertical fluid style={{ textAlign: "center" }}>
+          <Menu.Item
+            style={{ color: "blue" }}
+            disabled={textIsComplete}
+            content="Done"
+            onClick={handleFinishText}
+          />
+          <Link to="/end" hidden ref={endPageRef}></Link>
+          <Menu.Item
+            style={{ color: "red" }}
+            disabled={sessionContext.isPaused || textIsComplete}
+            content="Pause"
+            onClick={() => pauseSession(sessionContext)}
+          />
+        </Menu>
+      </div>
 
-          <GridColumn width="8">{displayScrollText()}</GridColumn>
-          <GridColumn width="4">
-            <Question
-              question={scrollQuestion}
-              disable={
-                scrollQuestionNumber >=
-                  sessionContext.template.scrollTexts[sessionContext.fileNumber]
-                    .questions.length -
-                    1 || textIsComplete
-              }
-              skip={() => setDisplayConfirmSkipMessage(true)}
-            />
+      {displayScrollText()}
 
-            <ConfirmSkipQuestionWindow
-              isOpen={displayConfirmSkipMessage}
-              skip={skipQuestion}
-              cancel={() => setDisplayConfirmSkipMessage(false)}
-            />
-          </GridColumn>
-        </Grid>
-        <ScrollTestInstructions
-          isOpen={sessionContext.hasStartedReading === false}
-          instructions={instructions}
-          fileID={currentFileID}
+      <div
+        style={{
+          top: "0px",
+          right: "0px",
+          minWidth: "15vw",
+          position: "fixed",
+          // height: 500,
+          // backgroundColor: "blue",
+        }}
+      >
+        <Question
+          question={scrollQuestion}
+          disable={
+            scrollQuestionNumber >=
+              sessionContext.template.scrollTexts[sessionContext.fileNumber]
+                .questions.length -
+                1 || textIsComplete
+          }
+          skip={() => setDisplayConfirmSkipMessage(true)}
         />
-        <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
-      </Segment>
+      </div>
+
+      <ConfirmSkipQuestionWindow
+        isOpen={displayConfirmSkipMessage}
+        skip={skipQuestion}
+        cancel={() => setDisplayConfirmSkipMessage(false)}
+      />
+
+      <ScrollTestInstructions
+        isOpen={sessionContext.hasStartedReading === false}
+        instructions={instructions}
+        fileID={currentFileID}
+      />
+      <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
     </div>
   );
 };

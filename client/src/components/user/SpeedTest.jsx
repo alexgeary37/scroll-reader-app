@@ -1,7 +1,7 @@
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import SpeedText from "./SpeedText.jsx";
 import { useContext, createRef, useState, useEffect } from "react";
-import { Container, Button, Grid, GridColumn } from "semantic-ui-react";
+import { Grid, Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import SpeedTestInstructions from "./SpeedTestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
@@ -152,38 +152,42 @@ const SpeedTest = () => {
   };
 
   return (
-    <div className="page">
-      <Container>
-        <Grid columns="3">
-          <GridColumn width="2">
-            <div className="fixed-position">
-              <Button
-                compact
-                primary
-                disabled={textIsComplete}
-                content="Done"
-                onClick={handleFinishText}
-              />
-              <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
-              <Button
-                compact
-                negative
-                disabled={sessionContext.isPaused || textIsComplete}
-                className="fixed-position"
-                content="Pause"
-                onClick={() => pauseSession(sessionContext)}
-              />
-            </div>
-          </GridColumn>
-          <GridColumn width="14">{displaySpeedText()}</GridColumn>
-        </Grid>
-        <SpeedTestInstructions
-          isOpen={sessionContext.hasStartedReading === false}
-          instructions={instructions}
-          fileID={currentFileID}
-        />
-        <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
-      </Container>
+    <div className="page-text">
+      <div
+        style={{
+          top: 0,
+          left: 0,
+          minWidth: "15vw",
+          position: "fixed",
+          height: 500,
+          backgroundColor: "red",
+        }}
+      >
+        <Menu vertical fluid style={{ textAlign: "center" }}>
+          <Menu.Item
+            style={{ color: "blue" }}
+            disabled={textIsComplete}
+            content="Done"
+            onClick={handleFinishText}
+          />
+          <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
+          <Menu.Item
+            style={{ color: "red" }}
+            disabled={sessionContext.isPaused || textIsComplete}
+            content="Pause"
+            onClick={() => pauseSession(sessionContext)}
+          />
+        </Menu>
+      </div>
+
+      {displaySpeedText()}
+
+      <SpeedTestInstructions
+        isOpen={sessionContext.hasStartedReading === false}
+        instructions={instructions}
+        fileID={currentFileID}
+      />
+      <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
     </div>
   );
 };

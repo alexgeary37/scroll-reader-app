@@ -1,8 +1,4 @@
-import {
-  Segment,
-  Container,
-  List,
-} from "semantic-ui-react";
+import { Segment, Container, List } from "semantic-ui-react";
 
 const PageFooter = () => {
   return (

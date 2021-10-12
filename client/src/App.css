@@ -10,10 +10,10 @@
   margin-top: 40px;
 }
 
-.h2-sui {
-  margin: 4em 0em 2em;
+.page-text {
+  min-height: calc(100vh - 75px + 40px);
 }
 
-.fixed-position {
-  position: fixed;
+.h2-sui {
+  margin: 4em 0em 2em;
 }
