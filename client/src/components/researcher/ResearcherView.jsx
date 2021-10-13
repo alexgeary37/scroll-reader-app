@@ -5,6 +5,7 @@ import {
   Segment,
   Container,
   Divider,
+  Grid,
   Header,
   List,
   Button,
@@ -138,7 +139,7 @@ const ResearcherView = () => {
         <div>
           <Header as="h2" textAlign="center" content="Uploaded Texts:" />
           <div>
-            <Segment>
+            <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
               <List relaxed divided>
                 {textFiles.textFiles.map((file) => (
                   <TextFile key={file.key} file={file} />
@@ -169,7 +170,7 @@ const ResearcherView = () => {
         <div>
           <Header as="h2" textAlign="center" content="Existing Templates:" />
           <div>
-            <Segment>
+            <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
               <div className="ui link divided relaxed items">
                 {templates.templates.map((template) => (
                   <SessionTemplate key={template.key} template={template} />
@@ -199,10 +200,11 @@ const ResearcherView = () => {
       <div className="page">
         <Segment>
           <Container>
-            <Route path="/researcher/data" component={DataGraph} />
-            {displayTextFiles()}
-            <Divider />
-            {displaySessionTemplates()}
+            <Grid style={{ marginTop: 5 }}>
+              <Route path="/researcher/data" component={DataGraph} />
+              <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
+              <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
+            </Grid>
           </Container>
         </Segment>
       </div>

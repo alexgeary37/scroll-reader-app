@@ -223,13 +223,9 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
 
   return (
     <div>
-      <Modal
-        open={isOpen}
-        style={{ height: "70vh", overflow: "auto", padding: 10 }}
-      >
-        <h1>Create a Session Template</h1>
-        <Divider />
-        <div>
+      <Modal open={isOpen} style={{ height: "70vh", padding: 10 }}>
+        <Header as="h1" content="Create a Session Template" />
+        <Segment style={{ overflow: "auto", maxHeight: "75%" }}>
           <Segment>
             <Header
               as="h3"
@@ -296,34 +292,34 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             />
             {displayScrollTexts()}
           </Segment>
-        </div>
 
-        <Segment>
-          <Form>
-            <div className="grouped fields">
-              <Header as="h3" content="Question Format:" />
-              <Form.Field>
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={comprehension}
-                    onChange={() => setComprehension(true)}
-                  />
-                  <label>Comprehension</label>
-                </div>
-              </Form.Field>
-              <Form.Field>
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={!comprehension}
-                    onChange={() => setComprehension(false)}
-                  />
-                  <label>Inline</label>
-                </div>
-              </Form.Field>
-            </div>
-          </Form>
+          <Segment>
+            <Form>
+              <div className="grouped fields">
+                <Header as="h3" content="Question Format:" />
+                <Form.Field>
+                  <div className="ui radio checkbox">
+                    <input
+                      type="radio"
+                      checked={comprehension}
+                      onChange={() => setComprehension(true)}
+                    />
+                    <label>Comprehension</label>
+                  </div>
+                </Form.Field>
+                <Form.Field>
+                  <div className="ui radio checkbox">
+                    <input
+                      type="radio"
+                      checked={!comprehension}
+                      onChange={() => setComprehension(false)}
+                    />
+                    <label>Inline</label>
+                  </div>
+                </Form.Field>
+              </div>
+            </Form>
+          </Segment>
         </Segment>
 
         <Button

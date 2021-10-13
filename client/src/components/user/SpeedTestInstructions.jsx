@@ -1,4 +1,4 @@
-import { Button, Modal, Segment } from "semantic-ui-react";
+import { Button, Modal } from "semantic-ui-react";
 import { SessionContext } from "../../contexts/SessionContext";
 import axios from "axios";
 import { useContext } from "react";
@@ -30,7 +30,7 @@ const SpeedTestInstructions = ({ isOpen, instructions, fileID }) => {
 
   return (
     <Modal size="tiny" open={isOpen} style={{ overflow: "auto", padding: 10 }}>
-      <Segment>{instructions}</Segment>
+      <Modal.Description as="h4" content={instructions} />
       <Button
         floated="right"
         primary

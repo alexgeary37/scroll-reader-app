@@ -1,4 +1,4 @@
-import { List, Item, Button } from "semantic-ui-react";
+import { List, Item, Button, Segment } from "semantic-ui-react";
 import SessionTemplateView from "./SessionTemplateView";
 import { useState } from "react";
 
@@ -9,14 +9,14 @@ const SessionTemplate = ({ template }) => {
     <Item>
       <Item.Content>
         <div onClick={() => setOpenTemplateView(true)}>
-          <Item.Header as="h4" style={{ margin: 5 }} content={template.name} />
+          <Item.Header as="h3" style={{ margin: 5 }} content={template.name} />
 
           <Item.Description
             as="h5"
             style={{ margin: 5 }}
             content="Speedtest texts:"
           />
-          <List style={{ marginLeft: 10 }} horizontal divided>
+          <List style={{ marginLeft: 20 }} horizontal divided>
             {template.speedTest.fileNames.map((name) => (
               <Item key={name}>
                 <Item.Content>
@@ -35,7 +35,7 @@ const SessionTemplate = ({ template }) => {
             style={{ margin: 5 }}
             content="Scrolltest texts:"
           />
-          <List style={{ marginLeft: 10 }} horizontal divided>
+          <List style={{ marginLeft: 20 }} horizontal divided>
             {template.scrollTexts.map((text) => (
               <Item key={text.name}>
                 <Item.Content>
@@ -65,6 +65,7 @@ const SessionTemplate = ({ template }) => {
             onClick={() => navigator.clipboard.writeText(template.url)}
           />
         </div>
+
         <SessionTemplateView
           template={template}
           isOpen={openTemplateView}

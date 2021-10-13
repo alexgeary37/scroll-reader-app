@@ -1,4 +1,4 @@
-import { Button, Modal, Segment } from "semantic-ui-react";
+import { Button, Modal } from "semantic-ui-react";
 import { SessionContext } from "../../contexts/SessionContext";
 import axios from "axios";
 import { useContext, useState } from "react";
@@ -111,7 +111,7 @@ const ScrollTestInstructions = ({ isOpen, instructions, fileID }) => {
   const displayInterestQuestion = () => {
     if (JSON.parse(instructions.interestQuestion) === true) {
       return (
-        <div className="ui form" style={{ textAlign: "center" }}>
+        <div className="ui form">
           <label>How interested are you with this topic?</label>
           <div className="inline fields">
             <div className="field">
@@ -171,8 +171,12 @@ const ScrollTestInstructions = ({ isOpen, instructions, fileID }) => {
   };
 
   return (
-    <Modal size="tiny" open={isOpen} style={{ overflow: "auto", padding: 10 }}>
-      <Segment>{instructions.main}</Segment>
+    <Modal
+      size="tiny"
+      open={isOpen}
+      style={{ textAlign: "center", overflow: "auto", padding: 10 }}
+    >
+      <Modal.Description as="h4" content={instructions.main} />
       {displayFamiliarityQuestion()}
       {displayInterestQuestion()}
       <Button

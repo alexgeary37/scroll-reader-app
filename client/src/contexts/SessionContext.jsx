@@ -5,7 +5,6 @@ import { createContext, useEffect, useState } from "react";
 export const SessionContext = createContext();
 
 export const SessionProvider = ({ children }) => {
-  const [userName, setUserName] = useState(localStorage.getItem("userName"));
   const [template, setTemplate] = useState(
     JSON.parse(localStorage.getItem("sessionTemplate"))
   );
@@ -30,7 +29,6 @@ export const SessionProvider = ({ children }) => {
   // and initialise them in localStorage.
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("isPaused")) === null) {
-      setUserName("");
       setTemplate(null);
       setIsPaused(false);
       setHasStartedReading(false);
@@ -39,10 +37,6 @@ export const SessionProvider = ({ children }) => {
       setSessionID("");
     }
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("userName", userName);
-  }, [userName]);
 
   useEffect(() => {
     localStorage.setItem("sessionTemplate", JSON.stringify(template));
@@ -74,8 +68,6 @@ export const SessionProvider = ({ children }) => {
   return (
     <SessionContext.Provider
       value={{
-        userName,
-        setUserName,
         template,
         setTemplate,
         isPaused,

@@ -1,7 +1,7 @@
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import SpeedText from "./SpeedText.jsx";
 import { useContext, createRef, useState, useEffect } from "react";
-import { Grid, Menu } from "semantic-ui-react";
+import { Button, Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import SpeedTestInstructions from "./SpeedTestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
@@ -159,24 +159,30 @@ const SpeedTest = () => {
           left: 0,
           minWidth: "15vw",
           position: "fixed",
-          height: 500,
-          backgroundColor: "red",
+          // height: 500,
+          // backgroundColor: "red",
         }}
       >
         <Menu vertical fluid style={{ textAlign: "center" }}>
-          <Menu.Item
-            style={{ color: "blue" }}
-            disabled={textIsComplete}
-            content="Done"
-            onClick={handleFinishText}
-          />
+          <Menu.Item>
+            <Button
+              primary
+              fluid
+              disabled={textIsComplete}
+              content="Done"
+              onClick={handleFinishText}
+            />
+          </Menu.Item>
           <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
-          <Menu.Item
-            style={{ color: "red" }}
-            disabled={sessionContext.isPaused || textIsComplete}
-            content="Pause"
-            onClick={() => pauseSession(sessionContext)}
-          />
+          <Menu.Item>
+            <Button
+              negative
+              fluid
+              disabled={sessionContext.isPaused || textIsComplete}
+              content="Pause"
+              onClick={() => pauseSession(sessionContext)}
+            />
+          </Menu.Item>
         </Menu>
       </div>
 

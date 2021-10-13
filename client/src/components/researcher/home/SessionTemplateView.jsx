@@ -1,72 +1,102 @@
-import { Button, Header, Modal, List, Item, Segment } from "semantic-ui-react";
+import {
+  Button,
+  Header,
+  Modal,
+  List,
+  Item,
+  Segment,
+  Divider,
+} from "semantic-ui-react";
 
 const SessionTemplateView = ({ template, isOpen, close }) => {
   const displayTemplateInfo = () => {
     return (
-      <div>
-        <Segment>
-          <Header content={template.name} />
-          <p>{`Question format: ${template.questionFormat}`}</p>
-          <p>{`Created: ${template.createdAt}`}</p>
-        </Segment>
-        <Segment>
-          <Header content="Speedtest" />
-          <p>{`Instructions: ${template.speedTest.instructions}`}</p>
-          <List style={{ marginLeft: 10 }} horizontal divided>
-            {template.speedTest.fileNames.map((name) => (
-              <Item key={name}>
-                <Item.Content>
-                  <Item.Description
-                    content={`${
-                      template.speedTest.fileNames.indexOf(name) + 1
-                    }. ${name}`}
-                  />
-                </Item.Content>
+      <Segment basic style={{ overflow: "auto", maxHeight: "75%" }}>
+        <Item>
+          <Item.Content>
+            <List>
+              <Item>
+                <Item.Description
+                  content={`Question format: ${template.questionFormat}`}
+                />
               </Item>
-            ))}
-          </List>
-        </Segment>
+              <Item>
+                <Item.Description content={`Created: ${template.createdAt}`} />
+              </Item>
+            </List>
 
-        <Segment>
-          <Header content="ScrollTexts" />
-          <List style={{ marginLeft: 10 }} divided relaxed>
-            {template.scrollTexts.map((text) => (
-              <Item key={text.name}>
-                <Item.Content>
-                  <Item.Header
-                    content={`${template.scrollTexts.indexOf(text) + 1}. ${
-                      text.name
-                    }`}
-                  />
-                  <p>{text.instructions.main} </p>
-                  <p>Questions:</p>
-                  <List relaxed>
-                    {text.questions.map((question) => (
-                      <Item key={text.questions.indexOf(question)}>
-                        <Item.Content>
-                          <Item.Description
-                            content={`${
-                              text.questions.indexOf(question) + 1
-                            }. ${question}`}
-                          />
-                        </Item.Content>
-                      </Item>
-                    ))}
-                  </List>
-                </Item.Content>
+            <Item.Header as="h3" content="Speedtest" />
+            <List>
+              <Item>
+                <Item.Description>{`Instructions: ${template.speedTest.instructions}`}</Item.Description>
               </Item>
-            ))}
-          </List>
-        </Segment>
-      </div>
+              <Item>
+                <Item.Header as="h5" style={{ margin: 5 }} content="Texts:" />
+                <List style={{ marginLeft: 20 }} horizontal divided>
+                  {template.speedTest.fileNames.map((name) => (
+                    <Item key={name}>
+                      <Item.Content>
+                        <Item.Description
+                          content={`${
+                            template.speedTest.fileNames.indexOf(name) + 1
+                          }. ${name}`}
+                        />
+                      </Item.Content>
+                    </Item>
+                  ))}
+                </List>
+              </Item>
+            </List>
+            <Divider />
+
+            <Item.Header as="h3" content="ScrollTexts" />
+
+            <List style={{ marginLeft: 20 }} divided relaxed>
+              {template.scrollTexts.map((text) => (
+                <Item key={text.name}>
+                  <Item.Content>
+                    <Item.Header
+                      as="h5"
+                      content={`${template.scrollTexts.indexOf(text) + 1}. ${
+                        text.name
+                      }`}
+                    />
+                    <Item.Description
+                      style={{ marginTop: 5 }}
+                      content={`Instructions: ${text.instructions.main}`}
+                    />
+                    <Item.Description
+                      as="h5"
+                      style={{ marginTop: 5, marginBottom: 0 }}
+                      content="Questions:"
+                    />
+                    <List style={{ marginLeft: 20 }}>
+                      {text.questions.map((question) => (
+                        <Item key={text.questions.indexOf(question)}>
+                          <Item.Content>
+                            <Item.Description
+                              content={`${
+                                text.questions.indexOf(question) + 1
+                              }. ${question}`}
+                            />
+                          </Item.Content>
+                        </Item>
+                      ))}
+                    </List>
+                  </Item.Content>
+                </Item>
+              ))}
+            </List>
+          </Item.Content>
+        </Item>
+      </Segment>
     );
   };
 
   return (
-    <Modal
-      open={isOpen}
-      style={{ height: "70vh", overflow: "auto", padding: 10 }}
-    >
+    <Modal open={isOpen} style={{ height: "70vh", padding: 10 }}>
+      <Header as="h1" content={template.name} />
+
       {displayTemplateInfo()}
       <Button floated="right" content="Close" onClick={close} />
     </Modal>

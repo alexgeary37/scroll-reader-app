@@ -74,7 +74,6 @@ const Home = () => {
     const sessionCreated = createSession();
 
     if (sessionCreated) {
-      sessionContext.setUserName(userName);
       sessionContext.setTemplate(template);
       speedTestRef.current.click();
     }
@@ -88,8 +87,7 @@ const Home = () => {
       .then((response) => {
         const currentSession = response.data;
         if (
-          currentSession.scrollTexts.length ===
-            template.scrollTexts.length &&
+          currentSession.scrollTexts.length === template.scrollTexts.length &&
           currentSession.scrollTexts.at(-1).hasOwnProperty("endTime")
         ) {
           endPageRef.current.click();

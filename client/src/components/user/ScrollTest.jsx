@@ -1,16 +1,7 @@
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import ScrollText from "./ScrollText.jsx";
 import { useContext, useState, useEffect, createRef } from "react";
-import {
-  Menu,
-  Grid,
-  Rail,
-  Sticky,
-  Header,
-  Image,
-  Ref,
-  Segment,
-} from "semantic-ui-react";
+import { Menu, Button, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
@@ -199,19 +190,25 @@ const ScrollTest = () => {
         }}
       >
         <Menu vertical fluid style={{ textAlign: "center" }}>
-          <Menu.Item
-            style={{ color: "blue" }}
-            disabled={textIsComplete}
-            content="Done"
-            onClick={handleFinishText}
-          />
+          <Menu.Item>
+            <Button
+              primary
+              fluid
+              disabled={textIsComplete}
+              content="Done"
+              onClick={handleFinishText}
+            />
+          </Menu.Item>
           <Link to="/end" hidden ref={endPageRef}></Link>
-          <Menu.Item
-            style={{ color: "red" }}
-            disabled={sessionContext.isPaused || textIsComplete}
-            content="Pause"
-            onClick={() => pauseSession(sessionContext)}
-          />
+          <Menu.Item>
+            <Button
+              negative
+              fluid
+              disabled={sessionContext.isPaused || textIsComplete}
+              content="Pause"
+              onClick={() => pauseSession(sessionContext)}
+            />
+          </Menu.Item>
         </Menu>
       </div>
 

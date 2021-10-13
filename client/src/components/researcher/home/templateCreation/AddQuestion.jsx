@@ -14,7 +14,7 @@ const AddQuestion = ({ isOpen, addQuestion, close }) => {
   };
 
   return (
-    <Modal style={{ padding: 10 }} size="tiny" open={isOpen}>
+    <Modal basic style={{ padding: 10 }} size="tiny" open={isOpen}>
       <Input
         style={{ marginBottom: 10 }}
         type="text"
