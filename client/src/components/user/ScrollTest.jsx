@@ -178,15 +178,13 @@ const ScrollTest = () => {
   };
 
   return (
-    <div className="page-text">
+    <div className="page-height footer-padding">
       <div
         style={{
           top: 0,
           left: 0,
           minWidth: "15vw",
           position: "fixed",
-          // height: 500,
-          // backgroundColor: "red",
         }}
       >
         <Menu vertical fluid style={{ textAlign: "center" }}>
@@ -204,7 +202,7 @@ const ScrollTest = () => {
             <Button
               negative
               fluid
-              disabled={sessionContext.isPaused || textIsComplete}
+              disabled={textIsComplete}
               content="Pause"
               onClick={() => pauseSession(sessionContext)}
             />

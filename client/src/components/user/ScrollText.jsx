@@ -76,7 +76,7 @@ const ScrollText = ({ fileID }) => {
   };
 
   return (
-    <Container text style={{ marginTop: 10 }}>
+    <Container text style={{ paddingTop: "20px" }}>
       <p>
         {words.map((word, index) => (
           <span key={index} onClick={(e) => handleWordClick(e, index)}>

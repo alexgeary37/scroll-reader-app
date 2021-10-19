@@ -98,7 +98,11 @@ const SessionTemplateView = ({ template, isOpen, close }) => {
       <Header as="h1" content={template.name} />
 
       {displayTemplateInfo()}
-      <Button floated="right" content="Close" onClick={close} />
+      <Button
+        style={{ position: "absolute", right: 10, bottom: 10 }}
+        content="Close"
+        onClick={close}
+      />
     </Modal>
   );
 };

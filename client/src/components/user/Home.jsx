@@ -120,43 +120,44 @@ const Home = () => {
     } else {
       if (sessionContext.sessionID === "") {
         return (
-          <div>
-            <Header as="h1" content="Welcome!" />
-            <Segment>
-              Please type your name below, and click on the button to begin the
-              session!
-            </Segment>
-            <div className="wrapper" style={{ justifyContent: "center" }}>
-              <Input
-                type="text"
-                placeholder="Type your name here..."
-                onChange={handleUserNameChange}
-              />
-              <Button
-                primary
-                content="Start Task 1"
-                onClick={handleStartTask1}
-              />
-              <Link to="/speedtest" hidden ref={speedTestRef}></Link>
-              {userNameError()}
-            </div>
+          <div style={{ textAlign: "center" }}>
+            <Container text>
+              <h1>Welcome!</h1>
+              <Segment>
+                Please type your name below, and click on the button to begin
+                the session!
+              </Segment>
+              <div className="wrapper" style={{ justifyContent: "center" }}>
+                <Input
+                  type="text"
+                  placeholder="Type your name here..."
+                  onChange={handleUserNameChange}
+                />
+                <Button
+                  primary
+                  content="Start Task 1"
+                  onClick={handleStartTask1}
+                />
+
+                {userNameError()}
+              </div>
+            </Container>
           </div>
         );
       } else {
         return (
-          <div>
-            <Segment>
-              You are currently in an active session, Click the button to
-              resume!
-            </Segment>
-            <Button
-              primary
-              content="Resume Session"
-              onClick={handleResumeSession}
-            />
-            <Link to="/speedtest" hidden ref={speedTestRef}></Link>
-            <Link to="/scrolltest" hidden ref={scrollTestRef}></Link>
-            <Link to="/end" hidden ref={endPageRef}></Link>
+          <div style={{ textAlign: "center" }}>
+            <Container text>
+              <Segment>
+                You are currently in an active session, Click the button to
+                resume!
+              </Segment>
+              <Button
+                primary
+                content="Resume Session"
+                onClick={handleResumeSession}
+              />
+            </Container>
           </div>
         );
       }
@@ -164,10 +165,11 @@ const Home = () => {
   };
 
   return (
-    <div className="page" style={{ textAlign: "center" }}>
-      <Segment>
-        <Container text>{displayContent()}</Container>
-      </Segment>
+    <div>
+      <div className="page-height footer-padding">{displayContent()}</div>
+      <Link to="/speedtest" hidden ref={speedTestRef}></Link>
+      <Link to="/scrolltest" hidden ref={scrollTestRef}></Link>
+      <Link to="/end" hidden ref={endPageRef}></Link>
     </div>
   );
 };

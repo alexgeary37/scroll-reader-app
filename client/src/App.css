@@ -5,15 +5,14 @@
 
 /* 'padding' is to allow space for the top menu.
 'minHeight' is screenheight - 200 because PageFooter is 200 */
-.page {
+.page-height {
   min-height: calc(100vh - 75px);
-  margin-top: 40px;
 }
 
-.page-text {
-  min-height: calc(100vh - 75px + 40px);
+.menu-padding {
+  padding-top: 40px;
 }
 
-.h2-sui {
-  margin: 4em 0em 2em;
+.footer-padding {
+  padding-bottom: 10px;
 }

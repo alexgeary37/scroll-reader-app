@@ -17,6 +17,7 @@ const AddQuestion = ({ isOpen, addQuestion, close }) => {
     <Modal basic style={{ padding: 10 }} size="tiny" open={isOpen}>
       <Input
         style={{ marginBottom: 10 }}
+        autoFocus
         type="text"
         fluid
         placeholder="Type a question for this text here..."

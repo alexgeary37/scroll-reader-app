@@ -169,15 +169,15 @@ const ResearcherView = () => {
       return (
         <div>
           <Header as="h2" textAlign="center" content="Existing Templates:" />
-          <div>
-            <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
-              <div className="ui link divided relaxed items">
-                {templates.templates.map((template) => (
-                  <SessionTemplate key={template.key} template={template} />
-                ))}
-              </div>
-            </Segment>
-          </div>
+
+          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
+            <div className="ui link divided relaxed items">
+              {templates.templates.map((template) => (
+                <SessionTemplate key={template.key} template={template} />
+              ))}
+            </div>
+          </Segment>
+
           <Button
             style={{ marginTop: 10 }}
             positive
@@ -197,16 +197,14 @@ const ResearcherView = () => {
   return (
     <div>
       <TopMenu />
-      <div className="page">
-        <Segment>
-          <Container>
-            <Grid style={{ marginTop: 5 }}>
-              <Route path="/researcher/data" component={DataGraph} />
-              <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
-              <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
-            </Grid>
-          </Container>
-        </Segment>
+      <div className="page-height footer-padding">
+        <Container>
+          <Grid style={{ marginTop: 5 }}>
+            <Route path="/researcher/data" component={DataGraph} />
+            <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
+            <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
+          </Grid>
+        </Container>
       </div>
     </div>
   );

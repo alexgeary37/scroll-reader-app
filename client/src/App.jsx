@@ -10,7 +10,9 @@ import EndPage from "./components/user/EndPage.jsx";
 
 const App = () => {
   return (
-    <div>
+    <div
+    // style={{ backgroundColor: "green" }}
+    >
       <Route path={`/researcher`} component={ResearcherView} />
       <SessionProvider>
         <Route path={`/user`} component={Home} />

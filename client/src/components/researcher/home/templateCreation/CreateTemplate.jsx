@@ -235,6 +235,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             <Input
               type="text"
               error={templateName === "" && displayMissingInputError}
+              autoFocus
               fluid
               placeholder="Type template name here..."
               onChange={(e) => setTemplateName(e.target.value)}
@@ -322,17 +323,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           </Segment>
         </Segment>
 
-        <Button
-          floated="right"
-          content="Cancel"
-          onClick={() => handleClose(false, null)}
-        />
-        <Button
-          floated="right"
-          primary
-          content="Create"
-          onClick={handleCreate}
-        />
+        <div style={{ position: "absolute", right: 10, bottom: 10 }}>
+          <Button content="Cancel" onClick={() => handleClose(false, null)} />
+          <Button positive content="Create" onClick={handleCreate} />
+        </div>
       </Modal>
     </div>
   );

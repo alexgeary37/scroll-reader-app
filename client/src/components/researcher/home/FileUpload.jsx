@@ -45,7 +45,7 @@ const FileUpload = ({ uploadSubmitted }) => {
     <div>
       <Button
         style={{ marginTop: 10 }}
-        primary
+        positive
         content="Upload Text"
         icon="file"
         onClick={handleButtonClick}

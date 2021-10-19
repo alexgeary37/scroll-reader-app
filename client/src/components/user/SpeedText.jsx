@@ -23,7 +23,7 @@ const SpeedText = ({ fileID }) => {
   };
 
   return (
-    <Container text style={{ marginTop: 10 }}>
+    <Container text style={{ paddingTop: "20px" }}>
       <p>{text}</p>
     </Container>
   );
