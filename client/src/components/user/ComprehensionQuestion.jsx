@@ -1,8 +1,7 @@
-import axios from "axios";
 import { useState } from "react";
 import { Card, Button, Form, Grid } from "semantic-ui-react";
 
-const Question = ({ question, disable, skip, submitAnswer }) => {
+const ComprehensionQuestion = ({ question, disable, submitAnswer, skip }) => {
   const [answer, setAnswer] = useState("");
 
   const handleChangeAnswer = (event) => {
@@ -53,4 +52,4 @@ const Question = ({ question, disable, skip, submitAnswer }) => {
   );
 };
 
-export default Question;
+export default ComprehensionQuestion;

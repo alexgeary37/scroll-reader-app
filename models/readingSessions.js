@@ -18,7 +18,7 @@ const textSchema = mongoose.Schema(
     questionAnswers: [
       mongoose.Schema(
         {
-          answer: { type: String, required: true },
+          answer: { type: mongoose.Schema.Types.Mixed, required: true },
           skip: { type: Boolean, required: true },
           time: { type: Date, required: true },
         },

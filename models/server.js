@@ -297,6 +297,7 @@ class Server {
           if (err) {
             res.send(err);
           } else {
+            // session.markModified("scrollTexts.$[elem].questionAnswers.-1.answer");
             session.save();
             res.send("Updated questionAnswers in current scrollText");
           }

@@ -7,7 +7,8 @@ import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
 import axios from "axios";
 import { isLastText, scrollToTop } from "../../utilityFunctions.js";
-import Question from "./Question.jsx";
+import ComprehensionQuestion from "./ComprehensionQuestion.jsx";
+import ClickQuestion from "./ClickQuestion.jsx";
 import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
 
 const ScrollTest = () => {
@@ -19,6 +20,7 @@ const ScrollTest = () => {
   const [scrollQuestionNumber, setScrollQuestionNumber] = useState(
     JSON.parse(localStorage.getItem("scrollQuestionNumber"))
   );
+  const [selectAnswerEnabled, setSelectAnswerEnabled] = useState(false);
   const [displayConfirmSkipMessage, setDisplayConfirmSkipMessage] =
     useState(false);
   const [textIsComplete, setTextIsComplete] = useState(false);
@@ -140,71 +142,13 @@ const ScrollTest = () => {
     sessionContext.setIsPaused(false);
   };
 
-  const displayScrollText = () => {
-    if (sessionContext.isPaused === false && sessionContext.hasStartedReading) {
-      return <ScrollText fileID={currentText.fileID} />;
-    }
-  };
-
-  const displayQuestions = () => {
-    if (scrollQuestionNumber < currentText.questions.length) {
-      return (
-        <div
-          style={{
-            top: "0px",
-            right: "0px",
-            minWidth: "15vw",
-            position: "fixed",
-            // height: 500,
-            // backgroundColor: "blue",
-          }}
-        >
-          <Question
-            question={currentText.questions[scrollQuestionNumber]}
-            disable={textIsComplete}
-            submitAnswer={handleAnswerQuestion}
-            skip={() => setDisplayConfirmSkipMessage(true)}
-          />
-        </div>
-      );
-    }
-  };
-
-  const handleAnswerQuestion = (answer, skip) => {
-    const sessionID = sessionContext.sessionID;
-    const currentTime = new Date();
-
-    axios
-      .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
-        id: sessionID,
-        fileID: currentText.fileID,
-        answer: answer,
-        skip: skip,
-        time: currentTime,
-      })
-      .then(() => {
-        setScrollQuestionNumber(scrollQuestionNumber + 1);
-      })
-      .catch((error) => {
-        console.error(
-          "Error updating readingSession.scrollTexts[fileID].questionAnswers",
-          error
-        );
-      });
-  };
-
-  const skipQuestion = () => {
-    handleAnswerQuestion("", true);
-    setDisplayConfirmSkipMessage(false);
-  };
-
-  return (
-    <div className="page-height footer-padding">
+  const displayButtons = () => {
+    return (
       <div
         style={{
           top: 0,
           left: 0,
-          minWidth: "15vw",
+          width: "15vw",
           position: "fixed",
         }}
       >
@@ -230,6 +174,93 @@ const ScrollTest = () => {
           </Menu.Item>
         </Menu>
       </div>
+    );
+  };
+
+  const displayScrollText = () => {
+    if (sessionContext.hasStartedReading) {
+      return (
+        <ScrollText
+          fileID={currentText.fileID}
+          selectAnswerEnabled={selectAnswerEnabled}
+          selectAnswer={handleSelectAnswer}
+        />
+      );
+    }
+  };
+
+  const displayQuestions = () => {
+    if (scrollQuestionNumber < currentText.questions.length) {
+      return (
+        <div
+          style={{
+            top: "0px",
+            right: "0px",
+            width: "15vw",
+            position: "fixed",
+            // height: 500,
+            // backgroundColor: "blue",
+          }}
+        >
+          {sessionContext.template.questionFormat === "comprehension" ? (
+            <ComprehensionQuestion
+              question={currentText.questions[scrollQuestionNumber]}
+              disable={textIsComplete}
+              submitAnswer={handleAnswerQuestion}
+              skip={() => setDisplayConfirmSkipMessage(true)}
+            />
+          ) : (
+            <ClickQuestion
+              question={currentText.questions[scrollQuestionNumber]}
+              disable={textIsComplete}
+              answerIsEnabled={selectAnswerEnabled}
+              enableAnswer={() => setSelectAnswerEnabled(true)}
+              skip={() => setDisplayConfirmSkipMessage(true)}
+            />
+          )}
+        </div>
+      );
+    }
+  };
+
+  const handleSelectAnswer = (index, textContent) => {
+    console.log(index, textContent);
+    // handleAnswerQuestion({ index, textContent }, false);
+    setSelectAnswerEnabled(false); // TODO: REMOVE THIS because the above line does the same thing
+  };
+
+  const handleAnswerQuestion = (answer, skip) => {
+    const sessionID = sessionContext.sessionID;
+    const currentTime = new Date();
+
+    axios
+      .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
+        id: sessionID,
+        fileID: currentText.fileID,
+        answer: answer,
+        skip: skip,
+        time: currentTime,
+      })
+      .then(() => {
+        setScrollQuestionNumber(scrollQuestionNumber + 1);
+        setSelectAnswerEnabled(false);
+      })
+      .catch((error) => {
+        console.error(
+          "Error updating readingSession.scrollTexts[fileID].questionAnswers",
+          error
+        );
+      });
+  };
+
+  const skipQuestion = () => {
+    handleAnswerQuestion("", true);
+    setDisplayConfirmSkipMessage(false);
+  };
+
+  return (
+    <div className="page-height footer-padding">
+      {displayButtons()}
 
       {displayScrollText()}
 

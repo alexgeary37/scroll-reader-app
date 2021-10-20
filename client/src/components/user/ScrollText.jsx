@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 
-const ScrollText = ({ fileID }) => {
+const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
   const sessionContext = useContext(SessionContext);
   const [words, setWords] = useState([]);
 
@@ -71,8 +71,9 @@ const ScrollText = ({ fileID }) => {
   useScrollPosition(addScrollPosEntry, 50);
 
   const handleWordClick = (event, index) => {
-    console.log(event, index);
-    console.log(event.target.textContent);
+    if (selectAnswerEnabled) {
+      selectAnswer(index, event.target.textContent);
+    }
   };
 
   return (

@@ -145,19 +145,13 @@ const SpeedTest = () => {
     sessionContext.setIsPaused(false);
   };
 
-  const displaySpeedText = () => {
-    if (sessionContext.isPaused === false && sessionContext.hasStartedReading) {
-      return <SpeedText fileID={currentFileID} />;
-    }
-  };
-
-  return (
-    <div className="page-height footer-padding">
+  const displayButtons = () => {
+    return (
       <div
         style={{
           top: 0,
           left: 0,
-          minWidth: "15vw",
+          width: "15vw",
           position: "fixed",
         }}
       >
@@ -183,6 +177,18 @@ const SpeedTest = () => {
           </Menu.Item>
         </Menu>
       </div>
+    );
+  };
+
+  const displaySpeedText = () => {
+    if (sessionContext.hasStartedReading) {
+      return <SpeedText fileID={currentFileID} />;
+    }
+  };
+
+  return (
+    <div className="page-height footer-padding">
+      {displayButtons()}
 
       {displaySpeedText()}
 
