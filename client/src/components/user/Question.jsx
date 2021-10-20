@@ -2,15 +2,16 @@ import axios from "axios";
 import { useState } from "react";
 import { Card, Button, Form, Grid } from "semantic-ui-react";
 
-const Question = ({ question, disable, skip }) => {
+const Question = ({ question, disable, skip, submitAnswer }) => {
   const [answer, setAnswer] = useState("");
 
   const handleChangeAnswer = (event) => {
     setAnswer(event.target.value);
   };
 
-  const submitAnswer = () => {
-    // axios.put();
+  const handleSubmit = () => {
+    submitAnswer(answer, false);
+    setAnswer("");
   };
 
   return (
@@ -22,6 +23,7 @@ const Question = ({ question, disable, skip }) => {
           <Form.Field>
             <textarea
               placeholder="Type your answer here..."
+              value={answer}
               onChange={handleChangeAnswer}
             />
           </Form.Field>
@@ -33,7 +35,7 @@ const Question = ({ question, disable, skip }) => {
               primary
               disabled={disable}
               content="Submit"
-              onClick={submitAnswer}
+              onClick={handleSubmit}
             />
           </Grid.Column>
           <Grid.Column width="8">

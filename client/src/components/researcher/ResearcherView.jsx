@@ -138,15 +138,15 @@ const ResearcherView = () => {
       return (
         <div>
           <Header as="h2" textAlign="center" content="Uploaded Texts:" />
-          <div>
-            <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
-              <List relaxed divided>
-                {textFiles.textFiles.map((file) => (
-                  <TextFile key={file.key} file={file} />
-                ))}
-              </List>
-            </Segment>
-          </div>
+
+          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
+            <List relaxed divided>
+              {textFiles.textFiles.map((file) => (
+                <TextFile key={file.key} file={file} />
+              ))}
+            </List>
+          </Segment>
+
           <FileUpload
             uploadSubmitted={(file) =>
               setTextFiles({
@@ -197,9 +197,9 @@ const ResearcherView = () => {
   return (
     <div>
       <TopMenu />
-      <div className="page-height footer-padding">
+      <div className="page-height menu-padding footer-padding">
         <Container>
-          <Grid style={{ marginTop: 5 }}>
+          <Grid>
             <Route path="/researcher/data" component={DataGraph} />
             <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
             <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>

@@ -10,41 +10,22 @@ import { isLastText, scrollToTop } from "../../utilityFunctions.js";
 import Question from "./Question.jsx";
 import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
 
-const Placeholder = () => (
-  <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
-);
-
 const ScrollTest = () => {
-  // const contextRef = createRef();
-
   const sessionContext = useContext(SessionContext);
   const endPageRef = createRef();
-  const [currentFileID, setCurrentFileID] = useState(
-    sessionContext.template.scrollTexts[sessionContext.fileNumber].fileID
+  const [currentText, setCurrentText] = useState(
+    sessionContext.template.scrollTexts[sessionContext.fileNumber]
   );
   const [scrollQuestionNumber, setScrollQuestionNumber] = useState(
     JSON.parse(localStorage.getItem("scrollQuestionNumber"))
-  );
-  const [scrollQuestion, setScrollQuestion] = useState(
-    sessionContext.template.scrollTexts[sessionContext.fileNumber].questions[
-      JSON.parse(localStorage.getItem("scrollQuestionNumber"))
-    ]
   );
   const [displayConfirmSkipMessage, setDisplayConfirmSkipMessage] =
     useState(false);
   const [textIsComplete, setTextIsComplete] = useState(false);
 
-  const [instructions, setInstructions] = useState(
-    sessionContext.template.scrollTexts[sessionContext.fileNumber].instructions
-  );
-
   useEffect(() => {
     if (localStorage.getItem("scrollQuestionNumber") === null) {
       setScrollQuestionNumber(0);
-      setScrollQuestion(
-        sessionContext.template.scrollTexts[sessionContext.fileNumber]
-          .questions[0]
-      );
     }
     initialiseTextIsComplete();
   }, []);
@@ -57,8 +38,8 @@ const ScrollTest = () => {
   }, [scrollQuestionNumber]);
 
   useEffect(() => {
-    setCurrentFileID(
-      sessionContext.template.scrollTexts[sessionContext.fileNumber].fileID
+    setCurrentText(
+      sessionContext.template.scrollTexts[sessionContext.fileNumber]
     );
   }, [sessionContext.fileNumber]);
 
@@ -72,11 +53,11 @@ const ScrollTest = () => {
 
         // Set to true if this text contains an endTime, false otherwise.
         if (currentSession.hasOwnProperty("scrollTexts")) {
-          const currentText = currentSession.scrollTexts.find(
-            (text) => text.fileID === currentFileID
+          const current = currentSession.scrollTexts.find(
+            (text) => text.fileID === currentText.fileID
           );
-          if (currentText !== undefined) {
-            setTextIsComplete(currentText.hasOwnProperty("endTime"));
+          if (current !== undefined) {
+            setTextIsComplete(current.hasOwnProperty("endTime"));
           }
         }
       });
@@ -91,7 +72,7 @@ const ScrollTest = () => {
     axios
       .put("http://localhost:3001/updateCurrentScrollText", {
         id: sessionID,
-        fileID: currentFileID,
+        fileID: currentText.fileID,
         endTime: endTime,
       })
       .then(() => {
@@ -99,7 +80,7 @@ const ScrollTest = () => {
       })
       .catch((error) => {
         console.error(
-          "Error updating readingSession.scrollTexts[currentFileID].endTime:",
+          "Error updating readingSession.scrollTexts[currentText.fileID].endTime:",
           error
         );
       });
@@ -108,7 +89,7 @@ const ScrollTest = () => {
   };
 
   const handleFinishText = () => {
-    // Update session.scrollTexts[currentFileID] with an end time.
+    // Update session.scrollTexts[currentText.fileID] with an end time.
     const sessionUpdated = finishCurrentText();
 
     const fileNumber = sessionContext.fileNumber;
@@ -119,8 +100,6 @@ const ScrollTest = () => {
       } else {
         // Adjust hooks and context for the next scrollText.
         const nextText = sessionContext.template.scrollTexts[fileNumber + 1];
-        setScrollQuestion(nextText.questions[0]);
-        setInstructions(nextText.instructions);
         setScrollQuestionNumber(0);
         sessionContext.setFileNumber(fileNumber + 1);
         scrollToTop();
@@ -139,7 +118,7 @@ const ScrollTest = () => {
     axios
       .put("http://localhost:3001/updateCurrentScrollTextPauses", {
         id: sessionID,
-        fileID: currentFileID,
+        fileID: currentText.fileID,
         action: action,
         time: currentTime,
       })
@@ -163,17 +142,59 @@ const ScrollTest = () => {
 
   const displayScrollText = () => {
     if (sessionContext.isPaused === false && sessionContext.hasStartedReading) {
-      return <ScrollText fileID={currentFileID} />;
+      return <ScrollText fileID={currentText.fileID} />;
     }
   };
 
+  const displayQuestions = () => {
+    if (scrollQuestionNumber < currentText.questions.length) {
+      return (
+        <div
+          style={{
+            top: "0px",
+            right: "0px",
+            minWidth: "15vw",
+            position: "fixed",
+            // height: 500,
+            // backgroundColor: "blue",
+          }}
+        >
+          <Question
+            question={currentText.questions[scrollQuestionNumber]}
+            disable={textIsComplete}
+            submitAnswer={handleAnswerQuestion}
+            skip={() => setDisplayConfirmSkipMessage(true)}
+          />
+        </div>
+      );
+    }
+  };
+
+  const handleAnswerQuestion = (answer, skip) => {
+    const sessionID = sessionContext.sessionID;
+    const currentTime = new Date();
+
+    axios
+      .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
+        id: sessionID,
+        fileID: currentText.fileID,
+        answer: answer,
+        skip: skip,
+        time: currentTime,
+      })
+      .then(() => {
+        setScrollQuestionNumber(scrollQuestionNumber + 1);
+      })
+      .catch((error) => {
+        console.error(
+          "Error updating readingSession.scrollTexts[fileID].questionAnswers",
+          error
+        );
+      });
+  };
+
   const skipQuestion = () => {
-    setScrollQuestion(
-      sessionContext.template.scrollTexts[sessionContext.fileNumber].questions[
-        scrollQuestionNumber + 1
-      ]
-    );
-    setScrollQuestionNumber(scrollQuestionNumber + 1);
+    handleAnswerQuestion("", true);
     setDisplayConfirmSkipMessage(false);
   };
 
@@ -212,27 +233,7 @@ const ScrollTest = () => {
 
       {displayScrollText()}
 
-      <div
-        style={{
-          top: "0px",
-          right: "0px",
-          minWidth: "15vw",
-          position: "fixed",
-          // height: 500,
-          // backgroundColor: "blue",
-        }}
-      >
-        <Question
-          question={scrollQuestion}
-          disable={
-            scrollQuestionNumber >=
-              sessionContext.template.scrollTexts[sessionContext.fileNumber]
-                .questions.length -
-                1 || textIsComplete
-          }
-          skip={() => setDisplayConfirmSkipMessage(true)}
-        />
-      </div>
+      {displayQuestions()}
 
       <ConfirmSkipQuestionWindow
         isOpen={displayConfirmSkipMessage}
@@ -242,8 +243,7 @@ const ScrollTest = () => {
 
       <ScrollTestInstructions
         isOpen={sessionContext.hasStartedReading === false}
-        instructions={instructions}
-        fileID={currentFileID}
+        text={currentText}
       />
       <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
     </div>

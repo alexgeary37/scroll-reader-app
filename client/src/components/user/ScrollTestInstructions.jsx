@@ -3,7 +3,7 @@ import { SessionContext } from "../../contexts/SessionContext";
 import axios from "axios";
 import { useContext, useState } from "react";
 
-const ScrollTestInstructions = ({ isOpen, instructions, fileID }) => {
+const ScrollTestInstructions = ({ isOpen, text }) => {
   const sessionContext = useContext(SessionContext);
   const [familiarity, setFamiliarity] = useState("Very Unfamiliar");
   const [interest, setInterest] = useState("Very Uninterested");
@@ -14,16 +14,16 @@ const ScrollTestInstructions = ({ isOpen, instructions, fileID }) => {
 
     let textObj = {
       id: sessionID,
-      fileID: fileID,
+      fileID: text.fileID,
       startTime: startTime,
     };
 
-    if (JSON.parse(instructions.familiarityQuestion) === true) {
-      textObj.familiarity = familiarity;
+    if (JSON.parse(text.instructions.hasFamiliarityQuestion) === true) {
+      textObj["familiarity"] = familiarity;
     }
 
-    if (JSON.parse(instructions.interestQuestion) === true) {
-      textObj.interest = interest;
+    if (JSON.parse(text.instructions.hasInterestQuestion) === true) {
+      textObj["interest"] = interest;
     }
 
     axios
@@ -35,7 +35,7 @@ const ScrollTestInstructions = ({ isOpen, instructions, fileID }) => {
       })
       .catch((error) => {
         console.error(
-          `Error updating readingSession.scrollTexts[fileID].startTime:`,
+          `Error updating readingSession.scrollTexts[text.fileID].startTime:`,
           error
         );
       });
@@ -47,7 +47,7 @@ const ScrollTestInstructions = ({ isOpen, instructions, fileID }) => {
   };
 
   const displayFamiliarityQuestion = () => {
-    if (JSON.parse(instructions.familiarityQuestion) === true) {
+    if (JSON.parse(text.instructions.hasFamiliarityQuestion) === true) {
       return (
         <div className="ui form" style={{ textAlign: "center" }}>
           <label>How familiar are you with this topic?</label>
@@ -109,7 +109,7 @@ const ScrollTestInstructions = ({ isOpen, instructions, fileID }) => {
   };
 
   const displayInterestQuestion = () => {
-    if (JSON.parse(instructions.interestQuestion) === true) {
+    if (JSON.parse(text.instructions.hasInterestQuestion) === true) {
       return (
         <div className="ui form">
           <label>How interested are you with this topic?</label>
@@ -176,7 +176,7 @@ const ScrollTestInstructions = ({ isOpen, instructions, fileID }) => {
       open={isOpen}
       style={{ textAlign: "center", overflow: "auto", padding: 10 }}
     >
-      <Modal.Description as="h4" content={instructions.main} />
+      <Modal.Description as="h4" content={text.instructions.main} />
       {displayFamiliarityQuestion()}
       {displayInterestQuestion()}
       <Button

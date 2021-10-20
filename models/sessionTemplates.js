@@ -12,8 +12,8 @@ const SessionTemplateSchema = mongoose.Schema({
         fileID: { type: String, required: true },
         instructions: {
           main: { type: String, required: true },
-          familiarityQuestion: { type: String, required: true },
-          interestQuestion: { type: String, required: true },
+          hasFamiliarityQuestion: { type: String, required: true },
+          hasInterestQuestion: { type: String, required: true },
         },
         questions: [{ type: String, required: true }],
       },

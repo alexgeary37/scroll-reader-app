@@ -7,10 +7,23 @@ const textSchema = mongoose.Schema(
     familiarity: { type: String, required: false },
     interest: { type: String, required: false },
     pauses: [
-      {
-        action: { type: String, required: true },
-        time: { type: Date, required: true },
-      },
+      mongoose.Schema(
+        {
+          action: { type: String, required: true },
+          time: { type: Date, required: true },
+        },
+        { _id: false }
+      ),
+    ],
+    questionAnswers: [
+      mongoose.Schema(
+        {
+          answer: { type: String, required: true },
+          skip: { type: Boolean, required: true },
+          time: { type: Date, required: true },
+        },
+        { _id: false }
+      ),
     ],
     endTime: { type: Date, required: false },
   },

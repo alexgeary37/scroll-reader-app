@@ -8,8 +8,8 @@ const ScrollTextListItem = ({
   addQuestion,
   setInstructions,
   instructionsError,
-  toggleFamiliarityQuestion,
-  toggleInterestQuestion,
+  toggleHasFamiliarityQuestion,
+  toggleHasInterestQuestion,
 }) => {
   const [openAddQuestion, setOpenAddQuestion] = useState(false);
   const [viewQuestions, setViewQuestions] = useState(false);
@@ -29,7 +29,7 @@ const ScrollTextListItem = ({
   return (
     <Item key={text.fileName}>
       <Item.Content>
-        <div className="wrapper" style={{ justifyContent: "space-between" }}>
+        <div className="wrapper">
           <div>
             <Item.Header
               as="h4"
@@ -50,7 +50,7 @@ const ScrollTextListItem = ({
               <input
                 type="checkbox"
                 defaultChecked
-                onClick={toggleFamiliarityQuestion}
+                onClick={toggleHasFamiliarityQuestion}
               />
               <label>Ask user about their familiarity</label>
             </div>
@@ -59,7 +59,7 @@ const ScrollTextListItem = ({
               <input
                 type="checkbox"
                 defaultChecked
-                onClick={toggleInterestQuestion}
+                onClick={toggleHasInterestQuestion}
               />
               <label>Ask user about their interest</label>
             </div>

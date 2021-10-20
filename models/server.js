@@ -274,6 +274,36 @@ class Server {
       );
     });
 
+    this.app.put("/addCurrentScrollTextQuestionAnswer", async (req, res) => {
+      const id = req.body.id;
+      const fileID = req.body.fileID;
+      const answer = req.body.answer;
+      const skip = req.body.skip;
+      const time = req.body.time;
+
+      ReadingSessionModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            "scrollTexts.$[elem].questionAnswers": {
+              answer: answer,
+              skip: skip,
+              time: time,
+            },
+          },
+        },
+        { arrayFilters: [{ "elem.fileID": fileID }] },
+        (err, session) => {
+          if (err) {
+            res.send(err);
+          } else {
+            session.save();
+            res.send("Updated questionAnswers in current scrollText");
+          }
+        }
+      );
+    });
+
     this.app.post("/insertScrollPosEntries", async (req, res) => {
       const newScrollPosEntries = req.body;
       ScrollPosEntryModel.insertMany(newScrollPosEntries, (err, entries) => {

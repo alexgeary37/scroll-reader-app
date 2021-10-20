@@ -116,8 +116,8 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           ).name,
           instructions: {
             main: "",
-            familiarityQuestion: true,
-            interestQuestion: true,
+            hasFamiliarityQuestion: true,
+            hasInterestQuestion: true,
           },
           questions: [],
         },
@@ -143,12 +143,12 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     const index = scrollTexts.indexOf(text);
     let tempScrollTexts = scrollTexts;
     if (question === "familiarity") {
-      const ask = !tempScrollTexts[index].instructions.familiarityQuestion;
-      tempScrollTexts[index].instructions.familiarityQuestion = ask;
+      const ask = !tempScrollTexts[index].instructions.hasFamiliarityQuestion;
+      tempScrollTexts[index].instructions.hasFamiliarityQuestion = ask;
     }
     if (question === "interest") {
-      const ask = !tempScrollTexts[index].instructions.interestQuestion;
-      tempScrollTexts[index].instructions.interestQuestion = ask;
+      const ask = !tempScrollTexts[index].instructions.hasInterestQuestion;
+      tempScrollTexts[index].instructions.hasInterestQuestion = ask;
     }
     setScrollTexts(tempScrollTexts);
   };
@@ -211,10 +211,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             instructionsError={
               text.instructions.main === "" && displayMissingInputError
             }
-            toggleFamiliarityQuestion={() =>
+            toggleHasFamiliarityQuestion={() =>
               setAskQuestion(text, "familiarity")
             }
-            toggleInterestQuestion={() => setAskQuestion(text, "interest")}
+            toggleHasInterestQuestion={() => setAskQuestion(text, "interest")}
           />
         ))}
       </List>
