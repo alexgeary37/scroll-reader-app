@@ -20,6 +20,7 @@ const textSchema = mongoose.Schema(
         {
           answer: { type: mongoose.Schema.Types.Mixed, required: true },
           skip: { type: Boolean, required: true },
+          yPosition: { type: Number, required: true },
           time: { type: Date, required: true },
         },
         { _id: false }
@@ -32,6 +33,7 @@ const textSchema = mongoose.Schema(
 
 const ReadingSessionSchema = new mongoose.Schema({
   userName: { type: String, required: true },
+  viewportHeight: { type: Number, required: true },
   templateID: { type: String, required: true },
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: false },

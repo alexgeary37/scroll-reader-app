@@ -7,9 +7,11 @@ import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
 import axios from "axios";
 import { isLastText, scrollToTop } from "../../utilityFunctions.js";
+import { getScrollPosition } from "./scrollPosition.jsx";
 import ComprehensionQuestion from "./ComprehensionQuestion.jsx";
 import ClickQuestion from "./ClickQuestion.jsx";
 import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
+import ConfirmDoneWindow from "./ConfirmDoneWindow.jsx";
 
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
@@ -22,6 +24,8 @@ const ScrollTest = () => {
   );
   const [selectAnswerEnabled, setSelectAnswerEnabled] = useState(false);
   const [displayConfirmSkipMessage, setDisplayConfirmSkipMessage] =
+    useState(false);
+  const [displayConfirmDoneMessage, setDisplayConfirmDoneMessage] =
     useState(false);
   const [textIsComplete, setTextIsComplete] = useState(false);
 
@@ -91,21 +95,25 @@ const ScrollTest = () => {
   };
 
   const handleFinishText = () => {
-    // Update session.scrollTexts[currentText.fileID] with an end time.
-    const sessionUpdated = finishCurrentText();
+    if (scrollQuestionNumber < currentText.questions.length) {
+      setDisplayConfirmDoneMessage(true);
+    } else {
+      // Update session.scrollTexts[currentText.fileID] with an end time.
+      const sessionUpdated = finishCurrentText();
 
-    const fileNumber = sessionContext.fileNumber;
+      const fileNumber = sessionContext.fileNumber;
 
-    if (sessionUpdated) {
-      if (isLastText("scroll", sessionContext)) {
-        endPageRef.current.click();
-      } else {
-        // Adjust hooks and context for the next scrollText.
-        const nextText = sessionContext.template.scrollTexts[fileNumber + 1];
-        setScrollQuestionNumber(0);
-        sessionContext.setFileNumber(fileNumber + 1);
-        scrollToTop();
-        sessionContext.setHasStartedReading(false);
+      if (sessionUpdated) {
+        if (isLastText("scroll", sessionContext)) {
+          endPageRef.current.click();
+        } else {
+          // Adjust hooks and context for the next scrollText.
+          const nextText = sessionContext.template.scrollTexts[fileNumber + 1];
+          setScrollQuestionNumber(0);
+          sessionContext.setFileNumber(fileNumber + 1);
+          scrollToTop();
+          sessionContext.setHasStartedReading(false);
+        }
       }
     }
   };
@@ -232,6 +240,7 @@ const ScrollTest = () => {
   const handleAnswerQuestion = (answer, skip) => {
     const sessionID = sessionContext.sessionID;
     const currentTime = new Date();
+    const yPos = getScrollPosition().y;
 
     axios
       .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
@@ -239,6 +248,7 @@ const ScrollTest = () => {
         fileID: currentText.fileID,
         answer: answer,
         skip: skip,
+        yPos: yPos,
         time: currentTime,
       })
       .then(() => {
@@ -270,6 +280,11 @@ const ScrollTest = () => {
         isOpen={displayConfirmSkipMessage}
         skip={skipQuestion}
         cancel={() => setDisplayConfirmSkipMessage(false)}
+      />
+
+      <ConfirmDoneWindow
+        isOpen={displayConfirmDoneMessage}
+        close={() => setDisplayConfirmDoneMessage(false)}
       />
 
       <ScrollTestInstructions

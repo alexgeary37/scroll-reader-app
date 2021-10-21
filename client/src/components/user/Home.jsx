@@ -45,9 +45,11 @@ const Home = () => {
   const createSession = async () => {
     let sessionCreated = false;
     const date = new Date();
+    const viewportHeight = window.innerHeight;
 
     const newReadingSession = {
       userName: userName,
+      viewportHeight: viewportHeight,
       templateID: template._id,
       startTime: date,
     };

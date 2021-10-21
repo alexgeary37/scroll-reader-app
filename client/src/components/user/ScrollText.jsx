@@ -77,15 +77,13 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
   };
 
   return (
-    <Container text style={{ paddingTop: "20px" }}>
-      <p>
-        {words.map((word, index) => (
-          <span key={index} onClick={(e) => handleWordClick(e, index)}>
-            {word + " "}
-          </span>
-        ))}
-      </p>
-    </Container>
+    <p className="text-container">
+      {words.map((word, index) => (
+        <span key={index} onClick={(e) => handleWordClick(e, index)}>
+          {word + " "}
+        </span>
+      ))}
+    </p>
   );
 };
 

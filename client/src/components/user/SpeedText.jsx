@@ -22,11 +22,7 @@ const SpeedText = ({ fileID }) => {
       });
   };
 
-  return (
-    <Container text style={{ paddingTop: "20px" }}>
-      <p>{text}</p>
-    </Container>
-  );
+  return <p className="text-container">{text}</p>;
 };
 
 export default SpeedText;

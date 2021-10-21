@@ -279,6 +279,7 @@ class Server {
       const fileID = req.body.fileID;
       const answer = req.body.answer;
       const skip = req.body.skip;
+      const yPos = req.body.yPos;
       const time = req.body.time;
 
       ReadingSessionModel.findByIdAndUpdate(
@@ -288,6 +289,7 @@ class Server {
             "scrollTexts.$[elem].questionAnswers": {
               answer: answer,
               skip: skip,
+              yPosition: yPos,
               time: time,
             },
           },

@@ -16,3 +16,9 @@
 .footer-padding {
   padding-bottom: 10px;
 }
+
+.text-container {
+  padding-top: 2vh;
+  padding-left: 28vw;
+  padding-right: 28vw;
+}
