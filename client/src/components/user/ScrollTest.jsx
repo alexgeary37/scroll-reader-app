@@ -231,8 +231,8 @@ const ScrollTest = () => {
     }
   };
 
-  const handleSelectAnswer = (index, textContent) => {
-    console.log(index, textContent);
+  const handleSelectAnswer = (textContent, index) => {
+    console.log(textContent, index);
     // handleAnswerQuestion({ index, textContent }, false);
     setSelectAnswerEnabled(false); // TODO: REMOVE THIS because the above line does the same thing
   };

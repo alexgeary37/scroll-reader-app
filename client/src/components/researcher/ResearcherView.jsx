@@ -52,7 +52,6 @@ const ResearcherView = () => {
             key: file._id,
             value: file._id,
             name: file.fileName,
-            text: file.fileName, // This is for the Dropdown in CreateTemplate.jsx
             uploadedAt: file.createdAt,
           };
           files.push(textFile);

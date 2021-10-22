@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Divider,
@@ -21,6 +21,19 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [comprehension, setComprehension] = useState(true);
   const [displayMissingInputError, setDisplayMissingInputError] =
     useState(false);
+  const [dropdownTextFiles, setDropdownTextFiles] = useState([]);
+
+  useEffect(() => {
+    const formattedTextFiles = textFiles.map((file) => {
+      return {
+        key: file.key,
+        value: file.value,
+        text: file.name,
+      };
+    });
+
+    setDropdownTextFiles(formattedTextFiles);
+  }, [textFiles]);
 
   const checkFormInputs = () => {
     let emptyFields = false;
@@ -270,7 +283,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               search
               selection
               multiple
-              options={textFiles}
+              options={dropdownTextFiles}
               onChange={(e, data) => setSpeedTextIDs(data.value)}
             />
           </Segment>
@@ -288,7 +301,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               search
               selection
               multiple
-              options={textFiles}
+              options={dropdownTextFiles}
               onChange={handleSelectScrollText}
             />
             {displayScrollTexts()}
