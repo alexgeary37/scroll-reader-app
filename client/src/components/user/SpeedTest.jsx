@@ -41,7 +41,8 @@ const SpeedTest = () => {
           const currentText = currentSession.speedTexts.find(
             (text) => text.fileID === currentFileID
           );
-          if (currentText !== undefined) {
+          // if (currentText !== "undefined") {
+          if (typeof currentText !== "undefined") {
             setTextIsComplete(currentText.hasOwnProperty("endTime"));
           }
         }
@@ -60,7 +61,7 @@ const SpeedTest = () => {
       })
       .catch((error) => {
         console.error(
-          `Error updating readingSession.speedTest[currentFileID].startTime:`,
+          "Error updating readingSession.speedTest[currentFileID].startTime:",
           error
         );
       });

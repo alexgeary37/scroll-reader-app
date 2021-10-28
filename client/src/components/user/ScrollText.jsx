@@ -1,5 +1,4 @@
-import { Container } from "semantic-ui-react";
-import { uuid } from "uuidv4";
+import { v4 as uuid_v4 } from "uuid";
 import useScrollPosition from "./scrollPosition.jsx";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -80,7 +79,7 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
   return (
     <p className="text-container">
       {words.map((word, index) => (
-        <span key={uuid()} onClick={(e) => handleWordClick(e, index)}>
+        <span key={uuid_v4()} onClick={(e) => handleWordClick(e, index)}>
           {word + " "}
         </span>
       ))}

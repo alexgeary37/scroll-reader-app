@@ -4,7 +4,6 @@ import TextFile from "./home/TextFile.jsx";
 import {
   Segment,
   Container,
-  Divider,
   Grid,
   Header,
   List,
@@ -19,11 +18,11 @@ import FileUpload from "./home/FileUpload.jsx";
 
 const ResearcherView = () => {
   const [textFiles, setTextFiles] = useState({
-    textFiles: [],
+    data: [],
     isFetching: true,
   });
   const [templates, setTemplates] = useState({
-    templates: [],
+    data: [],
     isFetching: true,
   });
   const [openTemplateCreator, setOpenTemplateCreator] = useState(false);
@@ -41,7 +40,7 @@ const ResearcherView = () => {
   }, [textFiles.isFetching]);
 
   const fetchTextFiles = () => {
-    setTextFiles({ textFiles: textFiles.textFiles, isFetching: true });
+    setTextFiles({ data: textFiles.data, isFetching: true });
     axios
       .get("http://localhost:3001/getTextFiles")
       .then((response) => {
@@ -52,13 +51,15 @@ const ResearcherView = () => {
             key: file._id,
             value: file._id,
             name: file.fileName,
+            questions: file.questions,
+            questionFormat: file.questionFormat,
             uploadedAt: file.createdAt,
           };
           files.push(textFile);
         });
 
         // Set text files for rendering, and indicate that they are no longer being fetched.
-        setTextFiles({ textFiles: files, isFetching: false });
+        setTextFiles({ data: files, isFetching: false });
       })
       .catch((error) => {
         console.error("Error fetching files:", error);
@@ -66,7 +67,7 @@ const ResearcherView = () => {
   };
 
   const fetchSessionTemplates = () => {
-    setTemplates({ templates: templates.templates, isFetching: true });
+    setTemplates({ data: templates.data, isFetching: true });
     axios
       .get("http://localhost:3001/getSessionTemplates")
       .then((templatesResponse) => {
@@ -74,19 +75,21 @@ const ResearcherView = () => {
         const data = templatesResponse.data;
         data.forEach((temp) => {
           // Get names of text files this template references.
-          const speedTextFileNames = [];
+          const speedTexts = [];
           temp.speedTest.fileIDs.forEach((fileID) => {
-            speedTextFileNames.push(
-              textFiles.textFiles.find((tf) => tf.key === fileID).name
-            );
+            speedTexts.push({
+              fileID: fileID,
+              name: textFiles.data.find((tf) => tf.value === fileID).name,
+            });
           });
           const scrollTexts = [];
           temp.scrollTexts.forEach((fileObj) => {
             scrollTexts.push({
-              name: textFiles.textFiles.find((tf) => tf.key === fileObj.fileID)
+              fileID: fileObj.fileID,
+              name: textFiles.data.find((tf) => tf.value === fileObj.fileID)
                 .name,
               instructions: fileObj.instructions,
-              questions: fileObj.questions,
+              questionIDs: fileObj.questionIDs,
             });
           });
 
@@ -94,11 +97,10 @@ const ResearcherView = () => {
             key: temp._id,
             name: temp.name,
             speedTest: {
-              fileNames: speedTextFileNames,
+              texts: speedTexts,
               instructions: temp.speedTest.instructions,
             },
             scrollTexts: scrollTexts,
-            questionFormat: temp.questionFormat,
             createdAt: temp.createdAt,
             url: temp._id,
           };
@@ -107,7 +109,7 @@ const ResearcherView = () => {
         });
 
         // Set templates for rendering, and indicate that they are no longer being fetched.
-        setTemplates({ templates: options, isFetching: false });
+        setTemplates({ data: options, isFetching: false });
       })
       .catch((error) => {
         console.error("Error fetching session templates:", error);
@@ -121,11 +123,27 @@ const ResearcherView = () => {
   const closeTemplateCreator = (templateCreated, template) => {
     if (templateCreated) {
       setTemplates({
-        templates: [...templates.templates, template],
+        data: [...templates.data, template],
         isFetching: false,
       });
     }
     setOpenTemplateCreator(false);
+  };
+
+  const handleUpdateFileQuestions = (
+    currentFile,
+    newQuestion,
+    questionFormat
+  ) => {
+    let files = textFiles.data;
+    const index = files.indexOf(currentFile);
+    files[index].questions.push(newQuestion);
+    files[index].questionFormat = questionFormat;
+
+    setTextFiles({
+      data: files,
+      isFetching: false,
+    });
   };
 
   const displayTextFiles = () => {
@@ -140,8 +158,14 @@ const ResearcherView = () => {
 
           <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
             <List relaxed divided>
-              {textFiles.textFiles.map((file) => (
-                <TextFile key={file.key} file={file} />
+              {textFiles.data.map((file) => (
+                <TextFile
+                  key={file.key}
+                  file={file}
+                  updateFileQuestions={(newQuestion, questionFormat) =>
+                    handleUpdateFileQuestions(file, newQuestion, questionFormat)
+                  }
+                />
               ))}
             </List>
           </Segment>
@@ -149,7 +173,7 @@ const ResearcherView = () => {
           <FileUpload
             uploadSubmitted={(file) =>
               setTextFiles({
-                textFiles: [...textFiles.textFiles, file],
+                data: [...textFiles.data, file],
                 isFetching: false,
               })
             }
@@ -171,8 +195,12 @@ const ResearcherView = () => {
 
           <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
             <div className="ui link divided relaxed items">
-              {templates.templates.map((template) => (
-                <SessionTemplate key={template.key} template={template} />
+              {templates.data.map((template) => (
+                <SessionTemplate
+                  key={template.key}
+                  template={template}
+                  textFiles={textFiles}
+                />
               ))}
             </div>
           </Segment>
@@ -186,7 +214,7 @@ const ResearcherView = () => {
           <CreateTemplate
             isOpen={openTemplateCreator}
             close={closeTemplateCreator}
-            textFiles={textFiles.textFiles}
+            textFiles={textFiles}
           />
         </div>
       );

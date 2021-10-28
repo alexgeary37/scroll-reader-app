@@ -1,41 +1,35 @@
 import { useState } from "react";
-import { Input, Item, Button, Checkbox } from "semantic-ui-react";
-import AddQuestion from "./AddQuestion";
+import { Input, Item, Button } from "semantic-ui-react";
 import QuestionsView from "./QuestionsView";
 
 const ScrollTextListItem = ({
   text,
-  addQuestion,
+  availableQuestions,
+  addQuestions,
   setInstructions,
   instructionsError,
   toggleHasFamiliarityQuestion,
   toggleHasInterestQuestion,
 }) => {
-  const [openAddQuestion, setOpenAddQuestion] = useState(false);
   const [viewQuestions, setViewQuestions] = useState(false);
   const [instructionsAreEmpty, setInstructionsAreEmpty] = useState(true);
-
-  const handleQuestionsClick = () => {
-    if (text.questions.length > 0) {
-      setViewQuestions(true);
-    }
-  };
 
   const handleInstructionsChange = (text, instructions) => {
     setInstructionsAreEmpty(instructions === "");
     setInstructions(text, instructions);
   };
 
+  const updateQuestions = (selectedQuestions) => {
+    setViewQuestions(false);
+    addQuestions(text, selectedQuestions);
+  };
+
   return (
-    <Item key={text.fileName}>
+    <Item key={text.fileID}>
       <Item.Content>
         <div className="wrapper">
           <div>
-            <Item.Header
-              as="h4"
-              style={{ margin: 5 }}
-              content={text.fileName}
-            />
+            <Item.Header style={{ margin: 5 }} content={text.fileName} />
           </div>
 
           <Input
@@ -65,29 +59,14 @@ const ScrollTextListItem = ({
             </div>
           </div>
 
-          <Button
-            disabled={text.questions.length === 0}
-            content={`Questions: ${text.questions.length}`}
-            onClick={handleQuestionsClick}
-          />
+          <Button content="Questions" onClick={() => setViewQuestions(true)} />
 
           <QuestionsView
             isOpen={viewQuestions}
-            text={text}
-            close={() => setViewQuestions(false)}
-          />
-
-          <Button
-            floated="right"
-            content="Add Question"
-            onClick={() => setOpenAddQuestion(true)}
+            availableQuestions={availableQuestions}
+            updateQuestions={updateQuestions}
           />
         </div>
-        <AddQuestion
-          isOpen={openAddQuestion}
-          addQuestion={(question) => addQuestion(text, question)}
-          close={() => setOpenAddQuestion(false)}
-        />
       </Item.Content>
     </Item>
   );

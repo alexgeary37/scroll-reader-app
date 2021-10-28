@@ -2,7 +2,7 @@
 
 import { useLayoutEffect } from "react";
 
-const isBrowser = typeof window !== `undefined`;
+const isBrowser = typeof window !== "undefined";
 
 export const getScrollPosition = () => {
   return !isBrowser ? { x: 0, y: 0 } : { x: window.scrollX, y: window.scrollY };

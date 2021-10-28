@@ -1,7 +1,7 @@
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import ScrollText from "./ScrollText.jsx";
 import { useContext, useState, useEffect, createRef } from "react";
-import { Menu, Button, Image } from "semantic-ui-react";
+import { Menu, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
@@ -62,7 +62,8 @@ const ScrollTest = () => {
           const current = currentSession.scrollTexts.find(
             (text) => text.fileID === currentText.fileID
           );
-          if (current !== undefined) {
+          // if (current !== "undefined") {
+          if (typeof current !== "undefined") {
             setTextIsComplete(current.hasOwnProperty("endTime"));
           }
         }
@@ -108,7 +109,6 @@ const ScrollTest = () => {
           endPageRef.current.click();
         } else {
           // Adjust hooks and context for the next scrollText.
-          const nextText = sessionContext.template.scrollTexts[fileNumber + 1];
           setScrollQuestionNumber(0);
           sessionContext.setFileNumber(fileNumber + 1);
           scrollToTop();
@@ -232,7 +232,7 @@ const ScrollTest = () => {
   };
 
   const handleSelectAnswer = (textContent, index) => {
-    console.log(textContent, index);
+    // console.log(textContent, index);
     // handleAnswerQuestion({ index, textContent }, false);
     setSelectAnswerEnabled(false); // TODO: REMOVE THIS because the above line does the same thing
   };

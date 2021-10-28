@@ -12,12 +12,14 @@ const FileUpload = ({ uploadSubmitted }) => {
   const handleFileSelect = (event) => {
     // https://stackoverflow.com/questions/51272255/how-to-use-filereader-in-react/51278185
     const file = event.target.files[0];
-    if (typeof file !== `undefined`) {
+    if (typeof file !== "undefined") {
       const reader = new FileReader();
       reader.onload = (event) => {
         const textFile = {
           text: event.target.result,
           fileName: file.name,
+          questions: [],
+          questionFormat: "",
           createdAt: new Date(),
         };
         axios
@@ -27,7 +29,8 @@ const FileUpload = ({ uploadSubmitted }) => {
               key: response.data._id,
               value: response.data._id,
               name: response.data.fileName,
-              text: response.data.fileName, // This is for the Dropdown in CreateTemplate.jsx
+              questions: [],
+              questionFormat: response.data.questionFormat,
               uploadedAt: response.data.createdAt,
             };
             uploadSubmitted(doc);

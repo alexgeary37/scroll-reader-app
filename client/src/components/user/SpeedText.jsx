@@ -1,4 +1,3 @@
-import { Container } from "semantic-ui-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 

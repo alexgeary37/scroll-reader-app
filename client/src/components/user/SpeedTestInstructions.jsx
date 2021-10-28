@@ -22,7 +22,7 @@ const SpeedTestInstructions = ({ isOpen, instructions, fileID }) => {
       })
       .catch((error) => {
         console.error(
-          `Error updating readingSession.speedTest.startTime:`,
+          "Error updating readingSession.speedTest.startTime:",
           error
         );
       });

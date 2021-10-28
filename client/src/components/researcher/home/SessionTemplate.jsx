@@ -1,8 +1,8 @@
-import { List, Item, Button, Segment } from "semantic-ui-react";
+import { List, Item, Button } from "semantic-ui-react";
 import SessionTemplateView from "./SessionTemplateView";
 import { useState } from "react";
 
-const SessionTemplate = ({ template }) => {
+const SessionTemplate = ({ template, textFiles }) => {
   const [openTemplateView, setOpenTemplateView] = useState(false);
 
   return (
@@ -17,13 +17,13 @@ const SessionTemplate = ({ template }) => {
             content="Speedtest texts:"
           />
           <List style={{ marginLeft: 20 }} horizontal divided>
-            {template.speedTest.fileNames.map((name) => (
-              <Item key={name}>
+            {template.speedTest.texts.map((text) => (
+              <Item key={text.fileID}>
                 <Item.Content>
                   <Item.Description
-                    content={`${
-                      template.speedTest.fileNames.indexOf(name) + 1
-                    }. ${name}`}
+                    content={`${template.speedTest.texts.indexOf(text) + 1}. ${
+                      text.name
+                    }`}
                   />
                 </Item.Content>
               </Item>
@@ -37,7 +37,7 @@ const SessionTemplate = ({ template }) => {
           />
           <List style={{ marginLeft: 20 }} horizontal divided>
             {template.scrollTexts.map((text) => (
-              <Item key={text.name}>
+              <Item key={text.fileID}>
                 <Item.Content>
                   <Item.Description
                     content={`${template.scrollTexts.indexOf(text) + 1}. ${
@@ -51,7 +51,16 @@ const SessionTemplate = ({ template }) => {
 
           <Item.Description
             style={{ margin: 5 }}
-            content={`Question Format: ${template.questionFormat}`}
+            content={`Question Format: ${
+              // Get the questionFormat from the first textFile used in template.scrollTexts
+              textFiles.data[
+                textFiles.data.indexOf(
+                  textFiles.data.find(
+                    (file) => file.value === template.scrollTexts[0].fileID
+                  )
+                )
+              ].questionFormat
+            }`}
           />
         </div>
         <div className="wrapper">
@@ -67,8 +76,9 @@ const SessionTemplate = ({ template }) => {
         </div>
 
         <SessionTemplateView
-          template={template}
           isOpen={openTemplateView}
+          template={template}
+          textFiles={textFiles}
           close={() => setOpenTemplateView(false)}
         />
       </Item.Content>

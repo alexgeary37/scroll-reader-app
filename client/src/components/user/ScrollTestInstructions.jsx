@@ -35,7 +35,7 @@ const ScrollTestInstructions = ({ isOpen, text }) => {
       })
       .catch((error) => {
         console.error(
-          `Error updating readingSession.scrollTexts[text.fileID].startTime:`,
+          "Error updating readingSession.scrollTexts[text.fileID].startTime:",
           error
         );
       });

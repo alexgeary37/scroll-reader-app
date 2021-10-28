@@ -15,13 +15,11 @@ const SessionTemplateSchema = mongoose.Schema({
           hasFamiliarityQuestion: { type: String, required: true },
           hasInterestQuestion: { type: String, required: true },
         },
-        questions: [{ type: String, required: true }],
+        questionIDs: [{ type: String, required: true }],
       },
       { _id: false }
     ),
   ],
-
-  questionFormat: { type: String, required: true },
   createdAt: { type: Date, required: true },
 });
 

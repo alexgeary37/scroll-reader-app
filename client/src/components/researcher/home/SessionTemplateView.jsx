@@ -8,7 +8,7 @@ import {
   Divider,
 } from "semantic-ui-react";
 
-const SessionTemplateView = ({ template, isOpen, close }) => {
+const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
   const speedTestInfo = () => {
     return (
       <div>
@@ -20,13 +20,13 @@ const SessionTemplateView = ({ template, isOpen, close }) => {
           <Item>
             <Item.Header as="h5" style={{ margin: 5 }} content="Texts:" />
             <List style={{ marginLeft: 20 }} horizontal divided>
-              {template.speedTest.fileNames.map((name) => (
-                <Item key={name}>
+              {template.speedTest.texts.map((text) => (
+                <Item key={text.fileID}>
                   <Item.Content>
                     <Item.Description
                       content={`${
-                        template.speedTest.fileNames.indexOf(name) + 1
-                      }. ${name}`}
+                        template.speedTest.texts.indexOf(text) + 1
+                      }. ${text.name}`}
                     />
                   </Item.Content>
                 </Item>
@@ -44,7 +44,7 @@ const SessionTemplateView = ({ template, isOpen, close }) => {
         <Item.Header as="h3" content="ScrollTexts" />
         <List style={{ marginLeft: 20 }} divided relaxed>
           {template.scrollTexts.map((text) => (
-            <Item key={text.name}>
+            <Item key={text.fileID}>
               <Item.Content>
                 <Item.Header
                   as="h5"
@@ -77,13 +77,23 @@ const SessionTemplateView = ({ template, isOpen, close }) => {
                   content="Questions:"
                 />
                 <List style={{ marginLeft: 20 }}>
-                  {text.questions.map((question) => (
-                    <Item key={text.questions.indexOf(question)}>
+                  {text.questionIDs.map((questionID) => (
+                    <Item key={questionID}>
                       <Item.Content>
                         <Item.Description
                           content={`${
-                            text.questions.indexOf(question) + 1
-                          }. ${question}`}
+                            text.questionIDs.indexOf(questionID) + 1
+                          }. ${
+                            // Get the question from the textFile
+                            textFiles.data[
+                              textFiles.data.indexOf(
+                                textFiles.data.find(
+                                  (file) => file.value === text.fileID
+                                )
+                              )
+                            ].questions.find((q) => q._id === questionID)
+                              .question
+                          }`}
                         />
                       </Item.Content>
                     </Item>
@@ -105,7 +115,16 @@ const SessionTemplateView = ({ template, isOpen, close }) => {
             <List>
               <Item>
                 <Item.Description
-                  content={`Question format: ${template.questionFormat}`}
+                  content={`Question format: ${
+                    textFiles.data[
+                      textFiles.data.indexOf(
+                        textFiles.data.find(
+                          (file) =>
+                            file.value === template.scrollTexts[0].fileID
+                        )
+                      )
+                    ].questionFormat
+                  }`}
                 />
               </Item>
               <Item>

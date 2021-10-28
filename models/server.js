@@ -64,6 +64,37 @@ class Server {
       });
     });
 
+    this.app.put("/addTextFileQuestion", async (req, res) => {
+      const id = req.body.id;
+      const question = req.body.question;
+      const answerRegion = req.body.answerRegion;
+      const questionFormat = req.body.questionFormat;
+
+      TextFileModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            questions: {
+              question: question,
+              answerRegion: answerRegion,
+            },
+          },
+          $set: {
+            questionFormat: questionFormat,
+          },
+        },
+        { new: true },
+        (err, textFile) => {
+          if (err) {
+            res.send(err);
+          } else {
+            textFile.save();
+            res.send(textFile);
+          }
+        }
+      );
+    });
+
     this.app.post("/createSessionTemplate", async (req, res) => {
       const newTemplate = req.body;
       SessionTemplateModel.create(newTemplate, (err, template) => {
@@ -143,6 +174,7 @@ class Server {
             },
           },
         },
+        { new: true },
         (err, session) => {
           if (err) {
             res.send(err);
@@ -173,6 +205,7 @@ class Server {
             },
           },
         },
+        { new: true },
         (err, session) => {
           if (err) {
             res.send(err);
@@ -192,7 +225,7 @@ class Server {
       ReadingSessionModel.findByIdAndUpdate(
         id,
         { $set: { "speedTexts.$[elem].endTime": endTime } },
-        { arrayFilters: [{ "elem.fileID": fileID }] },
+        { arrayFilters: [{ "elem.fileID": fileID }], new: true },
         (err, session) => {
           if (err) {
             res.send(err);
@@ -212,7 +245,7 @@ class Server {
       ReadingSessionModel.findByIdAndUpdate(
         id,
         { $set: { "scrollTexts.$[elem].endTime": endTime } },
-        { arrayFilters: [{ "elem.fileID": fileID }] },
+        { arrayFilters: [{ "elem.fileID": fileID }], new: true },
         (err, session) => {
           if (err) {
             res.send(err);
@@ -237,7 +270,7 @@ class Server {
             "speedTexts.$[elem].pauses": { action: action, time: time },
           },
         },
-        { arrayFilters: [{ "elem.fileID": fileID }] },
+        { arrayFilters: [{ "elem.fileID": fileID }], new: true },
         (err, session) => {
           if (err) {
             res.send(err);
@@ -262,7 +295,7 @@ class Server {
             "scrollTexts.$[elem].pauses": { action: action, time: time },
           },
         },
-        { arrayFilters: [{ "elem.fileID": fileID }] },
+        { arrayFilters: [{ "elem.fileID": fileID }], new: true },
         (err, session) => {
           if (err) {
             res.send(err);
@@ -294,7 +327,7 @@ class Server {
             },
           },
         },
-        { arrayFilters: [{ "elem.fileID": fileID }] },
+        { arrayFilters: [{ "elem.fileID": fileID }], new: true },
         (err, session) => {
           if (err) {
             res.send(err);

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   Button,
-  Divider,
   Form,
   Header,
   Segment,
@@ -18,22 +17,49 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [speedTextIDs, setSpeedTextIDs] = useState([]);
   const [speedTestInstructions, setSpeedTestInstructions] = useState("");
   const [scrollTexts, setScrollTexts] = useState([]);
-  const [comprehension, setComprehension] = useState(true);
+  const [questionFormat, setQuestionFormat] = useState("comprehension");
   const [displayMissingInputError, setDisplayMissingInputError] =
     useState(false);
-  const [dropdownTextFiles, setDropdownTextFiles] = useState([]);
+  const [dropdownSpeedTextFiles, setDropdownSpeedTextFiles] = useState([]);
+  const [dropdownScrollTextFiles, setDropdownScrollTextFiles] = useState([]);
+
+  // const template = {
+  //   key: temp._id,
+  //   name: temp.name,
+  //   speedTest: {
+  //     texts: speedTexts,
+  //     instructions: temp.speedTest.instructions,
+  //   },
+  //   scrollTexts: scrollTexts,
+  //   createdAt: temp.createdAt,
+  //   url: temp._id,
+  // };
 
   useEffect(() => {
-    const formattedTextFiles = textFiles.map((file) => {
+    setDropdownSpeedTextFiles(formatDropdownTextFiles(textFiles.data));
+
+    const scrollTextFiles = textFiles.data.filter(
+      (file) => file.questionFormat === questionFormat
+    );
+    setDropdownScrollTextFiles(formatDropdownTextFiles(scrollTextFiles));
+  }, [textFiles]);
+
+  useEffect(() => {
+    const scrollTextFiles = textFiles.data.filter(
+      (file) => file.questionFormat === questionFormat
+    );
+    setDropdownScrollTextFiles(formatDropdownTextFiles(scrollTextFiles));
+  }, [questionFormat]);
+
+  const formatDropdownTextFiles = (textFiles) => {
+    return textFiles.map((file) => {
       return {
         key: file.key,
         value: file.value,
         text: file.name,
       };
     });
-
-    setDropdownTextFiles(formattedTextFiles);
-  }, [textFiles]);
+  };
 
   const checkFormInputs = () => {
     let emptyFields = false;
@@ -75,11 +101,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         files.push({
           fileID: scrollTexts[i].fileID,
           instructions: scrollTexts[i].instructions,
-          questions: scrollTexts[i].questions,
+          questionIDs: scrollTexts[i].questionIDs,
         });
       }
 
-      const questionFormat = comprehension ? "comprehension" : "inline";
       const template = {
         name: templateName,
         speedTest: {
@@ -119,29 +144,31 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           break;
         }
       }
-    } else if (data.value.length > 0) {
-      setScrollTexts([
-        ...scrollTexts,
-        {
-          fileID: data.value[data.value.length - 1],
-          fileName: data.options.find(
-            (file) => file.value === data.value[data.value.length - 1]
-          ).name,
-          instructions: {
-            main: "",
-            hasFamiliarityQuestion: true,
-            hasInterestQuestion: true,
+    } else {
+      if (data.value.length > 0) {
+        setScrollTexts([
+          ...scrollTexts,
+          {
+            fileID: data.value[data.value.length - 1],
+            fileName: data.options.find(
+              (file) => file.value === data.value[data.value.length - 1]
+            ).text,
+            instructions: {
+              main: "",
+              hasFamiliarityQuestion: true,
+              hasInterestQuestion: true,
+            },
+            questionIDs: [],
           },
-          questions: [],
-        },
-      ]);
+        ]);
+      }
     }
   };
 
-  const handleAddQuestion = (text, question) => {
+  const handleAddQuestions = (text, selectedQuestions) => {
     const index = scrollTexts.indexOf(text);
     let tempScrollTexts = scrollTexts;
-    tempScrollTexts[index].questions.push(question);
+    tempScrollTexts[index].questionIDs = selectedQuestions;
     setScrollTexts(tempScrollTexts);
   };
 
@@ -171,7 +198,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setSpeedTextIDs([]);
     setScrollTexts([]);
     setSpeedTestInstructions("");
-    setComprehension(true);
+    setQuestionFormat("comprehension");
     setDisplayMissingInputError(false);
   };
 
@@ -181,15 +208,19 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     if (templateCreated) {
       const speedTextFileNames = [];
       responseData.speedTest.fileIDs.forEach((fileID) => {
-        speedTextFileNames.push(textFiles.find((tf) => tf.key === fileID).name);
+        speedTextFileNames.push({
+          fileID: fileID,
+          name: textFiles.data.find((tf) => tf.value === fileID).name,
+        });
       });
 
-      const scrollTexts = [];
+      const tempScrollTexts = [];
       responseData.scrollTexts.forEach((fileObj) =>
-        scrollTexts.push({
-          name: textFiles.find((tf) => tf.key === fileObj.fileID).name,
+        tempScrollTexts.push({
+          fileID: fileObj.fileID,
+          name: textFiles.data.find((tf) => tf.value === fileObj.fileID).name,
           instructions: fileObj.instructions,
-          questions: fileObj.questions,
+          questionIDs: fileObj.questionIDs,
         })
       );
 
@@ -197,11 +228,11 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         key: responseData._id,
         name: responseData.name,
         speedTest: {
-          fileNames: speedTextFileNames,
+          texts: speedTextFileNames,
           instructions: responseData.speedTest.instructions,
         },
-        scrollTexts: scrollTexts,
-        questionFormat: responseData.questionFormat,
+        scrollTexts: tempScrollTexts,
+        // questionFormat: responseData.questionFormat,
         createdAt: responseData.createdAt,
         url: responseData._id,
       };
@@ -219,7 +250,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           <ScrollTextListItem
             key={text.fileID}
             text={text}
-            addQuestion={handleAddQuestion}
+            availableQuestions={
+              textFiles.data.find((file) => file.key === text.fileID).questions
+            }
+            addQuestions={handleAddQuestions}
             setInstructions={setScrollTextInstructions}
             instructionsError={
               text.instructions.main === "" && displayMissingInputError
@@ -283,7 +317,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               search
               selection
               multiple
-              options={dropdownTextFiles}
+              options={dropdownSpeedTextFiles}
               onChange={(e, data) => setSpeedTextIDs(data.value)}
             />
           </Segment>
@@ -294,29 +328,15 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               content="Scrollable Texts:"
               style={{ paddingTop: 5, marginRight: 10 }}
             />
-            <Dropdown
-              placeholder="Select texts for the scroll test"
-              error={scrollTexts.length === 0 && displayMissingInputError}
-              fluid
-              search
-              selection
-              multiple
-              options={dropdownTextFiles}
-              onChange={handleSelectScrollText}
-            />
-            {displayScrollTexts()}
-          </Segment>
-
-          <Segment>
             <Form>
               <div className="grouped fields">
-                <Header as="h3" content="Question Format:" />
                 <Form.Field>
                   <div className="ui radio checkbox">
                     <input
                       type="radio"
-                      checked={comprehension}
-                      onChange={() => setComprehension(true)}
+                      disabled={scrollTexts.length > 0}
+                      checked={questionFormat === "comprehension"}
+                      onChange={() => setQuestionFormat("comprehension")}
                     />
                     <label>Comprehension</label>
                   </div>
@@ -325,14 +345,26 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
                   <div className="ui radio checkbox">
                     <input
                       type="radio"
-                      checked={!comprehension}
-                      onChange={() => setComprehension(false)}
+                      disabled={scrollTexts.length > 0}
+                      checked={questionFormat === "inline"}
+                      onChange={() => setQuestionFormat("inline")}
                     />
                     <label>Inline</label>
                   </div>
                 </Form.Field>
               </div>
             </Form>
+            <Dropdown
+              placeholder="Select texts for the scroll test"
+              error={scrollTexts.length === 0 && displayMissingInputError}
+              fluid
+              search
+              selection
+              multiple
+              options={dropdownScrollTextFiles}
+              onChange={handleSelectScrollText}
+            />
+            {displayScrollTexts()}
           </Segment>
         </Segment>
 
