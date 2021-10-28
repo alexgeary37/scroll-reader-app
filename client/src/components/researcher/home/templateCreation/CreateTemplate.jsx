@@ -133,23 +133,21 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         }
       }
     } else {
-      if (data.value.length > 0) {
-        setScrollTexts([
-          ...scrollTexts,
-          {
-            fileID: data.value[data.value.length - 1],
-            fileName: data.options.find(
-              (file) => file.value === data.value[data.value.length - 1]
-            ).text,
-            instructions: {
-              main: "",
-              hasFamiliarityQuestion: true,
-              hasInterestQuestion: true,
-            },
-            questionIDs: [],
+      setScrollTexts([
+        ...scrollTexts,
+        {
+          fileID: data.value[data.value.length - 1],
+          fileName: data.options.find(
+            (file) => file.value === data.value[data.value.length - 1]
+          ).text,
+          instructions: {
+            main: "",
+            hasFamiliarityQuestion: true,
+            hasInterestQuestion: true,
           },
-        ]);
-      }
+          questionIDs: [],
+        },
+      ]);
     }
   };
 
