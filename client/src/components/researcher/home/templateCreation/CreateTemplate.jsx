@@ -23,18 +23,6 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [dropdownSpeedTextFiles, setDropdownSpeedTextFiles] = useState([]);
   const [dropdownScrollTextFiles, setDropdownScrollTextFiles] = useState([]);
 
-  // const template = {
-  //   key: temp._id,
-  //   name: temp.name,
-  //   speedTest: {
-  //     texts: speedTexts,
-  //     instructions: temp.speedTest.instructions,
-  //   },
-  //   scrollTexts: scrollTexts,
-  //   createdAt: temp.createdAt,
-  //   url: temp._id,
-  // };
-
   useEffect(() => {
     setDropdownSpeedTextFiles(formatDropdownTextFiles(textFiles.data));
 

@@ -156,7 +156,9 @@ const ResearcherView = () => {
         <div>
           <Header as="h2" textAlign="center" content="Uploaded Texts:" />
 
-          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
+          <Segment
+            style={{ overflow: "auto", maxHeight: "75vh", marginBottom: 50 }}
+          >
             <List relaxed divided>
               {textFiles.data.map((file) => (
                 <TextFile
@@ -193,7 +195,9 @@ const ResearcherView = () => {
         <div>
           <Header as="h2" textAlign="center" content="Existing Templates:" />
 
-          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
+          <Segment
+            style={{ overflow: "auto", maxHeight: "75vh", marginBottom: 50 }}
+          >
             <div className="ui link divided relaxed items">
               {templates.data.map((template) => (
                 <SessionTemplate
@@ -206,7 +210,12 @@ const ResearcherView = () => {
           </Segment>
 
           <Button
-            style={{ marginTop: 10 }}
+            style={{
+              marginTop: 10,
+              position: "absolute",
+              bottom: 10,
+              right: 10,
+            }}
             positive
             content="Create Template"
             onClick={handleCreateTemplate}
