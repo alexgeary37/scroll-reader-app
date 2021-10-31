@@ -1,13 +1,17 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Item, Icon, Button, Form, Header } from "semantic-ui-react";
 import AddQuestionToTextFile from "./textFiles/AddQuestionToTextFile";
 import TextFileQuestionsView from "./textFiles/TextFileQuestionsView";
 
-const TextFile = ({ file, updateFileQuestions }) => {
+const TextFile = ({ file, updateFileQuestions, fileInUse, removeQuestion }) => {
   const [openAddQuestion, setOpenAddQuestion] = useState(false);
   const [openViewQuestions, setOpenViewQuestions] = useState(false);
   const [questionFormat, setQuestionFormat] = useState(file.questionFormat);
+
+  useEffect(() => {
+    console.log(file.questionFormat);
+  }, []);
 
   const addQuestion = (question, answerRegion) => {
     const fileID = file.key;
@@ -72,7 +76,7 @@ const TextFile = ({ file, updateFileQuestions }) => {
           </div>
           <div>
             <Button
-              disabled={questionFormat === ""}
+              disabled={questionFormat === "" || fileInUse}
               content="Add Question"
               onClick={() => setOpenAddQuestion(true)}
             />
@@ -93,6 +97,8 @@ const TextFile = ({ file, updateFileQuestions }) => {
         <TextFileQuestionsView
           isOpen={openViewQuestions}
           questions={file.questions}
+          fileInUse={fileInUse}
+          removeQuestion={removeQuestion}
           close={() => setOpenViewQuestions(false)}
         />
       </Item.Content>

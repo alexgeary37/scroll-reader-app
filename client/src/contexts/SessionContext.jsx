@@ -20,6 +20,9 @@ export const SessionProvider = ({ children }) => {
   const [scrollPosEntries, setScrollPosEntries] = useState(
     JSON.parse(localStorage.getItem("scrollPosEntries"))
   );
+  const [questionFormat, setQuestionFormat] = useState(
+    localStorage.getItem("questionFormat")
+  );
 
   // This sessionID enables the session to be accessed from db for updates.
   const [sessionID, setSessionID] = useState(localStorage.getItem("sessionID"));
@@ -34,6 +37,7 @@ export const SessionProvider = ({ children }) => {
       setHasStartedReading(false);
       setFileNumber(0);
       setScrollPosEntries([]);
+      setQuestionFormat("");
       setSessionID("");
     }
   }, []);
@@ -62,6 +66,10 @@ export const SessionProvider = ({ children }) => {
   }, [scrollPosEntries]);
 
   useEffect(() => {
+    localStorage.setItem("questionFormat", questionFormat);
+  }, [questionFormat]);
+
+  useEffect(() => {
     localStorage.setItem("sessionID", sessionID);
   }, [sessionID]);
 
@@ -78,6 +86,8 @@ export const SessionProvider = ({ children }) => {
         setFileNumber,
         scrollPosEntries,
         setScrollPosEntries,
+        questionFormat,
+        setQuestionFormat,
         sessionID,
         setSessionID,
       }}

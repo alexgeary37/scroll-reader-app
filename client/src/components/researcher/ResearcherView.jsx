@@ -140,10 +140,41 @@ const ResearcherView = () => {
     files[index].questions.push(newQuestion);
     files[index].questionFormat = questionFormat;
 
-    setTextFiles({
-      data: files,
-      isFetching: false,
-    });
+    setTextFiles({ data: files, isFetching: false });
+  };
+
+  const handleRemoveFileQuestion = (file, question) => {
+    let files = textFiles.data;
+    const index = files.indexOf(file);
+    files[index].questions = files[index].questions.filter(
+      (q) => q !== question
+    );
+    setTextFiles({ data: files, isFetching: false });
+
+    // TODO: Remove question from TextFile in database
+    const questionFormat =
+      files[index].questions.length > 0 ? files[index].questionFormat : "";
+
+    axios
+      .put("http://localhost:3001/removeTextFileQuestion", {
+        fileID: file.key,
+        questionID: question._id,
+        questionFormat: questionFormat,
+      })
+      .catch((error) => {
+        console.error("Error removing file.questions[q]", error);
+      });
+  };
+
+  const fileInUse = (fileID) => {
+    if (!templates.isFetching) {
+      return (
+        templates.data.find((template) =>
+          template.scrollTexts.some((text) => text.fileID === fileID)
+        ) !== undefined
+      );
+    }
+    return false;
   };
 
   const displayTextFiles = () => {
@@ -166,6 +197,10 @@ const ResearcherView = () => {
                   file={file}
                   updateFileQuestions={(newQuestion, questionFormat) =>
                     handleUpdateFileQuestions(file, newQuestion, questionFormat)
+                  }
+                  fileInUse={fileInUse(file.key)}
+                  removeQuestion={(question) =>
+                    handleRemoveFileQuestion(file, question)
                   }
                 />
               ))}

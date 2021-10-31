@@ -14,6 +14,7 @@ const EndPage = () => {
     localStorage.removeItem("fileNumber");
     localStorage.removeItem("scrollQuestionNumber");
     localStorage.removeItem("scrollPosEntries");
+    localStorage.removeItem("questionFormat");
     localStorage.removeItem("sessionID");
   };
 

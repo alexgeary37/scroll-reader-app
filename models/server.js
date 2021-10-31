@@ -95,6 +95,35 @@ class Server {
       );
     });
 
+    this.app.put("/removeTextFileQuestion", async (req, res) => {
+      const fileID = req.body.fileID;
+      const questionID = req.body.questionID;
+      const questionFormat = req.body.questionFormat;
+
+      TextFileModel.findByIdAndUpdate(
+        fileID,
+        {
+          $pull: {
+            questions: {
+              _id: questionID,
+            },
+          },
+          $set: {
+            questionFormat: questionFormat,
+          },
+        },
+        { new: true },
+        (err, textFile) => {
+          if (err) {
+            res.send(err);
+          } else {
+            textFile.save();
+            res.send(textFile);
+          }
+        }
+      );
+    });
+
     this.app.post("/createSessionTemplate", async (req, res) => {
       const newTemplate = req.body;
       SessionTemplateModel.create(newTemplate, (err, template) => {

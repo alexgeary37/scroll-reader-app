@@ -96,7 +96,7 @@ const ScrollTest = () => {
   };
 
   const handleFinishText = () => {
-    if (scrollQuestionNumber < currentText.questions.length) {
+    if (scrollQuestionNumber < currentText.questionIDs.length) {
       setDisplayConfirmDoneMessage(true);
     } else {
       // Update session.scrollTexts[currentText.fileID] with an end time.
@@ -198,7 +198,7 @@ const ScrollTest = () => {
   };
 
   const displayQuestions = () => {
-    if (scrollQuestionNumber < currentText.questions.length) {
+    if (scrollQuestionNumber < currentText.questionIDs.length) {
       return (
         <div
           style={{
@@ -210,16 +210,16 @@ const ScrollTest = () => {
             // backgroundColor: "blue",
           }}
         >
-          {sessionContext.template.questionFormat === "comprehension" ? (
+          {sessionContext.questionFormat === "comprehension" ? (
             <ComprehensionQuestion
-              question={currentText.questions[scrollQuestionNumber]}
+              question={currentText.questionIDs[scrollQuestionNumber]}
               disable={textIsComplete}
               submitAnswer={handleAnswerQuestion}
               skip={() => setDisplayConfirmSkipMessage(true)}
             />
           ) : (
             <ClickQuestion
-              question={currentText.questions[scrollQuestionNumber]}
+              question={currentText.questionIDs[scrollQuestionNumber]}
               disable={textIsComplete}
               answerIsEnabled={selectAnswerEnabled}
               enableAnswer={() => setSelectAnswerEnabled(true)}
