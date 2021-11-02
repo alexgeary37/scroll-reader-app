@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import ScrollTextListItem from "./ScrollTextListItem";
 
-const CreateTemplate = ({ isOpen, close, textFiles }) => {
+const CreateTemplate = ({ isOpen, close, textFiles, isFetchingTextFiles }) => {
   const [templateName, setTemplateName] = useState("");
   const [speedTextIDs, setSpeedTextIDs] = useState([]);
   const [speedTestInstructions, setSpeedTestInstructions] = useState("");
@@ -24,16 +24,16 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [dropdownScrollTextFiles, setDropdownScrollTextFiles] = useState([]);
 
   useEffect(() => {
-    setDropdownSpeedTextFiles(formatDropdownTextFiles(textFiles.data));
+    setDropdownSpeedTextFiles(formatDropdownTextFiles(textFiles));
 
-    const scrollTextFiles = textFiles.data.filter(
+    const scrollTextFiles = textFiles.filter(
       (file) => file.questionFormat === questionFormat
     );
     setDropdownScrollTextFiles(formatDropdownTextFiles(scrollTextFiles));
-  }, [textFiles]);
+  }, [textFiles, isFetchingTextFiles]);
 
   useEffect(() => {
-    const scrollTextFiles = textFiles.data.filter(
+    const scrollTextFiles = textFiles.filter(
       (file) => file.questionFormat === questionFormat
     );
     setDropdownScrollTextFiles(formatDropdownTextFiles(scrollTextFiles));
@@ -196,7 +196,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       responseData.speedTest.fileIDs.forEach((fileID) => {
         speedTextFileNames.push({
           fileID: fileID,
-          name: textFiles.data.find((tf) => tf.value === fileID).name,
+          name: textFiles.find((tf) => tf.value === fileID).name,
         });
       });
 
@@ -204,7 +204,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       responseData.scrollTexts.forEach((fileObj) =>
         tempScrollTexts.push({
           fileID: fileObj.fileID,
-          name: textFiles.data.find((tf) => tf.value === fileObj.fileID).name,
+          name: textFiles.find((tf) => tf.value === fileObj.fileID).name,
           instructions: fileObj.instructions,
           questionIDs: fileObj.questionIDs,
         })
@@ -237,7 +237,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             key={text.fileID}
             text={text}
             availableQuestions={
-              textFiles.data.find((file) => file.key === text.fileID).questions
+              textFiles.find((file) => file.key === text.fileID).questions
             }
             addQuestions={handleAddQuestions}
             setInstructions={setScrollTextInstructions}

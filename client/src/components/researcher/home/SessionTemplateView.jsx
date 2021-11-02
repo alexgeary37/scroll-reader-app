@@ -8,7 +8,7 @@ import {
   Divider,
 } from "semantic-ui-react";
 
-const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
+const SessionTemplateView = ({ isOpen, template, textFiles, isFetchingTextFiles, close }) => {
   const speedTestInfo = () => {
     return (
       <div>
@@ -85,9 +85,9 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
                             text.questionIDs.indexOf(questionID) + 1
                           }. ${
                             // Get the question from the textFile
-                            textFiles.data[
-                              textFiles.data.indexOf(
-                                textFiles.data.find(
+                            textFiles[
+                              textFiles.indexOf(
+                                textFiles.find(
                                   (file) => file.value === text.fileID
                                 )
                               )
@@ -116,9 +116,9 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
               <Item>
                 <Item.Description
                   content={`Question format: ${
-                    textFiles.data[
-                      textFiles.data.indexOf(
-                        textFiles.data.find(
+                    textFiles[
+                      textFiles.indexOf(
+                        textFiles.find(
                           (file) =>
                             file.value === template.scrollTexts[0].fileID
                         )

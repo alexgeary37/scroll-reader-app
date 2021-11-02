@@ -2,7 +2,7 @@ import { List, Item, Button } from "semantic-ui-react";
 import SessionTemplateView from "./SessionTemplateView";
 import { useState } from "react";
 
-const SessionTemplate = ({ template, textFiles }) => {
+const SessionTemplate = ({ template, textFiles, isFetchingTextFiles }) => {
   const [openTemplateView, setOpenTemplateView] = useState(false);
 
   return (
@@ -53,9 +53,9 @@ const SessionTemplate = ({ template, textFiles }) => {
             style={{ margin: 5 }}
             content={`Question Format: ${
               // Get the questionFormat from the first textFile used in template.scrollTexts
-              textFiles.data[
-                textFiles.data.indexOf(
-                  textFiles.data.find(
+              textFiles[
+                textFiles.indexOf(
+                  textFiles.find(
                     (file) => file.value === template.scrollTexts[0].fileID
                   )
                 )
@@ -79,6 +79,7 @@ const SessionTemplate = ({ template, textFiles }) => {
           isOpen={openTemplateView}
           template={template}
           textFiles={textFiles}
+          isFetchingTextFiles={isFetchingTextFiles}
           close={() => setOpenTemplateView(false)}
         />
       </Item.Content>
