@@ -10,7 +10,11 @@ const AddQuestionToTextFile = ({
   close,
 }) => {
   const [question, setQuestion] = useState("");
-  const [answerRegion, setAnswerRegion] = useState(null);
+  const [answerRegion, setAnswerRegion] = useState({
+    startIndex: 0,
+    endIndex: 0,
+  });
+  const [displayQuestionError, setDisplayQuestionError] = useState(false);
   const [
     displayAnswerRegionConfiguration,
     setDisplayAnswerRegionConfiguration,
@@ -18,25 +22,44 @@ const AddQuestionToTextFile = ({
   const [displayAnswerRegionError, setDisplayAnswerRegionError] =
     useState(false);
 
+  const handleCancel = () => {
+    setQuestion("");
+    setAnswerRegion({ startIndex: 0, endIndex: 0 });
+    setDisplayAnswerRegionConfiguration(false);
+    setDisplayAnswerRegionError(false);
+    close();
+  };
+
   const handleQuestionChange = (event) => {
+    setDisplayQuestionError(false);
     setQuestion(event.target.value);
   };
 
   const handleAddQuestion = () => {
-    if (question !== "") {
-      if (format === "inline" && answerRegion === null) {
-        setDisplayAnswerRegionError(true);
-        return;
-      }
-      addQuestion(question, answerRegion);
+    if (question === "") {
+      setDisplayQuestionError(true);
+      return;
     }
+
+    if (
+      format === "inline" &&
+      answerRegion.startIndex === 0 &&
+      answerRegion.endIndex === 0
+    ) {
+      setDisplayAnswerRegionError(true);
+      return;
+    }
+
+    setQuestion("");
+    setDisplayAnswerRegionConfiguration(false);
+    addQuestion(question, answerRegion);
+    setAnswerRegion({ startIndex: 0, endIndex: 0 });
     close();
   };
 
   const handleSelectAnswerRegion = (mouseDownIndex, mouseUpIndex) => {
-    setDisplayAnswerRegionConfiguration(false);
     setDisplayAnswerRegionError(false);
-    setAnswerRegion(mouseDownIndex, mouseUpIndex);
+    setAnswerRegion({ startIndex: mouseDownIndex, endIndex: mouseUpIndex });
   };
 
   const displayErrorMessage = () => {
@@ -54,8 +77,8 @@ const AddQuestionToTextFile = ({
       return (
         <TextAnswersConfigurationView
           fileID={fileID}
+          answerRegion={answerRegion}
           selectAnswer={handleSelectAnswerRegion}
-          close={() => setDisplayAnswerRegionConfiguration(false)}
         />
       );
     }
@@ -67,28 +90,53 @@ const AddQuestionToTextFile = ({
         {displayErrorMessage()}
         <Input
           style={{ marginBottom: 10 }}
+          error={displayQuestionError}
           autoFocus
           type="text"
           fluid
           placeholder="Type a question for this text here..."
           onChange={handleQuestionChange}
         />
-
-        <Button
-          positive
-          content="Select Region"
-          onClick={() => setDisplayAnswerRegionConfiguration(true)}
-        />
+        {displayInlineComponents()}
         <div style={{ position: "absolute", right: 10, bottom: 10 }}>
-          <Button content="Cancel" onClick={close} />
+          <Button content="Cancel" onClick={handleCancel} />
           <Button primary content="Add Question" onClick={handleAddQuestion} />
         </div>
       </div>
     );
   };
 
+  const displayInlineComponents = () => {
+    if (format === "inline") {
+      return (
+        <div>
+          <Button
+            positive
+            content="Select Answer Region"
+            onClick={() => setDisplayAnswerRegionConfiguration(true)}
+          />
+          {displayAnswerRegionSelection()}
+        </div>
+      );
+    }
+  };
+
+  const displayAnswerRegionSelection = () => {
+    if (displayAnswerRegionConfiguration) {
+      return (
+        <span
+          style={{ padding: 10, color: "blue" }}
+        >{`Answer Region: words [${answerRegion.startIndex} - ${answerRegion.endIndex}]`}</span>
+      );
+    }
+  };
+
   return (
-    <Modal open={isOpen} size="tiny" style={{ padding: 10 }}>
+    <Modal
+      open={isOpen}
+      size={format === "inline" ? "" : "tiny"}
+      style={{ padding: 10 }}
+    >
       {displayConfigurationView()}
       {displayQuestionAndButtons()}
     </Modal>

@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { v4 as uuid_v4 } from "uuid";
 import { wordSeparators } from "../../../../utilityFunctions";
-import { Button, Modal, Segment } from "semantic-ui-react";
+import { Segment } from "semantic-ui-react";
 
-const TextAnswersConfigurationView = ({ fileID, selectAnswer, close }) => {
+const TextAnswersConfigurationView = ({
+  fileID,
+  answerRegion,
+  selectAnswer,
+}) => {
   const [words, setWords] = useState([]);
 
   // Variable to store index of the word the user began highlighting from.
@@ -29,29 +33,37 @@ const TextAnswersConfigurationView = ({ fileID, selectAnswer, close }) => {
 
   const handleMouseUp = (index) => {
     if (mouseDownIndex !== index) {
-      selectAnswer(mouseDownIndex, index);
+      selectAnswer(
+        Math.min(mouseDownIndex, index),
+        Math.max(mouseDownIndex, index)
+      );
     }
   };
 
+  const wordColor = (index) => {
+    const minIndex = Math.min(answerRegion.startIndex, answerRegion.endIndex);
+    const maxIndex = Math.max(answerRegion.startIndex, answerRegion.endIndex);
+    if (minIndex <= index && index <= maxIndex && maxIndex > 0) {
+      return "yellow";
+    }
+    return "white";
+  };
+
   return (
-    <Modal open={true} style={{ height: "75vh", padding: 10 }}>
-      <Segment style={{ overflow: "auto", maxHeight: "85%" }}>
-        <p>
-          {words.map((word, index) => (
-            <span
-              key={uuid_v4()}
-              onMouseDown={() => (mouseDownIndex = index)}
-              onMouseUp={() => handleMouseUp(index)}
-            >
-              {word + " "}
-            </span>
-          ))}
-        </p>
-      </Segment>
-      <div style={{ position: "absolute", right: 10, bottom: 10 }}>
-        <Button content="Cancel" onClick={close} />
-      </div>
-    </Modal>
+    <Segment style={{ overflow: "auto", maxHeight: "65vh" }}>
+      <p>
+        {words.map((word, index) => (
+          <span
+            key={uuid_v4()}
+            onMouseDown={() => (mouseDownIndex = index)}
+            onMouseUp={() => handleMouseUp(index)}
+            style={{ backgroundColor: wordColor(index) }}
+          >
+            {word + " "}
+          </span>
+        ))}
+      </p>
+    </Segment>
   );
 };
 

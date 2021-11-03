@@ -199,7 +199,6 @@ const ScrollTest = () => {
 
   const displayQuestions = () => {
     if (scrollQuestionNumber < currentText.questionIDs.length) {
-      console.log(currentText);
       return (
         <div
           style={{
