@@ -6,8 +6,9 @@ import { Button, Modal, Segment } from "semantic-ui-react";
 
 const TextAnswersConfigurationView = ({ fileID, selectAnswer, close }) => {
   const [words, setWords] = useState([]);
-  const [mouseDownIndex, setMouseDownIndex] = useState(null);
-  const [mouseUpIndex, setMouseUpIndex] = useState(null);
+
+  // Variable to store index of the word the user began highlighting from.
+  let mouseDownIndex;
 
   useEffect(() => {
     fetchText();
@@ -26,18 +27,9 @@ const TextAnswersConfigurationView = ({ fileID, selectAnswer, close }) => {
       });
   };
 
-  const handleMouseDown = (event, index) => {
-    // console.log(event);
-    // console.log(index);
-    setMouseDownIndex(index);
-  };
-
-  const handleMouseUp = (event, index) => {
-    // console.log(event);
-    // console.log(index);
-    setMouseUpIndex(index);
-    if (mouseDownIndex !== mouseUpIndex) {
-      selectAnswer(mouseDownIndex, mouseUpIndex);
+  const handleMouseUp = (index) => {
+    if (mouseDownIndex !== index) {
+      selectAnswer(mouseDownIndex, index);
     }
   };
 
@@ -48,8 +40,8 @@ const TextAnswersConfigurationView = ({ fileID, selectAnswer, close }) => {
           {words.map((word, index) => (
             <span
               key={uuid_v4()}
-              onMouseDown={(e) => handleMouseDown(e, index)}
-              onMouseUp={(e) => handleMouseUp(e, index)}
+              onMouseDown={() => (mouseDownIndex = index)}
+              onMouseUp={() => handleMouseUp(index)}
             >
               {word + " "}
             </span>

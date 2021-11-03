@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Button, Input, Segment } from "semantic-ui-react";
+import { Modal, Button, Input } from "semantic-ui-react";
 import TextAnswersConfigurationView from "./TextAnswersConfigurationView";
 
 const AddQuestionToTextFile = ({
@@ -10,7 +10,7 @@ const AddQuestionToTextFile = ({
   close,
 }) => {
   const [question, setQuestion] = useState("");
-  const [answerRegion, setAnswerRegion] = useState("");
+  const [answerRegion, setAnswerRegion] = useState(null);
   const [
     displayAnswerRegionConfiguration,
     setDisplayAnswerRegionConfiguration,
@@ -24,7 +24,7 @@ const AddQuestionToTextFile = ({
 
   const handleAddQuestion = () => {
     if (question !== "") {
-      if (format === "inline" && answerRegion === "") {
+      if (format === "inline" && answerRegion === null) {
         setDisplayAnswerRegionError(true);
         return;
       }
@@ -34,8 +34,9 @@ const AddQuestionToTextFile = ({
   };
 
   const handleSelectAnswerRegion = (mouseDownIndex, mouseUpIndex) => {
+    setDisplayAnswerRegionConfiguration(false);
+    setDisplayAnswerRegionError(false);
     setAnswerRegion(mouseDownIndex, mouseUpIndex);
-    console.log(mouseDownIndex, mouseUpIndex);
   };
 
   const displayErrorMessage = () => {
