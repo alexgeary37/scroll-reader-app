@@ -17,14 +17,8 @@ import CreateTemplate from "./home/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./home/FileUpload.jsx";
 
 const ResearcherView = () => {
-  const [textFiles, setTextFiles] = useState({
-    data: [],
-    isFetching: true,
-  });
-  const [templates, setTemplates] = useState({
-    data: [],
-    isFetching: true,
-  });
+  const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
+  const [templates, setTemplates] = useState({ data: [], isFetching: true });
   const [openTemplateCreator, setOpenTemplateCreator] = useState(false);
 
   useEffect(() => {
@@ -38,10 +32,6 @@ const ResearcherView = () => {
       fetchSessionTemplates();
     }
   }, [textFiles.isFetching]);
-
-  useEffect(() => {
-    console.log("textFiles");
-  }, [textFiles]);
 
   const fetchTextFiles = () => {
     setTextFiles({ data: textFiles.data, isFetching: true });
