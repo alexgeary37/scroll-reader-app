@@ -11,6 +11,8 @@ const AddQuestionToTextFile = ({
 }) => {
   const [question, setQuestion] = useState("");
   const [answerRegion, setAnswerRegion] = useState("");
+  const [displayAnswerRegionError, setDisplayAnswerRegionError] =
+    useState(false);
 
   const handleQuestionChange = (event) => {
     setQuestion(event.target.value);
@@ -19,13 +21,22 @@ const AddQuestionToTextFile = ({
   const handleAddQuestion = () => {
     if (question !== "") {
       if (format === "inline" && answerRegion === "") {
-        // TODO
-        // setDisplayAnswerRegionError(true);
+        setDisplayAnswerRegionError(true);
         return;
       }
       addQuestion(question, answerRegion);
     }
     close();
+  };
+
+  const displayErrorMessage = () => {
+    if (displayAnswerRegionError) {
+      return (
+        <label style={{ padding: 10, color: "red" }}>
+          Please select an answer region for this question!
+        </label>
+      );
+    }
   };
 
   const displayText = () => {
@@ -41,6 +52,7 @@ const AddQuestionToTextFile = ({
   const displayQuestionAndButtons = () => {
     return (
       <div>
+        {displayErrorMessage()}
         <Input
           style={{ marginBottom: 10 }}
           autoFocus

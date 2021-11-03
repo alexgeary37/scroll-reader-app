@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Modal, List, Item, Divider, Button, Header } from "semantic-ui-react";
 
 const TextFileQuestionsView = ({

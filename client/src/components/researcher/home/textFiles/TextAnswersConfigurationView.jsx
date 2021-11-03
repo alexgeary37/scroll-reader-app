@@ -25,6 +25,7 @@ const TextAnswersConfigurationView = ({ fileID }) => {
   const handleWordClick = (event, index) => {
     // selectAnswer(event.target.textContent, index);
     console.log(event);
+    console.log(event.target.textContent, index);
   };
 
   return (

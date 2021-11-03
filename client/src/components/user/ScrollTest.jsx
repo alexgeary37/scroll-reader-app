@@ -199,6 +199,7 @@ const ScrollTest = () => {
 
   const displayQuestions = () => {
     if (scrollQuestionNumber < currentText.questionIDs.length) {
+      console.log(currentText);
       return (
         <div
           style={{
@@ -206,20 +207,20 @@ const ScrollTest = () => {
             right: "0px",
             width: "15vw",
             position: "fixed",
-            // height: 500,
-            // backgroundColor: "blue",
           }}
         >
           {sessionContext.questionFormat === "comprehension" ? (
             <ComprehensionQuestion
-              question={currentText.questionIDs[scrollQuestionNumber]}
+              currentText={currentText}
+              questionNumber={scrollQuestionNumber}
               disable={textIsComplete}
               submitAnswer={handleAnswerQuestion}
               skip={() => setDisplayConfirmSkipMessage(true)}
             />
           ) : (
             <ClickQuestion
-              question={currentText.questionIDs[scrollQuestionNumber]}
+              currentText={currentText}
+              questionNumber={scrollQuestionNumber}
               disable={textIsComplete}
               answerIsEnabled={selectAnswerEnabled}
               enableAnswer={() => setSelectAnswerEnabled(true)}

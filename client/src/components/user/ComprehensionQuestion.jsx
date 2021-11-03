@@ -1,8 +1,35 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Card, Button, Form, Grid } from "semantic-ui-react";
 
-const ComprehensionQuestion = ({ question, disable, submitAnswer, skip }) => {
+const ComprehensionQuestion = ({
+  currentText,
+  questionNumber,
+  disable,
+  submitAnswer,
+  skip,
+}) => {
+  const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+
+  useEffect(() => {
+    const fileID = currentText.fileID;
+    const questionID = currentText.questionIDs[questionNumber];
+
+    axios
+      .get("http://localhost:3001/getTextFile", {
+        params: { _id: fileID },
+      })
+      .then((response) => {
+        const questionObj = response.data.questions.find(
+          (q) => q._id === questionID
+        );
+        setQuestion(questionObj.question);
+      })
+      .catch((error) => {
+        console.error("Error fetching text in ScrollText:", error);
+      });
+  }, [currentText, questionNumber]);
 
   const handleChangeAnswer = (event) => {
     setAnswer(event.target.value);
