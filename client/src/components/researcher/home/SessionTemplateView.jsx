@@ -8,7 +8,7 @@ import {
   Divider,
 } from "semantic-ui-react";
 
-const SessionTemplateView = ({ isOpen, template, textFiles, isFetchingTextFiles, close }) => {
+const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
   const speedTestInfo = () => {
     return (
       <div>

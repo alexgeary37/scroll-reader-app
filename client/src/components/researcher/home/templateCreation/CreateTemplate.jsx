@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import ScrollTextListItem from "./ScrollTextListItem";
 
-const CreateTemplate = ({ isOpen, close, textFiles, isFetchingTextFiles }) => {
+const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [templateName, setTemplateName] = useState("");
   const [speedTextIDs, setSpeedTextIDs] = useState([]);
   const [speedTestInstructions, setSpeedTestInstructions] = useState("");
@@ -30,7 +30,7 @@ const CreateTemplate = ({ isOpen, close, textFiles, isFetchingTextFiles }) => {
       (file) => file.questionFormat === questionFormat
     );
     setDropdownScrollTextFiles(formatDropdownTextFiles(scrollTextFiles));
-  }, [textFiles, isFetchingTextFiles]);
+  }, [textFiles]);
 
   useEffect(() => {
     const scrollTextFiles = textFiles.filter(

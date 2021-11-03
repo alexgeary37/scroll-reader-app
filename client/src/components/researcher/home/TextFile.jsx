@@ -10,8 +10,8 @@ const TextFile = ({ file, updateFileQuestions, fileInUse, removeQuestion }) => {
   const [questionFormat, setQuestionFormat] = useState(file.questionFormat);
 
   useEffect(() => {
-    console.log(file.questionFormat);
-  }, []);
+    setQuestionFormat(file.questionFormat);
+  }, [file.questionFormat]);
 
   const addQuestion = (question, answerRegion) => {
     const fileID = file.key;

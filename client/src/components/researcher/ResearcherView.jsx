@@ -17,8 +17,10 @@ import CreateTemplate from "./home/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./home/FileUpload.jsx";
 
 const ResearcherView = () => {
-  const [textFiles, setTextFiles] = useState([]);
-  const [isFetchingTextFiles, setIsFetchingTextFiles] = useState(true);
+  const [textFiles, setTextFiles] = useState({
+    data: [],
+    isFetching: true,
+  });
   const [templates, setTemplates] = useState({
     data: [],
     isFetching: true,
@@ -32,19 +34,18 @@ const ResearcherView = () => {
 
   useEffect(() => {
     // Fetch session templates only after text files have been fetched.
-    console.log("isFetchingTextFiles");
-    if (!isFetchingTextFiles) {
+    if (!textFiles.isFetching) {
       fetchSessionTemplates();
     }
-  }, [isFetchingTextFiles]);
+  }, [textFiles.isFetching]);
 
   useEffect(() => {
     console.log("textFiles");
   }, [textFiles]);
 
   const fetchTextFiles = () => {
-    // setTextFiles({ data: textFiles.data, isFetching: true });
-    setIsFetchingTextFiles(true);
+    setTextFiles({ data: textFiles.data, isFetching: true });
+
     axios
       .get("http://localhost:3001/getTextFiles")
       .then((response) => {
@@ -63,8 +64,7 @@ const ResearcherView = () => {
         });
 
         // Set text files for rendering, and indicate that they are no longer being fetched.
-        setTextFiles(files);
-        setIsFetchingTextFiles(false);
+        setTextFiles({ data: files, isFetching: false });
       })
       .catch((error) => {
         console.error("Error fetching files:", error);
@@ -84,17 +84,15 @@ const ResearcherView = () => {
           temp.speedTest.fileIDs.forEach((fileID) => {
             speedTexts.push({
               fileID: fileID,
-              // name: textFiles.data.find((tf) => tf.value === fileID).name,
-              name: textFiles.find((tf) => tf.value === fileID).name,
+              name: textFiles.data.find((tf) => tf.value === fileID).name,
             });
           });
           const scrollTexts = [];
           temp.scrollTexts.forEach((fileObj) => {
             scrollTexts.push({
               fileID: fileObj.fileID,
-              // name: textFiles.data.find((tf) => tf.value === fileObj.fileID)
-              //   .name,
-              name: textFiles.find((tf) => tf.value === fileObj.fileID).name,
+              name: textFiles.data.find((tf) => tf.value === fileObj.fileID)
+                .name,
               instructions: fileObj.instructions,
               questionIDs: fileObj.questionIDs,
             });
@@ -142,29 +140,25 @@ const ResearcherView = () => {
     newQuestion,
     questionFormat
   ) => {
-    // let files = textFiles.data;
-    let files = textFiles;
+    let files = textFiles.data;
     const index = files.indexOf(currentFile);
     files[index].questions.push(newQuestion);
     files[index].questionFormat = questionFormat;
 
-    setTextFiles(files);
-    setIsFetchingTextFiles(false);
+    setTextFiles({ data: files, isFetching: false });
   };
 
   const handleRemoveFileQuestion = (file, question) => {
-    // let files = textFiles.data;
-    let files = textFiles;
+    let files = textFiles.data;
     const index = files.indexOf(file);
     files[index].questions = files[index].questions.filter(
       (q) => q !== question
     );
-    setTextFiles(files);
-    setIsFetchingTextFiles(false);
-
-    // TODO: Remove question from TextFile in database
     const questionFormat =
       files[index].questions.length > 0 ? files[index].questionFormat : "";
+    files[index].questionFormat = questionFormat;
+    console.log(files[index].questionFormat);
+    setTextFiles({ data: files, isFetching: false });
 
     axios
       .put("http://localhost:3001/removeTextFileQuestion", {
@@ -173,7 +167,7 @@ const ResearcherView = () => {
         questionFormat: questionFormat,
       })
       .catch((error) => {
-        console.error("Error removing file.questions[q]", error);
+        console.error("Error removing file.questions[index]", error);
       });
   };
 
@@ -193,7 +187,7 @@ const ResearcherView = () => {
 
     // Do not render text files if the researcher is looking at the data page,
     // or if the files are still being fetched from the database.
-    if (curUrl.substr(curUrl.length - 5) !== "/data" && !isFetchingTextFiles) {
+    if (curUrl.substr(curUrl.length - 5) !== "/data" && !textFiles.isFetching) {
       return (
         <div>
           <Header as="h2" textAlign="center" content="Uploaded Texts:" />
@@ -202,7 +196,7 @@ const ResearcherView = () => {
             style={{ overflow: "auto", maxHeight: "75vh", marginBottom: 50 }}
           >
             <List relaxed divided>
-              {textFiles.map((file) => (
+              {textFiles.data.map((file) => (
                 <TextFile
                   key={file.key}
                   file={file}
@@ -220,8 +214,10 @@ const ResearcherView = () => {
 
           <FileUpload
             uploadSubmitted={(file) => {
-              setTextFiles([...textFiles, file]);
-              setIsFetchingTextFiles(false);
+              setTextFiles({
+                data: [...textFiles.data, file],
+                isFetching: false,
+              });
             }}
           />
         </div>
@@ -247,8 +243,7 @@ const ResearcherView = () => {
                 <SessionTemplate
                   key={template.key}
                   template={template}
-                  textFiles={textFiles}
-                  isFetchingTextFiles={isFetchingTextFiles}
+                  textFiles={textFiles.data}
                 />
               ))}
             </div>
@@ -268,8 +263,7 @@ const ResearcherView = () => {
           <CreateTemplate
             isOpen={openTemplateCreator}
             close={closeTemplateCreator}
-            textFiles={textFiles}
-            isFetchingTextFiles={isFetchingTextFiles}
+            textFiles={textFiles.data}
           />
         </div>
       );

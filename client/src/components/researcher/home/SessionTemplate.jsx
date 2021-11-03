@@ -2,7 +2,7 @@ import { List, Item, Button } from "semantic-ui-react";
 import SessionTemplateView from "./SessionTemplateView";
 import { useState } from "react";
 
-const SessionTemplate = ({ template, textFiles, isFetchingTextFiles }) => {
+const SessionTemplate = ({ template, textFiles }) => {
   const [openTemplateView, setOpenTemplateView] = useState(false);
 
   return (
@@ -79,7 +79,6 @@ const SessionTemplate = ({ template, textFiles, isFetchingTextFiles }) => {
           isOpen={openTemplateView}
           template={template}
           textFiles={textFiles}
-          isFetchingTextFiles={isFetchingTextFiles}
           close={() => setOpenTemplateView(false)}
         />
       </Item.Content>

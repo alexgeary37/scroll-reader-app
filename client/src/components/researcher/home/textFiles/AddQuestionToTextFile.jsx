@@ -17,7 +17,14 @@ const AddQuestionToTextFile = ({
   };
 
   const handleAddQuestion = () => {
-    addQuestion(question, answerRegion);
+    if (question !== "") {
+      if (format === "inline" && answerRegion === "") {
+        // TODO
+        // setDisplayAnswerRegionError(true);
+        return;
+      }
+      addQuestion(question, answerRegion);
+    }
     close();
   };
 

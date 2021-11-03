@@ -30,7 +30,7 @@ const FileUpload = ({ uploadSubmitted }) => {
               value: response.data._id,
               name: response.data.fileName,
               questions: [],
-              questionFormat: response.data.questionFormat,
+              questionFormat: "",
               uploadedAt: response.data.createdAt,
             };
             uploadSubmitted(doc);
