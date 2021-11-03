@@ -8,10 +8,6 @@ const TextFileQuestionsView = ({
   removeQuestion,
   close,
 }) => {
-  useEffect(() => {
-    console.log("TextFileQuestionView questions:", questions);
-  }, [questions]);
-
   return (
     <Modal style={{ padding: 10 }} size="tiny" open={isOpen}>
       <Header as="h4" content="Questions" />

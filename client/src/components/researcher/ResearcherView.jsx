@@ -147,7 +147,7 @@ const ResearcherView = () => {
     const questionFormat =
       files[index].questions.length > 0 ? files[index].questionFormat : "";
     files[index].questionFormat = questionFormat;
-    console.log(files[index].questionFormat);
+
     setTextFiles({ data: files, isFetching: false });
 
     axios
