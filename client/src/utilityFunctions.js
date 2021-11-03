@@ -19,3 +19,5 @@ export const scrollToTop = () => {
     behavior: "smooth",
   });
 };
+
+export const wordSeparators = /[\s\r\n,]+/;

@@ -11,6 +11,10 @@ const AddQuestionToTextFile = ({
 }) => {
   const [question, setQuestion] = useState("");
   const [answerRegion, setAnswerRegion] = useState("");
+  const [
+    displayAnswerRegionConfiguration,
+    setDisplayAnswerRegionConfiguration,
+  ] = useState(false);
   const [displayAnswerRegionError, setDisplayAnswerRegionError] =
     useState(false);
 
@@ -29,6 +33,11 @@ const AddQuestionToTextFile = ({
     close();
   };
 
+  const handleSelectAnswerRegion = (mouseDownIndex, mouseUpIndex) => {
+    setAnswerRegion(mouseDownIndex, mouseUpIndex);
+    console.log(mouseDownIndex, mouseUpIndex);
+  };
+
   const displayErrorMessage = () => {
     if (displayAnswerRegionError) {
       return (
@@ -39,12 +48,14 @@ const AddQuestionToTextFile = ({
     }
   };
 
-  const displayText = () => {
-    if (format === "inline") {
+  const displayConfigurationView = () => {
+    if (displayAnswerRegionConfiguration) {
       return (
-        <Segment style={{ overflow: "auto", maxHeight: "75%" }}>
-          <TextAnswersConfigurationView fileID={fileID} />;
-        </Segment>
+        <TextAnswersConfigurationView
+          fileID={fileID}
+          selectAnswer={handleSelectAnswerRegion}
+          close={() => setDisplayAnswerRegionConfiguration(false)}
+        />
       );
     }
   };
@@ -62,6 +73,11 @@ const AddQuestionToTextFile = ({
           onChange={handleQuestionChange}
         />
 
+        <Button
+          positive
+          content="Select Region"
+          onClick={() => setDisplayAnswerRegionConfiguration(true)}
+        />
         <div style={{ position: "absolute", right: 10, bottom: 10 }}>
           <Button content="Cancel" onClick={close} />
           <Button primary content="Add Question" onClick={handleAddQuestion} />
@@ -70,24 +86,12 @@ const AddQuestionToTextFile = ({
     );
   };
 
-  const displayModal = () => {
-    if (format === "inline") {
-      return (
-        <Modal open={isOpen} style={{ height: "70vh", padding: 10 }}>
-          {displayText()}
-          {displayQuestionAndButtons()}
-        </Modal>
-      );
-    } else {
-      return (
-        <Modal open={isOpen} size="tiny" style={{ padding: 10 }}>
-          {displayQuestionAndButtons()}
-        </Modal>
-      );
-    }
-  };
-
-  return displayModal();
+  return (
+    <Modal open={isOpen} size="tiny" style={{ padding: 10 }}>
+      {displayConfigurationView()}
+      {displayQuestionAndButtons()}
+    </Modal>
+  );
 };
 
 export default AddQuestionToTextFile;

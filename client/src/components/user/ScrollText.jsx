@@ -3,6 +3,7 @@ import useScrollPosition from "./scrollPosition.jsx";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { SessionContext } from "../../contexts/SessionContext.jsx";
+import { wordSeparators } from "../../utilityFunctions.js";
 
 const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
   const sessionContext = useContext(SessionContext);
@@ -18,7 +19,7 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
         params: { _id: fileID },
       })
       .then((response) => {
-        setWords(response.data.text.split(" "));
+        setWords(response.data.text.split(wordSeparators));
         if (sessionContext.questionFormat === "") {
           sessionContext.setQuestionFormat(response.data.questionFormat);
         }
