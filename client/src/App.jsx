@@ -18,7 +18,6 @@ const App = () => {
         <Route path={`/scrolltest`} component={ScrollTest} />
         <Route path={`/end`} component={EndPage} />
       </SessionProvider>
-      <PageFooter />
     </div>
   );
 };

@@ -76,8 +76,7 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
 
   const handleWordClick = (index) => {
     if (selectAnswerEnabled) {
-      // selectAnswer(index, false);
-      console.log(words[index], index);
+      selectAnswer(index, false);
     }
   };
 

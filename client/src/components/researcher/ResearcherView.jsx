@@ -1,5 +1,3 @@
-import TopMenu from "./TopMenu.jsx";
-import DataGraph from "./data/DataGraph.jsx";
 import TextFile from "./home/TextFile.jsx";
 import {
   Segment,
@@ -10,7 +8,6 @@ import {
   Button,
 } from "semantic-ui-react";
 import { useState, useEffect } from "react";
-import { Route } from "react-router";
 import SessionTemplate from "./home/SessionTemplate.jsx";
 import axios from "axios";
 import CreateTemplate from "./home/templateCreation/CreateTemplate.jsx";
@@ -161,6 +158,34 @@ const ResearcherView = () => {
       });
   };
 
+  const handleDeleteFile = (file) => {
+    let files = textFiles.data;
+    files = files.filter((f) => f !== file);
+    setTextFiles({ data: files, isFetching: false });
+
+    axios
+      .put("http://localhost:3001/deleteTextFile", {
+        fileID: file.key,
+      })
+      .catch((error) => {
+        console.error("Error deleting file", error);
+      });
+  };
+
+  const handleDeleteTemplate = (template) => {
+    let sessionTemplates = templates.data;
+    sessionTemplates = sessionTemplates.filter((t) => t !== template);
+    setTemplates({ data: sessionTemplates, isFetching: false });
+
+    axios
+      .put("http://localhost:3001/deleteTemplate", {
+        templateID: template.key,
+      })
+      .catch((error) => {
+        console.error("Error deleting template", error);
+      });
+  };
+
   const fileInUse = (fileID) => {
     if (!templates.isFetching) {
       return (
@@ -180,11 +205,9 @@ const ResearcherView = () => {
     if (curUrl.substr(curUrl.length - 5) !== "/data" && !textFiles.isFetching) {
       return (
         <div>
-          <Header as="h2" textAlign="center" content="Uploaded Texts:" />
+          <Header as="h1" textAlign="center" content="Uploaded Texts" />
 
-          <Segment
-            style={{ overflow: "auto", maxHeight: "75vh", marginBottom: 50 }}
-          >
+          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
             <List relaxed divided>
               {textFiles.data.map((file) => (
                 <TextFile
@@ -197,6 +220,7 @@ const ResearcherView = () => {
                   removeQuestion={(question) =>
                     handleRemoveFileQuestion(file, question)
                   }
+                  deleteFile={() => handleDeleteFile(file)}
                 />
               ))}
             </List>
@@ -223,29 +247,23 @@ const ResearcherView = () => {
     if (curUrl.substr(curUrl.length - 5) !== "/data" && !templates.isFetching) {
       return (
         <div>
-          <Header as="h2" textAlign="center" content="Existing Templates:" />
+          <Header as="h1" textAlign="center" content="Existing Templates" />
 
-          <Segment
-            style={{ overflow: "auto", maxHeight: "75vh", marginBottom: 50 }}
-          >
+          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
             <div className="ui link divided relaxed items">
               {templates.data.map((template) => (
                 <SessionTemplate
                   key={template.key}
                   template={template}
                   textFiles={textFiles.data}
+                  deleteTemplate={() => handleDeleteTemplate(template)}
                 />
               ))}
             </div>
           </Segment>
 
           <Button
-            style={{
-              marginTop: 10,
-              position: "absolute",
-              bottom: 10,
-              right: 10,
-            }}
+            style={{ position: "absolute", right: 10 }}
             positive
             content="Create Template"
             onClick={handleCreateTemplate}
@@ -261,17 +279,13 @@ const ResearcherView = () => {
   };
 
   return (
-    <div>
-      <TopMenu />
-      <div className="page-height menu-padding footer-padding">
-        <Container>
-          <Grid>
-            <Route path="/researcher/data" component={DataGraph} />
-            <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
-            <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
-          </Grid>
-        </Container>
-      </div>
+    <div className="researcher">
+      <Container>
+        <Grid>
+          <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
+          <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
+        </Grid>
+      </Container>
     </div>
   );
 };

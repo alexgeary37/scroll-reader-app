@@ -47,12 +47,7 @@ const FileUpload = ({ uploadSubmitted }) => {
     //https://stackoverflow.com/questions/55464274/react-input-type-file-semantic-ui-react
     <div>
       <Button
-        style={{
-          marginTop: 10,
-          position: "absolute",
-          bottom: 10,
-          right: 10,
-        }}
+        style={{ position: "absolute", right: 10 }}
         positive
         content="Upload Text"
         icon="file"

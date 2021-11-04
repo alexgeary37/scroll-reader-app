@@ -168,7 +168,7 @@ const Home = () => {
 
   return (
     <div>
-      <div className="page-height footer-padding">{displayContent()}</div>
+      <div>{displayContent()}</div>
       <Link to="/speedtest" hidden ref={speedTestRef}></Link>
       <Link to="/scrolltest" hidden ref={scrollTestRef}></Link>
       <Link to="/end" hidden ref={endPageRef}></Link>

@@ -1,9 +1,11 @@
 import { List, Item, Button } from "semantic-ui-react";
 import SessionTemplateView from "./SessionTemplateView";
 import { useState } from "react";
+import DeleteTemplateModal from "./DeleteTemplateModal";
 
-const SessionTemplate = ({ template, textFiles }) => {
+const SessionTemplate = ({ template, textFiles, deleteTemplate }) => {
   const [openTemplateView, setOpenTemplateView] = useState(false);
+  const [openDeleteTemplateModal, setOpenDeleteTemplateModal] = useState(false);
 
   return (
     <Item>
@@ -73,6 +75,10 @@ const SessionTemplate = ({ template, textFiles }) => {
             content="Copy URL"
             onClick={() => navigator.clipboard.writeText(template.url)}
           />
+          <Button
+            content="Delete"
+            onClick={() => setOpenDeleteTemplateModal(true)}
+          />
         </div>
 
         <SessionTemplateView
@@ -80,6 +86,11 @@ const SessionTemplate = ({ template, textFiles }) => {
           template={template}
           textFiles={textFiles}
           close={() => setOpenTemplateView(false)}
+        />
+        <DeleteTemplateModal
+          isOpen={openDeleteTemplateModal}
+          answerYes={deleteTemplate}
+          answerNo={() => setOpenDeleteTemplateModal(false)}
         />
       </Item.Content>
     </Item>

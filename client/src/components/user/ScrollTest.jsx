@@ -263,7 +263,7 @@ const ScrollTest = () => {
   };
 
   return (
-    <div className="page-height footer-padding">
+    <div>
       {displayButtons()}
 
       {displayScrollText()}

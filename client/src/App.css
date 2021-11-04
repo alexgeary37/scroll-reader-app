@@ -3,26 +3,16 @@
   justify-content: space-between;
 }
 
-/* 'padding' is to allow space for the top menu.
-'minHeight' is screenheight - 200 because PageFooter is 200 */
-.page-height {
-  min-height: calc(100vh - 75px);
-}
-
-.menu-padding {
-  padding-top: 60px;
-}
-
-.footer-padding {
-  padding-bottom: 10px;
-}
-
 .text-container {
-  margin-top: 2vh;
+  margin-top: 1em;
   margin-left: 28vw;
   margin-right: 28vw;
 }
 
 .handcursor {
   cursor: url("icons8-pointer-28.png"), auto;
+}
+
+.researcher {
+  padding-top: 3em;
 }

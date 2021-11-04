@@ -2,11 +2,19 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Item, Icon, Button, Form, Header } from "semantic-ui-react";
 import AddQuestionToTextFile from "./textFiles/AddQuestionToTextFile";
+import DeleteTextModal from "./textFiles/DeleteTextModal";
 import TextFileQuestionsView from "./textFiles/TextFileQuestionsView";
 
-const TextFile = ({ file, updateFileQuestions, fileInUse, removeQuestion }) => {
+const TextFile = ({
+  file,
+  updateFileQuestions,
+  fileInUse,
+  removeQuestion,
+  deleteFile,
+}) => {
   const [openAddQuestion, setOpenAddQuestion] = useState(false);
   const [openViewQuestions, setOpenViewQuestions] = useState(false);
+  const [openDeleteTextModal, setOpenDeleteTextModal] = useState(false);
   const [questionFormat, setQuestionFormat] = useState(file.questionFormat);
 
   useEffect(() => {
@@ -85,7 +93,12 @@ const TextFile = ({ file, updateFileQuestions, fileInUse, removeQuestion }) => {
               content="View Questions"
               onClick={() => setOpenViewQuestions(true)}
             />
-          </div>{" "}
+            <Button
+              disabled={fileInUse}
+              content="Delete"
+              onClick={() => setOpenDeleteTextModal(true)}
+            />
+          </div>
         </div>
         <AddQuestionToTextFile
           isOpen={openAddQuestion}
@@ -100,6 +113,11 @@ const TextFile = ({ file, updateFileQuestions, fileInUse, removeQuestion }) => {
           fileInUse={fileInUse}
           removeQuestion={removeQuestion}
           close={() => setOpenViewQuestions(false)}
+        />
+        <DeleteTextModal
+          isOpen={openDeleteTextModal}
+          answerYes={deleteFile}
+          answerNo={() => setOpenDeleteTextModal(false)}
         />
       </Item.Content>
     </Item>

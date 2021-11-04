@@ -19,7 +19,7 @@ const EndPage = () => {
   };
 
   return (
-    <div className="page-height" style={{ textAlign: "center" }}>
+    <div style={{ textAlign: "center" }}>
       <Segment>
         <Container text>
           <Header as="h1" content="Thank you for taking the test!" />

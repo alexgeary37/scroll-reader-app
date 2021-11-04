@@ -188,7 +188,7 @@ const SpeedTest = () => {
   };
 
   return (
-    <div className="page-height footer-padding">
+    <div>
       {displayButtons()}
 
       {displaySpeedText()}

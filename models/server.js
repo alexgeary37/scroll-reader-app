@@ -95,6 +95,18 @@ class Server {
       );
     });
 
+    this.app.put("/deleteTextFile", async (req, res) => {
+      const fileID = req.body.fileID;
+
+      TextFileModel.findByIdAndDelete(fileID, (err, textFile) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send("Deleted textFile");
+        }
+      });
+    });
+
     this.app.put("/removeTextFileQuestion", async (req, res) => {
       const fileID = req.body.fileID;
       const questionID = req.body.questionID;
@@ -152,6 +164,18 @@ class Server {
           res.send(err);
         } else {
           res.send(result);
+        }
+      });
+    });
+
+    this.app.put("/deleteTemplate", async (req, res) => {
+      const templateID = req.body.templateID;
+
+      SessionTemplateModel.findByIdAndDelete(templateID, (err, template) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send("Deleted template");
         }
       });
     });
