@@ -337,7 +337,7 @@ class Server {
     });
 
     this.app.put("/addCurrentScrollTextQuestionAnswer", async (req, res) => {
-      const id = req.body.id;
+      const sessionID = req.body.sessionID;
       const fileID = req.body.fileID;
       const answer = req.body.answer;
       const skip = req.body.skip;
@@ -345,7 +345,7 @@ class Server {
       const time = req.body.time;
 
       ReadingSessionModel.findByIdAndUpdate(
-        id,
+        sessionID,
         {
           $push: {
             "scrollTexts.$[elem].questionAnswers": {

@@ -1,12 +1,36 @@
+import { useState, useEffect } from "react";
 import { Card, Button, Grid } from "semantic-ui-react";
+import axios from "axios";
 
 const ClickQuestion = ({
-  question,
+  currentText,
+  questionNumber,
   disable,
   answerIsEnabled,
   enableAnswer,
   skip,
 }) => {
+  const [question, setQuestion] = useState("");
+
+  useEffect(() => {
+    const fileID = currentText.fileID;
+    const questionID = currentText.questionIDs[questionNumber];
+
+    axios
+      .get("http://localhost:3001/getTextFile", {
+        params: { _id: fileID },
+      })
+      .then((response) => {
+        const questionObj = response.data.questions.find(
+          (q) => q._id === questionID
+        );
+        setQuestion(questionObj.question);
+      })
+      .catch((error) => {
+        console.error("Error fetching text in ScrollText:", error);
+      });
+  }, [currentText, questionNumber]);
+
   return (
     <Card fluid>
       <Card.Content>

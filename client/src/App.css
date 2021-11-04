@@ -18,7 +18,11 @@
 }
 
 .text-container {
-  padding-top: 2vh;
-  padding-left: 28vw;
-  padding-right: 28vw;
+  margin-top: 2vh;
+  margin-left: 28vw;
+  margin-right: 28vw;
+}
+
+.handcursor {
+  cursor: url("icons8-pointer-28.png"), auto;
 }

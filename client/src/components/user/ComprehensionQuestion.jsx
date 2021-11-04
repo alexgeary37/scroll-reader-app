@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Card, Button, Form, Grid } from "semantic-ui-react";
+import { Card, Button, Form, Grid, TextArea } from "semantic-ui-react";
 
 const ComprehensionQuestion = ({
   currentText,
@@ -47,9 +47,8 @@ const ComprehensionQuestion = ({
         <Card.Description content={question} />
         <Form style={{ marginTop: 10, marginBottom: 10 }}>
           <Form.Field>
-            <textarea
+            <TextArea
               placeholder="Type your answer here..."
-              value={answer}
               onChange={handleChangeAnswer}
             />
           </Form.Field>

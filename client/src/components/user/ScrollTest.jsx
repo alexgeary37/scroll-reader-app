@@ -150,6 +150,37 @@ const ScrollTest = () => {
     sessionContext.setIsPaused(false);
   };
 
+  const handleAnswerQuestion = (answer, skip) => {
+    const sessionID = sessionContext.sessionID;
+    const currentTime = new Date();
+    const yPos = getScrollPosition().y;
+
+    axios
+      .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
+        sessionID: sessionID,
+        fileID: currentText.fileID,
+        answer: answer,
+        skip: skip,
+        yPos: yPos,
+        time: currentTime,
+      })
+      .then(() => {
+        setScrollQuestionNumber(scrollQuestionNumber + 1);
+        setSelectAnswerEnabled(false);
+      })
+      .catch((error) => {
+        console.error(
+          "Error updating readingSession.scrollTexts[fileID].questionAnswers",
+          error
+        );
+      });
+  };
+
+  const skipQuestion = () => {
+    handleAnswerQuestion("", true);
+    setDisplayConfirmSkipMessage(false);
+  };
+
   const displayButtons = () => {
     return (
       <div
@@ -191,7 +222,7 @@ const ScrollTest = () => {
         <ScrollText
           fileID={currentText.fileID}
           selectAnswerEnabled={selectAnswerEnabled}
-          selectAnswer={handleSelectAnswer}
+          selectAnswer={handleAnswerQuestion}
         />
       );
     }
@@ -222,50 +253,13 @@ const ScrollTest = () => {
               questionNumber={scrollQuestionNumber}
               disable={textIsComplete}
               answerIsEnabled={selectAnswerEnabled}
-              enableAnswer={() => setSelectAnswerEnabled(true)}
+              enableAnswer={() => setSelectAnswerEnabled(!selectAnswerEnabled)}
               skip={() => setDisplayConfirmSkipMessage(true)}
             />
           )}
         </div>
       );
     }
-  };
-
-  const handleSelectAnswer = (textContent, index) => {
-    // console.log(textContent, index);
-    // handleAnswerQuestion({ index, textContent }, false);
-    setSelectAnswerEnabled(false); // TODO: REMOVE THIS because the above line does the same thing
-  };
-
-  const handleAnswerQuestion = (answer, skip) => {
-    const sessionID = sessionContext.sessionID;
-    const currentTime = new Date();
-    const yPos = getScrollPosition().y;
-
-    axios
-      .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
-        id: sessionID,
-        fileID: currentText.fileID,
-        answer: answer,
-        skip: skip,
-        yPos: yPos,
-        time: currentTime,
-      })
-      .then(() => {
-        setScrollQuestionNumber(scrollQuestionNumber + 1);
-        setSelectAnswerEnabled(false);
-      })
-      .catch((error) => {
-        console.error(
-          "Error updating readingSession.scrollTexts[fileID].questionAnswers",
-          error
-        );
-      });
-  };
-
-  const skipQuestion = () => {
-    handleAnswerQuestion("", true);
-    setDisplayConfirmSkipMessage(false);
   };
 
   return (

@@ -74,16 +74,21 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
   // This is a useLayoutEffect function.
   useScrollPosition(addScrollPosEntry, 50);
 
-  const handleWordClick = (event, index) => {
+  const handleWordClick = (index) => {
     if (selectAnswerEnabled) {
-      selectAnswer(event.target.textContent, index);
+      // selectAnswer(index, false);
+      console.log(words[index], index);
     }
   };
 
   return (
-    <p className="text-container">
+    <p
+      className={
+        selectAnswerEnabled ? "text-container handcursor" : "text-container"
+      }
+    >
       {words.map((word, index) => (
-        <span key={uuid_v4()} onClick={(e) => handleWordClick(e, index)}>
+        <span key={uuid_v4()} onClick={() => handleWordClick(index)}>
           {word + " "}
         </span>
       ))}
