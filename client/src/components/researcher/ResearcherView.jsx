@@ -1,4 +1,4 @@
-import TextFile from "./home/TextFile.jsx";
+import TextFile from "./TextFile.jsx";
 import {
   Segment,
   Container,
@@ -8,10 +8,10 @@ import {
   Button,
 } from "semantic-ui-react";
 import { useState, useEffect } from "react";
-import SessionTemplate from "./home/SessionTemplate.jsx";
+import SessionTemplate from "./SessionTemplate.jsx";
 import axios from "axios";
-import CreateTemplate from "./home/templateCreation/CreateTemplate.jsx";
-import FileUpload from "./home/FileUpload.jsx";
+import CreateTemplate from "./templateCreation/CreateTemplate.jsx";
+import FileUpload from "./FileUpload.jsx";
 
 const ResearcherView = () => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });

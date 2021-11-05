@@ -1,7 +1,7 @@
 import { List, Item, Button } from "semantic-ui-react";
-import SessionTemplateView from "./SessionTemplateView";
+import SessionTemplateView from "./templates/SessionTemplateView";
 import { useState } from "react";
-import DeleteTemplateModal from "./DeleteTemplateModal";
+import DeleteTemplateModal from "./templates/DeleteTemplateModal";
 
 const SessionTemplate = ({ template, textFiles, deleteTemplate }) => {
   const [openTemplateView, setOpenTemplateView] = useState(false);
