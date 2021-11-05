@@ -82,7 +82,7 @@ const TextFile = ({
               </Form>
             </div>
           </div>
-          <div>
+          <div class="ui vertical buttons">
             <Button
               disabled={questionFormat === "" || fileInUse}
               content="Add Question"

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Card, Button, Grid } from "semantic-ui-react";
+import { Card, Button, Grid, Message, Transition } from "semantic-ui-react";
 import axios from "axios";
 
 const ClickQuestion = ({
@@ -57,6 +57,13 @@ const ClickQuestion = ({
             />
           </Grid.Column>
         </Grid>
+        <Transition visible={answerIsEnabled} animation="glow" duration={2000}>
+          <Message
+            info
+            hidden={!answerIsEnabled}
+            content="Click in the text where you think the answer is!"
+          />
+        </Transition>
       </Card.Content>
     </Card>
   );
