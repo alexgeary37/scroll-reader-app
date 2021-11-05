@@ -16,13 +16,16 @@ const TextFileQuestionsView = ({
   };
 
   return (
-    <Modal style={{ padding: 10 }} size="tiny" open={isOpen}>
+    <Modal style={{ padding: 10 }} open={isOpen}>
       <Header as="h4" content="Questions" />
       <List ordered divided relaxed>
         {questions.map((question) => (
           <Item key={question._id}>
             <div className="wrapper">
               <Item.Description content={question.question} />
+              <Item.Description
+                content={`Answer Region: [${question.answerRegion.startIndex}, ${question.answerRegion.endIndex}]`}
+              />
               <Button
                 floated="right"
                 disabled={fileInUse}
