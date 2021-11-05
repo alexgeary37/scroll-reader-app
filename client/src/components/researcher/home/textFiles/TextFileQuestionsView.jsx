@@ -24,7 +24,7 @@ const TextFileQuestionsView = ({
             <div className="wrapper">
               <Item.Description content={question.question} />
               <Item.Description
-                content={`Answer Region: [${question.answerRegion.startIndex}, ${question.answerRegion.endIndex}]`}
+                content={`Word Index Answer Region: [${question.answerRegion.startIndex}...${question.answerRegion.endIndex}]`}
               />
               <Button
                 floated="right"
