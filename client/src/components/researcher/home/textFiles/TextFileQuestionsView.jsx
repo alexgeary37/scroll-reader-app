@@ -7,6 +7,14 @@ const TextFileQuestionsView = ({
   removeQuestion,
   close,
 }) => {
+  const handleRemoveQuestion = (question) => {
+    const closeModal = questions.length === 1;
+    removeQuestion(question);
+    if (closeModal) {
+      close();
+    }
+  };
+
   return (
     <Modal style={{ padding: 10 }} size="tiny" open={isOpen}>
       <Header as="h4" content="Questions" />
@@ -19,7 +27,7 @@ const TextFileQuestionsView = ({
                 floated="right"
                 disabled={fileInUse}
                 content="Remove"
-                onClick={() => removeQuestion(question)}
+                onClick={() => handleRemoveQuestion(question)}
               />
             </div>
           </Item>

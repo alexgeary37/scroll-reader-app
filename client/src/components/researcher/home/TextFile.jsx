@@ -93,6 +93,7 @@ const TextFile = ({
               content="View Questions"
               onClick={() => setOpenViewQuestions(true)}
             />
+            <Button content="View Text" />
             <Button
               disabled={fileInUse}
               content="Delete"
