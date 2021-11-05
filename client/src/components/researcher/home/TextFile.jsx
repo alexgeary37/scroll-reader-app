@@ -4,6 +4,7 @@ import { Item, Icon, Button, Form, Header } from "semantic-ui-react";
 import AddQuestionToTextFile from "./textFiles/AddQuestionToTextFile";
 import DeleteTextModal from "./textFiles/DeleteTextModal";
 import TextFileQuestionsView from "./textFiles/TextFileQuestionsView";
+import TextFileTextView from "./textFiles/TextFileTextView";
 
 const TextFile = ({
   file,
@@ -14,6 +15,7 @@ const TextFile = ({
 }) => {
   const [openAddQuestion, setOpenAddQuestion] = useState(false);
   const [openViewQuestions, setOpenViewQuestions] = useState(false);
+  const [openTextFileTextView, setOpenTextFileTextView] = useState(false);
   const [openDeleteTextModal, setOpenDeleteTextModal] = useState(false);
   const [questionFormat, setQuestionFormat] = useState(file.questionFormat);
 
@@ -82,7 +84,7 @@ const TextFile = ({
               </Form>
             </div>
           </div>
-          <div class="ui vertical buttons">
+          <div className="ui vertical buttons">
             <Button
               disabled={questionFormat === "" || fileInUse}
               content="Add Question"
@@ -93,7 +95,10 @@ const TextFile = ({
               content="View Questions"
               onClick={() => setOpenViewQuestions(true)}
             />
-            <Button content="View Text" />
+            <Button
+              content="View Text"
+              onClick={() => setOpenTextFileTextView(true)}
+            />
             <Button
               disabled={fileInUse}
               content="Delete"
@@ -114,6 +119,11 @@ const TextFile = ({
           fileInUse={fileInUse}
           removeQuestion={removeQuestion}
           close={() => setOpenViewQuestions(false)}
+        />
+        <TextFileTextView
+          isOpen={openTextFileTextView}
+          fileID={file.value}
+          close={() => setOpenTextFileTextView(false)}
         />
         <DeleteTextModal
           isOpen={openDeleteTextModal}
