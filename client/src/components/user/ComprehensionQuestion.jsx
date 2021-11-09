@@ -16,6 +16,8 @@ const ComprehensionQuestion = ({
     const fileID = currentText.fileID;
     const questionID = currentText.questionIDs[questionNumber];
 
+    console.log(fileID);
+
     axios
       .get("http://localhost:3001/getTextFile", {
         params: { _id: fileID },
@@ -24,7 +26,9 @@ const ComprehensionQuestion = ({
         const questionObj = response.data.questions.find(
           (q) => q._id === questionID
         );
-        setQuestion(questionObj.question);
+        if (typeof questionObj !== "undefined") {
+          setQuestion(questionObj.question);
+        }
       })
       .catch((error) => {
         console.error("Error fetching text in ScrollText:", error);

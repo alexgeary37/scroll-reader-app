@@ -20,9 +20,7 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
       })
       .then((response) => {
         setWords(response.data.text.split(wordSeparators));
-        if (sessionContext.questionFormat === "") {
-          sessionContext.setQuestionFormat(response.data.questionFormat);
-        }
+        sessionContext.setQuestionFormat(response.data.questionFormat);
       })
       .catch((error) => {
         console.error("Error fetching text in ScrollText:", error);
