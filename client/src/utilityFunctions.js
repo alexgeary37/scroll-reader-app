@@ -1,4 +1,8 @@
-// Functions that are used in multiple components throughout the app.
+/** Variables and Functions that are used in multiple components in the app */
+
+export const wordSeparators = /[\s\r\n,]+/;
+
+/** Functions */
 
 // Check if this is the last text.
 // Used in SpeedTest and ScrollTest.
@@ -19,5 +23,3 @@ export const scrollToTop = () => {
     behavior: "smooth",
   });
 };
-
-export const wordSeparators = /[\s\r\n,]+/;
