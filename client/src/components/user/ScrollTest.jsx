@@ -12,6 +12,7 @@ import ComprehensionQuestion from "./ComprehensionQuestion.jsx";
 import ClickQuestion from "./ClickQuestion.jsx";
 import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
 import ConfirmDoneWindow from "./ConfirmDoneWindow.jsx";
+import AnswerResponseWindow from "./AnswerResponseWindow.jsx";
 
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
@@ -23,6 +24,8 @@ const ScrollTest = () => {
     JSON.parse(localStorage.getItem("scrollQuestionNumber"))
   );
   const [selectAnswerEnabled, setSelectAnswerEnabled] = useState(false);
+  const [displayAnswerResponseWindow, setDisplayAnswerResponseWindow] =
+    useState(false);
   const [displayConfirmSkipMessage, setDisplayConfirmSkipMessage] =
     useState(false);
   const [displayConfirmDoneMessage, setDisplayConfirmDoneMessage] =
@@ -150,8 +153,37 @@ const ScrollTest = () => {
     sessionContext.setIsPaused(false);
   };
 
-  const handleAnswerClickQuestion = (answer) => {
-    console.log(currentText);
+  const handleAnswerClickQuestion = (answer, skip) => {
+    const sessionID = sessionContext.sessionID;
+    const currentTime = new Date();
+    const yPos = getScrollPosition().y;
+
+    axios
+      .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
+        sessionID: sessionID,
+        fileID: currentText.fileID,
+        answer: { answer: answer /**, questionID */ },
+        skip: skip,
+        yPos: yPos,
+        time: currentTime,
+      })
+      .then(() => {
+        if (
+          sessionContext.questionAnswers[scrollQuestionNumber].startIndex <=
+            answer &&
+          answer <=
+            sessionContext.questionAnswers[scrollQuestionNumber].endIndex
+        ) {
+          setScrollQuestionNumber(scrollQuestionNumber + 1);
+        }
+        setDisplayAnswerResponseWindow(true);
+      })
+      .catch((error) => {
+        console.error(
+          "Error updating readingSession.scrollTexts[fileID].questionAnswers",
+          error
+        );
+      });
   };
 
   const handleAnswerQuestion = (answer, skip) => {
@@ -274,7 +306,7 @@ const ScrollTest = () => {
 
       {displayQuestions()}
 
-      {/* <AnswerReponseWindow /> */}
+      <AnswerResponseWindow isOpen={displayAnswerResponseWindow} />
 
       <ConfirmSkipQuestionWindow
         isOpen={displayConfirmSkipMessage}
