@@ -114,20 +114,6 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
           <Item.Content>
             <List>
               <Item>
-                <Item.Description
-                  content={`Question format: ${
-                    textFiles[
-                      textFiles.indexOf(
-                        textFiles.find(
-                          (file) =>
-                            file.value === template.scrollTexts[0].fileID
-                        )
-                      )
-                    ].questionFormat
-                  }`}
-                />
-              </Item>
-              <Item>
                 <Item.Description content={`Created: ${template.createdAt}`} />
               </Item>
             </List>
