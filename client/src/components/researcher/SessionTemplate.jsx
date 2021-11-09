@@ -50,20 +50,6 @@ const SessionTemplate = ({ template, textFiles, deleteTemplate }) => {
               </Item>
             ))}
           </List>
-
-          <Item.Description
-            style={{ margin: 5 }}
-            content={`Question Format: ${
-              // Get the questionFormat from the first textFile used in template.scrollTexts
-              textFiles[
-                textFiles.indexOf(
-                  textFiles.find(
-                    (file) => file.value === template.scrollTexts[0].fileID
-                  )
-                )
-              ].questionFormat
-            }`}
-          />
         </div>
         <div className="wrapper">
           <Item.Description
