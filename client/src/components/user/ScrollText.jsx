@@ -21,6 +21,11 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
       .then((response) => {
         setWords(response.data.text.split(wordSeparators));
         sessionContext.setQuestionFormat(response.data.questionFormat);
+        sessionContext.setQuestionAnswers(
+          response.data.questions.map((q) => {
+            return q.answerRegion;
+          })
+        );
       })
       .catch((error) => {
         console.error("Error fetching text in ScrollText:", error);
@@ -74,7 +79,7 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
 
   const handleWordClick = (index) => {
     if (selectAnswerEnabled) {
-      selectAnswer(index, false);
+      selectAnswer(index);
     }
   };
 

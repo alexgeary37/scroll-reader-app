@@ -150,6 +150,10 @@ const ScrollTest = () => {
     sessionContext.setIsPaused(false);
   };
 
+  const handleAnswerClickQuestion = (answer) => {
+    console.log(currentText);
+  };
+
   const handleAnswerQuestion = (answer, skip) => {
     const sessionID = sessionContext.sessionID;
     const currentTime = new Date();
@@ -222,7 +226,7 @@ const ScrollTest = () => {
         <ScrollText
           fileID={currentText.fileID}
           selectAnswerEnabled={selectAnswerEnabled}
-          selectAnswer={handleAnswerQuestion}
+          selectAnswer={handleAnswerClickQuestion}
         />
       );
     }
@@ -269,6 +273,8 @@ const ScrollTest = () => {
       {displayScrollText()}
 
       {displayQuestions()}
+
+      {/* <AnswerReponseWindow /> */}
 
       <ConfirmSkipQuestionWindow
         isOpen={displayConfirmSkipMessage}

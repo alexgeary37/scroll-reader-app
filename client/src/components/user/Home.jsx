@@ -34,6 +34,7 @@ const Home = () => {
           setTemplateError(true);
         } else {
           setTemplate(response.data);
+          console.log(response.data);
         }
       })
       .catch((error) => {
