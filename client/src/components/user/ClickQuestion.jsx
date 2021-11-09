@@ -44,8 +44,8 @@ const ClickQuestion = ({
           <Grid.Column width="8">
             <Button
               fluid
-              toggle
-              active={answerIsEnabled}
+              basic={!answerIsEnabled}
+              positive
               disabled={disable}
               content="Answer"
               onClick={enableAnswer}
