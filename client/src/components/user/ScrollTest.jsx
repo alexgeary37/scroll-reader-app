@@ -24,8 +24,10 @@ const ScrollTest = () => {
     JSON.parse(localStorage.getItem("scrollQuestionNumber"))
   );
   const [selectAnswerEnabled, setSelectAnswerEnabled] = useState(false);
-  const [displayAnswerResponseWindow, setDisplayAnswerResponseWindow] =
-    useState(false);
+  const [answerResponseWindow, setAnswerResponseWindow] = useState({
+    display: false,
+    isCorrect: false,
+  });
   const [displayConfirmSkipMessage, setDisplayConfirmSkipMessage] =
     useState(false);
   const [displayConfirmDoneMessage, setDisplayConfirmDoneMessage] =
@@ -153,56 +155,46 @@ const ScrollTest = () => {
     sessionContext.setIsPaused(false);
   };
 
-  const handleAnswerClickQuestion = (answer, skip) => {
+  const handleAnswerQuestion = (answer, skip) => {
+    const isInlineQuestion = sessionContext.questionFormat === "inline";
     const sessionID = sessionContext.sessionID;
     const currentTime = new Date();
     const yPos = getScrollPosition().y;
+    const answerObj = isInlineQuestion
+      ? {
+          questionID: currentText.questionIDs[scrollQuestionNumber],
+          answer: answer,
+        }
+      : answer;
+
+    console.log(isInlineQuestion, answer);
 
     axios
       .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
         sessionID: sessionID,
         fileID: currentText.fileID,
-        answer: { answer: answer /**, questionID */ },
+        answer: answerObj,
         skip: skip,
         yPos: yPos,
         time: currentTime,
       })
       .then(() => {
-        if (
-          sessionContext.questionAnswers[scrollQuestionNumber].startIndex <=
-            answer &&
-          answer <=
-            sessionContext.questionAnswers[scrollQuestionNumber].endIndex
-        ) {
+        if (isInlineQuestion) {
+          let isCorrect = false;
+          if (
+            sessionContext.questionAnswers[scrollQuestionNumber].startIndex <=
+              answer &&
+            answer <=
+              sessionContext.questionAnswers[scrollQuestionNumber].endIndex
+          ) {
+            setScrollQuestionNumber(scrollQuestionNumber + 1);
+            isCorrect = true;
+          }
+
+          setAnswerResponseWindow({ display: true, isCorrect: isCorrect });
+        } else {
           setScrollQuestionNumber(scrollQuestionNumber + 1);
         }
-        setDisplayAnswerResponseWindow(true);
-      })
-      .catch((error) => {
-        console.error(
-          "Error updating readingSession.scrollTexts[fileID].questionAnswers",
-          error
-        );
-      });
-  };
-
-  const handleAnswerQuestion = (answer, skip) => {
-    const sessionID = sessionContext.sessionID;
-    const currentTime = new Date();
-    const yPos = getScrollPosition().y;
-
-    axios
-      .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
-        sessionID: sessionID,
-        fileID: currentText.fileID,
-        answer: answer,
-        skip: skip,
-        yPos: yPos,
-        time: currentTime,
-      })
-      .then(() => {
-        setScrollQuestionNumber(scrollQuestionNumber + 1);
-        setSelectAnswerEnabled(false);
       })
       .catch((error) => {
         console.error(
@@ -258,7 +250,7 @@ const ScrollTest = () => {
         <ScrollText
           fileID={currentText.fileID}
           selectAnswerEnabled={selectAnswerEnabled}
-          selectAnswer={handleAnswerClickQuestion}
+          selectAnswer={handleAnswerQuestion}
         />
       );
     }
@@ -306,7 +298,17 @@ const ScrollTest = () => {
 
       {displayQuestions()}
 
-      <AnswerResponseWindow isOpen={displayAnswerResponseWindow} />
+      <AnswerResponseWindow
+        isOpen={answerResponseWindow.display}
+        isCorrect={answerResponseWindow.isCorrect}
+        tryAgain={() =>
+          setAnswerResponseWindow({ display: false, isCorrect: false })
+        }
+        continueReading={() => {
+          setAnswerResponseWindow({ display: false, isCorrect: false });
+          setSelectAnswerEnabled(false);
+        }}
+      />
 
       <ConfirmSkipQuestionWindow
         isOpen={displayConfirmSkipMessage}
