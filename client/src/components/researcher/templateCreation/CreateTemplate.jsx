@@ -17,27 +17,13 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [speedTextIDs, setSpeedTextIDs] = useState([]);
   const [speedTestInstructions, setSpeedTestInstructions] = useState("");
   const [scrollTexts, setScrollTexts] = useState([]);
-  // const [questionFormat, setQuestionFormat] = useState("comprehension");
   const [displayMissingInputError, setDisplayMissingInputError] =
     useState(false);
-  const [dropdownSpeedTextFiles, setDropdownSpeedTextFiles] = useState([]);
-  // const [dropdownScrollTextFiles, setDropdownScrollTextFiles] = useState([]);
+  const [dropdownTextFiles, setDropdownTextFiles] = useState([]);
 
   useEffect(() => {
-    setDropdownSpeedTextFiles(formatDropdownTextFiles(textFiles));
-    // setDropdownScrollTextFiles(formatDropdownTextFiles(textFiles));
-    // const scrollTextFiles = textFiles.filter(
-    //   (file) => file.questionFormat === questionFormat
-    // );
-    // setDropdownScrollTextFiles(formatDropdownTextFiles(scrollTextFiles));
+    setDropdownTextFiles(formatDropdownTextFiles(textFiles));
   }, [textFiles]);
-
-  // useEffect(() => {
-  //   const scrollTextFiles = textFiles.filter(
-  //     (file) => file.questionFormat === questionFormat
-  //   );
-  //   setDropdownScrollTextFiles(formatDropdownTextFiles(scrollTextFiles));
-  // }, [questionFormat]);
 
   const formatDropdownTextFiles = (textFiles) => {
     return textFiles.map((file) => {
@@ -100,7 +86,6 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           instructions: speedTestInstructions,
         },
         scrollTexts: files,
-        // questionFormat: questionFormat,
         createdAt: new Date(),
       };
 
@@ -184,7 +169,6 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setSpeedTextIDs([]);
     setScrollTexts([]);
     setSpeedTestInstructions("");
-    // setQuestionFormat("comprehension");
     setDisplayMissingInputError(false);
   };
 
@@ -218,7 +202,6 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           instructions: responseData.speedTest.instructions,
         },
         scrollTexts: tempScrollTexts,
-        // questionFormat: responseData.questionFormat,
         createdAt: responseData.createdAt,
         url: responseData._id,
       };
@@ -303,7 +286,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               search
               selection
               multiple
-              options={dropdownSpeedTextFiles}
+              options={dropdownTextFiles}
               onChange={(e, data) => setSpeedTextIDs(data.value)}
             />
           </Segment>
@@ -314,32 +297,6 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               content="Scrollable Texts:"
               style={{ paddingTop: 5, marginRight: 10 }}
             />
-            {/* <Form>
-              <div className="grouped fields">
-                <Form.Field>
-                  <div className="ui radio checkbox">
-                    <input
-                      type="radio"
-                      disabled={scrollTexts.length > 0}
-                      checked={questionFormat === "comprehension"}
-                      onChange={() => setQuestionFormat("comprehension")}
-                    />
-                    <label>Comprehension</label>
-                  </div>
-                </Form.Field>
-                <Form.Field>
-                  <div className="ui radio checkbox">
-                    <input
-                      type="radio"
-                      disabled={scrollTexts.length > 0}
-                      checked={questionFormat === "inline"}
-                      onChange={() => setQuestionFormat("inline")}
-                    />
-                    <label>Inline</label>
-                  </div>
-                </Form.Field>
-              </div>
-            </Form> */}
             <Dropdown
               placeholder="Select texts for the scroll test"
               error={scrollTexts.length === 0 && displayMissingInputError}
@@ -347,7 +304,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               search
               selection
               multiple
-              options={dropdownSpeedTextFiles}
+              options={dropdownTextFiles}
               onChange={handleSelectScrollText}
             />
             {displayScrollTexts()}
