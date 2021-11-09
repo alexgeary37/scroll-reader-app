@@ -42,6 +42,11 @@ const ComprehensionQuestion = ({
     setAnswer("");
   };
 
+  const handleSkip = () => {
+    skip();
+    setAnswer("");
+  };
+
   return (
     <Card fluid>
       <Card.Content>
@@ -51,6 +56,7 @@ const ComprehensionQuestion = ({
           <Form.Field>
             <TextArea
               placeholder="Type your answer here..."
+              value={answer}
               onChange={handleChangeAnswer}
             />
           </Form.Field>
@@ -71,7 +77,7 @@ const ComprehensionQuestion = ({
               negative
               disabled={disable}
               content="Skip"
-              onClick={skip}
+              onClick={handleSkip}
             />
           </Grid.Column>
         </Grid>

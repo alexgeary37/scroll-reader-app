@@ -167,8 +167,6 @@ const ScrollTest = () => {
         }
       : answer;
 
-    console.log(isInlineQuestion, answer);
-
     axios
       .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
         sessionID: sessionID,
@@ -191,7 +189,11 @@ const ScrollTest = () => {
             isCorrect = true;
           }
 
-          setAnswerResponseWindow({ display: true, isCorrect: isCorrect });
+          if (skip) {
+            setScrollQuestionNumber(scrollQuestionNumber + 1);
+          } else {
+            setAnswerResponseWindow({ display: true, isCorrect: isCorrect });
+          }
         } else {
           setScrollQuestionNumber(scrollQuestionNumber + 1);
         }
@@ -206,6 +208,7 @@ const ScrollTest = () => {
 
   const skipQuestion = () => {
     handleAnswerQuestion("", true);
+    setSelectAnswerEnabled(false);
     setDisplayConfirmSkipMessage(false);
   };
 
