@@ -25,6 +25,7 @@ export const scrollToTop = () => {
   });
 };
 
+// Adds the latest viewport width and height to ReadingSession.viewportDimensions array.
 export const recordViewportResize = (e, sessionContext) => {
   const sessionID = sessionContext.sessionID;
   const time = new Date();
