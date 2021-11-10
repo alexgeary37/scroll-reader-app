@@ -17,10 +17,11 @@ const TextFile = ({
   const [openViewQuestions, setOpenViewQuestions] = useState(false);
   const [openTextFileTextView, setOpenTextFileTextView] = useState(false);
   const [openDeleteTextModal, setOpenDeleteTextModal] = useState(false);
-  const [questionFormat, setQuestionFormat] = useState(file.questionFormat);
+  // const [questionFormat, setQuestionFormat] = useState(file.questionFormat);
 
   useEffect(() => {
-    setQuestionFormat(file.questionFormat);
+    // setQuestionFormat(file.questionFormat);
+    console.log("file.questionFormat::", file.questionFormat);
   }, [file.questionFormat]);
 
   return (
@@ -31,10 +32,12 @@ const TextFile = ({
           <div>
             <Item.Header as="h4" style={{ margin: 5 }} content={file.name} />
             <Item.Description content={`Uploaded: ${file.uploadedAt}`} />
-            <div>
+            <Item.Description
+              content={`Question Format: ${file.questionFormat}`}
+            />
+            {/* <div>
               <Form>
                 <div className="grouped fields">
-                  <Header as="h5" content="Question Format:" />
                   <Form.Field>
                     <div className="ui radio checkbox">
                       <input
@@ -59,7 +62,7 @@ const TextFile = ({
                   </Form.Field>
                 </div>
               </Form>
-            </div>
+            </div> */}
           </div>
 
           <div className="ui vertical buttons">
@@ -87,7 +90,7 @@ const TextFile = ({
           isOpen={openViewQuestions}
           fileID={file.key}
           questions={file.questions}
-          format={questionFormat}
+          format={file.questionFormat}
           usedAsScrollText={usedAsScrollText}
           updateFileQuestions={updateFileQuestions}
           removeQuestion={removeQuestion}

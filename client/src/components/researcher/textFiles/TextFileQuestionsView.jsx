@@ -1,5 +1,13 @@
-import {useState} from "react"
-import { Modal, List, Item, Divider, Button, Header } from "semantic-ui-react";
+import { useEffect, useState } from "react";
+import {
+  Modal,
+  List,
+  Item,
+  Divider,
+  Button,
+  Header,
+  Form,
+} from "semantic-ui-react";
 import AddQuestionToTextFile from "./AddQuestionToTextFile";
 import axios from "axios";
 
@@ -14,6 +22,7 @@ const TextFileQuestionsView = ({
   close,
 }) => {
   const [openAddQuestion, setOpenAddQuestion] = useState(false);
+  const [questionFormat, setQuestionFormat] = useState(format);
 
   const addQuestion = (question, answerRegion) => {
     axios
@@ -21,12 +30,12 @@ const TextFileQuestionsView = ({
         id: fileID,
         question: question,
         answerRegion: answerRegion,
-        questionFormat: format,
+        questionFormat: questionFormat,
       })
       .then((response) => {
         // Return the latest question just added.
         const newQuestion = response.data.questions.at(-1);
-        updateFileQuestions(newQuestion, format);
+        updateFileQuestions(newQuestion, questionFormat);
       })
       .catch((error) => {
         console.error(
@@ -36,19 +45,39 @@ const TextFileQuestionsView = ({
       });
   };
 
-  const handleRemoveQuestion = (question) => {
-    const closeModal = questions.length === 1;
-    removeQuestion(question);
-    if (closeModal) {
-      close();
-    }
-  };
-
   return (
     <Modal style={{ padding: 10 }} open={isOpen}>
       <Header as="h4" content="Questions" />
+      <div>
+        <Form>
+          <div className="grouped fields">
+            <Form.Field>
+              <div className="ui radio checkbox">
+                <input
+                  type="radio"
+                  disabled={format !== "" || usedAsScrollText}
+                  checked={questionFormat === "comprehension"}
+                  onChange={() => setQuestionFormat("comprehension")}
+                />
+                <label>Comprehension</label>
+              </div>
+            </Form.Field>
+            <Form.Field>
+              <div className="ui radio checkbox">
+                <input
+                  type="radio"
+                  disabled={format !== "" || usedAsScrollText}
+                  checked={questionFormat === "inline"}
+                  onChange={() => setQuestionFormat("inline")}
+                />
+                <label>Inline</label>
+              </div>
+            </Form.Field>
+          </div>
+        </Form>
+      </div>
       <Button
-        disabled={format === "" || usedAsScrollText}
+        disabled={questionFormat === "" || usedAsScrollText}
         content="Add Question"
         onClick={() => setOpenAddQuestion(true)}
       />
@@ -64,7 +93,7 @@ const TextFileQuestionsView = ({
                 floated="right"
                 disabled={usedAsScrollText}
                 content="Remove"
-                onClick={() => handleRemoveQuestion(question)}
+                onClick={() => removeQuestion(question)}
               />
             </div>
           </Item>
