@@ -81,6 +81,7 @@ const TextFileQuestionsView = ({
         </Form>
       </div>
       <Button
+        positive
         disabled={questionFormat === "" || usedAsScrollText}
         content="Add Question"
         onClick={() => setOpenAddQuestion(true)}
