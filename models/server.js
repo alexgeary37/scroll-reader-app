@@ -212,6 +212,35 @@ class Server {
       });
     });
 
+    this.app.put("/addViewportChange", async (req, res) => {
+      const id = req.body.id;
+      const width = req.body.width;
+      const height = req.body.height;
+      const time = req.body.time;
+
+      ReadingSessionModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            viewportDimensions: {
+              width: width,
+              height: height,
+              time: time,
+            },
+          },
+        },
+        { new: true },
+        (err, session) => {
+          if (err) {
+            res.send(err);
+          } else {
+            session.save();
+            res.send("Added new object to viewportDimensions");
+          }
+        }
+      );
+    });
+
     this.app.put("/addNewSpeedText", async (req, res) => {
       const id = req.body.id;
       const fileID = req.body.fileID;

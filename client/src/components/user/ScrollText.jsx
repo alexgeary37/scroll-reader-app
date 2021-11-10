@@ -3,7 +3,7 @@ import useScrollPosition from "./scrollPosition.jsx";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { SessionContext } from "../../contexts/SessionContext.jsx";
-import { wordSeparators } from "../../utilityFunctions.js";
+import { wordSeparators } from "../../utilities.js";
 
 const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
   const sessionContext = useContext(SessionContext);

@@ -31,7 +31,12 @@ textSchema {
 
 ReadingSessionSchema {
   userName,
-  viewportHeight,
+  viewportDimensions [
+    {
+      width,
+      height
+    }
+  ],
   templateID,
   startTime,
   endTime,

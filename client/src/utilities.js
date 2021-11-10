@@ -1,4 +1,5 @@
 /** Variables and Functions that are used in multiple components in the app */
+import axios from "axios";
 
 export const wordSeparators = /[\s\r\n,]+/;
 
@@ -22,4 +23,20 @@ export const scrollToTop = () => {
     top: 0,
     behavior: "smooth",
   });
+};
+
+export const recordViewportResize = (e, sessionContext) => {
+  const sessionID = sessionContext.sessionID;
+  const time = new Date();
+
+  axios
+    .put("http://localhost:3001/addViewportChange", {
+      id: sessionID,
+      width: window.innerWidth,
+      height: window.innerHeight,
+      time: time,
+    })
+    .catch((error) => {
+      console.error("Error updating readingSession.viewportDimensions:", error);
+    });
 };

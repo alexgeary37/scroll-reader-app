@@ -6,7 +6,9 @@ import { Link } from "react-router-dom";
 import SpeedTestInstructions from "./SpeedTestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
 import axios from "axios";
-import { isLastText, scrollToTop } from "../../utilityFunctions.js";
+import { isLastText, scrollToTop } from "../../utilities.js";
+import { debounce } from "debounce";
+import { recordViewportResize } from "../../utilities";
 
 const SpeedTest = () => {
   const sessionContext = useContext(SessionContext);
@@ -20,6 +22,10 @@ const SpeedTest = () => {
   useEffect(() => {
     setInstructions(sessionContext.template.speedTest.instructions);
     initialiseTextIsComplete();
+    window.onresize = debounce(
+      (e) => recordViewportResize(e, sessionContext),
+      500
+    );
   }, []);
 
   useEffect(() => {

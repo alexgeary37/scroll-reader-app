@@ -6,13 +6,15 @@ import { Link } from "react-router-dom";
 import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
 import PauseWindow from "./PauseWindow.jsx";
 import axios from "axios";
-import { isLastText, scrollToTop } from "../../utilityFunctions.js";
+import { isLastText, scrollToTop } from "../../utilities.js";
 import { getScrollPosition } from "./scrollPosition.jsx";
 import ComprehensionQuestion from "./ComprehensionQuestion.jsx";
 import ClickQuestion from "./ClickQuestion.jsx";
 import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
 import ConfirmDoneWindow from "./ConfirmDoneWindow.jsx";
 import AnswerResponseWindow from "./AnswerResponseWindow.jsx";
+import { debounce } from "debounce";
+import { recordViewportResize } from "../../utilities";
 
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
@@ -39,6 +41,10 @@ const ScrollTest = () => {
       setScrollQuestionNumber(0);
     }
     initialiseTextIsComplete();
+    window.onresize = debounce(
+      (e) => recordViewportResize(e, sessionContext),
+      500
+    );
   }, []);
 
   useEffect(() => {
