@@ -1,12 +1,5 @@
 import TextFile from "./TextFile.jsx";
-import {
-  Segment,
-  Container,
-  Grid,
-  Header,
-  List,
-  Button,
-} from "semantic-ui-react";
+import { Segment, Container, Grid, Header, Button } from "semantic-ui-react";
 import { useState, useEffect } from "react";
 import SessionTemplate from "./SessionTemplate.jsx";
 import axios from "axios";
@@ -221,7 +214,7 @@ const ResearcherView = () => {
           <Header as="h1" textAlign="center" content="Uploaded Texts" />
 
           <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
-            <List relaxed divided>
+            <div className="ui link divided relaxed items">
               {textFiles.data.map((file) => (
                 <TextFile
                   key={file.key}
@@ -237,7 +230,7 @@ const ResearcherView = () => {
                   deleteFile={() => handleDeleteFile(file)}
                 />
               ))}
-            </List>
+            </div>
           </Segment>
 
           <FileUpload
