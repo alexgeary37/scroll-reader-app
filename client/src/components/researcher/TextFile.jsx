@@ -34,6 +34,10 @@ const TextFile = ({
               content="Questions"
               onClick={() => setOpenViewQuestions(true)}
             />
+            <Button content="Styles" />
+          </div>
+
+          <div className="ui vertical buttons" style={{ marginLeft: 5 }}>
             <Button
               content="View Text"
               onClick={() => setOpenTextFileTextView(true)}
@@ -43,10 +47,6 @@ const TextFile = ({
               content="Delete"
               onClick={() => setOpenDeleteTextModal(true)}
             />
-          </div>
-
-          <div className="ui vertical buttons" style={{ marginLeft: 5 }}>
-            <Button content="Styles" />
           </div>
         </div>
 
