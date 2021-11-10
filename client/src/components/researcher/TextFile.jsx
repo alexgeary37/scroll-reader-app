@@ -1,7 +1,5 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Item, Icon, Button, Form, Header } from "semantic-ui-react";
-// import AddQuestionToTextFile from "./textFiles/AddQuestionToTextFile";
+import { useState } from "react";
+import { Item, Icon, Button } from "semantic-ui-react";
 import DeleteTextModal from "./textFiles/DeleteTextModal";
 import TextFileQuestionsView from "./textFiles/TextFileQuestionsView";
 import TextFileTextView from "./textFiles/TextFileTextView";
@@ -17,12 +15,6 @@ const TextFile = ({
   const [openViewQuestions, setOpenViewQuestions] = useState(false);
   const [openTextFileTextView, setOpenTextFileTextView] = useState(false);
   const [openDeleteTextModal, setOpenDeleteTextModal] = useState(false);
-  // const [questionFormat, setQuestionFormat] = useState(file.questionFormat);
-
-  useEffect(() => {
-    // setQuestionFormat(file.questionFormat);
-    console.log("file.questionFormat::", file.questionFormat);
-  }, [file.questionFormat]);
 
   return (
     <Item>
@@ -35,34 +27,6 @@ const TextFile = ({
             <Item.Description
               content={`Question Format: ${file.questionFormat}`}
             />
-            {/* <div>
-              <Form>
-                <div className="grouped fields">
-                  <Form.Field>
-                    <div className="ui radio checkbox">
-                      <input
-                        type="radio"
-                        disabled={file.questionFormat !== ""}
-                        checked={questionFormat === "comprehension"}
-                        onChange={() => setQuestionFormat("comprehension")}
-                      />
-                      <label>Comprehension</label>
-                    </div>
-                  </Form.Field>
-                  <Form.Field>
-                    <div className="ui radio checkbox">
-                      <input
-                        type="radio"
-                        disabled={file.questionFormat !== ""}
-                        checked={questionFormat === "inline"}
-                        onChange={() => setQuestionFormat("inline")}
-                      />
-                      <label>Inline</label>
-                    </div>
-                  </Form.Field>
-                </div>
-              </Form>
-            </div> */}
           </div>
 
           <div className="ui vertical buttons">

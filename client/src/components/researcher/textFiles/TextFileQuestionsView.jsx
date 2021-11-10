@@ -24,6 +24,10 @@ const TextFileQuestionsView = ({
   const [openAddQuestion, setOpenAddQuestion] = useState(false);
   const [questionFormat, setQuestionFormat] = useState(format);
 
+  useEffect(() => {
+    setQuestionFormat(format);
+  }, [format]);
+
   const addQuestion = (question, answerRegion) => {
     axios
       .put("http://localhost:3001/addTextFileQuestion", {
@@ -105,7 +109,7 @@ const TextFileQuestionsView = ({
       <AddQuestionToTextFile
         isOpen={openAddQuestion}
         fileID={fileID}
-        format={format}
+        format={questionFormat}
         addQuestion={addQuestion}
         close={() => setOpenAddQuestion(false)}
       />
