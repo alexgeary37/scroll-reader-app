@@ -115,13 +115,9 @@ const ResearcherView = () => {
     setOpenTemplateCreator(false);
   };
 
-  const handleUpdateFileQuestions = (
-    currentFile,
-    newQuestion,
-    questionFormat
-  ) => {
+  const handleUpdateFileQuestions = (file, newQuestion, questionFormat) => {
     let files = textFiles.data;
-    const index = files.indexOf(currentFile);
+    const index = files.indexOf(file);
     files[index].questions.push(newQuestion);
     files[index].questionFormat = questionFormat;
 
@@ -150,6 +146,10 @@ const ResearcherView = () => {
         console.error("Error removing file.questions[index]", error);
       });
   };
+
+  const handleUpdateFileStyles = (file, style) => {};
+
+  const handleRemoveFileStyle = (file, style) => {};
 
   const handleDeleteFile = (file) => {
     let files = textFiles.data;
@@ -219,14 +219,18 @@ const ResearcherView = () => {
                 <TextFile
                   key={file.key}
                   file={file}
+                  usedInTemplate={fileUsedInTemplate(file.key)}
+                  usedAsScrollText={fileUsedAsScrollText(file.key)}
                   updateFileQuestions={(newQuestion, questionFormat) =>
                     handleUpdateFileQuestions(file, newQuestion, questionFormat)
                   }
-                  usedInTemplate={fileUsedInTemplate(file.key)}
-                  usedAsScrollText={fileUsedAsScrollText(file.key)}
                   removeQuestion={(question) =>
                     handleRemoveFileQuestion(file, question)
                   }
+                  updateFileStyles={(style) =>
+                    handleUpdateFileStyles(file, style)
+                  }
+                  removeStyle={(style) => handleRemoveFileStyle(file, style)}
                   deleteFile={() => handleDeleteFile(file)}
                 />
               ))}
@@ -289,10 +293,14 @@ const ResearcherView = () => {
     <div className="researcher">
       <Container>
         <Grid>
-          <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
-          <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
+          <Grid.Row>
+            <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
+            <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Button positive content="Download data" />
+          </Grid.Row>
         </Grid>
-        <Button positive content="Download data" />
       </Container>
     </div>
   );

@@ -1,22 +1,30 @@
+import { useState } from "react";
 import { Modal, Divider, Button, Header } from "semantic-ui-react";
 
-const TextFileStylesView = ({ isOpen, fileID, close }) => {
+const TextFileStylesView = ({
+  isOpen,
+  fileID,
+  styles,
+  usedInTemplate,
+  updateFileStyles,
+  removeStyle,
+  close,
+}) => {
+  const [openAddStyle, setOpenAddStyle] = useState(false);
   //   const addStyle = (style) => {
   //     axios
-  //       .put("http://localhost:3001/addTextFileQuestion", {
+  //       .put("http://localhost:3001/addTextFileStyle", {
   //         id: fileID,
-  //         question: question,
-  //         answerRegion: answerRegion,
-  //         questionFormat: questionFormat,
+  //         style: style,
   //       })
   //       .then((response) => {
-  //         // Return the latest question just added.
-  //         const newQuestion = response.data.questions.at(-1);
-  //         updateFileQuestions(newQuestion, questionFormat);
+  //         // Return the latest style just added.
+  //         const newStyle = response.data.styles.at(-1);
+  //         updateFileStyles(newStyle);
   //       })
   //       .catch((error) => {
   //         console.error(
-  //           "Error updating file.questions and file.questionFormat:",
+  //           "Error updating file.styles:",
   //           error
   //         );
   //       });
@@ -28,9 +36,9 @@ const TextFileStylesView = ({ isOpen, fileID, close }) => {
 
       <Button
         positive
-        // disabled={}
+        disabled={usedInTemplate}
         content="Add Style"
-        // onClick={() => setOpenAddQuestion(true)}
+        onClick={() => setOpenAddStyle(true)}
       />
       {/* <List ordered divided relaxed>
         {styles.map((style) => (
@@ -40,7 +48,7 @@ const TextFileStylesView = ({ isOpen, fileID, close }) => {
               
               <Button
                 floated="right"
-                // disabled={usedAsScrollText}
+                // disabled={usedInTemplate}
                 content="Remove"
                 onClick={() => removeStyle(style)}
               />
@@ -51,12 +59,11 @@ const TextFileStylesView = ({ isOpen, fileID, close }) => {
       <Divider />
       <Button floated="right" content="Close" onClick={close} />
 
-      {/* <AddQuestionToTextFile
-        isOpen={openAddQuestion}
+      {/* <AddStyleToTextFile
+        isOpen={openAddStyle}
         fileID={fileID}
-        format={questionFormat}
-        addQuestion={addQuestion}
-        close={() => setOpenAddQuestion(false)}
+        addStyle={addStyle}
+        close={() => setOpenAddStyle(false)}
       /> */}
     </Modal>
   );

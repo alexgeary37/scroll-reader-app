@@ -7,10 +7,12 @@ import TextFileTextView from "./textFiles/TextFileTextView";
 
 const TextFile = ({
   file,
-  updateFileQuestions,
   usedInTemplate,
   usedAsScrollText,
+  updateFileQuestions,
   removeQuestion,
+  updateFileStyles,
+  removeStyle,
   deleteFile,
 }) => {
   const [openViewQuestions, setOpenViewQuestions] = useState(false);
@@ -65,6 +67,10 @@ const TextFile = ({
         <TextFileStylesView
           isOpen={openViewStyles}
           fileID={file.value}
+          // styles={file.styles}
+          usedInTemplate={usedInTemplate}
+          updateFileStyles={updateFileStyles}
+          removeStyle={removeStyle}
           close={() => setOpenViewStyles(false)}
         />
         <TextFileTextView
