@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Button,
   Header,
@@ -9,6 +10,10 @@ import {
 } from "semantic-ui-react";
 
 const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
+  useEffect(() => {
+    console.log("TextFiles::", textFiles);
+  }, []);
+
   const speedTestInfo = () => {
     return (
       <div>
@@ -133,7 +138,7 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
     <Modal open={isOpen} style={{ height: "70vh", padding: 10 }}>
       <Header as="h1" content={template.name} />
 
-      {displayTemplateInfo()}
+      {/* {displayTemplateInfo()} */}
       <Button
         style={{ position: "absolute", right: 10, bottom: 10 }}
         content="Close"
