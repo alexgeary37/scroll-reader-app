@@ -1,7 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Item, Icon, Button, Form, Header } from "semantic-ui-react";
-import AddQuestionToTextFile from "./textFiles/AddQuestionToTextFile";
 import DeleteTextModal from "./textFiles/DeleteTextModal";
 import TextFileQuestionsView from "./textFiles/TextFileQuestionsView";
 import TextFileTextView from "./textFiles/TextFileTextView";
@@ -14,7 +12,6 @@ const TextFile = ({
   removeQuestion,
   deleteFile,
 }) => {
-  const [openAddQuestion, setOpenAddQuestion] = useState(false);
   const [openViewQuestions, setOpenViewQuestions] = useState(false);
   const [openTextFileTextView, setOpenTextFileTextView] = useState(false);
   const [openDeleteTextModal, setOpenDeleteTextModal] = useState(false);
@@ -23,29 +20,6 @@ const TextFile = ({
   useEffect(() => {
     setQuestionFormat(file.questionFormat);
   }, [file.questionFormat]);
-
-  const addQuestion = (question, answerRegion) => {
-    const fileID = file.key;
-
-    axios
-      .put("http://localhost:3001/addTextFileQuestion", {
-        id: fileID,
-        question: question,
-        answerRegion: answerRegion,
-        questionFormat: questionFormat,
-      })
-      .then((response) => {
-        // Return the latest question just added.
-        const newQuestion = response.data.questions.at(-1);
-        updateFileQuestions(newQuestion, questionFormat);
-      })
-      .catch((error) => {
-        console.error(
-          "Error updating file.questions and file.questionFormat:",
-          error
-        );
-      });
-  };
 
   return (
     <Item>
@@ -88,13 +62,7 @@ const TextFile = ({
 
           <div className="ui vertical buttons">
             <Button
-              disabled={questionFormat === "" || usedAsScrollText}
-              content="Add Question"
-              onClick={() => setOpenAddQuestion(true)}
-            />
-            <Button
-              disabled={file.questions.length === 0}
-              content="View Questions"
+              content="Questions"
               onClick={() => setOpenViewQuestions(true)}
             />
             <Button
@@ -113,17 +81,13 @@ const TextFile = ({
           </div>
         </div>
 
-        <AddQuestionToTextFile
-          isOpen={openAddQuestion}
-          fileID={file.key}
-          format={questionFormat}
-          addQuestion={addQuestion}
-          close={() => setOpenAddQuestion(false)}
-        />
         <TextFileQuestionsView
           isOpen={openViewQuestions}
+          fileID={file.key}
           questions={file.questions}
+          format={questionFormat}
           usedAsScrollText={usedAsScrollText}
+          updateFileQuestions={updateFileQuestions}
           removeQuestion={removeQuestion}
           close={() => setOpenViewQuestions(false)}
         />
