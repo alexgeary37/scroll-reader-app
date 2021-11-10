@@ -134,7 +134,7 @@ const AddQuestionToTextFile = ({
   return (
     <Modal
       open={isOpen}
-      size={format === "inline" ? "" : "tiny"}
+      size={format === "inline" ? "small" : "tiny"}
       style={{ padding: 10 }}
     >
       {displayConfigurationView()}
