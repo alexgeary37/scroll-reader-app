@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Modal, Divider, Button, Header } from "semantic-ui-react";
+import AddStyleToTextFile from "./AddStyleToTextFile";
+import axios from "axios";
 
 const TextFileStylesView = ({
   isOpen,
@@ -11,24 +13,22 @@ const TextFileStylesView = ({
   close,
 }) => {
   const [openAddStyle, setOpenAddStyle] = useState(false);
-  //   const addStyle = (style) => {
-  //     axios
-  //       .put("http://localhost:3001/addTextFileStyle", {
-  //         id: fileID,
-  //         style: style,
-  //       })
-  //       .then((response) => {
-  //         // Return the latest style just added.
-  //         const newStyle = response.data.styles.at(-1);
-  //         updateFileStyles(newStyle);
-  //       })
-  //       .catch((error) => {
-  //         console.error(
-  //           "Error updating file.styles:",
-  //           error
-  //         );
-  //       });
-  //   };
+
+  const addStyle = (style) => {
+    axios
+      .put("http://localhost:3001/addTextFileStyle", {
+        id: fileID,
+        style: style,
+      })
+      .then((response) => {
+        // Return the latest style just added.
+        const newStyle = response.data.styles.at(-1);
+        updateFileStyles(newStyle);
+      })
+      .catch((error) => {
+        console.error("Error updating file.styles:", error);
+      });
+  };
 
   return (
     <Modal style={{ padding: 10 }} open={isOpen}>
@@ -59,12 +59,12 @@ const TextFileStylesView = ({
       <Divider />
       <Button floated="right" content="Close" onClick={close} />
 
-      {/* <AddStyleToTextFile
+      <AddStyleToTextFile
         isOpen={openAddStyle}
         fileID={fileID}
         addStyle={addStyle}
         close={() => setOpenAddStyle(false)}
-      /> */}
+      />
     </Modal>
   );
 };

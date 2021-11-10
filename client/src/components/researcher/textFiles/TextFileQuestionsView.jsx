@@ -109,7 +109,6 @@ const TextFileQuestionsView = ({
 
       <AddQuestionToTextFile
         isOpen={openAddQuestion}
-        fileID={fileID}
         format={questionFormat}
         addQuestion={addQuestion}
         close={() => setOpenAddQuestion(false)}
