@@ -84,6 +84,7 @@ const TextFile = ({
               </Form>
             </div>
           </div>
+
           <div className="ui vertical buttons">
             <Button
               disabled={questionFormat === "" || fileInUse}
@@ -105,7 +106,12 @@ const TextFile = ({
               onClick={() => setOpenDeleteTextModal(true)}
             />
           </div>
+
+          <div className="ui vertical buttons" style={{ marginLeft: 5 }}>
+            <Button content="Styles" />
+          </div>
         </div>
+
         <AddQuestionToTextFile
           isOpen={openAddQuestion}
           fileID={file.key}
