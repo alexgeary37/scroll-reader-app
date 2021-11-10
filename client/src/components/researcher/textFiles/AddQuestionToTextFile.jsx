@@ -113,7 +113,11 @@ const AddQuestionToTextFile = ({
           <Button
             positive
             content="Select Answer Region"
-            onClick={() => setDisplayAnswerRegionConfiguration(true)}
+            onClick={() =>
+              setDisplayAnswerRegionConfiguration(
+                !displayAnswerRegionConfiguration
+              )
+            }
           />
           {displayAnswerRegionSelection()}
         </div>
