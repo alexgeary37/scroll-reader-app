@@ -3,7 +3,7 @@ import { Modal, List, Item, Divider, Button, Header } from "semantic-ui-react";
 const TextFileQuestionsView = ({
   isOpen,
   questions,
-  fileInUse,
+  usedAsScrollText,
   removeQuestion,
   close,
 }) => {
@@ -28,7 +28,7 @@ const TextFileQuestionsView = ({
               />
               <Button
                 floated="right"
-                disabled={fileInUse}
+                disabled={usedAsScrollText}
                 content="Remove"
                 onClick={() => handleRemoveQuestion(question)}
               />

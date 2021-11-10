@@ -186,7 +186,20 @@ const ResearcherView = () => {
       });
   };
 
-  const fileInUse = (fileID) => {
+  const fileUsedInTemplate = (fileID) => {
+    if (!templates.isFetching) {
+      const usedAsSpeed =
+        templates.data.find((template) =>
+          template.speedTest.texts.some((text) => text.fileID === fileID)
+        ) !== undefined;
+
+      const usedAsScroll = fileUsedAsScrollText(fileID);
+      return usedAsSpeed || usedAsScroll;
+    }
+    return false;
+  };
+
+  const fileUsedAsScrollText = (fileID) => {
     if (!templates.isFetching) {
       return (
         templates.data.find((template) =>
@@ -216,7 +229,8 @@ const ResearcherView = () => {
                   updateFileQuestions={(newQuestion, questionFormat) =>
                     handleUpdateFileQuestions(file, newQuestion, questionFormat)
                   }
-                  fileInUse={fileInUse(file.key)}
+                  usedInTemplate={fileUsedInTemplate(file.key)}
+                  usedAsScrollText={fileUsedAsScrollText(file.key)}
                   removeQuestion={(question) =>
                     handleRemoveFileQuestion(file, question)
                   }
@@ -285,6 +299,7 @@ const ResearcherView = () => {
           <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
           <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
         </Grid>
+        <Button positive content="Download data" />
       </Container>
     </div>
   );

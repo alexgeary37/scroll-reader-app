@@ -9,7 +9,8 @@ import TextFileTextView from "./textFiles/TextFileTextView";
 const TextFile = ({
   file,
   updateFileQuestions,
-  fileInUse,
+  usedInTemplate,
+  usedAsScrollText,
   removeQuestion,
   deleteFile,
 }) => {
@@ -87,7 +88,7 @@ const TextFile = ({
 
           <div className="ui vertical buttons">
             <Button
-              disabled={questionFormat === "" || fileInUse}
+              disabled={questionFormat === "" || usedAsScrollText}
               content="Add Question"
               onClick={() => setOpenAddQuestion(true)}
             />
@@ -101,7 +102,7 @@ const TextFile = ({
               onClick={() => setOpenTextFileTextView(true)}
             />
             <Button
-              disabled={fileInUse}
+              disabled={usedInTemplate}
               content="Delete"
               onClick={() => setOpenDeleteTextModal(true)}
             />
@@ -122,7 +123,7 @@ const TextFile = ({
         <TextFileQuestionsView
           isOpen={openViewQuestions}
           questions={file.questions}
-          fileInUse={fileInUse}
+          usedAsScrollText={usedAsScrollText}
           removeQuestion={removeQuestion}
           close={() => setOpenViewQuestions(false)}
         />
