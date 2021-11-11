@@ -24,33 +24,43 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
     setLineHeight(event.target.value);
   };
 
-  const handleAddStyle = () => {
+  const checkFormInputs = () => {
+    let emptyFields = false;
+
     if (family === "") {
       setDisplayFamilyError(true);
-      return;
+      emptyFields = true;
     }
     if (size === -1) {
       setDisplaySizeError(true);
-      return;
+      emptyFields = true;
     }
     if (lineHeight === -1) {
       setDisplayLineHeightError(true);
-      return;
+      emptyFields = true;
     }
 
-    const style = {
-      fontFamily: family,
-      fontSize: size,
-      lineHeight: lineHeight,
-    };
+    return emptyFields;
+  };
 
-    addStyle(style);
+  const handleAddStyle = () => {
+    const emptyFields = checkFormInputs();
 
-    setFamily("");
-    setSize(-1);
-    setLineHeight(-1);
+    if (!emptyFields) {
+      const style = {
+        fontFamily: family.trim(),
+        fontSize: size,
+        lineHeight: lineHeight,
+      };
 
-    close();
+      addStyle(style);
+
+      setFamily("");
+      setSize(-1);
+      setLineHeight(-1);
+
+      close();
+    }
   };
 
   const handleCancel = () => {
@@ -79,18 +89,17 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
           style={{ marginBottom: 10 }}
           error={displaySizeError}
           type="Number"
-          fluid
-          placeholder="Type a size number here..."
+          placeholder="Size (pixels)"
           onChange={handleSizeChange}
         />
         <Input
           style={{ marginBottom: 10 }}
           error={displayLineHeightError}
           type="Number"
-          fluid
-          placeholder="Type a line height number here..."
+          placeholder="Line height (pixels)"
           onChange={handleLineHeightChange}
         />
+
         <div style={{ position: "absolute", right: 10, bottom: 10 }}>
           <Button content="Cancel" onClick={handleCancel} />
           <Button primary content="Add Style" onClick={handleAddStyle} />

@@ -144,13 +144,34 @@ const ResearcherView = () => {
         questionFormat: questionFormat,
       })
       .catch((error) => {
-        console.error("Error removing file.questions[index]", error);
+        console.error("Error removing question from file.questions", error);
       });
   };
 
-  const handleUpdateFileStyles = (file, style) => {};
+  const handleUpdateFileStyles = (file, newStyle) => {
+    let files = textFiles.data;
+    const index = files.indexOf(file);
+    files[index].styles.push(newStyle);
 
-  const handleRemoveFileStyle = (file, style) => {};
+    setTextFiles({ data: files, isFetching: false });
+  };
+
+  const handleRemoveFileStyle = (file, style) => {
+    let files = textFiles.data;
+    const index = files.indexOf(file);
+    files[index].styles = files[index].styles.filter((s) => s !== style);
+
+    setTextFiles({ data: files, isFetching: false });
+
+    axios
+      .put("http://localhost:3001/removeTextFileStyle", {
+        fileID: file.key,
+        styleID: style._id,
+      })
+      .catch((error) => {
+        console.error("Error removing style from file.styles", error);
+      });
+  };
 
   const handleDeleteFile = (file) => {
     let files = textFiles.data;
