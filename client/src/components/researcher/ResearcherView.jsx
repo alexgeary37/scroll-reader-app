@@ -46,7 +46,6 @@ const ResearcherView = () => {
 
         // Set text files for rendering, and indicate that they are no longer being fetched.
         setTextFiles({ data: files, isFetching: false });
-        console.log(files);
       })
       .catch((error) => {
         console.error("Error fetching files:", error);

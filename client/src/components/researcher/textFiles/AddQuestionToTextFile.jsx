@@ -22,17 +22,14 @@ const AddQuestionToTextFile = ({
   const [displayAnswerRegionError, setDisplayAnswerRegionError] =
     useState(false);
 
-  const handleCancel = () => {
-    setQuestion("");
-    setAnswerRegion({ startIndex: 0, endIndex: 0 });
-    setDisplayAnswerRegionConfiguration(false);
-    setDisplayAnswerRegionError(false);
-    close();
-  };
-
   const handleQuestionChange = (event) => {
     setDisplayQuestionError(false);
     setQuestion(event.target.value);
+  };
+
+  const handleSelectAnswerRegion = (mouseDownIndex, mouseUpIndex) => {
+    setDisplayAnswerRegionError(false);
+    setAnswerRegion({ startIndex: mouseDownIndex, endIndex: mouseUpIndex });
   };
 
   const handleAddQuestion = () => {
@@ -57,9 +54,12 @@ const AddQuestionToTextFile = ({
     close();
   };
 
-  const handleSelectAnswerRegion = (mouseDownIndex, mouseUpIndex) => {
+  const handleCancel = () => {
+    setQuestion("");
+    setAnswerRegion({ startIndex: 0, endIndex: 0 });
+    setDisplayAnswerRegionConfiguration(false);
     setDisplayAnswerRegionError(false);
-    setAnswerRegion({ startIndex: mouseDownIndex, endIndex: mouseUpIndex });
+    close();
   };
 
   const displayErrorMessage = () => {
