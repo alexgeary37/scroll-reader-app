@@ -67,7 +67,7 @@ const TextFile = ({
         <TextFileStylesView
           isOpen={openViewStyles}
           fileID={file.value}
-          // styles={file.styles}
+          styles={file.styles}
           usedInTemplate={usedInTemplate}
           updateFileStyles={updateFileStyles}
           removeStyle={removeStyle}

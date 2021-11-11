@@ -38,6 +38,7 @@ const ResearcherView = () => {
             name: file.fileName,
             questions: file.questions,
             questionFormat: file.questionFormat,
+            styles: file.styles,
             uploadedAt: file.createdAt,
           };
           files.push(textFile);
@@ -45,6 +46,7 @@ const ResearcherView = () => {
 
         // Set text files for rendering, and indicate that they are no longer being fetched.
         setTextFiles({ data: files, isFetching: false });
+        console.log(files);
       })
       .catch((error) => {
         console.error("Error fetching files:", error);

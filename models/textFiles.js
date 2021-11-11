@@ -13,6 +13,13 @@ const TextFileSchema = mongoose.Schema({
     }),
   ],
   questionFormat: { type: String, required: false },
+  styles: [
+    mongoose.Schema({
+      fontFamily: { type: String, required: true },
+      fontSize: { type: Number, required: true },
+      lineHeight: { type: Number, required: true },
+    }),
+  ],
   createdAt: { type: Date, required: true },
 });
 

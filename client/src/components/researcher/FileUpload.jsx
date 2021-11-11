@@ -20,6 +20,7 @@ const FileUpload = ({ uploadSubmitted }) => {
           fileName: file.name,
           questions: [],
           questionFormat: "",
+          styles: [],
           createdAt: new Date(),
         };
         axios
@@ -31,6 +32,7 @@ const FileUpload = ({ uploadSubmitted }) => {
               name: response.data.fileName,
               questions: [],
               questionFormat: "",
+              styles: [],
               uploadedAt: response.data.createdAt,
             };
             uploadSubmitted(doc);
