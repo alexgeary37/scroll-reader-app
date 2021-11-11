@@ -142,6 +142,8 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setScrollTexts(tempScrollTexts);
   };
 
+  const handleSelectStyle = (text, style) => {};
+
   const setScrollTextInstructions = (text, instructions) => {
     const index = scrollTexts.indexOf(text);
     let tempScrollTexts = scrollTexts;
@@ -221,7 +223,11 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             availableQuestions={
               textFiles.find((file) => file.key === text.fileID).questions
             }
+            availableStyles={
+              textFiles.find((file) => file.key === text.fileID).styles
+            }
             addQuestions={handleAddQuestions}
+            selectStyle={handleSelectStyle}
             setInstructions={setScrollTextInstructions}
             instructionsError={
               text.instructions.main === "" && displayMissingInputError

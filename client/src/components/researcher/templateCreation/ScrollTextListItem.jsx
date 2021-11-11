@@ -1,17 +1,21 @@
 import { useState } from "react";
 import { Input, Item, Button } from "semantic-ui-react";
 import QuestionsView from "./QuestionsView";
+import StylesView from "./StylesView";
 
 const ScrollTextListItem = ({
   text,
   availableQuestions,
+  availableStyles,
   addQuestions,
+  selectStyle,
   setInstructions,
   instructionsError,
   toggleHasFamiliarityQuestion,
   toggleHasInterestQuestion,
 }) => {
   const [viewQuestions, setViewQuestions] = useState(false);
+  const [viewStyles, setViewStyles] = useState(false);
   const [instructionsAreEmpty, setInstructionsAreEmpty] = useState(true);
 
   const handleInstructionsChange = (text, instructions) => {
@@ -22,6 +26,11 @@ const ScrollTextListItem = ({
   const updateQuestions = (selectedQuestions) => {
     setViewQuestions(false);
     addQuestions(text, selectedQuestions);
+  };
+
+  const updateStyle = (style) => {
+    setViewStyles(false);
+    selectStyle(style);
   };
 
   return (
@@ -59,12 +68,19 @@ const ScrollTextListItem = ({
             </div>
           </div>
 
+          <Button content="Styles" onClick={() => setViewStyles(true)} />
           <Button content="Questions" onClick={() => setViewQuestions(true)} />
 
           <QuestionsView
             isOpen={viewQuestions}
             availableQuestions={availableQuestions}
             updateQuestions={updateQuestions}
+          />
+
+          <StylesView
+            isOpen={viewStyles}
+            availableStyles={availableStyles}
+            updateStyle={updateStyle}
           />
         </div>
       </Item.Content>
