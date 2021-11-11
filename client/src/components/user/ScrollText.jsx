@@ -9,6 +9,12 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
   const sessionContext = useContext(SessionContext);
   const [words, setWords] = useState([]);
 
+  const textStyle = {
+    fontFamily: "sans-serif",
+    fontSize: "15px",
+    lineHeight: "20px",
+  };
+
   useEffect(() => {
     fetchText();
   }, [fileID]);
@@ -88,6 +94,7 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
       className={
         selectAnswerEnabled ? "text-container handcursor" : "text-container"
       }
+      style={textStyle}
     >
       {words.map((word, index) => (
         <span key={uuid_v4()} onClick={() => handleWordClick(index)}>

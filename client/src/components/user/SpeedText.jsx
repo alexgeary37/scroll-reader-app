@@ -4,6 +4,12 @@ import axios from "axios";
 const SpeedText = ({ fileID }) => {
   const [text, setText] = useState("");
 
+  const textStyle = {
+    fontFamily: "sans-serif",
+    fontSize: "15px",
+    lineHeight: "20px",
+  };
+
   useEffect(() => {
     fetchText();
   }, [fileID]);
@@ -21,7 +27,11 @@ const SpeedText = ({ fileID }) => {
       });
   };
 
-  return <p className="text-container">{text}</p>;
+  return (
+    <p className="text-container" style={textStyle}>
+      {text}
+    </p>
+  );
 };
 
 export default SpeedText;
