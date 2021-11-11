@@ -95,6 +95,29 @@ class Server {
       );
     });
 
+    this.app.put("/addTextFileStyle", async (req, res) => {
+      const id = req.body.id;
+      const style = req.body.style;
+
+      TextFileModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            styles: style,
+          },
+        },
+        { new: true },
+        (err, textFile) => {
+          if (err) {
+            res.send(err);
+          } else {
+            textFile.save();
+            res.send(textFile);
+          }
+        }
+      );
+    });
+
     this.app.put("/deleteTextFile", async (req, res) => {
       const fileID = req.body.fileID;
 
@@ -122,6 +145,31 @@ class Server {
           },
           $set: {
             questionFormat: questionFormat,
+          },
+        },
+        { new: true },
+        (err, textFile) => {
+          if (err) {
+            res.send(err);
+          } else {
+            textFile.save();
+            res.send(textFile);
+          }
+        }
+      );
+    });
+
+    this.app.put("/removeTextFileStyle", async (req, res) => {
+      const fileID = req.body.fileID;
+      const styleID = req.body.styleID;
+
+      TextFileModel.findByIdAndUpdate(
+        fileID,
+        {
+          $pull: {
+            styles: {
+              _id: styleID,
+            },
           },
         },
         { new: true },

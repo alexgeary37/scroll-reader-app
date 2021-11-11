@@ -74,7 +74,7 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
     }
   };
 
-  // This is a useLayoutEffect function.
+  // This is a useLayoutEffect function triggered whenever a scroll event occurs.
   useScrollPosition(addScrollPosEntry, 50);
 
   const handleWordClick = (index) => {
