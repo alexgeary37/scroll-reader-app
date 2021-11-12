@@ -5,15 +5,15 @@ import axios from "axios";
 import { SessionContext } from "../../contexts/SessionContext.jsx";
 import { wordSeparators } from "../../utilities.js";
 
-const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
+const ScrollText = ({
+  fileID,
+  textStyleID,
+  selectAnswerEnabled,
+  selectAnswer,
+}) => {
   const sessionContext = useContext(SessionContext);
   const [words, setWords] = useState([]);
-
-  const textStyle = {
-    fontFamily: "sans-serif",
-    fontSize: "15px",
-    lineHeight: "20px",
-  };
+  const [textStyle, setTextStyle] = useState(null);
 
   useEffect(() => {
     fetchText();
@@ -26,6 +26,14 @@ const ScrollText = ({ fileID, selectAnswerEnabled, selectAnswer }) => {
       })
       .then((response) => {
         setWords(response.data.text.split(wordSeparators));
+
+        const style = response.data.styles.find((s) => s._id === textStyleID);
+        setTextStyle({
+          fontFamily: style.fontFamily,
+          fontSize: `${style.fontSize}px`,
+          lineHeight: `${style.lineHeight}px`,
+        });
+
         sessionContext.setQuestionFormat(response.data.questionFormat);
         sessionContext.setQuestionAnswers(
           response.data.questions.map((q) => {

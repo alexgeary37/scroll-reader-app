@@ -258,6 +258,7 @@ const ScrollTest = () => {
       return (
         <ScrollText
           fileID={currentText.fileID}
+          textStyleID={currentText.styleID}
           selectAnswerEnabled={selectAnswerEnabled}
           selectAnswer={handleAnswerQuestion}
         />
