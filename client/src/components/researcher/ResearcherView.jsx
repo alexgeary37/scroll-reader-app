@@ -76,7 +76,7 @@ const ResearcherView = () => {
                 .name,
               instructions: fileObj.instructions,
               questionIDs: fileObj.questionIDs,
-              styleID: fileObj.styles[0]._id,
+              styleID: fileObj.styleID,
             });
           });
 

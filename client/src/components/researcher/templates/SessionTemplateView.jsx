@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Button,
   Header,
@@ -9,6 +10,26 @@ import {
 } from "semantic-ui-react";
 
 const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
+  useEffect(() => {
+    console.log(template);
+  }, []);
+
+  const styleContent = (text) => {
+    return `font-family: ${
+      textFiles
+        .find((tf) => tf.value === text.fileID)
+        .styles.find((s) => s._id === text.styleID).fontFamily
+    }, font-size: ${
+      textFiles
+        .find((tf) => tf.value === text.fileID)
+        .styles.find((s) => s._id === text.styleID).fontSize
+    }, line-height: ${
+      textFiles
+        .find((tf) => tf.value === text.fileID)
+        .styles.find((s) => s._id === text.styleID).lineHeight
+    }`;
+  };
+
   const speedTestInfo = () => {
     return (
       <div>
@@ -74,6 +95,15 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
                 <Item.Description
                   as="h5"
                   style={{ marginTop: 5, marginBottom: 0 }}
+                  content="Style"
+                />
+                <Item.Description
+                  style={{ marginLeft: 20 }}
+                  content={styleContent(text)}
+                />
+                <Item.Description
+                  as="h5"
+                  style={{ marginTop: 5, marginBottom: 0 }}
                   content="Questions:"
                 />
                 <List style={{ marginLeft: 20 }}>
@@ -85,13 +115,9 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
                             text.questionIDs.indexOf(questionID) + 1
                           }. ${
                             // Get the question from the textFile
-                            textFiles[
-                              textFiles.indexOf(
-                                textFiles.find(
-                                  (file) => file.value === text.fileID
-                                )
-                              )
-                            ].questions.find((q) => q._id === questionID)
+                            textFiles
+                              .find((tf) => tf.value === text.fileID)
+                              .questions.find((q) => q._id === questionID)
                               .question
                           }`}
                         />
