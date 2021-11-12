@@ -12,18 +12,18 @@ const ScrollTestInstructions = ({ isOpen, text }) => {
     const sessionID = sessionContext.sessionID;
     const startTime = new Date();
 
-    let textObj = {
+    const textObj = {
       id: sessionID,
       fileID: text.fileID,
       startTime: startTime,
     };
 
     if (JSON.parse(text.instructions.hasFamiliarityQuestion) === true) {
-      textObj["familiarity"] = familiarity;
+      textObj.familiarity = familiarity;
     }
 
     if (JSON.parse(text.instructions.hasInterestQuestion) === true) {
-      textObj["interest"] = interest;
+      textObj.interest = interest;
     }
 
     axios

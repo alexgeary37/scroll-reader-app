@@ -141,28 +141,28 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
 
   const handleAddQuestions = (text, selectedQuestions) => {
     const index = scrollTexts.indexOf(text);
-    let tempScrollTexts = scrollTexts;
+    const tempScrollTexts = scrollTexts;
     tempScrollTexts[index].questionIDs = selectedQuestions;
     setScrollTexts(tempScrollTexts);
   };
 
   const handleSelectStyle = (text, styleID) => {
     const index = scrollTexts.indexOf(text);
-    let tempScrollTexts = scrollTexts;
+    const tempScrollTexts = scrollTexts;
     tempScrollTexts[index].styleID = styleID;
     setScrollTexts(tempScrollTexts);
   };
 
   const setScrollTextInstructions = (text, instructions) => {
     const index = scrollTexts.indexOf(text);
-    let tempScrollTexts = scrollTexts;
+    const tempScrollTexts = scrollTexts;
     tempScrollTexts[index].instructions.main = instructions;
     setScrollTexts(tempScrollTexts);
   };
 
   const setAskQuestion = (text, question) => {
     const index = scrollTexts.indexOf(text);
-    let tempScrollTexts = scrollTexts;
+    const tempScrollTexts = scrollTexts;
     if (question === "familiarity") {
       const ask = !tempScrollTexts[index].instructions.hasFamiliarityQuestion;
       tempScrollTexts[index].instructions.hasFamiliarityQuestion = ask;

@@ -118,7 +118,7 @@ const ResearcherView = () => {
   };
 
   const handleUpdateFileQuestions = (file, newQuestion, questionFormat) => {
-    let files = textFiles.data;
+    const files = textFiles.data;
     const index = files.indexOf(file);
     files[index].questions.push(newQuestion);
     files[index].questionFormat = questionFormat;
@@ -127,7 +127,7 @@ const ResearcherView = () => {
   };
 
   const handleRemoveFileQuestion = (file, question) => {
-    let files = textFiles.data;
+    const files = textFiles.data;
     const index = files.indexOf(file);
     files[index].questions = files[index].questions.filter(
       (q) => q !== question
@@ -150,7 +150,7 @@ const ResearcherView = () => {
   };
 
   const handleUpdateFileStyles = (file, newStyle) => {
-    let files = textFiles.data;
+    const files = textFiles.data;
     const index = files.indexOf(file);
     files[index].styles.push(newStyle);
 
@@ -158,7 +158,7 @@ const ResearcherView = () => {
   };
 
   const handleRemoveFileStyle = (file, style) => {
-    let files = textFiles.data;
+    const files = textFiles.data;
     const index = files.indexOf(file);
     files[index].styles = files[index].styles.filter((s) => s !== style);
 
