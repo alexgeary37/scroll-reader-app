@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Divider, Button, Header, List, Item } from "semantic-ui-react";
 import AddStyleToTextFile from "./AddStyleToTextFile";
 import axios from "axios";

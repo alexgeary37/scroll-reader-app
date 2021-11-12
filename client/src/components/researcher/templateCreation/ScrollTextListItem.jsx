@@ -30,7 +30,7 @@ const ScrollTextListItem = ({
 
   const updateStyle = (style) => {
     setViewStyles(false);
-    selectStyle(style);
+    selectStyle(text, style);
   };
 
   return (

@@ -68,13 +68,14 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     const emptyFields = checkFormInputs();
 
     if (!emptyFields) {
-      // Set files field.
+      // Create scrollTexts field.
       const files = [];
       for (let i = 0; i < scrollTexts.length; i++) {
         files.push({
           fileID: scrollTexts[i].fileID,
           instructions: scrollTexts[i].instructions,
           questionIDs: scrollTexts[i].questionIDs,
+          styleID: scrollTexts[i].styleID,
         });
       }
 
@@ -130,6 +131,9 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             hasInterestQuestion: true,
           },
           questionIDs: [],
+          styleID: textFiles.find(
+            (tf) => tf.value === data.value[data.value.length - 1]
+          ).styles[0].value,
         },
       ]);
     }
@@ -142,7 +146,12 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setScrollTexts(tempScrollTexts);
   };
 
-  const handleSelectStyle = (text, style) => {};
+  const handleSelectStyle = (text, styleID) => {
+    const index = scrollTexts.indexOf(text);
+    let tempScrollTexts = scrollTexts;
+    tempScrollTexts[index].styleID = styleID;
+    setScrollTexts(tempScrollTexts);
+  };
 
   const setScrollTextInstructions = (text, instructions) => {
     const index = scrollTexts.indexOf(text);
@@ -192,6 +201,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           name: textFiles.find((tf) => tf.value === fileObj.fileID).name,
           instructions: fileObj.instructions,
           questionIDs: fileObj.questionIDs,
+          styleID: fileObj.styleID,
         })
       );
 

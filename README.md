@@ -77,5 +77,12 @@ TextFileSchema {
     }
   ],
   questionFormat,
+  styles [
+    {
+      fontFamily,
+      fontSize,
+      lineHeight
+    }
+  ],
   createdAt
 }

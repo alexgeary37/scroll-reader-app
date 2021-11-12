@@ -76,6 +76,7 @@ const ResearcherView = () => {
                 .name,
               instructions: fileObj.instructions,
               questionIDs: fileObj.questionIDs,
+              styleID: fileObj.styles[0]._id,
             });
           });
 
@@ -225,6 +226,24 @@ const ResearcherView = () => {
     return false;
   };
 
+  const handleFileUpload = (file) => {
+    axios
+      .get("http://localhost:3001/getTextFile", {
+        params: { _id: file.key },
+      })
+      .then((response) => {
+        const newFile = file;
+        newFile.styles[0]._id = response.data.styles[0]._id;
+        setTextFiles({
+          data: [...textFiles.data, newFile],
+          isFetching: false,
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching text in ScrollText:", error);
+      });
+  };
+
   const displayTextFiles = () => {
     const curUrl = window.location.href;
 
@@ -259,14 +278,7 @@ const ResearcherView = () => {
             </div>
           </Segment>
 
-          <FileUpload
-            uploadSubmitted={(file) => {
-              setTextFiles({
-                data: [...textFiles.data, file],
-                isFetching: false,
-              });
-            }}
-          />
+          <FileUpload uploadSubmitted={handleFileUpload} />
         </div>
       );
     }

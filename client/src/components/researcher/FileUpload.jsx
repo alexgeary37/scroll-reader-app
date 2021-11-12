@@ -3,6 +3,12 @@ import { useRef } from "react";
 import { Button } from "semantic-ui-react";
 
 const FileUpload = ({ uploadSubmitted }) => {
+  const defaultStyle = {
+    fontFamily: "sans-serif",
+    fontSize: 15,
+    lineHeight: 20,
+  };
+
   const fileRef = useRef();
 
   const handleButtonClick = () => {
@@ -20,7 +26,7 @@ const FileUpload = ({ uploadSubmitted }) => {
           fileName: file.name,
           questions: [],
           questionFormat: "",
-          styles: [],
+          styles: [defaultStyle],
           createdAt: new Date(),
         };
         axios
@@ -32,7 +38,7 @@ const FileUpload = ({ uploadSubmitted }) => {
               name: response.data.fileName,
               questions: [],
               questionFormat: "",
-              styles: [],
+              styles: [defaultStyle],
               uploadedAt: response.data.createdAt,
             };
             uploadSubmitted(doc);
