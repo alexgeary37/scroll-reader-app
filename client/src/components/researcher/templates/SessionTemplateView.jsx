@@ -10,10 +10,6 @@ import {
 } from "semantic-ui-react";
 
 const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
-  useEffect(() => {
-    console.log(template);
-  }, []);
-
   const styleContent = (text) => {
     return `font-family: ${
       textFiles
