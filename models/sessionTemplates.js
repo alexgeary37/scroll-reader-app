@@ -3,7 +3,12 @@ const mongoose = require("mongoose");
 const SessionTemplateSchema = mongoose.Schema({
   name: { type: String, required: true },
   speedTest: {
-    fileIDs: [{ type: String, required: true }], // TODO: Make these list items objects with fileID and styleID
+    texts: [
+      mongoose.Schema({
+        fileID: { type: String, required: true },
+        styleID: { type: String, required: true },
+      }),
+    ],
     instructions: { type: String, required: true },
   },
   scrollTexts: [
