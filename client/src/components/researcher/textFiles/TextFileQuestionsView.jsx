@@ -32,7 +32,7 @@ const TextFileQuestionsView = ({
     axios
       .put("http://localhost:3001/addTextFileQuestion", {
         id: fileID,
-        question: question,
+        question: question.trim(),
         answerRegion: answerRegion,
         questionFormat: questionFormat,
       })

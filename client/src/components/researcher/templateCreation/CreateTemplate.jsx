@@ -37,7 +37,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const checkFormInputs = () => {
     let emptyFields = false;
 
-    if (templateName === "") {
+    if (templateName.trim() === "") {
       setDisplayMissingInputError(true);
       emptyFields = true;
     }
@@ -49,7 +49,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       setDisplayMissingInputError(true);
       emptyFields = true;
     }
-    if (speedTestInstructions === "") {
+    if (speedTestInstructions.trim() === "") {
       setDisplayMissingInputError(true);
       emptyFields = true;
     }
@@ -80,10 +80,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       }
 
       const template = {
-        name: templateName,
+        name: templateName.trim(),
         speedTest: {
           fileIDs: speedTextIDs,
-          instructions: speedTestInstructions,
+          instructions: speedTestInstructions.trim(),
         },
         scrollTexts: files,
         createdAt: new Date(),

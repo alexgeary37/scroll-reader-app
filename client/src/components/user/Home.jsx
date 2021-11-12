@@ -49,7 +49,7 @@ const Home = () => {
     const viewportHeight = window.innerHeight;
 
     const newReadingSession = {
-      userName: userName,
+      userName: userName.trim(),
       viewportDimensions: [
         {
           width: viewportWidth,
@@ -74,7 +74,7 @@ const Home = () => {
   };
 
   const handleStartTask1 = () => {
-    if (userName === "") {
+    if (userName.trim() === "") {
       setDisplayUserNameError(true);
       return;
     }
