@@ -13,7 +13,7 @@ import ScrollTextListItem from "./ScrollTextListItem";
 
 const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [templateName, setTemplateName] = useState("");
-  const [speedTextIDs, setSpeedTextIDs] = useState([]);
+  const [speedTexts, setSpeedTexts] = useState([]);
   const [speedTestInstructions, setSpeedTestInstructions] = useState("");
   const [scrollTexts, setScrollTexts] = useState([]);
   const [displayMissingInputError, setDisplayMissingInputError] =
@@ -41,7 +41,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       setDisplayMissingInputError(true);
       emptyFields = true;
     }
-    if (speedTextIDs.length === 0) {
+    if (speedTexts.length === 0) {
       setDisplayMissingInputError(true);
       emptyFields = true;
     }
@@ -82,7 +82,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       const template = {
         name: templateName.trim(),
         speedTest: {
-          fileIDs: speedTextIDs,
+          texts: speedTexts,
           instructions: speedTestInstructions.trim(),
         },
         scrollTexts: files,
@@ -97,6 +97,36 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         .catch((error) => {
           console.error("Error creating session template:", error);
         });
+    }
+  };
+
+  const handleSelectSpeedText = (e, data) => {
+    if (e.target.className === "delete icon") {
+      for (let i = 0; i < data.options.length; i++) {
+        const optionIndex = data.value.indexOf(data.options[i].value);
+
+        // IF this element is not found in data.value array, and it is still
+        // in speedTexts, remove it from speedTexts.
+        if (
+          optionIndex === -1 &&
+          speedTexts.some((elem) => elem.fileID === data.options[i].value)
+        ) {
+          setSpeedTexts(
+            speedTexts.filter((elem) => elem.fileID !== data.options[i].value)
+          );
+          break;
+        }
+      }
+    } else {
+      setSpeedTexts([
+        ...speedTexts,
+        {
+          fileID: data.value[data.value.length - 1],
+          styleID: textFiles.find(
+            (tf) => tf.value === data.value[data.value.length - 1]
+          ).styles[0].value,
+        },
+      ]);
     }
   };
 
@@ -146,7 +176,14 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setScrollTexts(tempScrollTexts);
   };
 
-  const handleSelectStyle = (text, styleID) => {
+  const handleSelectSpeedTextStyle = (text, styleID) => {
+    const index = speedTexts.indexOf(text);
+    const tempSpeedTexts = speedTexts;
+    tempSpeedTexts[index].styleID = styleID;
+    setSpeedTexts(tempSpeedTexts);
+  };
+
+  const handleSelectScrollTextStyle = (text, styleID) => {
     const index = scrollTexts.indexOf(text);
     const tempScrollTexts = scrollTexts;
     tempScrollTexts[index].styleID = styleID;
@@ -176,7 +213,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
 
   const clearData = () => {
     setTemplateName("");
-    setSpeedTextIDs([]);
+    setSpeedTexts([]);
     setScrollTexts([]);
     setSpeedTestInstructions("");
     setDisplayMissingInputError(false);
@@ -186,11 +223,12 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     clearData();
 
     if (templateCreated) {
-      const speedTextFileNames = [];
-      responseData.speedTest.fileIDs.forEach((fileID) => {
-        speedTextFileNames.push({
-          fileID: fileID,
-          name: textFiles.find((tf) => tf.value === fileID).name,
+      const tempSpeedTexts = [];
+      responseData.speedTest.texts.forEach((text) => {
+        tempSpeedTexts.push({
+          fileID: text.fileID,
+          name: textFiles.find((tf) => tf.value === text.fileID).name,
+          styleID: text.styleID,
         });
       });
 
@@ -209,7 +247,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         key: responseData._id,
         name: responseData.name,
         speedTest: {
-          texts: speedTextFileNames,
+          texts: tempSpeedTexts,
           instructions: responseData.speedTest.instructions,
         },
         scrollTexts: tempScrollTexts,
@@ -221,6 +259,23 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     } else {
       close(false, null);
     }
+  };
+
+  const displaySpeedTexts = () => {
+    return (
+      <List relaxed divided>
+        {speedTexts.map((text) => {
+          // <SpeedTextListItem
+          //   key={text.fileID}
+          //   text={text}
+          //   availableStyles={
+          //     textFiles.find((file) => file.key === text.fileID).styles
+          //   }
+          //   selectStyle={handleSelectSpeedTextStyle}
+          // />;
+        })}
+      </List>
+    );
   };
 
   const displayScrollTexts = () => {
@@ -237,7 +292,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               textFiles.find((file) => file.key === text.fileID).styles
             }
             addQuestions={handleAddQuestions}
-            selectStyle={handleSelectStyle}
+            selectStyle={handleSelectScrollTextStyle}
             setInstructions={setScrollTextInstructions}
             instructionsError={
               text.instructions.main === "" && displayMissingInputError
@@ -296,14 +351,15 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             />
             <Dropdown
               placeholder="Select texts for the speed test"
-              error={speedTextIDs.length === 0 && displayMissingInputError}
+              error={speedTexts.length === 0 && displayMissingInputError}
               fluid
               search
               selection
               multiple
               options={dropdownTextFiles}
-              onChange={(e, data) => setSpeedTextIDs(data.value)}
+              onChange={handleSelectSpeedText}
             />
+            {displaySpeedTexts()}
           </Segment>
 
           <Segment>

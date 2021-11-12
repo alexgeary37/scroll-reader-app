@@ -47,7 +47,12 @@ ReadingSessionSchema {
 SessionTemplateSchema {
   name,
   speedTest {
-    fileIDs,
+    texts [
+      {
+        fileID,
+        styleID
+      }
+    ],
     instructions
   },
   scrollTexts [

@@ -62,10 +62,11 @@ const ResearcherView = () => {
         data.forEach((temp) => {
           // Get names of text files this template references.
           const speedTexts = [];
-          temp.speedTest.fileIDs.forEach((fileID) => {
+          temp.speedTest.texts.forEach((text) => {
             speedTexts.push({
-              fileID: fileID,
-              name: textFiles.data.find((tf) => tf.value === fileID).name,
+              fileID: text.fileID,
+              name: textFiles.data.find((tf) => tf.value === text.fileID).name,
+              styleID: text.styleID,
             });
           });
           const scrollTexts = [];
