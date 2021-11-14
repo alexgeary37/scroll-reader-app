@@ -35,15 +35,25 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
             <Item.Description>{`Instructions: ${template.speedTest.instructions}`}</Item.Description>
           </Item>
           <Item>
-            <Item.Header as="h5" style={{ margin: 5 }} content="Texts:" />
-            <List style={{ marginLeft: 20 }} horizontal divided>
+            <Item.Header as="h4" style={{ margin: 5 }} content="Texts:" />
+            <List style={{ marginLeft: 20 }} divided relaxed>
               {template.speedTest.texts.map((text) => (
                 <Item key={text.fileID}>
                   <Item.Content>
-                    <Item.Description
+                    <Item.Header
+                      as="h5"
                       content={`${
                         template.speedTest.texts.indexOf(text) + 1
                       }. ${text.name}`}
+                    />
+                    <Item.Description
+                      as="h5"
+                      style={{ marginTop: 5, marginBottom: 0 }}
+                      content="Style"
+                    />
+                    <Item.Description
+                      style={{ marginLeft: 20 }}
+                      content={styleContent(text)}
                     />
                   </Item.Content>
                 </Item>
