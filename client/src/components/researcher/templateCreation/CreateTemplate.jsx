@@ -10,6 +10,7 @@ import {
 } from "semantic-ui-react";
 import axios from "axios";
 import ScrollTextListItem from "./ScrollTextListItem";
+import SpeedTextListItem from "./SpeedTextListItem";
 
 const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [templateName, setTemplateName] = useState("");
@@ -101,6 +102,9 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   };
 
   const handleSelectSpeedText = (e, data) => {
+    console.log("speeds:", speedTexts);
+    console.log(data.value);
+    console.log(textFiles);
     if (e.target.className === "delete icon") {
       for (let i = 0; i < data.options.length; i++) {
         const optionIndex = data.value.indexOf(data.options[i].value);
@@ -122,15 +126,21 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         ...speedTexts,
         {
           fileID: data.value[data.value.length - 1],
+          fileName: data.options.find(
+            (file) => file.value === data.value[data.value.length - 1]
+          ).text,
           styleID: textFiles.find(
             (tf) => tf.value === data.value[data.value.length - 1]
-          ).styles[0].value,
+          ).styles[0]._id,
         },
       ]);
     }
   };
 
   const handleSelectScrollText = (e, data) => {
+    console.log("scrolls:", scrollTexts);
+    console.log(data.value);
+    console.log(textFiles);
     if (e.target.className === "delete icon") {
       for (let i = 0; i < data.options.length; i++) {
         const optionIndex = data.value.indexOf(data.options[i].value);
@@ -163,7 +173,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           questionIDs: [],
           styleID: textFiles.find(
             (tf) => tf.value === data.value[data.value.length - 1]
-          ).styles[0].value,
+          ).styles[0]._id,
         },
       ]);
     }
@@ -264,16 +274,16 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const displaySpeedTexts = () => {
     return (
       <List relaxed divided>
-        {speedTexts.map((text) => {
-          // <SpeedTextListItem
-          //   key={text.fileID}
-          //   text={text}
-          //   availableStyles={
-          //     textFiles.find((file) => file.key === text.fileID).styles
-          //   }
-          //   selectStyle={handleSelectSpeedTextStyle}
-          // />;
-        })}
+        {speedTexts.map((text) => (
+          <SpeedTextListItem
+            key={text.fileID}
+            text={text}
+            availableStyles={
+              textFiles.find((file) => file.key === text.fileID).styles
+            }
+            selectStyle={handleSelectSpeedTextStyle}
+          />
+        ))}
       </List>
     );
   };

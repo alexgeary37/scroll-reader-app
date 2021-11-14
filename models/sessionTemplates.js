@@ -4,10 +4,13 @@ const SessionTemplateSchema = mongoose.Schema({
   name: { type: String, required: true },
   speedTest: {
     texts: [
-      mongoose.Schema({
-        fileID: { type: String, required: true },
-        styleID: { type: String, required: true },
-      }),
+      mongoose.Schema(
+        {
+          fileID: { type: String, required: true },
+          styleID: { type: String, required: true },
+        },
+        { _id: false }
+      ),
     ],
     instructions: { type: String, required: true },
   },
