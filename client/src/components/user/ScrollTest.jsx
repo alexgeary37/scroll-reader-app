@@ -70,12 +70,12 @@ const ScrollTest = () => {
 
         // Set to true if this text contains an endTime, false otherwise.
         if (currentSession.hasOwnProperty("scrollTexts")) {
-          const current = currentSession.scrollTexts.find(
-            (text) => text.fileID === currentText.fileID
+          const text = currentSession.scrollTexts.find(
+            (t) => t.fileID === currentText.fileID
           );
-          // if (current !== "undefined") {
-          if (typeof current !== "undefined") {
-            setTextIsComplete(current.hasOwnProperty("endTime"));
+          // if (text !== "undefined") {
+          if (typeof text !== "undefined") {
+            setTextIsComplete(text.hasOwnProperty("endTime"));
           }
         }
       });

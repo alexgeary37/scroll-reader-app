@@ -14,8 +14,8 @@ const SpeedTest = () => {
   const sessionContext = useContext(SessionContext);
   const startTask2Ref = createRef();
   const [instructions, setInstructions] = useState("");
-  const [currentFileID, setCurrentFileID] = useState(
-    sessionContext.template.speedTest.fileIDs[sessionContext.fileNumber]
+  const [currentText, setCurrentText] = useState(
+    sessionContext.template.speedTest.texts[sessionContext.fileNumber]
   );
   const [textIsComplete, setTextIsComplete] = useState(false);
 
@@ -29,8 +29,8 @@ const SpeedTest = () => {
   }, []);
 
   useEffect(() => {
-    setCurrentFileID(
-      sessionContext.template.speedTest.fileIDs[sessionContext.fileNumber]
+    setCurrentText(
+      sessionContext.template.speedTest.texts[sessionContext.fileNumber]
     );
   }, [sessionContext.fileNumber]);
 
@@ -44,12 +44,11 @@ const SpeedTest = () => {
 
         // Set to true if this text contains an endTime, false otherwise.
         if (currentSession.hasOwnProperty("speedTexts")) {
-          const currentText = currentSession.speedTexts.find(
-            (text) => text.fileID === currentFileID
+          const text = currentSession.speedTexts.find(
+            (t) => t.fileID === currentText.fileID
           );
-          // if (currentText !== "undefined") {
-          if (typeof currentText !== "undefined") {
-            setTextIsComplete(currentText.hasOwnProperty("endTime"));
+          if (typeof text !== "undefined") {
+            setTextIsComplete(text.hasOwnProperty("endTime"));
           }
         }
       });
@@ -67,7 +66,7 @@ const SpeedTest = () => {
       })
       .catch((error) => {
         console.error(
-          "Error updating readingSession.speedTest[currentFileID].startTime:",
+          "Error adding new text to readingSession.speedTexts:",
           error
         );
       });
@@ -82,7 +81,7 @@ const SpeedTest = () => {
     axios
       .put("http://localhost:3001/updateCurrentSpeedText", {
         id: sessionID,
-        fileID: currentFileID,
+        fileID: currentText.fileID,
         endTime: endTime,
       })
       .then(() => {
@@ -112,7 +111,7 @@ const SpeedTest = () => {
       } else {
         // Add a new entry to session.speedTexts.
         startNextText(
-          sessionContext.template.speedTest.fileIDs[fileNumber + 1]
+          sessionContext.template.speedTest.texts[fileNumber + 1].fileID
         );
         sessionContext.setFileNumber(fileNumber + 1);
         scrollToTop();
@@ -130,7 +129,7 @@ const SpeedTest = () => {
     axios
       .put("http://localhost:3001/updateCurrentSpeedTextPauses", {
         id: sessionID,
-        fileID: currentFileID,
+        fileID: currentText.fileID,
         action: action,
         time: currentTime,
       })
@@ -189,20 +188,24 @@ const SpeedTest = () => {
 
   const displaySpeedText = () => {
     if (sessionContext.hasStartedReading) {
-      return <SpeedText fileID={currentFileID} />;
+      return (
+        <SpeedText
+          fileID={currentText.fileID}
+          textStyleID={currentText.styleID}
+        />
+      );
     }
   };
 
   return (
     <div>
       {displayButtons()}
-
       {displaySpeedText()}
 
       <SpeedTestInstructions
         isOpen={sessionContext.hasStartedReading === false}
         instructions={instructions}
-        fileID={currentFileID}
+        fileID={currentText.fileID}
       />
       <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
     </div>
