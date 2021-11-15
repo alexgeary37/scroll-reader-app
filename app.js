@@ -4,7 +4,11 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
-const routes = require("./routes/routes");
+const textFileRoutes = require("./routes/textFileRoutes");
+const sessionTemplateRoutes = require("./routes/sessionTemplateRoutes");
+const readingSessionRoutes = require("./routes/readingSessionRoutes");
+const scrollPosEntryRoutes = require("./routes/scrollPosEntryRoutes");
+const defaultRoute = require("./routes/defaultRoute");
 const port = process.env.PORT;
 const mongoUrl = process.env.ATLAS_URI;
 
@@ -19,7 +23,12 @@ mongoose
     app.use(cors());
     app.use(express.json({ limit: "50mb" }));
     app.use(express.urlencoded({ extended: false, limit: "50mb" }));
-    app.use(routes);
+
+    app.use(textFileRoutes);
+    app.use(sessionTemplateRoutes);
+    app.use(readingSessionRoutes);
+    app.use(scrollPosEntryRoutes);
+    app.use(defaultRoute);
 
     app.listen(port, () => {
       console.log("Server running on port: ", port);
