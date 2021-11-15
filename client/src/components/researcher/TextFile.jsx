@@ -59,7 +59,6 @@ const TextFile = ({
           fileID={file.key}
           questions={file.questions}
           format={file.questionFormat}
-          usedAsScrollText={usedAsScrollText}
           updateFileQuestions={updateFileQuestions}
           removeQuestion={removeQuestion}
           close={() => setOpenViewQuestions(false)}
@@ -68,7 +67,6 @@ const TextFile = ({
           isOpen={openViewStyles}
           fileID={file.value}
           styles={file.styles}
-          usedInTemplate={usedInTemplate}
           updateFileStyles={updateFileStyles}
           removeStyle={removeStyle}
           close={() => setOpenViewStyles(false)}

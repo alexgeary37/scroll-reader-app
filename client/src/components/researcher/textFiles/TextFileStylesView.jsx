@@ -7,12 +7,29 @@ const TextFileStylesView = ({
   isOpen,
   fileID,
   styles,
-  usedInTemplate,
   updateFileStyles,
   removeStyle,
   close,
 }) => {
   const [openAddStyle, setOpenAddStyle] = useState(false);
+  const [usedStyleIDs, setUsedStyleIDs] = useState([]);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchTemplateStyles();
+    }
+  }, [isOpen]);
+
+  const fetchTemplateStyles = () => {
+    axios
+      .get("http://localhost:3001/getUsedStyles")
+      .then((response) => {
+        setUsedStyleIDs(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching used styles:", error);
+      });
+  };
 
   const addStyle = (style) => {
     axios
@@ -49,7 +66,7 @@ const TextFileStylesView = ({
 
               <Button
                 floated="right"
-                disabled={usedInTemplate}
+                disabled={usedStyleIDs.includes(style._id)}
                 content="Remove"
                 onClick={() => removeStyle(style)}
               />

@@ -16,17 +16,34 @@ const TextFileQuestionsView = ({
   fileID,
   questions,
   format,
-  usedAsScrollText,
   updateFileQuestions,
   removeQuestion,
   close,
 }) => {
   const [openAddQuestion, setOpenAddQuestion] = useState(false);
   const [questionFormat, setQuestionFormat] = useState(format);
+  const [usedQuestionIDs, setUsedQuestionIDs] = useState([]);
 
   useEffect(() => {
     setQuestionFormat(format);
   }, [format]);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchTemplateQuestions();
+    }
+  }, [isOpen]);
+
+  const fetchTemplateQuestions = () => {
+    axios
+      .get("http://localhost:3001/getUsedQuestions")
+      .then((response) => {
+        setUsedQuestionIDs(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching used questions:", error);
+      });
+  };
 
   const addQuestion = (question, answerRegion) => {
     axios
@@ -59,7 +76,7 @@ const TextFileQuestionsView = ({
               <div className="ui radio checkbox">
                 <input
                   type="radio"
-                  disabled={format !== "" || usedAsScrollText}
+                  disabled={format !== ""}
                   checked={questionFormat === "comprehension"}
                   onChange={() => setQuestionFormat("comprehension")}
                 />
@@ -70,7 +87,7 @@ const TextFileQuestionsView = ({
               <div className="ui radio checkbox">
                 <input
                   type="radio"
-                  disabled={format !== "" || usedAsScrollText}
+                  disabled={format !== ""}
                   checked={questionFormat === "inline"}
                   onChange={() => setQuestionFormat("inline")}
                 />
@@ -96,7 +113,7 @@ const TextFileQuestionsView = ({
               />
               <Button
                 floated="right"
-                disabled={usedAsScrollText}
+                disabled={usedQuestionIDs.includes(question._id)}
                 content="Remove"
                 onClick={() => removeQuestion(question)}
               />

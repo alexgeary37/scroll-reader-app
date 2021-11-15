@@ -102,9 +102,6 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   };
 
   const handleSelectSpeedText = (e, data) => {
-    console.log("speeds:", speedTexts);
-    console.log(data.value);
-    console.log(textFiles);
     if (e.target.className === "delete icon") {
       for (let i = 0; i < data.options.length; i++) {
         const optionIndex = data.value.indexOf(data.options[i].value);
@@ -138,9 +135,6 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   };
 
   const handleSelectScrollText = (e, data) => {
-    console.log("scrolls:", scrollTexts);
-    console.log(data.value);
-    console.log(textFiles);
     if (e.target.className === "delete icon") {
       for (let i = 0; i < data.options.length; i++) {
         const optionIndex = data.value.indexOf(data.options[i].value);
