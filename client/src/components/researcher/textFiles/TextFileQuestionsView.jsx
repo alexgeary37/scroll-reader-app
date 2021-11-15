@@ -82,7 +82,7 @@ const TextFileQuestionsView = ({
       </div>
       <Button
         positive
-        disabled={questionFormat === "" || usedAsScrollText}
+        disabled={questionFormat === ""}
         content="Add Question"
         onClick={() => setOpenAddQuestion(true)}
       />

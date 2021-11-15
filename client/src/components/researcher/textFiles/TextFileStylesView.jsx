@@ -36,7 +36,6 @@ const TextFileStylesView = ({
 
       <Button
         positive
-        disabled={usedInTemplate}
         content="Add Style"
         onClick={() => setOpenAddStyle(true)}
       />
