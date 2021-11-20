@@ -1,6 +1,7 @@
 import { SessionContext } from "../../../contexts/SessionContext.jsx";
 import { useContext, useEffect, useState } from "react";
 import ScrollTest from "./ScrollTest.jsx";
+import DisplaySessionCompleted from "../DisplaySessionCompleted.jsx";
 
 const ScrollTestWrapper = () => {
   const sessionContext = useContext(SessionContext);
@@ -14,7 +15,7 @@ const ScrollTestWrapper = () => {
 
   const displayPage = () => {
     if (sessionIsComplete === true) {
-      return <h1>Session is complete!</h1>;
+      return <DisplaySessionCompleted />;
     } else if (sessionIsComplete === false) {
       return <ScrollTest />;
     } else {
