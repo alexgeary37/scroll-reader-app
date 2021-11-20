@@ -3,7 +3,7 @@ import ScrollText from "./ScrollText.jsx";
 import { useContext, useState, useEffect, createRef } from "react";
 import { Menu, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import ScrollTestInstructions from "../ScrollTestInstructions.jsx";
+import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
 import PauseWindow from "../PauseWindow.jsx";
 import axios from "axios";
 import { isLastText, scrollToTop } from "../../../utilities.js";

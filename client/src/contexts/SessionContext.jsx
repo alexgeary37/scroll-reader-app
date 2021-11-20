@@ -35,16 +35,20 @@ export const SessionProvider = ({ children }) => {
   // and initialise them in localStorage.
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("isPaused")) === null) {
-      setTemplate(null);
-      setIsPaused(false);
-      setHasStartedReading(false);
-      setFileNumber(0);
-      setScrollPosEntries([]);
-      setQuestionFormat("");
-      setQuestionAnswers([]);
-      setSessionID("");
+      initialiseVariables();
     }
   }, []);
+
+  const initialiseVariables = () => {
+    setTemplate(null);
+    setIsPaused(false);
+    setHasStartedReading(false);
+    setFileNumber(0);
+    setScrollPosEntries([]);
+    setQuestionFormat("");
+    setQuestionAnswers([]);
+    setSessionID("");
+  };
 
   useEffect(() => {
     localStorage.setItem("sessionTemplate", JSON.stringify(template));
@@ -100,6 +104,7 @@ export const SessionProvider = ({ children }) => {
         setQuestionAnswers,
         sessionID,
         setSessionID,
+        initialiseVariables,
       }}
     >
       {children}

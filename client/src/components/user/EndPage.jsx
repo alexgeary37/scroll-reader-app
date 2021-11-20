@@ -1,21 +1,22 @@
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Segment, Container, Header } from "semantic-ui-react";
+import { SessionContext } from "../../contexts/SessionContext";
 
 const EndPage = () => {
+  const sessionContext = useContext(SessionContext);
+  const [variablesCleared, setVariablesCleared] = useState(false);
+
   useEffect(() => {
-    clearSessionVariables();
-  }, []);
+    if (!variablesCleared) {
+      clearSessionVariables();
+      sessionContext.initialiseVariables(true);
+      setVariablesCleared(true);
+    }
+  }, [sessionContext]);
 
   const clearSessionVariables = () => {
     localStorage.removeItem("userName");
-    localStorage.removeItem("sessionTemplate");
-    localStorage.removeItem("isPaused");
-    localStorage.removeItem("hasStartedReading");
-    localStorage.removeItem("fileNumber");
     localStorage.removeItem("scrollQuestionNumber");
-    localStorage.removeItem("scrollPosEntries");
-    localStorage.removeItem("questionFormat");
-    localStorage.removeItem("sessionID");
   };
 
   return (

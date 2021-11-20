@@ -1,5 +1,5 @@
 import { Button, Modal } from "semantic-ui-react";
-import { SessionContext } from "../../contexts/SessionContext";
+import { SessionContext } from "../../../contexts/SessionContext";
 import axios from "axios";
 import { useContext } from "react";
 
