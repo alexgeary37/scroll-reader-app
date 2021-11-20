@@ -1,20 +1,20 @@
-import { SessionContext } from "../../contexts/SessionContext.jsx";
+import { SessionContext } from "../../../contexts/SessionContext.jsx";
 import ScrollText from "./ScrollText.jsx";
 import { useContext, useState, useEffect, createRef } from "react";
 import { Menu, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
-import PauseWindow from "./PauseWindow.jsx";
+import ScrollTestInstructions from "../ScrollTestInstructions.jsx";
+import PauseWindow from "../PauseWindow.jsx";
 import axios from "axios";
-import { isLastText, scrollToTop } from "../../utilities.js";
+import { isLastText, scrollToTop } from "../../../utilities.js";
 import { getScrollPosition } from "./scrollPosition.jsx";
 import ComprehensionQuestion from "./ComprehensionQuestion.jsx";
 import ClickQuestion from "./ClickQuestion.jsx";
 import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
-import ConfirmDoneWindow from "./ConfirmDoneWindow.jsx";
+import ConfirmDoneWindow from "../ConfirmDoneWindow.jsx";
 import AnswerResponseWindow from "./AnswerResponseWindow.jsx";
 import { debounce } from "debounce";
-import { recordViewportResize } from "../../utilities";
+import { recordViewportResize } from "../../../utilities";
 
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);

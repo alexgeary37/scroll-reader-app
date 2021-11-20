@@ -2,8 +2,8 @@ import { v4 as uuid_v4 } from "uuid";
 import useScrollPosition from "./scrollPosition.jsx";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { SessionContext } from "../../contexts/SessionContext.jsx";
-import { wordSeparators } from "../../utilities.js";
+import { SessionContext } from "../../../contexts/SessionContext.jsx";
+import { wordSeparators } from "../../../utilities.js";
 
 const ScrollText = ({
   fileID,
