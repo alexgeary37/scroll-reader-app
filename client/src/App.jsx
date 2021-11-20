@@ -3,7 +3,7 @@ import "./App.css";
 import ResearcherView from "./components/researcher/ResearcherView.jsx";
 import Home from "./components/user/Home.jsx";
 import { SessionProvider } from "./contexts/SessionContext.jsx";
-import SpeedTest from "./components/user/speed/SpeedTest.jsx";
+import SpeedTestWrapper from "./components/user/speed/SpeedTestWrapper.jsx";
 import EndPage from "./components/user/EndPage.jsx";
 import ScrollTestWrapper from "./components/user/scroll/ScrollTestWrapper";
 
@@ -13,7 +13,7 @@ const App = () => {
       <Route path={`/researcher`} component={ResearcherView} />
       <SessionProvider>
         <Route path={`/user`} component={Home} />
-        <Route path={`/speedtest`} component={SpeedTest} />
+        <Route path={`/speedtest`} component={SpeedTestWrapper} />
         <Route path={`/scrolltest`} component={ScrollTestWrapper} />
         <Route path={`/end`} component={EndPage} />
       </SessionProvider>
