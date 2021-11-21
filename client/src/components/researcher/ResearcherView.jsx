@@ -5,7 +5,7 @@ import SessionTemplate from "./SessionTemplate.jsx";
 import axios from "axios";
 import CreateTemplate from "./templateCreation/CreateTemplate.jsx";
 import FileUpload from "./FileUpload.jsx";
-import DownloadDataForm from "./data/DownloadDataForm.jsx";
+import DownloadDataForm from "./DownloadDataForm.jsx";
 
 const ResearcherView = () => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
