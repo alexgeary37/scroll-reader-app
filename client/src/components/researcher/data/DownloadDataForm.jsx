@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Modal, Button, Dropdown, Header } from "semantic-ui-react";
 import axios from "axios";
 
-const DownloadForm = ({ open, closeForm, setScrollData }) => {
+const DownloadDataForm = ({ isOpen, close }) => {
   const [sessionOptions, setSessionOptions] = useState([]);
   const [sessionID, setSessionID] = useState("");
 
@@ -11,7 +11,8 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
   }, []);
 
   const fetchSessions = () => {
-    axios.get("http://localhost:3001/getReadingSessions")
+    axios
+      .get("http://localhost:3001/getReadingSessions")
       .then((response) => {
         const readingSessions = response.data;
         const options = [];
@@ -30,9 +31,10 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
   };
 
   const fetchScrollData = () => {
-    axios.get("http://localhost:3001/getScrollPosEntries", {
-      params: { sessionID: sessionID },
-    })
+    axios
+      .get("http://localhost:3001/getScrollPosEntries", {
+        params: { sessionID: sessionID },
+      })
       .then((response) => {
         const scrollPosEntries = response.data;
         const positions = [];
@@ -41,7 +43,6 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
           positions.push(entry.yPos);
           timestamps.push(entry.time);
         });
-        setScrollData({ yPositions: positions, timestamps: timestamps });
         toggleOpenDownloadForm();
       })
       .catch((error) => {
@@ -56,11 +57,11 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
 
   const toggleOpenDownloadForm = () => {
     setSessionID("");
-    closeForm();
+    close();
   };
 
   return (
-    <Modal open={open} style={{ padding: 10 }}>
+    <Modal open={isOpen} style={{ padding: 10 }}>
       <Header
         as="h2"
         content="Select session to download"
@@ -83,4 +84,4 @@ const DownloadForm = ({ open, closeForm, setScrollData }) => {
   );
 };
 
-export default DownloadForm;
+export default DownloadDataForm;
