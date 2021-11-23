@@ -342,6 +342,7 @@ const ResearcherView = () => {
             />
             <DownloadDataForm
               isOpen={openDownloadDataModal}
+              templates={templates.data}
               close={() => setOpenDownloadDataModal(false)}
             />
           </Grid.Row>

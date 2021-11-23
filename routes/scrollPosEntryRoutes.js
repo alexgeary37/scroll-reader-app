@@ -13,15 +13,19 @@ router.post("/insertScrollPosEntries", async (req, res) => {
   });
 });
 
+// Get scroll position entries from multiple sessions, ordered by session and time.
 router.get("/getScrollPosEntries", async (req, res) => {
-  const sessionID = req.query.sessionID;
-  ScrollPosEntryModel.find({ sessionID: sessionID }, (err, result) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(result);
+  const sessionIDs = req.query.sessionIDs;
+  ScrollPosEntryModel.find(
+    { sessionID: { $in: sessionIDs } },
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(result);
+      }
     }
-  });
+  ).sort({ sessionID: 1, time: 1 });
 });
 
 module.exports = router;

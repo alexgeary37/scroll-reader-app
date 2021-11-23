@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { Modal, Button, Dropdown, Header } from "semantic-ui-react";
 import axios from "axios";
 
-const DownloadDataForm = ({ isOpen, close }) => {
+const DownloadDataForm = ({ isOpen, templates, close }) => {
   const [sessionOptions, setSessionOptions] = useState([]);
-  const [sessionID, setSessionID] = useState("");
+  const [sessionIDs, setSessionIDs] = useState([]);
 
   useEffect(() => {
-    fetchSessions();
-  }, []);
+    if (isOpen) {
+      fetchSessions();
+    }
+  }, [isOpen]);
 
   const fetchSessions = () => {
     axios
@@ -20,7 +22,9 @@ const DownloadDataForm = ({ isOpen, close }) => {
           options.push({
             key: session._id,
             value: session._id,
-            text: session.userName,
+            text: `User: ${session.userName}, Template: ${
+              templates.find((t) => t.key === session.templateID).name
+            }, Start Time: ${session.startTime}`,
           });
         });
         setSessionOptions(options);
@@ -33,17 +37,26 @@ const DownloadDataForm = ({ isOpen, close }) => {
   const fetchScrollData = () => {
     axios
       .get("http://localhost:3001/getScrollPosEntries", {
-        params: { sessionID: sessionID },
+        params: { sessionIDs: sessionIDs },
       })
       .then((response) => {
         const scrollPosEntries = response.data;
-        const positions = [];
-        const timestamps = [];
-        scrollPosEntries.forEach((entry) => {
-          positions.push(entry.yPos);
-          timestamps.push(entry.time);
-        });
-        toggleOpenDownloadForm();
+        const entriesBySession = [];
+
+        let sessionID = scrollPosEntries[0].sessionID;
+        let scrollPosIndex = 0;
+        for (let i = 0; i < scrollPosEntries.length; i++) {
+          if (sessionID !== scrollPosEntries[i].sessionID) {
+            entriesBySession.push(scrollPosEntries.slice(scrollPosIndex, i));
+            sessionID = scrollPosEntries[i].sessionID;
+            scrollPosIndex = i;
+          }
+        }
+        entriesBySession.push(scrollPosEntries.slice(scrollPosIndex));
+
+        console.log("entriesBySession::", entriesBySession);
+        // Export scrollPosEntries to csv.
+        handleClose();
       })
       .catch((error) => {
         console.error("Error fetching scroll data:", error);
@@ -52,11 +65,12 @@ const DownloadDataForm = ({ isOpen, close }) => {
 
   // https://www.codegrepper.com/code-examples/javascript/semantic+ui+react+how+to+get+dropdown+value
   const handleSelectSession = (e, data) => {
-    setSessionID(data.value);
+    setSessionIDs(data.value);
   };
 
-  const toggleOpenDownloadForm = () => {
-    setSessionID("");
+  const handleClose = () => {
+    setSessionOptions([]);
+    setSessionIDs([]);
     close();
   };
 
@@ -64,21 +78,22 @@ const DownloadDataForm = ({ isOpen, close }) => {
     <Modal open={isOpen} style={{ padding: 10 }}>
       <Header
         as="h2"
-        content="Select session to download"
+        content="Select reading session to download"
         textAlign="center"
-        className="h2-sui"
       />
       <Dropdown
         placeholder="Select Session"
         fluid
         search
         selection
+        multiple
         options={sessionOptions}
         onChange={handleSelectSession}
       />
+
       <div style={{ float: "right", paddingTop: 10 }}>
         <Button primary content="Select" onClick={fetchScrollData} />
-        <Button content="Cancel" onClick={toggleOpenDownloadForm} />
+        <Button content="Cancel" onClick={handleClose} />
       </div>
     </Modal>
   );
