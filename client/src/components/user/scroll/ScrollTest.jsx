@@ -6,7 +6,11 @@ import { Link } from "react-router-dom";
 import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
 import PauseWindow from "../PauseWindow.jsx";
 import axios from "axios";
-import { isLastText, scrollToTop } from "../../../utilities.js";
+import {
+  addScrollPosEntryToSessionContext,
+  isLastText,
+  scrollToTop,
+} from "../../../utilities.js";
 import { getScrollPosition } from "./scrollPosition.jsx";
 import ComprehensionQuestion from "./ComprehensionQuestion.jsx";
 import ClickQuestion from "./ClickQuestion.jsx";
@@ -165,7 +169,7 @@ const ScrollTest = () => {
     const isInlineQuestion = sessionContext.questionFormat === "inline";
     const sessionID = sessionContext.sessionID;
     const currentTime = new Date();
-    const yPos = getScrollPosition().y;
+    const yPos = parseInt(getScrollPosition().y);
     const answerObj = isInlineQuestion
       ? {
           questionID: currentText.questionIDs[scrollQuestionNumber],
@@ -216,6 +220,14 @@ const ScrollTest = () => {
     handleAnswerQuestion("", true);
     setSelectAnswerEnabled(false);
     setDisplayConfirmSkipMessage(false);
+  };
+
+  const handleCloseScrollTestInstructions = () => {
+    sessionContext.setHasStartedReading(true);
+    addScrollPosEntryToSessionContext(
+      sessionContext,
+      parseInt(getScrollPosition().y)
+    );
   };
 
   const displayButtons = () => {
@@ -334,6 +346,7 @@ const ScrollTest = () => {
       <ScrollTestInstructions
         isOpen={sessionContext.hasStartedReading === false}
         text={currentText}
+        close={handleCloseScrollTestInstructions}
       />
       <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
     </div>

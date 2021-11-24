@@ -3,7 +3,7 @@ import { SessionContext } from "../../../contexts/SessionContext";
 import axios from "axios";
 import { useContext, useState } from "react";
 
-const ScrollTestInstructions = ({ isOpen, text }) => {
+const ScrollTestInstructions = ({ isOpen, text, close }) => {
   const sessionContext = useContext(SessionContext);
   const [familiarity, setFamiliarity] = useState("Very Unfamiliar");
   const [interest, setInterest] = useState("Very Uninterested");
@@ -30,8 +30,8 @@ const ScrollTestInstructions = ({ isOpen, text }) => {
       .put("http://localhost:3001/addNewScrollText", textObj)
       .then(() => {
         // Set sessionContext to be in progress, this will close modal.
-        sessionContext.setHasStartedReading(true);
         clearData();
+        close();
       })
       .catch((error) => {
         console.error(

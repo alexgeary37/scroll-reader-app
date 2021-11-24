@@ -41,3 +41,19 @@ export const recordViewportResize = (e, sessionContext) => {
       console.error("Error updating readingSession.viewportDimensions:", error);
     });
 };
+
+export const addScrollPosEntryToSessionContext = (sessionContext, yPos) => {
+  const date = new Date();
+
+  const scrollPosEntry = {
+    yPos: yPos,
+    time: date,
+    sessionID: sessionContext.sessionID,
+    textNumber: sessionContext.fileNumber,
+  };
+
+  sessionContext.setScrollPosEntries([
+    ...sessionContext.scrollPosEntries,
+    scrollPosEntry,
+  ]);
+};

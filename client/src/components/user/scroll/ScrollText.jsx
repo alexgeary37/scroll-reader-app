@@ -3,7 +3,10 @@ import useScrollPosition from "./scrollPosition.jsx";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { SessionContext } from "../../../contexts/SessionContext.jsx";
-import { wordSeparators } from "../../../utilities.js";
+import {
+  addScrollPosEntryToSessionContext,
+  wordSeparators,
+} from "../../../utilities.js";
 
 const ScrollText = ({
   fileID,
@@ -65,31 +68,12 @@ const ScrollText = ({
 
   const addScrollPosEntry = (currPos) => {
     if (sessionContext.isPaused === false) {
-      const date = new Date();
-      const timestamp =
-        date.getHours() +
-        ":" +
-        date.getMinutes() +
-        ":" +
-        date.getSeconds() +
-        ":" +
-        date.getMilliseconds();
-
-      const scrollPosEntry = {
-        yPos: parseInt(currPos.y),
-        time: timestamp,
-        sessionID: sessionContext.sessionID,
-      };
-
-      sessionContext.setScrollPosEntries([
-        ...sessionContext.scrollPosEntries,
-        scrollPosEntry,
-      ]);
+      addScrollPosEntryToSessionContext(sessionContext, parseInt(currPos.y));
     }
   };
 
   // This is a useLayoutEffect function triggered whenever a scroll event occurs.
-  useScrollPosition(addScrollPosEntry, 50);
+  useScrollPosition(addScrollPosEntry, 25);
 
   const handleWordClick = (index) => {
     if (selectAnswerEnabled) {

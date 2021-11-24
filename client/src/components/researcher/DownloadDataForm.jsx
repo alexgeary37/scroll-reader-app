@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Dropdown, Header } from "semantic-ui-react";
 import axios from "axios";
+import { ExportToCsv } from "export-to-csv";
 
 const DownloadDataForm = ({ isOpen, templates, close }) => {
   const [sessionOptions, setSessionOptions] = useState([]);
@@ -41,26 +42,71 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
       })
       .then((response) => {
         const scrollPosEntries = response.data;
-        const entriesBySession = [];
+
+        // List of lists of entries, each one associated with an
+        // individual text from and individual session.
+        const entriesByText = [];
 
         let sessionID = scrollPosEntries[0].sessionID;
+        let textNumber = 0;
         let scrollPosIndex = 0;
         for (let i = 0; i < scrollPosEntries.length; i++) {
-          if (sessionID !== scrollPosEntries[i].sessionID) {
-            entriesBySession.push(scrollPosEntries.slice(scrollPosIndex, i));
+          // Create separate lists of entries associated with each text read within each session.
+          if (
+            textNumber !== scrollPosEntries[i].textNumber ||
+            sessionID !== scrollPosEntries[i].sessionID
+          ) {
+            entriesByText.push({
+              textNumber: textNumber,
+              entries: scrollPosEntries.slice(scrollPosIndex, i),
+            });
+            textNumber = scrollPosEntries[i].textNumber;
             sessionID = scrollPosEntries[i].sessionID;
             scrollPosIndex = i;
           }
         }
-        entriesBySession.push(scrollPosEntries.slice(scrollPosIndex));
 
-        console.log("entriesBySession::", entriesBySession);
-        // Export scrollPosEntries to csv.
+        // Add the last text's list of entries to entriesByText.
+        entriesByText.push({
+          textNumber: textNumber,
+          entries: scrollPosEntries.slice(scrollPosIndex),
+        });
+
+        // Export a csv file for each text.
+        for (let i = 0; i < entriesByText.length; i++) {
+          const data = csvFormat(entriesByText[i].entries);
+          createCsv(
+            data,
+            `${entriesByText[i].entries[0].sessionID}_${entriesByText[i].textNumber}`
+          );
+        }
+
         handleClose();
       })
       .catch((error) => {
         console.error("Error fetching scroll data:", error);
       });
+  };
+
+  const csvFormat = (entries) => {
+    return entries.map((entry) => {
+      return { yPos: entry.yPos, time: entry.time };
+    });
+  };
+
+  const createCsv = (data, filename) => {
+    const options = {
+      filename: filename,
+      fieldSeparator: ",",
+      quoteStrings: '"',
+      decimalSeparator: ".",
+      showLabels: true,
+      useBom: true,
+      useKeysAsHeaders: true,
+    };
+
+    const csvExporter = new ExportToCsv(options);
+    csvExporter.generateCsv(data);
   };
 
   // https://www.codegrepper.com/code-examples/javascript/semantic+ui+react+how+to+get+dropdown+value
