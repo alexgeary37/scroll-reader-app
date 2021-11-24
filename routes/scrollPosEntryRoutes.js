@@ -25,7 +25,7 @@ router.get("/getScrollPosEntries", async (req, res) => {
         res.send(result);
       }
     }
-  ).sort({ sessionID: 1, time: 1 });
+  ).sort({ sessionID: 1, textNumber: 1, time: 1 });
 });
 
 module.exports = router;
