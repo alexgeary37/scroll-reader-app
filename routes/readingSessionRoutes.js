@@ -13,7 +13,7 @@ router.post("/createReadingSession", async (req, res) => {
   });
 });
 
-router.get("/getCurrentSession", async (req, res) => {
+router.get("/getReadingSession", async (req, res) => {
   const id = req.query;
   ReadingSessionModel.findOne({ _id: id }, (err, result) => {
     if (err) {
@@ -58,6 +58,25 @@ router.put("/addViewportChange", async (req, res) => {
       } else {
         session.save();
         res.send("Added new object to viewportDimensions");
+      }
+    }
+  );
+});
+
+router.put("/addEndTime", async (req, res) => {
+  const id = req.body.id;
+  const time = req.body.time;
+
+  ReadingSessionModel.findByIdAndUpdate(
+    id,
+    { $set: { endTime: time } },
+    { new: true },
+    (err, session) => {
+      if (err) {
+        res.send(err);
+      } else {
+        session.save();
+        res.send("Added endTime to readingSession");
       }
     }
   );

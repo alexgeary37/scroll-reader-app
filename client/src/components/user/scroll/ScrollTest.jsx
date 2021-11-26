@@ -66,7 +66,7 @@ const ScrollTest = () => {
 
   const initialiseTextIsComplete = () => {
     axios
-      .get("http://localhost:3001/getCurrentSession", {
+      .get("http://localhost:3001/getReadingSession", {
         params: { _id: sessionContext.sessionID },
       })
       .then((response) => {
@@ -77,7 +77,6 @@ const ScrollTest = () => {
           const text = currentSession.scrollTexts.find(
             (t) => t.fileID === currentText.fileID
           );
-          // if (text !== "undefined") {
           if (typeof text !== "undefined") {
             setTextIsComplete(text.hasOwnProperty("endTime"));
           }
@@ -86,7 +85,6 @@ const ScrollTest = () => {
   };
 
   const finishCurrentText = async () => {
-    let sessionUpdated = false;
     const sessionID = sessionContext.sessionID;
     const endTime = new Date();
 
@@ -97,9 +95,6 @@ const ScrollTest = () => {
         fileID: currentText.fileID,
         endTime: endTime,
       })
-      .then(() => {
-        sessionUpdated = true;
-      })
       .catch((error) => {
         console.error(
           "Error updating readingSession.scrollTexts[currentText.fileID].endTime:",
@@ -107,7 +102,21 @@ const ScrollTest = () => {
         );
       });
 
-    return sessionUpdated;
+    return endTime;
+  };
+
+  const finishReadingSession = async (endTime) => {
+    const sessionID = sessionContext.sessionID;
+
+    // Update session with an endTime.
+    axios
+      .put("http://localhost:3001/addEndTime", {
+        id: sessionID,
+        time: endTime,
+      })
+      .catch((error) => {
+        console.error("Error updating readingSession.endTime:", error);
+      });
   };
 
   const handleFinishText = () => {
@@ -115,21 +124,22 @@ const ScrollTest = () => {
       setDisplayConfirmDoneMessage(true);
     } else {
       // Update session.scrollTexts[currentText.fileID] with an end time.
-      const sessionUpdated = finishCurrentText();
+      const endTime = finishCurrentText();
 
       const fileNumber = sessionContext.fileNumber;
 
-      if (sessionUpdated) {
-        if (isLastText("scroll", sessionContext)) {
-          endPageRef.current.click();
-        } else {
-          // Adjust hooks and context for the next scrollText.
-          setScrollQuestionNumber(0);
-          sessionContext.setFileNumber(fileNumber + 1);
-          scrollToTop();
-          sessionContext.setHasStartedReading(false);
-        }
+      // if (sessionUpdated) {
+      if (isLastText("scroll", sessionContext)) {
+        finishReadingSession(endTime);
+        endPageRef.current.click();
+      } else {
+        // Adjust hooks and context for the next scrollText.
+        setScrollQuestionNumber(0);
+        sessionContext.setFileNumber(fileNumber + 1);
+        scrollToTop();
+        sessionContext.setHasStartedReading(false);
       }
+      // }
     }
   };
 

@@ -36,7 +36,7 @@ const SpeedTest = () => {
 
   const initialiseTextIsComplete = () => {
     axios
-      .get("http://localhost:3001/getCurrentSession", {
+      .get("http://localhost:3001/getReadingSession", {
         params: { _id: sessionContext.sessionID },
       })
       .then((response) => {
