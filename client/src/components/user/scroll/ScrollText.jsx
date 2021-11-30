@@ -52,7 +52,7 @@ const ScrollText = ({
   // This useEffect runs whenever sessionContext.scrollPosEntries changes.
   // It also runs once the user has finished scrolling.
   useEffect(() => {
-    const intervalId = setInterval(() => {
+    const intervalID = setInterval(() => {
       const entriesToInsert = sessionContext.scrollPosEntries;
       if (entriesToInsert.length > 0) {
         sessionContext.setScrollPosEntries([]);
@@ -63,7 +63,7 @@ const ScrollText = ({
           });
       }
     }, 500);
-    return () => clearInterval(intervalId);
+    return () => clearInterval(intervalID);
   }, [sessionContext.scrollPosEntries]);
 
   const addScrollPosEntry = (currPos) => {

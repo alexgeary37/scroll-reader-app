@@ -22,12 +22,12 @@ const Home = () => {
   const fetchSessionTemplate = () => {
     // Get sessionTemplateID from the url.
     const url = window.location.href.toString();
-    const templateId = url.substr(url.lastIndexOf("/") + 1);
+    const templateID = url.substr(url.lastIndexOf("/") + 1);
 
     // Get template from the database
     axios
       .get("http://localhost:3001/getSessionTemplate", {
-        params: { _id: templateId },
+        params: { _id: templateID },
       })
       .then((response) => {
         if (response.data.name === "CastError") {

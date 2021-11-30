@@ -25,6 +25,17 @@ router.get("/getTextFile", async (req, res) => {
 });
 
 router.get("/getTextFiles", async (req, res) => {
+  const fileIDs = Object.values(req.query);
+  TextFileModel.find({ _id: { $in: fileIDs } }, (err, result) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+router.get("/getAllTextFiles", async (req, res) => {
   TextFileModel.find({}, (err, result) => {
     if (err) {
       res.send(err);

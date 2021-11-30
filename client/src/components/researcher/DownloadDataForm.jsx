@@ -66,6 +66,14 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
       });
   };
 
+  const getSpeedTexts = async (textFileIDs) => {
+    return axios
+      .get("http://localhost:3001/getTextFiles", { params: textFileIDs })
+      .then((response) => {
+        return response.data;
+      });
+  };
+
   const exportScrollData = async (scrollPosEntries) => {
     // List of lists of entries, each one associated with an
     // individual text from and individual session.
@@ -144,6 +152,25 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
     const templateData = await getTemplateData(readingSessionData.templateID);
     readingSession.templateName = templateData.name;
     readingSession.speedTestInstructions = templateData.speedTest.instructions;
+
+    const templateSpeedTexts = templateData.speedTest.texts;
+    const speedTextIDs = templateSpeedTexts.map((t) => t.fileID);
+    const speedTexts = await getSpeedTexts(speedTextIDs);
+
+    const sessionSpeedTexts = [];
+    speedTextIDs.forEach((fileID) => {
+      const text = speedTexts.find((t) => t._id === fileID);
+      sessionSpeedTexts.push({
+        fileID: fileID,
+        fileName: text.fileName,
+        questionFormat: text.questionFormat,
+        // fontFamily: ,
+        // fontSize: ,
+        // lineHeight: ,
+      });
+    });
+
+    console.log(sessionSpeedTexts);
 
     createCsv([readingSession], `readingSession_${readingSessionData._id}`);
     createCsv(viewportDimensions, "viewportDimensions");

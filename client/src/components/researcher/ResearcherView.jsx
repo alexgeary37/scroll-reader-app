@@ -29,7 +29,7 @@ const ResearcherView = () => {
     setTextFiles({ data: textFiles.data, isFetching: true });
 
     axios
-      .get("http://localhost:3001/getTextFiles")
+      .get("http://localhost:3001/getAllTextFiles")
       .then((response) => {
         const data = response.data;
         const files = [];
