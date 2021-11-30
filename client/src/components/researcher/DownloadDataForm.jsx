@@ -36,58 +36,14 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
       });
   };
 
-  const exportScrollData = async () => {
-    axios
+  const getScrollPositionData = async () => {
+    return axios
       .get("http://localhost:3001/getScrollPosEntries", {
         params: { sessionID: sessionID },
       })
       .then((response) => {
-        const scrollPosEntries = response.data;
-
-        // List of lists of entries, each one associated with an
-        // individual text from and individual session.
-        const entriesByText = [];
-
-        let textNumber = 0;
-        let scrollPosIndex = 0;
-        for (let i = 0; i < scrollPosEntries.length; i++) {
-          // Create separate lists of entries associated with each text.
-          if (textNumber !== scrollPosEntries[i].textNumber) {
-            entriesByText.push({
-              textNumber: textNumber,
-              entries: scrollPosEntries.slice(scrollPosIndex, i),
-            });
-            textNumber = scrollPosEntries[i].textNumber;
-            scrollPosIndex = i;
-          }
-        }
-
-        // Add the last text's list of entries to entriesByText.
-        entriesByText.push({
-          textNumber: textNumber,
-          entries: scrollPosEntries.slice(scrollPosIndex),
-        });
-
-        // Export a csv file for each text.
-        for (let i = 0; i < entriesByText.length; i++) {
-          // Format scroll position entries for exporting to csv.
-          const data = formatScrollPosEntriesForCsv(entriesByText[i].entries);
-
-          createCsv(
-            data,
-            `scrollText_${entriesByText[i].textNumber}_positions`
-          );
-        }
-      })
-      .catch((error) => {
-        console.error("Error exporting scroll position entry data:", error);
+        return response.data;
       });
-  };
-
-  const formatScrollPosEntriesForCsv = (entries) => {
-    return entries.map((entry) => {
-      return { yPos: entry.yPos, time: entry.time };
-    });
   };
 
   const getReadingSessionData = async () => {
@@ -96,48 +52,63 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
         params: { _id: sessionID },
       })
       .then((response) => {
-        const session = response.data;
-
-        setSessionTemplateID(session.templateID);
-
-        const readingSessionData = [
-          {
-            userName: session.userName,
-            startTime: session.startTime,
-            endTime: session.endTime,
-          },
-        ];
-
-        const viewportDimensions = formatViewportDimensionsForCsv(
-          session.viewportDimensions
-        );
-
-        return {
-          readingSession: readingSessionData,
-          viewportDimensions: viewportDimensions,
-        };
+        return response.data;
       });
+  };
+
+  const getTemplateData = async (templateID) => {
+    return axios
+      .get("http://localhost:3001/getSessionTemplate", {
+        params: { _id: templateID },
+      })
+      .then((response) => {
+        return response.data;
+      });
+  };
+
+  const exportScrollData = async (scrollPosEntries) => {
+    // List of lists of entries, each one associated with an
+    // individual text from and individual session.
+    const entriesByText = [];
+
+    let textNumber = 0;
+    let scrollPosIndex = 0;
+    for (let i = 0; i < scrollPosEntries.length; i++) {
+      // Create separate lists of entries associated with each text.
+      if (textNumber !== scrollPosEntries[i].textNumber) {
+        entriesByText.push({
+          textNumber: textNumber,
+          entries: scrollPosEntries.slice(scrollPosIndex, i),
+        });
+        textNumber = scrollPosEntries[i].textNumber;
+        scrollPosIndex = i;
+      }
+    }
+
+    // Add the last text's list of entries to entriesByText.
+    entriesByText.push({
+      textNumber: textNumber,
+      entries: scrollPosEntries.slice(scrollPosIndex),
+    });
+
+    // Export a csv file for each text.
+    for (let i = 0; i < entriesByText.length; i++) {
+      // Format scroll position entries for exporting to csv.
+      const data = formatScrollPosEntriesForCsv(entriesByText[i].entries);
+      createCsv(data, `scrollText_${entriesByText[i].textNumber}_positions`);
+    }
+  };
+
+  const formatScrollPosEntriesForCsv = (entries) => {
+    return entries.map((entry) => {
+      return { yPos: entry.yPos, time: entry.time };
+    });
   };
 
   const formatViewportDimensionsForCsv = (dimensions) => {
     return dimensions.map((d) => {
       return { width: d.width, height: d.height, time: d.time };
     });
-  };
-
-  const getTemplateData = async () => {
-    return axios
-      .get("http://localhost:3001/getTemplate", {
-        params: { _id: sessionTemplateID },
-      })
-      .then((response) => {
-        const template = response.data;
-
-        return {
-          templateName: template.name,
-          speedTestInstructions: template.speedTestInstructions,
-        };
-      });
   };
 
   const createCsv = (data, filename) => {
@@ -156,15 +127,25 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
   };
 
   const handleExport = async () => {
-    exportScrollData();
-    const readingSessionData = await getReadingSessionData();
-    const readingSession = readingSessionData.readingSession;
-    const viewportDimensions = readingSessionData.viewportDimensions;
-    const templateData = await getTemplateData();
-    readingSession.templateName = templateData.templateName;
-    readingSession.speedTestInstructions = templateData.speedTestInstructions;
+    const scrollPositionData = await getScrollPositionData();
+    exportScrollData(scrollPositionData);
 
-    createCsv(readingSession, `${session._id}_readingSession`);
+    const readingSessionData = await getReadingSessionData();
+    const readingSession = {
+      userName: readingSessionData.userName,
+      startTime: readingSessionData.startTime,
+      endTime: readingSessionData.endTime,
+    };
+
+    const viewportDimensions = formatViewportDimensionsForCsv(
+      readingSessionData.viewportDimensions
+    );
+
+    const templateData = await getTemplateData(readingSessionData.templateID);
+    readingSession.templateName = templateData.name;
+    readingSession.speedTestInstructions = templateData.speedTest.instructions;
+
+    createCsv([readingSession], `readingSession_${readingSessionData._id}`);
     createCsv(viewportDimensions, "viewportDimensions");
 
     handleClose();
