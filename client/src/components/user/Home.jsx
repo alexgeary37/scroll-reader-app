@@ -54,6 +54,7 @@ const Home = () => {
         {
           width: viewportWidth,
           height: viewportHeight,
+          time: date,
         },
       ],
       templateID: template._id,

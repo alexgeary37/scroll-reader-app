@@ -37,7 +37,7 @@ const ReadingSessionSchema = new mongoose.Schema({
     {
       width: { type: Number, required: true },
       height: { type: Number, required: true },
-      time: { type: Date, required: false },
+      time: { type: Date, required: true },
     },
   ],
   templateID: { type: String, required: true },

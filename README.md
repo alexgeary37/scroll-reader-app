@@ -34,7 +34,8 @@ ReadingSessionSchema {
   viewportDimensions [
     {
       width,
-      height
+      height,
+      time
     }
   ],
   templateID,

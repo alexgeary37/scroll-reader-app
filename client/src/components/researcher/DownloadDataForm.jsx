@@ -97,8 +97,6 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
       .then((response) => {
         const session = response.data;
 
-        console.log(session);
-
         const readingSession = [
           {
             userName: session.userName,
@@ -110,10 +108,10 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
         // TODO: This function takes a list of items and turns it into a csv, not a single item (I THINK)
         createCsv(readingSession, `${session._id}_readingSession`);
 
-        // const viewportDimensions = formatViewportDimensionsForCsv(
-        //   session.viewportDimensions
-        // );
-        // createCsv(viewportDimensions, "viewportDimensions");
+        const viewportDimensions = formatViewportDimensionsForCsv(
+          session.viewportDimensions
+        );
+        createCsv(viewportDimensions, "viewportDimensions");
       })
       .catch((error) => {
         console.error("Error exporting reading session data:", error);
@@ -170,7 +168,12 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
       />
 
       <div style={{ float: "right", paddingTop: 10 }}>
-        <Button primary content="Select" onClick={handleExport} />
+        <Button
+          primary
+          content="Export Session Data"
+          icon="download"
+          onClick={handleExport}
+        />
         <Button content="Cancel" onClick={handleClose} />
       </div>
     </Modal>

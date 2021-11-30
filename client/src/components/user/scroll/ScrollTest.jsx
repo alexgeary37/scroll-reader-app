@@ -119,18 +119,18 @@ const ScrollTest = () => {
       });
   };
 
-  const handleFinishText = () => {
+  const handleFinishText = async () => {
     if (scrollQuestionNumber < currentText.questionIDs.length) {
       setDisplayConfirmDoneMessage(true);
     } else {
       // Update session.scrollTexts[currentText.fileID] with an end time.
-      const endTime = finishCurrentText();
+      const endTime = await finishCurrentText();
 
       const fileNumber = sessionContext.fileNumber;
 
       // if (sessionUpdated) {
       if (isLastText("scroll", sessionContext)) {
-        finishReadingSession(endTime);
+        await finishReadingSession(endTime);
         endPageRef.current.click();
       } else {
         // Adjust hooks and context for the next scrollText.
