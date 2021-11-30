@@ -6,6 +6,7 @@ import { ExportToCsv } from "export-to-csv";
 const DownloadDataForm = ({ isOpen, templates, close }) => {
   const [sessionOptions, setSessionOptions] = useState([]);
   const [sessionID, setSessionID] = useState("");
+  const [sessionTemplateID, setSessionTemplateID] = useState("");
 
   useEffect(() => {
     if (isOpen) {
@@ -89,15 +90,17 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
     });
   };
 
-  const exportReadingSessionData = async () => {
-    axios
+  const getReadingSessionData = async () => {
+    return axios
       .get("http://localhost:3001/getReadingSession", {
         params: { _id: sessionID },
       })
       .then((response) => {
         const session = response.data;
 
-        const readingSession = [
+        setSessionTemplateID(session.templateID);
+
+        const readingSessionData = [
           {
             userName: session.userName,
             startTime: session.startTime,
@@ -105,16 +108,14 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
           },
         ];
 
-        // TODO: This function takes a list of items and turns it into a csv, not a single item (I THINK)
-        createCsv(readingSession, `${session._id}_readingSession`);
-
         const viewportDimensions = formatViewportDimensionsForCsv(
           session.viewportDimensions
         );
-        createCsv(viewportDimensions, "viewportDimensions");
-      })
-      .catch((error) => {
-        console.error("Error exporting reading session data:", error);
+
+        return {
+          readingSession: readingSessionData,
+          viewportDimensions: viewportDimensions,
+        };
       });
   };
 
@@ -122,6 +123,21 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
     return dimensions.map((d) => {
       return { width: d.width, height: d.height, time: d.time };
     });
+  };
+
+  const getTemplateData = async () => {
+    return axios
+      .get("http://localhost:3001/getTemplate", {
+        params: { _id: sessionTemplateID },
+      })
+      .then((response) => {
+        const template = response.data;
+
+        return {
+          templateName: template.name,
+          speedTestInstructions: template.speedTestInstructions,
+        };
+      });
   };
 
   const createCsv = (data, filename) => {
@@ -139,9 +155,18 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
     csvExporter.generateCsv(data);
   };
 
-  const handleExport = () => {
+  const handleExport = async () => {
     exportScrollData();
-    exportReadingSessionData();
+    const readingSessionData = await getReadingSessionData();
+    const readingSession = readingSessionData.readingSession;
+    const viewportDimensions = readingSessionData.viewportDimensions;
+    const templateData = await getTemplateData();
+    readingSession.templateName = templateData.templateName;
+    readingSession.speedTestInstructions = templateData.speedTestInstructions;
+
+    createCsv(readingSession, `${session._id}_readingSession`);
+    createCsv(viewportDimensions, "viewportDimensions");
+
     handleClose();
   };
 
