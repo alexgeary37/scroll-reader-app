@@ -3,10 +3,9 @@ import { Modal, Button, Dropdown, Header } from "semantic-ui-react";
 import axios from "axios";
 import { ExportToCsv } from "export-to-csv";
 
-const DownloadDataForm = ({ isOpen, templates, close }) => {
+const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
   const [sessionOptions, setSessionOptions] = useState([]);
   const [sessionID, setSessionID] = useState("");
-  const [sessionTemplateID, setSessionTemplateID] = useState("");
 
   useEffect(() => {
     if (isOpen) {
@@ -56,24 +55,6 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
       });
   };
 
-  const getTemplateData = async (templateID) => {
-    return axios
-      .get("http://localhost:3001/getSessionTemplate", {
-        params: { _id: templateID },
-      })
-      .then((response) => {
-        return response.data;
-      });
-  };
-
-  const getSpeedTexts = async (textFileIDs) => {
-    return axios
-      .get("http://localhost:3001/getTextFiles", { params: textFileIDs })
-      .then((response) => {
-        return response.data;
-      });
-  };
-
   const exportScrollData = async (scrollPosEntries) => {
     // List of lists of entries, each one associated with an
     // individual text from and individual session.
@@ -105,6 +86,66 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
       const data = formatScrollPosEntriesForCsv(entriesByText[i].entries);
       createCsv(data, `scrollText_${entriesByText[i].textNumber}_positions`);
     }
+  };
+
+  const exportReadingSessionData = (readingSessionData, templateData) => {
+    const readingSession = {
+      userName: readingSessionData.userName,
+      startTime: readingSessionData.startTime,
+      endTime: readingSessionData.endTime,
+      templateName: templateData.name,
+      speedTestInstructions: templateData.speedTest.instructions,
+    };
+
+    createCsv([readingSession], `readingSession_${readingSessionData._id}`);
+  };
+
+  const exportSpeedTextData = (readingSessionData, templateData) => {
+    // Deep copy this array to not change the objects in it through changes to the speedTexts variable.
+    const speedTexts = JSON.parse(JSON.stringify(templateData.speedTest.texts));
+
+    speedTexts.forEach((speedText) => {
+      const text = textFiles.find((t) => t.key === speedText.fileID);
+      const style = text.styles.find((s) => s._id === speedText.styleID);
+      const sessionText = readingSessionData.speedTexts.find(
+        (t) => t.fileID === speedText.fileID
+      );
+      speedText.startTime = sessionText.startTime;
+      speedText.endTime = sessionText.endTime;
+      speedText.fontFamily = style.fontFamily;
+      speedText.fontSize = style.fontSize;
+      speedText.lineHeight = style.lineHeight;
+      delete speedText.styleID;
+    });
+
+    createCsv(speedTexts, "speedTexts");
+  };
+
+  const exportScrollTextData = (readingSessionData, templateData) => {
+    // Deep copy this array to not change the objects in it through changes to the scrollTexts variable.
+    const scrollTexts = JSON.parse(JSON.stringify(templateData.scrollTexts));
+
+    scrollTexts.forEach((scrollText) => {
+      const text = textFiles.find((t) => t.key === scrollText.fileID);
+      const style = text.styles.find((s) => s._id === scrollText.styleID);
+      const sessionText = readingSessionData.scrollTexts.find(
+        (t) => t.fileID === scrollText.fileID
+      );
+
+      scrollText.startTime = sessionText.startTime;
+      scrollText.endTime = sessionText.endTime;
+      scrollText.instructions = scrollText.instructions.main;
+      scrollText.questionFormat = text.questionFormat;
+      scrollText.userFamiliarity = sessionText.familiarity;
+      scrollText.userInterest = sessionText.interest;
+      scrollText.fontFamily = style.fontFamily;
+      scrollText.fontSize = style.fontSize;
+      scrollText.lineHeight = style.lineHeight;
+      delete scrollText.styleID;
+      delete scrollText.questionIDs;
+    });
+
+    createCsv(scrollTexts, "scrollTexts");
   };
 
   const formatScrollPosEntriesForCsv = (entries) => {
@@ -139,41 +180,18 @@ const DownloadDataForm = ({ isOpen, templates, close }) => {
     exportScrollData(scrollPositionData);
 
     const readingSessionData = await getReadingSessionData();
-    const readingSession = {
-      userName: readingSessionData.userName,
-      startTime: readingSessionData.startTime,
-      endTime: readingSessionData.endTime,
-    };
+    const templateData = templates.find(
+      (t) => t.key === readingSessionData.templateID
+    );
 
     const viewportDimensions = formatViewportDimensionsForCsv(
       readingSessionData.viewportDimensions
     );
-
-    const templateData = await getTemplateData(readingSessionData.templateID);
-    readingSession.templateName = templateData.name;
-    readingSession.speedTestInstructions = templateData.speedTest.instructions;
-
-    const templateSpeedTexts = templateData.speedTest.texts;
-    const speedTextIDs = templateSpeedTexts.map((t) => t.fileID);
-    const speedTexts = await getSpeedTexts(speedTextIDs);
-
-    const sessionSpeedTexts = [];
-    speedTextIDs.forEach((fileID) => {
-      const text = speedTexts.find((t) => t._id === fileID);
-      sessionSpeedTexts.push({
-        fileID: fileID,
-        fileName: text.fileName,
-        questionFormat: text.questionFormat,
-        // fontFamily: ,
-        // fontSize: ,
-        // lineHeight: ,
-      });
-    });
-
-    console.log(sessionSpeedTexts);
-
-    createCsv([readingSession], `readingSession_${readingSessionData._id}`);
     createCsv(viewportDimensions, "viewportDimensions");
+
+    exportReadingSessionData(readingSessionData, templateData);
+    exportSpeedTextData(readingSessionData, templateData);
+    exportScrollTextData(readingSessionData, templateData);
 
     handleClose();
   };
