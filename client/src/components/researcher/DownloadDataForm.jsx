@@ -104,6 +104,7 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
     // Deep copy this array to not change the objects in it through changes to the speedTexts variable.
     const speedTexts = JSON.parse(JSON.stringify(templateData.speedTest.texts));
 
+    let textNumber = 0;
     speedTexts.forEach((speedText) => {
       const text = textFiles.find((t) => t.key === speedText.fileID);
       const style = text.styles.find((s) => s._id === speedText.styleID);
@@ -116,6 +117,9 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
       speedText.fontSize = style.fontSize;
       speedText.lineHeight = style.lineHeight;
       delete speedText.styleID;
+
+      createCsv(sessionText.pauses, `speedText_${textNumber}_pauses`);
+      textNumber++;
     });
 
     createCsv(speedTexts, "speedTexts");
@@ -125,13 +129,13 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
     // Deep copy this array to not change the objects in it through changes to the scrollTexts variable.
     const scrollTexts = JSON.parse(JSON.stringify(templateData.scrollTexts));
 
+    let textNumber = 0;
     scrollTexts.forEach((scrollText) => {
       const text = textFiles.find((t) => t.key === scrollText.fileID);
       const style = text.styles.find((s) => s._id === scrollText.styleID);
       const sessionText = readingSessionData.scrollTexts.find(
         (t) => t.fileID === scrollText.fileID
       );
-
       scrollText.startTime = sessionText.startTime;
       scrollText.endTime = sessionText.endTime;
       scrollText.instructions = scrollText.instructions.main;
@@ -143,6 +147,25 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
       scrollText.lineHeight = style.lineHeight;
       delete scrollText.styleID;
       delete scrollText.questionIDs;
+
+      createCsv(sessionText.pauses, `scrollText_${textNumber}_pauses`);
+
+      const questionAnswers = [];
+      for (let i = 0; i < sessionText.questionAnswers.length; i++) {
+        const entry = sessionText.questionAnswers[i];
+        // console.log(text.questions.find((q) => ));
+        // // console.log(templateData);
+        questionAnswers.push({
+          // question: question,
+          userAnswer: entry.answer,
+          skip: entry.skip,
+          yPosition: entry.yPosition,
+          time: entry.time,
+        });
+      }
+
+      createCsv(questionAnswers, `scrollText_${textNumber}_questionAnswers`);
+      textNumber++;
     });
 
     createCsv(scrollTexts, "scrollTexts");
@@ -161,18 +184,20 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
   };
 
   const createCsv = (data, filename) => {
-    const options = {
-      filename: filename,
-      fieldSeparator: ",",
-      quoteStrings: '"',
-      decimalSeparator: ".",
-      showLabels: true,
-      useBom: true,
-      useKeysAsHeaders: true,
-    };
+    if (data.length > 0) {
+      const options = {
+        filename: filename,
+        fieldSeparator: ",",
+        quoteStrings: '"',
+        decimalSeparator: ".",
+        showLabels: true,
+        useBom: true,
+        useKeysAsHeaders: true,
+      };
 
-    const csvExporter = new ExportToCsv(options);
-    csvExporter.generateCsv(data);
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(data);
+    }
   };
 
   const handleExport = async () => {
