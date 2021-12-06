@@ -145,6 +145,9 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
       scrollText.fontFamily = style.fontFamily;
       scrollText.fontSize = style.fontSize;
       scrollText.lineHeight = style.lineHeight;
+
+      const scrollTextQuestionIDs = scrollText.questionIDs;
+
       delete scrollText.styleID;
       delete scrollText.questionIDs;
 
@@ -152,15 +155,21 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
 
       const questionAnswers = [];
       for (let i = 0; i < sessionText.questionAnswers.length; i++) {
-        const entry = sessionText.questionAnswers[i];
-        // console.log(text.questions.find((q) => ));
+        const sessionTextQuestionAnswerEntry = sessionText.questionAnswers[i];
+        const question = text.questions.find(
+          (q) => q._id === scrollTextQuestionIDs[i]
+        );
+        const correctAnswer = `[${question.answerRegion.startIndex}, ${question.answerRegion.endIndex}]`;
+        // console.log("text.questions:", text.questions);
+        // console.log("scrollTextQuestionIDs:", scrollTextQuestionIDs);
         // // console.log(templateData);
         questionAnswers.push({
-          // question: question,
-          userAnswer: entry.answer,
-          skip: entry.skip,
-          yPosition: entry.yPosition,
-          time: entry.time,
+          question: question.question,
+          userAnswer: sessionTextQuestionAnswerEntry.answer,
+          correctAnswer: correctAnswer,
+          skip: sessionTextQuestionAnswerEntry.skip,
+          yPosition: sessionTextQuestionAnswerEntry.yPosition,
+          time: sessionTextQuestionAnswerEntry.time,
         });
       }
 
