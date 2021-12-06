@@ -160,9 +160,6 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
           (q) => q._id === scrollTextQuestionIDs[i]
         );
         const correctAnswer = `[${question.answerRegion.startIndex}, ${question.answerRegion.endIndex}]`;
-        // console.log("text.questions:", text.questions);
-        // console.log("scrollTextQuestionIDs:", scrollTextQuestionIDs);
-        // // console.log(templateData);
         questionAnswers.push({
           question: question.question,
           userAnswer: sessionTextQuestionAnswerEntry.answer,
