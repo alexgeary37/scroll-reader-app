@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
-const router = express.Router();
 const textFileRoutes = require("./routes/textFileRoutes");
 const sessionTemplateRoutes = require("./routes/sessionTemplateRoutes");
 const readingSessionRoutes = require("./routes/readingSessionRoutes");
@@ -38,8 +37,6 @@ class Server {
     this.app.use(sessionTemplateRoutes);
     this.app.use(readingSessionRoutes);
     this.app.use(scrollPosEntryRoutes);
-
-    // Catch all requests that don't match any route
     this.app.use(defaultRoute);
   }
 
