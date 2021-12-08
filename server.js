@@ -29,7 +29,7 @@ class Server {
     });
 
     // Pick up React index.html file
-    this.app.use(express.static(path.join(__dirname, "../client/build")));
+    this.app.use(express.static(path.join(__dirname, "./client/build")));
   }
 
   routes() {
@@ -39,7 +39,7 @@ class Server {
     this.app.use(scrollPosEntryRoutes);
     // Catch all requests that don't match any route
     router.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "/client/build/index.html"));
+      res.sendFile(path.join(__dirname, "./client/build/index.html"));
     });
   }
 
