@@ -39,7 +39,7 @@ class Server {
     this.app.use(scrollPosEntryRoutes);
     // Catch all requests that don't match any route
     router.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "../client/build/index.html"));
+      res.sendFile(path.join(__dirname, "/client/build/index.html"));
     });
   }
 
