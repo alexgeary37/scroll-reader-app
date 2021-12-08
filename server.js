@@ -7,6 +7,7 @@ const textFileRoutes = require("./routes/textFileRoutes");
 const sessionTemplateRoutes = require("./routes/sessionTemplateRoutes");
 const readingSessionRoutes = require("./routes/readingSessionRoutes");
 const scrollPosEntryRoutes = require("./routes/scrollPosEntryRoutes");
+const defaultRoute = require("./routes/defaultRoute");
 
 class Server {
   constructor() {
@@ -37,10 +38,9 @@ class Server {
     this.app.use(sessionTemplateRoutes);
     this.app.use(readingSessionRoutes);
     this.app.use(scrollPosEntryRoutes);
+
     // Catch all requests that don't match any route
-    router.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "./client/build/index.html"));
-    });
+    this.app.use(defaultRoute);
   }
 
   listen() {
