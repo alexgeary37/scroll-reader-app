@@ -66,7 +66,7 @@ const TextFileStylesView = ({
 
               <Button
                 floated="right"
-                disabled={usedStyleIDs.includes(style._id)}
+                disabled={usedStyleIDs.includes(style._id) || styles.length < 2}
                 content="Remove"
                 onClick={() => removeStyle(style)}
               />

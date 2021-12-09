@@ -156,6 +156,7 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
       const questionAnswers = [];
       for (let i = 0; i < sessionText.questionAnswers.length; i++) {
         const sessionTextQuestionAnswerEntry = sessionText.questionAnswers[i];
+        console.log(sessionTextQuestionAnswerEntry);
         const question = text.questions.find(
           (q) => q._id === scrollTextQuestionIDs[i]
         );

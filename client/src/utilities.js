@@ -57,3 +57,26 @@ export const addScrollPosEntryToSessionContext = (sessionContext, yPos) => {
     scrollPosEntry,
   ]);
 };
+
+export const prettyDate = (date) => {
+  let prettyDate =
+    date.getDate() +
+    "/" +
+    date.getMonth() +
+    "/" +
+    date.getFullYear() +
+    " " +
+    date.getHours() +
+    ":" +
+    date.getMinutes() +
+    ":" +
+    date.getSeconds() +
+    "." +
+    date.getMilliseconds();
+  return prettyDate;
+};
+
+export const prettyMongoDate = (date) => {
+  let prettyMongoDate = date;
+  return prettyMongoDate;
+};
