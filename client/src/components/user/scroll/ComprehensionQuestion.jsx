@@ -66,7 +66,7 @@ const ComprehensionQuestion = ({
             <Button
               fluid
               primary
-              disabled={disable}
+              disabled={disable || answer === ""}
               content="Submit"
               onClick={handleSubmit}
             />

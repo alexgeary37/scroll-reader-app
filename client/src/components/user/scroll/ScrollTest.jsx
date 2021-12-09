@@ -180,12 +180,6 @@ const ScrollTest = () => {
     const sessionID = sessionContext.sessionID;
     const currentTime = new Date();
     const yPos = parseInt(getScrollPosition().y);
-    // const answerObj = isInlineQuestion
-    //   ? {
-    //       questionID: currentText.questionIDs[scrollQuestionNumber],
-    //       answer: answer,
-    //     }
-    //   : answer;
 
     axios
       .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
