@@ -7,6 +7,7 @@ import {
   addScrollPosEntryToSessionContext,
   wordSeparators,
 } from "../../../utilities.js";
+import { Container } from "semantic-ui-react";
 
 const ScrollText = ({
   fileID,
@@ -82,10 +83,9 @@ const ScrollText = ({
   };
 
   return (
-    <p
-      className={
-        selectAnswerEnabled ? "text-container handcursor" : "text-container"
-      }
+    <Container
+      text
+      className={selectAnswerEnabled ? "hand-cursor" : ""}
       style={textStyle}
     >
       {words.map((word, index) => (
@@ -93,7 +93,7 @@ const ScrollText = ({
           {word + " "}
         </span>
       ))}
-    </p>
+    </Container>
   );
 };
 
