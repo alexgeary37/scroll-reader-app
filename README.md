@@ -1,5 +1,9 @@
 # NodeReact application called ScrollReader
 
+
+THINGS CHANGED:
+proxy to 3001
+
 ## Run commands
 ----------------------------------
 ### Terminal commands:

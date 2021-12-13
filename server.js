@@ -8,6 +8,8 @@ const readingSessionRoutes = require("./routes/readingSessionRoutes");
 const scrollPosEntryRoutes = require("./routes/scrollPosEntryRoutes");
 const defaultRoute = require("./routes/defaultRoute");
 
+const router = express.Router();
+
 class Server {
   constructor() {
     this.app = express();

@@ -25,6 +25,7 @@ router.get("/getSessionTemplate", async (req, res) => {
 });
 
 router.get("/getSessionTemplates", async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
   SessionTemplateModel.find({}, (err, result) => {
     if (err) {
       res.send(err);
