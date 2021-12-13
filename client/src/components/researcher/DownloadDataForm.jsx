@@ -15,7 +15,7 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
 
   const fetchSessions = () => {
     axios
-      .get("http://localhost:3001/getReadingSessions")
+      .get("/api/getReadingSessions")
       .then((response) => {
         const readingSessions = response.data;
         const options = [];
@@ -37,7 +37,7 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
 
   const getScrollPositionData = async () => {
     return axios
-      .get("http://localhost:3001/getScrollPosEntries", {
+      .get("/api/getScrollPosEntries", {
         params: { sessionID: sessionID },
       })
       .then((response) => {
@@ -47,7 +47,7 @@ const DownloadDataForm = ({ isOpen, templates, textFiles, close }) => {
 
   const getReadingSessionData = async () => {
     return axios
-      .get("http://localhost:3001/getReadingSession", {
+      .get("/api/getReadingSession", {
         params: { _id: sessionID },
       })
       .then((response) => {

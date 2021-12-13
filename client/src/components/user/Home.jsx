@@ -26,7 +26,7 @@ const Home = () => {
 
     // Get template from the database
     axios
-      .get("http://localhost:3001/getSessionTemplate", {
+      .get("/api/getSessionTemplate", {
         params: { _id: templateID },
       })
       .then((response) => {
@@ -62,7 +62,7 @@ const Home = () => {
     };
 
     await axios
-      .post("http://localhost:3001/createReadingSession", newReadingSession)
+      .post("/api/createReadingSession", newReadingSession)
       .then((response) => {
         sessionContext.setSessionID(response.data._id);
         sessionCreated = true;
@@ -90,7 +90,7 @@ const Home = () => {
 
   const handleResumeSession = () => {
     axios
-      .get("http://localhost:3001/getReadingSession", {
+      .get("/api/getReadingSession", {
         params: { _id: sessionContext.sessionID },
       })
       .then((response) => {

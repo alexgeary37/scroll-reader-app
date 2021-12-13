@@ -36,7 +36,7 @@ const SpeedTest = () => {
 
   const initialiseTextIsComplete = () => {
     axios
-      .get("http://localhost:3001/getReadingSession", {
+      .get("/api/getReadingSession", {
         params: { _id: sessionContext.sessionID },
       })
       .then((response) => {
@@ -59,7 +59,7 @@ const SpeedTest = () => {
     const startTime = new Date();
 
     axios
-      .put("http://localhost:3001/addNewSpeedText", {
+      .put("/api/addNewSpeedText", {
         id: sessionID,
         fileID: fileID,
         startTime: startTime,
@@ -79,7 +79,7 @@ const SpeedTest = () => {
 
     // Update session with the time the current file was finished.
     axios
-      .put("http://localhost:3001/updateCurrentSpeedText", {
+      .put("/api/updateCurrentSpeedText", {
         id: sessionID,
         fileID: currentText.fileID,
         endTime: endTime,
@@ -127,7 +127,7 @@ const SpeedTest = () => {
 
     // Update session with the time the current file was finished.
     axios
-      .put("http://localhost:3001/updateCurrentSpeedTextPauses", {
+      .put("/api/updateCurrentSpeedTextPauses", {
         id: sessionID,
         fileID: currentText.fileID,
         action: action,

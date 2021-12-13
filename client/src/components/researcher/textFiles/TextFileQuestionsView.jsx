@@ -36,7 +36,7 @@ const TextFileQuestionsView = ({
 
   const fetchTemplateQuestions = () => {
     axios
-      .get("http://localhost:3001/getUsedQuestions")
+      .get("/api/getUsedQuestions")
       .then((response) => {
         setUsedQuestionIDs(response.data);
       })
@@ -47,7 +47,7 @@ const TextFileQuestionsView = ({
 
   const addQuestion = (question, answerRegion) => {
     axios
-      .put("http://localhost:3001/addTextFileQuestion", {
+      .put("/api/addTextFileQuestion", {
         id: fileID,
         question: question.trim(),
         answerRegion: answerRegion,

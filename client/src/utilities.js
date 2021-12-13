@@ -31,7 +31,7 @@ export const recordViewportResize = (e, sessionContext) => {
   const time = new Date();
 
   axios
-    .put("http://localhost:3001/addViewportChange", {
+    .put("/api/addViewportChange", {
       id: sessionID,
       width: window.innerWidth,
       height: window.innerHeight,

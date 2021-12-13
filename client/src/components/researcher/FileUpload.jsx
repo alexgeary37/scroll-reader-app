@@ -30,7 +30,7 @@ const FileUpload = ({ uploadSubmitted }) => {
           createdAt: new Date(),
         };
         axios
-          .post("http://localhost:3001/uploadTextFile", textFile)
+          .post("/api/uploadTextFile", textFile)
           .then((response) => {
             const doc = {
               key: response.data._id,

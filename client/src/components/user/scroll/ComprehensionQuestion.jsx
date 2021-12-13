@@ -17,7 +17,7 @@ const ComprehensionQuestion = ({
     const questionID = currentText.questionIDs[questionNumber];
 
     axios
-      .get("http://localhost:3001/getTextFile", {
+      .get("/api/getTextFile", {
         params: { _id: fileID },
       })
       .then((response) => {

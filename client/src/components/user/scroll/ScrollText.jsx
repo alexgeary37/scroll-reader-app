@@ -25,7 +25,7 @@ const ScrollText = ({
 
   const fetchText = () => {
     axios
-      .get("http://localhost:3001/getTextFile", {
+      .get("/api/getTextFile", {
         params: { _id: fileID },
       })
       .then((response) => {
@@ -58,7 +58,7 @@ const ScrollText = ({
       if (entriesToInsert.length > 0) {
         sessionContext.setScrollPosEntries([]);
         axios
-          .post("http://localhost:3001/insertScrollPosEntries", entriesToInsert)
+          .post("/api/insertScrollPosEntries", entriesToInsert)
           .catch((error) => {
             console.error("Error adding scrollPosEntry:", error);
           });

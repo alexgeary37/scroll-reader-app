@@ -20,7 +20,7 @@ const TextAnswersConfigurationView = ({
 
   const fetchText = () => {
     axios
-      .get("http://localhost:3001/getTextFile", {
+      .get("/api/getTextFile", {
         params: { _id: fileID },
       })
       .then((response) => {

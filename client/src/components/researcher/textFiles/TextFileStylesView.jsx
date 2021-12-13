@@ -22,7 +22,7 @@ const TextFileStylesView = ({
 
   const fetchTemplateStyles = () => {
     axios
-      .get("http://localhost:3001/getUsedStyles")
+      .get("/api/getUsedStyles")
       .then((response) => {
         setUsedStyleIDs(response.data);
       })
@@ -33,7 +33,7 @@ const TextFileStylesView = ({
 
   const addStyle = (style) => {
     axios
-      .put("http://localhost:3001/addTextFileStyle", {
+      .put("/api/addTextFileStyle", {
         id: fileID,
         style: style,
       })

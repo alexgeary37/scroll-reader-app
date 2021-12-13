@@ -8,7 +8,7 @@ const TextFileTextView = ({ isOpen, fileID, close }) => {
   useEffect(() => {
     if (isOpen) {
       axios
-        .get("http://localhost:3001/getTextFile", {
+        .get("/api/getTextFile", {
           params: { _id: fileID },
         })
         .then((response) => {

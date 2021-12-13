@@ -11,7 +11,7 @@ const SpeedTestInstructions = ({ isOpen, instructions, fileID }) => {
     const startTime = new Date();
 
     axios
-      .put("http://localhost:3001/addNewSpeedText", {
+      .put("/api/addNewSpeedText", {
         id: sessionID,
         fileID: fileID,
         startTime: startTime,

@@ -142,7 +142,7 @@ const ResearcherView = () => {
     setTextFiles({ data: files, isFetching: false });
 
     axios
-      .put("http://localhost:3001/removeTextFileQuestion", {
+      .put("/api/removeTextFileQuestion", {
         fileID: file.key,
         questionID: question._id,
         questionFormat: questionFormat,
@@ -168,7 +168,7 @@ const ResearcherView = () => {
     setTextFiles({ data: files, isFetching: false });
 
     axios
-      .put("http://localhost:3001/removeTextFileStyle", {
+      .put("/api/removeTextFileStyle", {
         fileID: file.key,
         styleID: style._id,
       })
@@ -183,7 +183,7 @@ const ResearcherView = () => {
     setTextFiles({ data: files, isFetching: false });
 
     axios
-      .put("http://localhost:3001/deleteTextFile", {
+      .put("/api/deleteTextFile", {
         fileID: file.key,
       })
       .catch((error) => {
@@ -197,7 +197,7 @@ const ResearcherView = () => {
     setTemplates({ data: sessionTemplates, isFetching: false });
 
     axios
-      .put("http://localhost:3001/deleteTemplate", {
+      .put("/api/deleteTemplate", {
         templateID: template.key,
       })
       .catch((error) => {
@@ -231,7 +231,7 @@ const ResearcherView = () => {
 
   const handleFileUpload = (file) => {
     axios
-      .get("http://localhost:3001/getTextFile", {
+      .get("/api/getTextFile", {
         params: { _id: file.key },
       })
       .then((response) => {

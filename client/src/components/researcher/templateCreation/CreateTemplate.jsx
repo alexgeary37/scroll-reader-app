@@ -91,7 +91,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       };
 
       axios
-        .post("http://localhost:3001/createSessionTemplate", template)
+        .post("/api/createSessionTemplate", template)
         .then((response) => {
           handleClose(true, response.data);
         })

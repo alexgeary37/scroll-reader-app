@@ -27,7 +27,7 @@ const ScrollTestInstructions = ({ isOpen, text, close }) => {
     }
 
     axios
-      .put("http://localhost:3001/addNewScrollText", textObj)
+      .put("/api/addNewScrollText", textObj)
       .then(() => {
         // Set sessionContext to be in progress, this will close modal.
         clearData();

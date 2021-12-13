@@ -66,7 +66,7 @@ const ScrollTest = () => {
 
   const initialiseTextIsComplete = () => {
     axios
-      .get("http://localhost:3001/getReadingSession", {
+      .get("/api/getReadingSession", {
         params: { _id: sessionContext.sessionID },
       })
       .then((response) => {
@@ -90,7 +90,7 @@ const ScrollTest = () => {
 
     // Update session with the time the current file was finished.
     axios
-      .put("http://localhost:3001/updateCurrentScrollText", {
+      .put("/api/updateCurrentScrollText", {
         id: sessionID,
         fileID: currentText.fileID,
         endTime: endTime,
@@ -110,7 +110,7 @@ const ScrollTest = () => {
 
     // Update session with an endTime.
     axios
-      .put("http://localhost:3001/addEndTime", {
+      .put("/api/addEndTime", {
         id: sessionID,
         time: endTime,
       })
@@ -151,7 +151,7 @@ const ScrollTest = () => {
 
     // Update session with the time the current file was finished.
     axios
-      .put("http://localhost:3001/updateCurrentScrollTextPauses", {
+      .put("/api/updateCurrentScrollTextPauses", {
         id: sessionID,
         fileID: currentText.fileID,
         action: action,
@@ -182,7 +182,7 @@ const ScrollTest = () => {
     const yPos = parseInt(getScrollPosition().y);
 
     axios
-      .put("http://localhost:3001/addCurrentScrollTextQuestionAnswer", {
+      .put("/api/addCurrentScrollTextQuestionAnswer", {
         sessionID: sessionID,
         fileID: currentText.fileID,
         answer: answer,
