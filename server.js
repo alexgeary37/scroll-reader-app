@@ -17,7 +17,7 @@ const corsOptions = {
 class Server {
   constructor() {
     this.app = express();
-    this.port = process.env.PORT || 3001;
+    this.port = process.env.PORT || 3002;
     this.mongoUrl = process.env.ATLAS_URI;
     this.middlewares();
     this.routes();
