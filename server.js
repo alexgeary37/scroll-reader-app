@@ -8,7 +8,11 @@ const readingSessionRoutes = require("./routes/readingSessionRoutes");
 const scrollPosEntryRoutes = require("./routes/scrollPosEntryRoutes");
 const defaultRoute = require("./routes/defaultRoute");
 
-const router = express.Router();
+// const router = express.Router();
+const corsOptions = {
+  origin: "https://scroll-reader-app.herokuapp.com",
+  optionsSuccessStatus: 200,
+};
 
 class Server {
   constructor() {
@@ -20,7 +24,8 @@ class Server {
   }
 
   middlewares() {
-    this.app.use(cors());
+    this.app.use(cors(corsOptions));
+    this.app.options("*", cors());
     this.app.use(express.json({ limit: "50mb" }));
     this.app.use(express.urlencoded({ extended: false, limit: "50mb" }));
 
