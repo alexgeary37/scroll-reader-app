@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const SessionTemplateModel = require("../models/sessionTemplates");
 
-router.post("/createSessionTemplate", async (req, res) => {
+router.post("/api/createSessionTemplate", async (req, res) => {
   const newTemplate = req.body;
   SessionTemplateModel.create(newTemplate, (err, template) => {
     if (err) {
@@ -13,7 +13,7 @@ router.post("/createSessionTemplate", async (req, res) => {
   });
 });
 
-router.get("/getSessionTemplate", async (req, res) => {
+router.get("/api/getSessionTemplate", async (req, res) => {
   const id = req.query;
   SessionTemplateModel.findOne({ _id: id }, (err, result) => {
     if (err) {
@@ -24,7 +24,7 @@ router.get("/getSessionTemplate", async (req, res) => {
   });
 });
 
-router.get("/getSessionTemplates", async (req, res) => {
+router.get("/api/getSessionTemplates", async (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
   SessionTemplateModel.find({}, (err, result) => {
     if (err) {
@@ -35,7 +35,7 @@ router.get("/getSessionTemplates", async (req, res) => {
   });
 });
 
-router.get("/getUsedQuestions", async (req, res) => {
+router.get("/api/getUsedQuestions", async (req, res) => {
   SessionTemplateModel.find({}, (err, result) => {
     if (err) {
       res.send(err);
@@ -51,7 +51,7 @@ router.get("/getUsedQuestions", async (req, res) => {
   });
 });
 
-router.get("/getUsedStyles", async (req, res) => {
+router.get("/api/getUsedStyles", async (req, res) => {
   SessionTemplateModel.find({}, (err, result) => {
     if (err) {
       res.send(err);
@@ -66,7 +66,7 @@ router.get("/getUsedStyles", async (req, res) => {
   });
 });
 
-router.put("/deleteTemplate", async (req, res) => {
+router.put("/api/deleteTemplate", async (req, res) => {
   const templateID = req.body.templateID;
 
   SessionTemplateModel.findByIdAndDelete(templateID, (err, template) => {
