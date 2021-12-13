@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Input, Button, Modal } from "semantic-ui-react";
 
+const MINIMUM_FONT_SIZE = 5;
+const MINIMUM_LINE_HEIGHT = 7;
+
 const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
   const [family, setFamily] = useState("");
   const [size, setSize] = useState(-1);
@@ -15,13 +18,17 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
   };
 
   const handleSizeChange = (event) => {
-    setDisplaySizeError(false);
-    setSize(event.target.value);
+    if (event.target.value >= MINIMUM_FONT_SIZE) {
+      setDisplaySizeError(false);
+      setSize(event.target.value);
+    }
   };
 
   const handleLineHeightChange = (event) => {
-    setDisplayLineHeightError(false);
-    setLineHeight(event.target.value);
+    if (event.target.value >= MINIMUM_LINE_HEIGHT) {
+      setDisplayLineHeightError(false);
+      setLineHeight(event.target.value);
+    }
   };
 
   const checkFormInputs = () => {
