@@ -5,6 +5,8 @@ import axios from "axios";
 import { SessionContext } from "../../contexts/SessionContext";
 import PageError from "../PageError";
 
+const MIN_USERNAME_CHARACTERS = 3;
+
 const Home = () => {
   const [userName, setUserName] = useState("");
   const [template, setTemplate] = useState(null);
@@ -24,7 +26,7 @@ const Home = () => {
     const url = window.location.href.toString();
     const templateID = url.substr(url.lastIndexOf("/") + 1);
 
-    // Get template from the database
+    // Get template from the database.
     axios
       .get("/api/getSessionTemplate", {
         params: { _id: templateID },
@@ -75,7 +77,7 @@ const Home = () => {
   };
 
   const handleStartTask1 = () => {
-    if (userName.trim() === "") {
+    if (userName.trim().length < MIN_USERNAME_CHARACTERS) {
       setDisplayUserNameError(true);
       return;
     }

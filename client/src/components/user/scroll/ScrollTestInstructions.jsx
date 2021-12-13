@@ -2,48 +2,66 @@ import { Button, Modal } from "semantic-ui-react";
 import { SessionContext } from "../../../contexts/SessionContext";
 import axios from "axios";
 import { useContext, useState } from "react";
+import { isValidObjectId } from "mongoose";
 
 const ScrollTestInstructions = ({ isOpen, text, close }) => {
   const sessionContext = useContext(SessionContext);
-  const [familiarity, setFamiliarity] = useState("Very Unfamiliar");
-  const [interest, setInterest] = useState("Very Uninterested");
+  const [familiarity, setFamiliarity] = useState("");
+  const [interest, setInterest] = useState("");
+  const [displayFamiliarityError, setDisplayFamiliarityError] = useState(false);
+  const [displayInterestError, setDisplayInterestError] = useState(false);
+
+  const inputsAreValid = () => {
+    let isValid = true;
+    if (familiarity === "") {
+      setDisplayFamiliarityError(true);
+      isValid = false;
+    }
+    if (interest === "") {
+      setDisplayInterestError(true);
+      isValid = false;
+    }
+    return isValid;
+  };
 
   const handleStartTest = () => {
-    const sessionID = sessionContext.sessionID;
-    const startTime = new Date();
+    if (inputsAreValid()) {
+      const sessionID = sessionContext.sessionID;
+      const startTime = new Date();
 
-    const textObj = {
-      id: sessionID,
-      fileID: text.fileID,
-      startTime: startTime,
-    };
+      const textObj = {
+        id: sessionID,
+        fileID: text.fileID,
+        startTime: startTime,
+      };
 
-    if (JSON.parse(text.instructions.hasFamiliarityQuestion) === true) {
-      textObj.familiarity = familiarity;
+      if (JSON.parse(text.instructions.hasFamiliarityQuestion) === true) {
+        textObj.familiarity = familiarity;
+      }
+
+      if (JSON.parse(text.instructions.hasInterestQuestion) === true) {
+        textObj.interest = interest;
+      }
+
+      axios
+        .put("/api/addNewScrollText", textObj)
+        .then(() => {
+          // Set sessionContext to be in progress, this will close modal.
+          clearData();
+          close();
+        })
+        .catch((error) => {
+          console.error(
+            "Error updating readingSession.scrollTexts[text.fileID].startTime:",
+            error
+          );
+        });
     }
-
-    if (JSON.parse(text.instructions.hasInterestQuestion) === true) {
-      textObj.interest = interest;
-    }
-
-    axios
-      .put("/api/addNewScrollText", textObj)
-      .then(() => {
-        // Set sessionContext to be in progress, this will close modal.
-        clearData();
-        close();
-      })
-      .catch((error) => {
-        console.error(
-          "Error updating readingSession.scrollTexts[text.fileID].startTime:",
-          error
-        );
-      });
   };
 
   const clearData = () => {
-    setFamiliarity("Very Unfamiliar");
-    setInterest("Very Uninterested");
+    setFamiliarity("");
+    setInterest("");
   };
 
   const displayFamiliarityQuestion = () => {
