@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ReadingSessionModel = require("../models/readingSessions");
 
-router.post("/createReadingSession", async (req, res) => {
+router.post("/api/createReadingSession", async (req, res) => {
   const newSession = req.body;
   ReadingSessionModel.create(newSession, (err, session) => {
     if (err) {
@@ -13,7 +13,7 @@ router.post("/createReadingSession", async (req, res) => {
   });
 });
 
-router.get("/getReadingSession", async (req, res) => {
+router.get("/api/getReadingSession", async (req, res) => {
   const id = req.query;
   ReadingSessionModel.findOne({ _id: id }, (err, result) => {
     if (err) {
@@ -24,7 +24,7 @@ router.get("/getReadingSession", async (req, res) => {
   });
 });
 
-router.get("/getReadingSessions", async (req, res) => {
+router.get("/api/getReadingSessions", async (req, res) => {
   ReadingSessionModel.find({}, (err, result) => {
     if (err) {
       res.send(err);
@@ -34,7 +34,7 @@ router.get("/getReadingSessions", async (req, res) => {
   });
 });
 
-router.put("/addViewportChange", async (req, res) => {
+router.put("/api/addViewportChange", async (req, res) => {
   const id = req.body.id;
   const width = req.body.width;
   const height = req.body.height;
@@ -63,7 +63,7 @@ router.put("/addViewportChange", async (req, res) => {
   );
 });
 
-router.put("/addEndTime", async (req, res) => {
+router.put("/api/addEndTime", async (req, res) => {
   const id = req.body.id;
   const time = req.body.time;
 
@@ -82,7 +82,7 @@ router.put("/addEndTime", async (req, res) => {
   );
 });
 
-router.put("/addNewSpeedText", async (req, res) => {
+router.put("/api/addNewSpeedText", async (req, res) => {
   const id = req.body.id;
   const fileID = req.body.fileID;
   const startTime = req.body.startTime;
@@ -109,7 +109,7 @@ router.put("/addNewSpeedText", async (req, res) => {
   );
 });
 
-router.put("/addNewScrollText", async (req, res) => {
+router.put("/api/addNewScrollText", async (req, res) => {
   const id = req.body.id;
   const fileID = req.body.fileID;
   const startTime = req.body.startTime;
@@ -140,7 +140,7 @@ router.put("/addNewScrollText", async (req, res) => {
   );
 });
 
-router.put("/updateCurrentSpeedText", async (req, res) => {
+router.put("/api/updateCurrentSpeedText", async (req, res) => {
   const id = req.body.id;
   const fileID = req.body.fileID;
   const endTime = req.body.endTime;
@@ -160,7 +160,7 @@ router.put("/updateCurrentSpeedText", async (req, res) => {
   );
 });
 
-router.put("/updateCurrentScrollText", async (req, res) => {
+router.put("/api/updateCurrentScrollText", async (req, res) => {
   const id = req.body.id;
   const fileID = req.body.fileID;
   const endTime = req.body.endTime;
@@ -180,7 +180,7 @@ router.put("/updateCurrentScrollText", async (req, res) => {
   );
 });
 
-router.put("/updateCurrentSpeedTextPauses", async (req, res) => {
+router.put("/api/updateCurrentSpeedTextPauses", async (req, res) => {
   const id = req.body.id;
   const fileID = req.body.fileID;
   const action = req.body.action;
@@ -205,7 +205,7 @@ router.put("/updateCurrentSpeedTextPauses", async (req, res) => {
   );
 });
 
-router.put("/updateCurrentScrollTextPauses", async (req, res) => {
+router.put("/api/updateCurrentScrollTextPauses", async (req, res) => {
   const id = req.body.id;
   const fileID = req.body.fileID;
   const action = req.body.action;
@@ -230,7 +230,7 @@ router.put("/updateCurrentScrollTextPauses", async (req, res) => {
   );
 });
 
-router.put("/addCurrentScrollTextQuestionAnswer", async (req, res) => {
+router.put("/api/addCurrentScrollTextQuestionAnswer", async (req, res) => {
   const sessionID = req.body.sessionID;
   const fileID = req.body.fileID;
   const answer = req.body.answer;

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ScrollPosEntryModel = require("../models/scrollPosEntries");
 
-router.post("/insertScrollPosEntries", async (req, res) => {
+router.post("/api/insertScrollPosEntries", async (req, res) => {
   const newScrollPosEntries = req.body;
   ScrollPosEntryModel.insertMany(newScrollPosEntries, (err, entries) => {
     if (err) {
@@ -14,7 +14,7 @@ router.post("/insertScrollPosEntries", async (req, res) => {
 });
 
 // Get scroll position entries from multiple sessions, ordered by session and time.
-router.get("/getScrollPosEntries", async (req, res) => {
+router.get("/api/getScrollPosEntries", async (req, res) => {
   const sessionID = req.query.sessionID;
   ScrollPosEntryModel.find({ sessionID: sessionID }, (err, result) => {
     if (err) {
