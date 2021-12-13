@@ -35,7 +35,7 @@ router.get("/getTextFiles", async (req, res) => {
   });
 });
 
-router.get("/getAllTextFiles", async (req, res) => {
+router.get("/api/getAllTextFiles", async (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
   TextFileModel.find({}, (err, result) => {
     if (err) {

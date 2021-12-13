@@ -29,7 +29,7 @@ const ResearcherView = () => {
     setTextFiles({ data: textFiles.data, isFetching: true });
 
     axios
-      .get("http://localhost:3001/getAllTextFiles")
+      .get("/api/getAllTextFiles")
       .then((response) => {
         const data = response.data;
         const files = [];
@@ -57,7 +57,7 @@ const ResearcherView = () => {
   const fetchSessionTemplates = () => {
     setTemplates({ data: templates.data, isFetching: true });
     axios
-      .get("http://localhost:3001/getSessionTemplates")
+      .get("/api/getSessionTemplates")
       .then((templatesResponse) => {
         const options = [];
         const data = templatesResponse.data;

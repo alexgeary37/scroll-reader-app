@@ -13,7 +13,7 @@ const router = express.Router();
 class Server {
   constructor() {
     this.app = express();
-    this.port = process.env.PORT;
+    this.port = process.env.PORT || 3001;
     this.mongoUrl = process.env.ATLAS_URI;
     this.middlewares();
     this.routes();
