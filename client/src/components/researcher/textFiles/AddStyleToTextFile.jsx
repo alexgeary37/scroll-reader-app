@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Input, Button, Modal } from "semantic-ui-react";
 
 const MINIMUM_FONT_SIZE = 5;
-const MINIMUM_LINE_HEIGHT = 7;
+const MINIMUM_LINE_HEIGHT = 6;
 
 const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
   const [family, setFamily] = useState("");
@@ -18,17 +18,13 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
   };
 
   const handleSizeChange = (event) => {
-    if (event.target.value >= MINIMUM_FONT_SIZE) {
-      setDisplaySizeError(false);
-      setSize(event.target.value);
-    }
+    setDisplaySizeError(false);
+    setSize(event.target.value);
   };
 
   const handleLineHeightChange = (event) => {
-    if (event.target.value >= MINIMUM_LINE_HEIGHT) {
-      setDisplayLineHeightError(false);
-      setLineHeight(event.target.value);
-    }
+    setDisplayLineHeightError(false);
+    setLineHeight(event.target.value);
   };
 
   const checkFormInputs = () => {
@@ -96,6 +92,7 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
           style={{ marginBottom: 10 }}
           error={displaySizeError}
           type="Number"
+          min={MINIMUM_FONT_SIZE}
           placeholder="Size (pixels)"
           onChange={handleSizeChange}
         />
@@ -103,6 +100,7 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
           style={{ marginBottom: 10 }}
           error={displayLineHeightError}
           type="Number"
+          min={MINIMUM_LINE_HEIGHT}
           placeholder="Line height (pixels)"
           onChange={handleLineHeightChange}
         />
