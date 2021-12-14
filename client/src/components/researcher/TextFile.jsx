@@ -8,7 +8,6 @@ import TextFileTextView from "./textFiles/TextFileTextView";
 const TextFile = ({
   file,
   usedInTemplate,
-  usedAsScrollText,
   updateFileQuestions,
   removeQuestion,
   updateFileStyles,

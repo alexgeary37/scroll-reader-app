@@ -3,7 +3,12 @@ import SessionTemplateView from "./templates/SessionTemplateView";
 import { useState } from "react";
 import DeleteTemplateModal from "./templates/DeleteTemplateModal";
 
-const SessionTemplate = ({ template, textFiles, deleteTemplate }) => {
+const SessionTemplate = ({
+  template,
+  usedInReadingSession,
+  textFiles,
+  deleteTemplate,
+}) => {
   const [openTemplateView, setOpenTemplateView] = useState(false);
   const [openDeleteTemplateModal, setOpenDeleteTemplateModal] = useState(false);
 
@@ -62,6 +67,7 @@ const SessionTemplate = ({ template, textFiles, deleteTemplate }) => {
             onClick={() => navigator.clipboard.writeText(template.url)}
           />
           <Button
+            disabled={usedInReadingSession}
             content="Delete"
             onClick={() => setOpenDeleteTemplateModal(true)}
           />

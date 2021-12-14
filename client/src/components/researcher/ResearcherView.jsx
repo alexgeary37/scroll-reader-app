@@ -113,7 +113,7 @@ const ResearcherView = () => {
 
   const fetchReadingSessions = () => {
     setReadingSessions({ data: readingSessions.data, isFetching: false });
-
+    // TODO:
     // axios
     //   .get("/api/getReadingSessions")
     //   .then((response) => {
@@ -186,7 +186,7 @@ const ResearcherView = () => {
         questionFormat: questionFormat,
       })
       .catch((error) => {
-        console.error("Error removing question from file.questions", error);
+        console.error("Error removing question from file.questions:", error);
       });
   };
 
@@ -211,7 +211,7 @@ const ResearcherView = () => {
         styleID: style._id,
       })
       .catch((error) => {
-        console.error("Error removing style from file.styles", error);
+        console.error("Error removing style from file.styles:", error);
       });
   };
 
@@ -225,7 +225,7 @@ const ResearcherView = () => {
         fileID: file.key,
       })
       .catch((error) => {
-        console.error("Error deleting file", error);
+        console.error("Error deleting file:", error);
       });
   };
 
@@ -239,13 +239,22 @@ const ResearcherView = () => {
         templateID: template.key,
       })
       .catch((error) => {
-        console.error("Error deleting template", error);
+        console.error("Error deleting template:", error);
       });
   };
 
   const handleDeleteReadingSession = (session) => {
-    // TODO: Complete this
     let sessions = readingSessions.data;
+    sessions = sessions.filter((s) => s !== session);
+    setReadingSessions({ data: readingSessions, isFetching: false });
+
+    axios
+      .put("/api/deleteReadingSession", {
+        readingSessionID: session.key,
+      })
+      .catch((error) => {
+        console.error("Error deleting reading session:", error);
+      });
   };
 
   const fileUsedInTemplate = (fileID) => {
@@ -266,6 +275,17 @@ const ResearcherView = () => {
       return (
         templates.data.find((template) =>
           template.scrollTexts.some((text) => text.fileID === fileID)
+        ) !== undefined
+      );
+    }
+    return false;
+  };
+
+  const templateUsedInReadingSession = (templateID) => {
+    if (!readingSessions.isFetching) {
+      return (
+        readingSessions.data.find(
+          (session) => session.templateID === templateID
         ) !== undefined
       );
     }
@@ -304,7 +324,6 @@ const ResearcherView = () => {
                   key={file.key}
                   file={file}
                   usedInTemplate={fileUsedInTemplate(file.key)}
-                  usedAsScrollText={fileUsedAsScrollText(file.key)}
                   updateFileQuestions={(newQuestion, questionFormat) =>
                     handleUpdateFileQuestions(file, newQuestion, questionFormat)
                   }
@@ -340,6 +359,9 @@ const ResearcherView = () => {
                 <SessionTemplate
                   key={template.key}
                   template={template}
+                  usedInReadingSession={templateUsedInReadingSession(
+                    template.key
+                  )}
                   textFiles={textFiles.data}
                   deleteTemplate={() => handleDeleteTemplate(template)}
                 />
@@ -372,7 +394,7 @@ const ResearcherView = () => {
           <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
             <div className="ui link divided relaxed items">
               {readingSessions.data.map((session) => (
-                <SessionTemplate
+                <ReadingSession
                   key={session.key}
                   session={session}
                   deleteReadingSession={() =>
@@ -395,9 +417,9 @@ const ResearcherView = () => {
             <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
             <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
           </Grid.Row>
-          {/* <Grid.Row>
+          <Grid.Row>
             <Grid.Column width={16}>{displayReadingSessions()}</Grid.Column>
-          </Grid.Row> */}
+          </Grid.Row>
           <Grid.Row>
             <Button
               positive
