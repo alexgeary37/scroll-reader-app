@@ -114,34 +114,34 @@ const ResearcherView = () => {
   const fetchReadingSessions = () => {
     setReadingSessions({ data: readingSessions.data, isFetching: false });
 
-    axios
-      .get("/api/getReadingSessions")
-      .then((response) => {
-        const options = [];
-        const data = response.data;
-        data.forEach((session) => {
-          // TODO: Finish this function
-          const option = {
-            key: session._id,
-            name: session.name,
-            speedTest: {
-              texts: speedTexts,
-              instructions: session.speedTest.instructions,
-            },
-            scrollTexts: scrollTexts,
-            createdAt: session.createdAt,
-            url: session._id,
-          };
+    // axios
+    //   .get("/api/getReadingSessions")
+    //   .then((response) => {
+    //     const options = [];
+    //     const data = response.data;
+    //     data.forEach((session) => {
+    //       // TODO: Finish this function
+    //       const option = {
+    //         key: session._id,
+    //         name: session.name,
+    //         speedTest: {
+    //           texts: speedTexts,
+    //           instructions: session.speedTest.instructions,
+    //         },
+    //         scrollTexts: scrollTexts,
+    //         createdAt: session.createdAt,
+    //         url: session._id,
+    //       };
 
-          options.push(option);
-        });
+    //       options.push(option);
+    //     });
 
-        // Set templates for rendering, and indicate that they are no longer being fetched.
-        setTemplates({ data: options, isFetching: false });
-      })
-      .catch((error) => {
-        console.error("Error fetching reading sessions:", error);
-      });
+    // Set templates for rendering, and indicate that they are no longer being fetched.
+    // setTemplates({ data: options, isFetching: false });
+    // })
+    // .catch((error) => {
+    //   console.error("Error fetching reading sessions:", error);
+    // });
   };
 
   const handleCreateTemplate = () => {
@@ -348,7 +348,7 @@ const ResearcherView = () => {
           </Segment>
 
           <Button
-            style={{ position: "absolute", right: 10 }}
+            style={{ display: "flex", float: "right" }}
             positive
             content="Create Template"
             onClick={handleCreateTemplate}
@@ -395,9 +395,9 @@ const ResearcherView = () => {
             <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
             <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
           </Grid.Row>
-          <Grid.Row>
+          {/* <Grid.Row>
             <Grid.Column width={16}>{displayReadingSessions()}</Grid.Column>
-          </Grid.Row>
+          </Grid.Row> */}
           <Grid.Row>
             <Button
               positive
