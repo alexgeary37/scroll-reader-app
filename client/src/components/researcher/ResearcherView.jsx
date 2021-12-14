@@ -248,11 +248,8 @@ const ResearcherView = () => {
   };
 
   const displayTextFiles = () => {
-    const curUrl = window.location.href;
-
-    // Do not render text files if the researcher is looking at the data page,
-    // or if the files are still being fetched from the database.
-    if (curUrl.substr(curUrl.length - 5) !== "/data" && !textFiles.isFetching) {
+    // Only rendern text files once they have been fetched.
+    if (!textFiles.isFetching) {
       return (
         <div>
           <Header as="h1" textAlign="center" content="Uploaded Texts" />
@@ -288,11 +285,8 @@ const ResearcherView = () => {
   };
 
   const displaySessionTemplates = () => {
-    const curUrl = window.location.href;
-
-    // Do not render session templates if the researcher is looking at the data page,
-    // or if the session templates are still being fetched from the database.
-    if (curUrl.substr(curUrl.length - 5) !== "/data" && !templates.isFetching) {
+    // Only render sessionTemplates if they have been fetched.
+    if (!templates.isFetching) {
       return (
         <div>
           <Header as="h1" textAlign="center" content="Existing Templates" />

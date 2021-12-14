@@ -24,7 +24,7 @@ const Home = () => {
   const fetchSessionTemplate = () => {
     // Get sessionTemplateID from the url.
     const url = window.location.href.toString();
-    const templateID = url.substr(url.lastIndexOf("/") + 1);
+    const templateID = url.substring(url.lastIndexOf("/") + 1, url.length);
 
     // Get template from the database.
     axios

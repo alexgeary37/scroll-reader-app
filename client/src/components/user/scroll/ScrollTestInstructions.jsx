@@ -13,11 +13,17 @@ const ScrollTestInstructions = ({ isOpen, text, close }) => {
 
   const inputsAreValid = () => {
     let isValid = true;
-    if (familiarity === "") {
+    if (
+      JSON.parse(text.instructions.hasFamiliarityQuestion) === true &&
+      familiarity === ""
+    ) {
       setDisplayFamiliarityError(true);
       isValid = false;
     }
-    if (interest === "") {
+    if (
+      JSON.parse(text.instructions.hasInterestQuestion) === true &&
+      interest === ""
+    ) {
       setDisplayInterestError(true);
       isValid = false;
     }
