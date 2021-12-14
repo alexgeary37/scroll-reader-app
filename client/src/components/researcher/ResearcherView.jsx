@@ -10,12 +10,17 @@ import DownloadDataForm from "./DownloadDataForm.jsx";
 const ResearcherView = () => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
   const [templates, setTemplates] = useState({ data: [], isFetching: true });
+  const [readingSessions, setReadingSessions] = useState({
+    data: [],
+    isFetching: true,
+  });
   const [openTemplateCreator, setOpenTemplateCreator] = useState(false);
   const [openDownloadDataModal, setOpenDownloadDataModal] = useState(false);
 
   useEffect(() => {
     // Fetch text files only on first render.
     fetchTextFiles();
+    fetchReadingSessions();
   }, []);
 
   useEffect(() => {
@@ -103,6 +108,39 @@ const ResearcherView = () => {
       })
       .catch((error) => {
         console.error("Error fetching session templates:", error);
+      });
+  };
+
+  const fetchReadingSessions = () => {
+    setReadingSessions({ data: readingSessions.data, isFetching: false });
+
+    axios
+      .get("/api/getReadingSessions")
+      .then((response) => {
+        const options = [];
+        const data = response.data;
+        data.forEach((session) => {
+          // TODO: Finish this function
+          const option = {
+            key: session._id,
+            name: session.name,
+            speedTest: {
+              texts: speedTexts,
+              instructions: session.speedTest.instructions,
+            },
+            scrollTexts: scrollTexts,
+            createdAt: session.createdAt,
+            url: session._id,
+          };
+
+          options.push(option);
+        });
+
+        // Set templates for rendering, and indicate that they are no longer being fetched.
+        setTemplates({ data: options, isFetching: false });
+      })
+      .catch((error) => {
+        console.error("Error fetching reading sessions:", error);
       });
   };
 
@@ -203,6 +241,11 @@ const ResearcherView = () => {
       .catch((error) => {
         console.error("Error deleting template", error);
       });
+  };
+
+  const handleDeleteReadingSession = (session) => {
+    // TODO: Complete this
+    let sessions = readingSessions.data;
   };
 
   const fileUsedInTemplate = (fileID) => {
@@ -320,6 +363,30 @@ const ResearcherView = () => {
     }
   };
 
+  const displayReadingSessions = () => {
+    if (!readingSessions.isFetching) {
+      return (
+        <div>
+          <Header as="h1" textAlign="center" content="Reading Sessions" />
+
+          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
+            <div className="ui link divided relaxed items">
+              {readingSessions.data.map((session) => (
+                <SessionTemplate
+                  key={session.key}
+                  session={session}
+                  deleteReadingSession={() =>
+                    handleDeleteReadingSession(session)
+                  }
+                />
+              ))}
+            </div>
+          </Segment>
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="researcher">
       <Container>
@@ -327,6 +394,9 @@ const ResearcherView = () => {
           <Grid.Row>
             <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
             <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column width={16}>{displayReadingSessions()}</Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Button
