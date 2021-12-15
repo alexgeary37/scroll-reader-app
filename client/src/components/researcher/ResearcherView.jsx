@@ -51,7 +51,6 @@ const ResearcherView = () => {
             value: file._id,
             name: file.fileName,
             questions: file.questions,
-            questionFormat: file.questionFormat,
             styles: file.styles,
             uploadedAt: file.createdAt,
           };
@@ -164,11 +163,10 @@ const ResearcherView = () => {
     setOpenTemplateCreator(false);
   };
 
-  const handleUpdateFileQuestions = (file, newQuestion, questionFormat) => {
+  const handleUpdateFileQuestions = (file, newQuestion) => {
     const files = textFiles.data;
     const index = files.indexOf(file);
     files[index].questions.push(newQuestion);
-    files[index].questionFormat = questionFormat;
 
     setTextFiles({ data: files, isFetching: false });
   };
@@ -179,9 +177,6 @@ const ResearcherView = () => {
     files[index].questions = files[index].questions.filter(
       (q) => q !== question
     );
-    const questionFormat =
-      files[index].questions.length > 0 ? files[index].questionFormat : "";
-    files[index].questionFormat = questionFormat;
 
     setTextFiles({ data: files, isFetching: false });
 
@@ -189,7 +184,6 @@ const ResearcherView = () => {
       .put("/api/removeTextFileQuestion", {
         fileID: file.key,
         questionID: question._id,
-        questionFormat: questionFormat,
       })
       .catch((error) => {
         console.error("Error removing question from file.questions:", error);
@@ -330,8 +324,8 @@ const ResearcherView = () => {
                   key={file.key}
                   file={file}
                   usedInTemplate={fileUsedInTemplate(file.key)}
-                  updateFileQuestions={(newQuestion, questionFormat) =>
-                    handleUpdateFileQuestions(file, newQuestion, questionFormat)
+                  updateFileQuestions={(newQuestion) =>
+                    handleUpdateFileQuestions(file, newQuestion)
                   }
                   removeQuestion={(question) =>
                     handleRemoveFileQuestion(file, question)

@@ -1,15 +1,10 @@
 import { useState } from "react";
-import { Modal, Button, Input } from "semantic-ui-react";
+import { Modal, Button, Input, Form } from "semantic-ui-react";
 import TextAnswersConfigurationView from "./TextAnswersConfigurationView";
 
-const AddQuestionToTextFile = ({
-  isOpen,
-  fileID,
-  format,
-  addQuestion,
-  close,
-}) => {
+const AddQuestionToTextFile = ({ isOpen, fileID, addQuestion, close }) => {
   const [question, setQuestion] = useState("");
+  const [questionFormat, setQuestionFormat] = useState("");
   const [answerRegion, setAnswerRegion] = useState({
     startIndex: 0,
     endIndex: 0,
@@ -39,7 +34,7 @@ const AddQuestionToTextFile = ({
     }
 
     if (
-      format === "inline" &&
+      questionFormat === "inline" &&
       answerRegion.startIndex === 0 &&
       answerRegion.endIndex === 0
     ) {
@@ -49,13 +44,14 @@ const AddQuestionToTextFile = ({
 
     setQuestion("");
     setDisplayAnswerRegionConfiguration(false);
-    addQuestion(question, answerRegion);
+    addQuestion(question, questionFormat, answerRegion);
     setAnswerRegion({ startIndex: 0, endIndex: 0 });
     close();
   };
 
   const handleCancel = () => {
     setQuestion("");
+    setQuestionFormat("");
     setAnswerRegion({ startIndex: 0, endIndex: 0 });
     setDisplayAnswerRegionConfiguration(false);
     setDisplayAnswerRegionError(false);
@@ -98,6 +94,32 @@ const AddQuestionToTextFile = ({
           onChange={handleQuestionChange}
         />
         <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div>
+            <Form>
+              <div className="grouped fields">
+                <Form.Field>
+                  <div className="ui radio checkbox">
+                    <input
+                      type="radio"
+                      checked={questionFormat === "comprehension"}
+                      onChange={() => setQuestionFormat("comprehension")}
+                    />
+                    <label>Comprehension</label>
+                  </div>
+                </Form.Field>
+                <Form.Field>
+                  <div className="ui radio checkbox">
+                    <input
+                      type="radio"
+                      checked={questionFormat === "inline"}
+                      onChange={() => setQuestionFormat("inline")}
+                    />
+                    <label>Inline</label>
+                  </div>
+                </Form.Field>
+              </div>
+            </Form>
+          </div>
           {displayInlineComponents()}
           <div style={{ float: "right" }}>
             <Button content="Cancel" onClick={handleCancel} />
@@ -113,7 +135,7 @@ const AddQuestionToTextFile = ({
   };
 
   const displayInlineComponents = () => {
-    if (format === "inline") {
+    if (questionFormat === "inline") {
       return (
         <div>
           <Button

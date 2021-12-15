@@ -6,13 +6,13 @@ const TextFileSchema = mongoose.Schema({
   questions: [
     mongoose.Schema({
       question: { type: String, required: true },
+      questionFormat: { type: String, required: false },
       answerRegion: {
         startIndex: { type: Number, required: true },
         endIndex: { type: Number, required: true },
       },
     }),
   ],
-  questionFormat: { type: String, required: false },
   styles: [
     mongoose.Schema({
       fontFamily: { type: String, required: true },

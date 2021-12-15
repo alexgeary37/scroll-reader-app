@@ -38,7 +38,7 @@ const ScrollText = ({
           lineHeight: `${style.lineHeight}px`,
         });
 
-        sessionContext.setQuestionFormat(response.data.questionFormat);
+        // sessionContext.setQuestionFormat(response.data.questionFormat);
         sessionContext.setQuestionAnswers(
           response.data.questions.map((q) => {
             return q.answerRegion;

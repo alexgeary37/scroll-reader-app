@@ -15,18 +15,12 @@ const TextFileQuestionsView = ({
   isOpen,
   fileID,
   questions,
-  format,
   updateFileQuestions,
   removeQuestion,
   close,
 }) => {
   const [openAddQuestion, setOpenAddQuestion] = useState(false);
-  const [questionFormat, setQuestionFormat] = useState(format);
   const [usedQuestionIDs, setUsedQuestionIDs] = useState([]);
-
-  useEffect(() => {
-    setQuestionFormat(format);
-  }, [format]);
 
   useEffect(() => {
     if (isOpen) {
@@ -45,7 +39,7 @@ const TextFileQuestionsView = ({
       });
   };
 
-  const addQuestion = (question, answerRegion) => {
+  const addQuestion = (question, questionFormat, answerRegion) => {
     axios
       .put("/api/addTextFileQuestion", {
         id: fileID,
@@ -69,35 +63,6 @@ const TextFileQuestionsView = ({
   return (
     <Modal style={{ padding: 10 }} open={isOpen}>
       <Header as="h4" content="Questions" />
-      <div>
-        <Form>
-          <div className="grouped fields">
-            <Form.Field>
-              <div className="ui radio checkbox">
-                <input
-                  type="radio"
-                  disabled={format !== ""}
-                  checked={questionFormat === "comprehension"}
-                  onChange={() => setQuestionFormat("comprehension")}
-                />
-                <label>Comprehension</label>
-              </div>
-            </Form.Field>
-            <Form.Field>
-              <div className="ui radio checkbox">
-                <input
-                  type="radio"
-                  disabled={format !== ""}
-                  checked={questionFormat === "inline"}
-                  onChange={() => setQuestionFormat("inline")}
-                />
-                <label>Inline</label>
-              </div>
-            </Form.Field>
-          </div>
-        </Form>
-      </div>
-
       <List ordered divided relaxed>
         {questions.map((question) => (
           <Item key={question._id}>
@@ -119,7 +84,6 @@ const TextFileQuestionsView = ({
       <Divider />
       <Button
         positive
-        disabled={questionFormat === ""}
         content="Add Question"
         onClick={() => setOpenAddQuestion(true)}
       />
@@ -128,7 +92,6 @@ const TextFileQuestionsView = ({
       <AddQuestionToTextFile
         isOpen={openAddQuestion}
         fileID={fileID}
-        format={questionFormat}
         addQuestion={addQuestion}
         close={() => setOpenAddQuestion(false)}
       />

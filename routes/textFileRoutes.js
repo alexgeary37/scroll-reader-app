@@ -48,8 +48,8 @@ router.get("/api/getAllTextFiles", async (req, res) => {
 router.put("/api/addTextFileQuestion", async (req, res) => {
   const id = req.body.id;
   const question = req.body.question;
-  const answerRegion = req.body.answerRegion;
   const questionFormat = req.body.questionFormat;
+  const answerRegion = req.body.answerRegion;
 
   TextFileModel.findByIdAndUpdate(
     id,
@@ -57,11 +57,9 @@ router.put("/api/addTextFileQuestion", async (req, res) => {
       $push: {
         questions: {
           question: question,
+          questionFormat: questionFormat,
           answerRegion: answerRegion,
         },
-      },
-      $set: {
-        questionFormat: questionFormat,
       },
     },
     { new: true },
@@ -114,7 +112,6 @@ router.put("/api/deleteTextFile", async (req, res) => {
 router.put("/api/removeTextFileQuestion", async (req, res) => {
   const fileID = req.body.fileID;
   const questionID = req.body.questionID;
-  const questionFormat = req.body.questionFormat;
 
   TextFileModel.findByIdAndUpdate(
     fileID,
@@ -123,9 +120,6 @@ router.put("/api/removeTextFileQuestion", async (req, res) => {
         questions: {
           _id: questionID,
         },
-      },
-      $set: {
-        questionFormat: questionFormat,
       },
     },
     { new: true },

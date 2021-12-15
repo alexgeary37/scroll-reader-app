@@ -27,9 +27,6 @@ const TextFile = ({
           <div>
             <Item.Header as="h4" style={{ margin: 5 }} content={file.name} />
             <Item.Description content={`Uploaded: ${file.uploadedAt}`} />
-            <Item.Description
-              content={`Question Format: ${file.questionFormat}`}
-            />
           </div>
 
           <div className="ui vertical buttons">
@@ -57,7 +54,6 @@ const TextFile = ({
           isOpen={openViewQuestions}
           fileID={file.key}
           questions={file.questions}
-          format={file.questionFormat}
           updateFileQuestions={updateFileQuestions}
           removeQuestion={removeQuestion}
           close={() => setOpenViewQuestions(false)}
