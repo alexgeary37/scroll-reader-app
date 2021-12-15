@@ -1,8 +1,9 @@
 import { Item, Button } from "semantic-ui-react";
 import { useState } from "react";
-import DeleteReadingSessionModal from "./readingSessions/DeleteReadingSessionModal";
+import DeleteReadingSessionModal from "./readingSessions/DeleteReadingSessionModal.jsx";
+import { handleExport } from "./exportData.js";
 
-const ReadingSession = ({ session, deleteReadingSession }) => {
+const ReadingSession = ({ session, textFiles, deleteReadingSession }) => {
   const [openDeleteReadingSessionModal, setOpenDeleteReadingSessionModal] =
     useState(false);
 
@@ -17,6 +18,12 @@ const ReadingSession = ({ session, deleteReadingSession }) => {
         <Button
           content="Delete"
           onClick={() => setOpenDeleteReadingSessionModal(true)}
+        />
+        <Button
+          primary
+          content="Export Session Data"
+          icon="download"
+          onClick={() => handleExport(session.key, textFiles)}
         />
 
         <DeleteReadingSessionModal

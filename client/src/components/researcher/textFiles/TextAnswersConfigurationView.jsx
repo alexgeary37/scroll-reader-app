@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { v4 as uuid_v4 } from "uuid";
-import { wordSeparators } from "../../../utilities";
+import { wordSeparators } from "../../../utilities.js";
 import { Segment } from "semantic-ui-react";
 
 const TextAnswersConfigurationView = ({

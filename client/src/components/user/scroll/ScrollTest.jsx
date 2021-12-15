@@ -9,6 +9,7 @@ import axios from "axios";
 import {
   addScrollPosEntryToSessionContext,
   isLastText,
+  recordViewportResize,
   scrollToTop,
 } from "../../../utilities.js";
 import { getScrollPosition } from "./scrollPosition.jsx";
@@ -18,7 +19,6 @@ import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
 import ConfirmDoneWindow from "../ConfirmDoneWindow.jsx";
 import AnswerResponseWindow from "./AnswerResponseWindow.jsx";
 import { debounce } from "debounce";
-import { recordViewportResize } from "../../../utilities";
 
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);

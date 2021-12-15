@@ -5,7 +5,6 @@ import SessionTemplate from "./SessionTemplate.jsx";
 import axios from "axios";
 import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./FileUpload.jsx";
-import DownloadDataForm from "./DownloadDataForm.jsx";
 import ReadingSession from "./ReadingSession.jsx";
 
 const ResearcherView = () => {
@@ -20,24 +19,19 @@ const ResearcherView = () => {
 
   useEffect(() => {
     // Fetch text files only on first render.
-    console.log("fetch textfiles");
     fetchTextFiles();
   }, []);
 
   useEffect(() => {
     // Fetch session templates only after text files have been fetched.
-    console.log("texts:", textFiles.isFetching);
     if (!textFiles.isFetching) {
-      console.log("fetch templates");
       fetchSessionTemplates();
     }
   }, [textFiles.isFetching]);
 
   useEffect(() => {
     // Fetch reading sessions only after templates have been fetched.
-    console.log("templates:", templates.isFetching);
     if (!templates.isFetching) {
-      console.log("fetch sessions");
       fetchReadingSessions();
     }
   }, [templates.isFetching]);
@@ -136,6 +130,7 @@ const ResearcherView = () => {
           const option = {
             key: session._id,
             userName: session.userName,
+            templateID: session.templateID,
             templateName: templates.data.find(
               (t) => t.key === session.templateID
             ).name,
@@ -407,6 +402,7 @@ const ResearcherView = () => {
                 <ReadingSession
                   key={session.key}
                   session={session}
+                  textFiles={textFiles.data}
                   deleteReadingSession={() =>
                     handleDeleteReadingSession(session)
                   }
@@ -430,7 +426,7 @@ const ResearcherView = () => {
           <Grid.Row>
             <Grid.Column width={16}>{displayReadingSessions()}</Grid.Column>
           </Grid.Row>
-          <Grid.Row>
+          {/* <Grid.Row>
             <Button
               positive
               content="Download data"
@@ -442,7 +438,7 @@ const ResearcherView = () => {
               textFiles={textFiles.data}
               close={() => setOpenDownloadDataModal(false)}
             />
-          </Grid.Row>
+          </Grid.Row> */}
         </Grid>
       </Container>
     </div>
