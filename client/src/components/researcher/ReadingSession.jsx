@@ -1,11 +1,18 @@
 import { Item, Button } from "semantic-ui-react";
 import { useState } from "react";
 import DeleteReadingSessionModal from "./readingSessions/DeleteReadingSessionModal.jsx";
+import ConfirmExportModal from "./readingSessions/ConfirmExportModal.jsx";
 import { exportData } from "./exportData.js";
 
 const ReadingSession = ({ session, textFiles, deleteReadingSession }) => {
   const [openDeleteReadingSessionModal, setOpenDeleteReadingSessionModal] =
     useState(false);
+  const [openConfirmExportModal, setOpenConfirmExportModal] = useState(false);
+
+  const handleAnswerYesExport = () => {
+    exportData(session.key, textFiles);
+    setOpenConfirmExportModal(false);
+  };
 
   return (
     <Item>
@@ -26,9 +33,8 @@ const ReadingSession = ({ session, textFiles, deleteReadingSession }) => {
               primary
               content="Export Session Data"
               icon="download"
-              onClick={() => exportData(session.key, textFiles)}
+              onClick={() => setOpenConfirmExportModal(true)}
             />
-
             <Button
               content="Delete"
               onClick={() => setOpenDeleteReadingSessionModal(true)}
@@ -40,6 +46,11 @@ const ReadingSession = ({ session, textFiles, deleteReadingSession }) => {
           isOpen={openDeleteReadingSessionModal}
           answerYes={deleteReadingSession}
           answerNo={() => setOpenDeleteReadingSessionModal(false)}
+        />
+        <ConfirmExportModal
+          isOpen={openConfirmExportModal}
+          answerYes={handleAnswerYesExport}
+          answerNo={() => setOpenConfirmExportModal(false)}
         />
       </Item.Content>
     </Item>

@@ -26,7 +26,7 @@ const DownloadData = ({ isOpen, readingSessions, textFiles, close }) => {
   };
 
   return (
-    <Modal open={isOpen}>
+    <Modal open={isOpen} size="tiny">
       <Dropdown
         placeholder="Select a reading session to export..."
         fluid

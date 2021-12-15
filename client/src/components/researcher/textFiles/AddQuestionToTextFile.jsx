@@ -97,10 +97,16 @@ const AddQuestionToTextFile = ({
           placeholder="Type a question for this text here..."
           onChange={handleQuestionChange}
         />
-        {displayInlineComponents()}
-        <div style={{ display: "flex", float: "right" }}>
-          <Button content="Cancel" onClick={handleCancel} />
-          <Button primary content="Add Question" onClick={handleAddQuestion} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          {displayInlineComponents()}
+          <div style={{ float: "right" }}>
+            <Button content="Cancel" onClick={handleCancel} />
+            <Button
+              primary
+              content="Add Question"
+              onClick={handleAddQuestion}
+            />
+          </div>
         </div>
       </div>
     );

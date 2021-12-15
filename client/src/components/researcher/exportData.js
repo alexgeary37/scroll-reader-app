@@ -87,6 +87,7 @@ const exportSpeedTextData = (readingSessionData, textFiles, templateData) => {
     const sessionText = readingSessionData.speedTexts.find(
       (t) => t.fileID === speedText.fileID
     );
+    speedText.name = text.name;
     speedText.startTime = sessionText.startTime;
     speedText.endTime = sessionText.endTime;
     speedText.fontFamily = style.fontFamily;
@@ -94,7 +95,7 @@ const exportSpeedTextData = (readingSessionData, textFiles, templateData) => {
     speedText.lineHeight = style.lineHeight;
     delete speedText.styleID;
 
-    createCsv(sessionText.pauses, `speedText_${textNumber}_pauses`);
+    createCsv(sessionText.pauses, `speedText_${textNumber + 1}_pauses`);
     textNumber++;
   });
 
@@ -112,6 +113,7 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     const sessionText = readingSessionData.scrollTexts.find(
       (t) => t.fileID === scrollText.fileID
     );
+    scrollText.name = text.name;
     scrollText.startTime = sessionText.startTime;
     scrollText.endTime = sessionText.endTime;
     scrollText.instructions = scrollText.instructions.main;
@@ -127,7 +129,7 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     delete scrollText.styleID;
     delete scrollText.questionIDs;
 
-    createCsv(sessionText.pauses, `scrollText_${textNumber}_pauses`);
+    createCsv(sessionText.pauses, `scrollText_${textNumber + 1}_pauses`);
 
     const questionAnswers = [];
     for (let i = 0; i < sessionText.questionAnswers.length; i++) {
@@ -146,7 +148,7 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
       });
     }
 
-    createCsv(questionAnswers, `scrollText_${textNumber}_questionAnswers`);
+    createCsv(questionAnswers, `scrollText_${textNumber + 1}_questionAnswers`);
     textNumber++;
   });
 
@@ -154,8 +156,13 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
 };
 
 const formatScrollPosEntriesForCsv = (entries) => {
+  const firstEntryTime = Date.parse(entries[0].time);
   return entries.map((entry) => {
-    return { yPos: entry.yPos, time: entry.time };
+    return {
+      yPos: entry.yPos,
+      time: entry.time,
+      elapsedTime: Date.parse(entry.time) - firstEntryTime,
+    };
   });
 };
 

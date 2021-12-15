@@ -97,12 +97,7 @@ const TextFileQuestionsView = ({
           </div>
         </Form>
       </div>
-      <Button
-        positive
-        disabled={questionFormat === ""}
-        content="Add Question"
-        onClick={() => setOpenAddQuestion(true)}
-      />
+
       <List ordered divided relaxed>
         {questions.map((question) => (
           <Item key={question._id}>
@@ -122,6 +117,12 @@ const TextFileQuestionsView = ({
         ))}
       </List>
       <Divider />
+      <Button
+        positive
+        disabled={questionFormat === ""}
+        content="Add Question"
+        onClick={() => setOpenAddQuestion(true)}
+      />
       <Button floated="right" content="Close" onClick={close} />
 
       <AddQuestionToTextFile

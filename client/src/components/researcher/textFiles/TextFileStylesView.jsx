@@ -51,11 +51,6 @@ const TextFileStylesView = ({
     <Modal style={{ padding: 10 }} open={isOpen}>
       <Header as="h4" content="Styles" />
 
-      <Button
-        positive
-        content="Add Style"
-        onClick={() => setOpenAddStyle(true)}
-      />
       <List ordered divided relaxed>
         {styles.map((style) => (
           <Item key={style._id}>
@@ -75,6 +70,11 @@ const TextFileStylesView = ({
         ))}
       </List>
       <Divider />
+      <Button
+        positive
+        content="Add Style"
+        onClick={() => setOpenAddStyle(true)}
+      />
       <Button floated="right" content="Close" onClick={close} />
 
       <AddStyleToTextFile
