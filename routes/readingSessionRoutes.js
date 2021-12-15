@@ -263,4 +263,16 @@ router.put("/api/addCurrentScrollTextQuestionAnswer", async (req, res) => {
   );
 });
 
+router.put("/api/deleteReadingSession", async (req, res) => {
+  const sessionID = req.body.readingSessionID;
+
+  ReadingSessionModel.findByIdAndDelete(sessionID, (err, session) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send("Deleted session");
+    }
+  });
+});
+
 module.exports = router;

@@ -3,9 +3,10 @@ import { Segment, Container, Grid, Header, Button } from "semantic-ui-react";
 import { useState, useEffect } from "react";
 import SessionTemplate from "./SessionTemplate.jsx";
 import axios from "axios";
-import CreateTemplate from "./templateCreation/CreateTemplate.jsx";
+import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./FileUpload.jsx";
 import DownloadDataForm from "./DownloadDataForm.jsx";
+import ReadingSession from "./ReadingSession.jsx";
 
 const ResearcherView = () => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
@@ -19,16 +20,27 @@ const ResearcherView = () => {
 
   useEffect(() => {
     // Fetch text files only on first render.
+    console.log("fetch textfiles");
     fetchTextFiles();
-    fetchReadingSessions();
   }, []);
 
   useEffect(() => {
     // Fetch session templates only after text files have been fetched.
+    console.log("texts:", textFiles.isFetching);
     if (!textFiles.isFetching) {
+      console.log("fetch templates");
       fetchSessionTemplates();
     }
   }, [textFiles.isFetching]);
+
+  useEffect(() => {
+    // Fetch reading sessions only after templates have been fetched.
+    console.log("templates:", templates.isFetching);
+    if (!templates.isFetching) {
+      console.log("fetch sessions");
+      fetchReadingSessions();
+    }
+  }, [templates.isFetching]);
 
   const fetchTextFiles = () => {
     setTextFiles({ data: textFiles.data, isFetching: true });
@@ -51,7 +63,7 @@ const ResearcherView = () => {
           files.push(textFile);
         });
 
-        // Set text files for rendering, and indicate that they are no longer being fetched.
+        // Set textFiles for rendering, and indicate that they are no longer being fetched.
         setTextFiles({ data: files, isFetching: false });
       })
       .catch((error) => {
@@ -61,6 +73,7 @@ const ResearcherView = () => {
 
   const fetchSessionTemplates = () => {
     setTemplates({ data: templates.data, isFetching: true });
+
     axios
       .get("/api/getSessionTemplates")
       .then((templatesResponse) => {
@@ -113,35 +126,32 @@ const ResearcherView = () => {
 
   const fetchReadingSessions = () => {
     setReadingSessions({ data: readingSessions.data, isFetching: false });
-    // TODO:
-    // axios
-    //   .get("/api/getReadingSessions")
-    //   .then((response) => {
-    //     const options = [];
-    //     const data = response.data;
-    //     data.forEach((session) => {
-    //       // TODO: Finish this function
-    //       const option = {
-    //         key: session._id,
-    //         name: session.name,
-    //         speedTest: {
-    //           texts: speedTexts,
-    //           instructions: session.speedTest.instructions,
-    //         },
-    //         scrollTexts: scrollTexts,
-    //         createdAt: session.createdAt,
-    //         url: session._id,
-    //       };
 
-    //       options.push(option);
-    //     });
+    axios
+      .get("/api/getReadingSessions")
+      .then((response) => {
+        const options = [];
+        const data = response.data;
+        data.forEach((session) => {
+          const option = {
+            key: session._id,
+            userName: session.userName,
+            templateName: templates.data.find(
+              (t) => t.key === session.templateID
+            ).name,
+            startTime: session.startTime,
+            endTime: session.endTime,
+          };
 
-    // Set templates for rendering, and indicate that they are no longer being fetched.
-    // setTemplates({ data: options, isFetching: false });
-    // })
-    // .catch((error) => {
-    //   console.error("Error fetching reading sessions:", error);
-    // });
+          options.push(option);
+        });
+
+        // Set readingSessions for rendering, and indicate that they are no longer being fetched.
+        setReadingSessions({ data: options, isFetching: false });
+      })
+      .catch((error) => {
+        console.error("Error fetching reading sessions:", error);
+      });
   };
 
   const handleCreateTemplate = () => {
@@ -246,7 +256,7 @@ const ResearcherView = () => {
   const handleDeleteReadingSession = (session) => {
     let sessions = readingSessions.data;
     sessions = sessions.filter((s) => s !== session);
-    setReadingSessions({ data: readingSessions, isFetching: false });
+    setReadingSessions({ data: sessions, isFetching: false });
 
     axios
       .put("/api/deleteReadingSession", {
