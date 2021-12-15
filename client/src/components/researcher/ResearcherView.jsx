@@ -6,6 +6,7 @@ import axios from "axios";
 import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./FileUpload.jsx";
 import ReadingSession from "./ReadingSession.jsx";
+import DownloadData from "./DownloadData.jsx";
 
 const ResearcherView = () => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
@@ -424,21 +425,21 @@ const ResearcherView = () => {
             <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={16}>{displayReadingSessions()}</Grid.Column>
-          </Grid.Row>
-          {/* <Grid.Row>
             <Button
-              positive
+              primary
               content="Download data"
               onClick={() => setOpenDownloadDataModal(true)}
             />
-            <DownloadDataForm
+            <DownloadData
               isOpen={openDownloadDataModal}
-              templates={templates.data}
+              readingSessions={readingSessions.data}
               textFiles={textFiles.data}
               close={() => setOpenDownloadDataModal(false)}
             />
-          </Grid.Row> */}
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column width={16}>{displayReadingSessions()}</Grid.Column>
+          </Grid.Row>
         </Grid>
       </Container>
     </div>

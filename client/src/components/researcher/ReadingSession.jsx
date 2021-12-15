@@ -1,7 +1,7 @@
 import { Item, Button } from "semantic-ui-react";
 import { useState } from "react";
 import DeleteReadingSessionModal from "./readingSessions/DeleteReadingSessionModal.jsx";
-import { handleExport } from "./exportData.js";
+import { exportData } from "./exportData.js";
 
 const ReadingSession = ({ session, textFiles, deleteReadingSession }) => {
   const [openDeleteReadingSessionModal, setOpenDeleteReadingSessionModal] =
@@ -10,21 +10,31 @@ const ReadingSession = ({ session, textFiles, deleteReadingSession }) => {
   return (
     <Item>
       <Item.Content>
-        <Item.Header as="h3" style={{ margin: 5 }} content={session.userName} />
-        <Item.Description content={`Template: ${session.templateName}`} />
-        <Item.Description content={`Start time: ${session.startTime}`} />
-        <Item.Description content={`End time: ${session.endTime}`} />
+        <div className="wrapper">
+          <div>
+            <Item.Header
+              as="h3"
+              style={{ margin: 5 }}
+              content={session.userName}
+            />
+            <Item.Description content={`Template: ${session.templateName}`} />
+            <Item.Description content={`Start time: ${session.startTime}`} />
+            <Item.Description content={`End time: ${session.endTime}`} />
+          </div>
+          <div className="ui vertical buttons">
+            <Button
+              primary
+              content="Export Session Data"
+              icon="download"
+              onClick={() => exportData(session.key, textFiles)}
+            />
 
-        <Button
-          content="Delete"
-          onClick={() => setOpenDeleteReadingSessionModal(true)}
-        />
-        <Button
-          primary
-          content="Export Session Data"
-          icon="download"
-          onClick={() => handleExport(session.key, textFiles)}
-        />
+            <Button
+              content="Delete"
+              onClick={() => setOpenDeleteReadingSessionModal(true)}
+            />
+          </div>
+        </div>
 
         <DeleteReadingSessionModal
           isOpen={openDeleteReadingSessionModal}

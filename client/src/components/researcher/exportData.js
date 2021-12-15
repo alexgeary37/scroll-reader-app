@@ -182,7 +182,7 @@ const createCsv = (data, filename) => {
   }
 };
 
-export const handleExport = async (sessionID, textFiles) => {
+export const exportData = async (sessionID, textFiles) => {
   const scrollPositionData = await getScrollPositionData(sessionID);
   exportScrollData(scrollPositionData);
 
