@@ -16,10 +16,17 @@ const AddQuestionToTextFile = ({ isOpen, fileID, addQuestion, close }) => {
   ] = useState(false);
   const [displayAnswerRegionError, setDisplayAnswerRegionError] =
     useState(false);
+  const [displayQuestionFormatError, setDisplayQuestionFormatError] =
+    useState(false);
 
   const handleQuestionChange = (event) => {
     setDisplayQuestionError(false);
     setQuestion(event.target.value);
+  };
+
+  const handleQuestionFormatChange = (format) => {
+    setDisplayQuestionFormatError(false);
+    setQuestionFormat(format);
   };
 
   const handleSelectAnswerRegion = (mouseDownIndex, mouseUpIndex) => {
@@ -27,10 +34,16 @@ const AddQuestionToTextFile = ({ isOpen, fileID, addQuestion, close }) => {
     setAnswerRegion({ startIndex: mouseDownIndex, endIndex: mouseUpIndex });
   };
 
-  const handleAddQuestion = () => {
+  const checkInputs = () => {
+    let inputsAreValid = true;
     if (question === "") {
       setDisplayQuestionError(true);
-      return;
+      inputsAreValid = false;
+    }
+
+    if (questionFormat === "") {
+      setDisplayQuestionFormatError(true);
+      inputsAreValid = false;
     }
 
     if (
@@ -39,30 +52,48 @@ const AddQuestionToTextFile = ({ isOpen, fileID, addQuestion, close }) => {
       answerRegion.endIndex === 0
     ) {
       setDisplayAnswerRegionError(true);
+      inputsAreValid = false;
+    }
+    return inputsAreValid;
+  };
+
+  const handleAddQuestion = () => {
+    const inputsAreValid = checkInputs();
+
+    if (!inputsAreValid) {
       return;
     }
 
-    setQuestion("");
-    setDisplayAnswerRegionConfiguration(false);
     addQuestion(question, questionFormat, answerRegion);
-    setAnswerRegion({ startIndex: 0, endIndex: 0 });
-    close();
+    handleClose();
   };
 
-  const handleCancel = () => {
+  const handleClose = () => {
     setQuestion("");
     setQuestionFormat("");
     setAnswerRegion({ startIndex: 0, endIndex: 0 });
     setDisplayAnswerRegionConfiguration(false);
+    setDisplayQuestionError(false);
+    setDisplayQuestionFormatError(false);
     setDisplayAnswerRegionError(false);
     close();
   };
 
-  const displayErrorMessage = () => {
+  const displayAnswerRegionErrorMessage = () => {
     if (displayAnswerRegionError) {
       return (
         <label style={{ padding: 10, color: "red" }}>
           Please select an answer region for this question!
+        </label>
+      );
+    }
+  };
+
+  const displayQuestionFormatErrorMessage = () => {
+    if (displayQuestionFormatError) {
+      return (
+        <label style={{ padding: 10, color: "red" }}>
+          Please select a question format!
         </label>
       );
     }
@@ -83,7 +114,7 @@ const AddQuestionToTextFile = ({ isOpen, fileID, addQuestion, close }) => {
   const displayQuestionAndButtons = () => {
     return (
       <div>
-        {displayErrorMessage()}
+        {displayAnswerRegionErrorMessage()}
         <Input
           style={{ marginBottom: 10 }}
           error={displayQuestionError}
@@ -102,7 +133,9 @@ const AddQuestionToTextFile = ({ isOpen, fileID, addQuestion, close }) => {
                     <input
                       type="radio"
                       checked={questionFormat === "comprehension"}
-                      onChange={() => setQuestionFormat("comprehension")}
+                      onChange={() =>
+                        handleQuestionFormatChange("comprehension")
+                      }
                     />
                     <label>Comprehension</label>
                   </div>
@@ -112,17 +145,18 @@ const AddQuestionToTextFile = ({ isOpen, fileID, addQuestion, close }) => {
                     <input
                       type="radio"
                       checked={questionFormat === "inline"}
-                      onChange={() => setQuestionFormat("inline")}
+                      onChange={() => handleQuestionFormatChange("inline")}
                     />
                     <label>Inline</label>
                   </div>
                 </Form.Field>
               </div>
             </Form>
+            {displayQuestionFormatErrorMessage()}
           </div>
           {displayInlineComponents()}
           <div style={{ float: "right" }}>
-            <Button content="Cancel" onClick={handleCancel} />
+            <Button content="Cancel" onClick={handleClose} />
             <Button
               primary
               content="Add Question"
@@ -164,7 +198,7 @@ const AddQuestionToTextFile = ({ isOpen, fileID, addQuestion, close }) => {
   };
 
   return (
-    <Modal open={isOpen} size="small" style={{ padding: 10 }}>
+    <Modal open={isOpen} style={{ padding: 10 }}>
       {displayConfigurationView()}
       {displayQuestionAndButtons()}
     </Modal>

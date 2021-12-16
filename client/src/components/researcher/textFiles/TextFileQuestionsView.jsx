@@ -44,19 +44,16 @@ const TextFileQuestionsView = ({
       .put("/api/addTextFileQuestion", {
         id: fileID,
         question: question.trim(),
-        answerRegion: answerRegion,
         questionFormat: questionFormat,
+        answerRegion: answerRegion,
       })
       .then((response) => {
         // Return the latest question just added.
         const newQuestion = response.data.questions.at(-1);
-        updateFileQuestions(newQuestion, questionFormat);
+        updateFileQuestions(newQuestion);
       })
       .catch((error) => {
-        console.error(
-          "Error updating file.questions and file.questionFormat:",
-          error
-        );
+        console.error("Error updating file.questions:", error);
       });
   };
 
@@ -68,6 +65,7 @@ const TextFileQuestionsView = ({
           <Item key={question._id}>
             <div className="wrapper">
               <Item.Description content={question.question} />
+              <Item.Description content={question.questionFormat} />
               <Item.Description
                 content={`Word Index Answer Region: [${question.answerRegion.startIndex}...${question.answerRegion.endIndex}]`}
               />
