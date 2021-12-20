@@ -52,7 +52,7 @@ const ResearcherView = () => {
             name: file.fileName,
             questions: file.questions,
             styles: file.styles,
-            uploadedAt: file.createdAt,
+            uploadedAt: file.createdAt, // TODO make this Date() object to use new utilities.js function
           };
           files.push(textFile);
         });
