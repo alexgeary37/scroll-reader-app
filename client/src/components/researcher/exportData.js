@@ -132,6 +132,8 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     createCsv(sessionText.pauses, `scrollText_${textNumber + 1}_pauses`);
 
     const questionAnswers = [];
+    // TODO: change this from looping with index, to looping foreach, 
+    // and search for text.questions.find(questionAnswers[i]._id)
     for (let i = 0; i < sessionText.questionAnswers.length; i++) {
       const sessionTextQuestionAnswerEntry = sessionText.questionAnswers[i];
       const question = text.questions.find(
