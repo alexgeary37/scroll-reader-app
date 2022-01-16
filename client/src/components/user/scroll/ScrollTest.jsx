@@ -181,6 +181,8 @@ const ScrollTest = () => {
     const currentTime = new Date();
     const yPos = parseInt(getScrollPosition().y);
 
+    console.log("HANDLE ANSWER QUESTION");
+
     axios
       .put("/api/addCurrentScrollTextQuestionAnswer", {
         sessionID: sessionID,
@@ -203,6 +205,7 @@ const ScrollTest = () => {
             isCorrect = true;
           }
 
+          console.log("skip::", skip);
           if (skip) {
             setScrollQuestionNumber(scrollQuestionNumber + 1);
           } else {

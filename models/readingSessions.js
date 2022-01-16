@@ -16,15 +16,12 @@ const textSchema = mongoose.Schema(
       ),
     ],
     questionAnswers: [
-      mongoose.Schema(
-        {
-          answer: { type: mongoose.Schema.Types.Mixed, required: true },
-          skip: { type: Boolean, required: true },
-          yPosition: { type: Number, required: true },
-          time: { type: Date, required: true },
-        },
-        { _id: false }
-      ),
+      {
+        answer: { type: mongoose.Schema.Types.Mixed, required: true },
+        skip: { type: Boolean, required: true },
+        yPosition: { type: Number, required: true },
+        time: { type: Date, required: true },
+      },
     ],
     endTime: { type: Date, required: false },
   },

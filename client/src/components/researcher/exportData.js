@@ -124,31 +124,26 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     scrollText.fontSize = style.fontSize;
     scrollText.lineHeight = style.lineHeight;
 
-    const scrollTextQuestionIDs = scrollText.questionIDs;
-
     delete scrollText.styleID;
     delete scrollText.questionIDs;
 
     createCsv(sessionText.pauses, `scrollText_${textNumber + 1}_pauses`);
 
     const questionAnswers = [];
-    // TODO: change this from looping with index, to looping foreach, 
-    // and search for text.questions.find(questionAnswers[i]._id)
-    for (let i = 0; i < sessionText.questionAnswers.length; i++) {
-      const sessionTextQuestionAnswerEntry = sessionText.questionAnswers[i];
-      const question = text.questions.find(
-        (q) => q._id === scrollTextQuestionIDs[i]
-      );
+
+    sessionText.questionAnswers.forEach((questionAnswer) => {
+      const question = text.questions.find((q) => q._id === questionAnswer._id);
       const correctAnswer = `[${question.answerRegion.startIndex}, ${question.answerRegion.endIndex}]`;
+
       questionAnswers.push({
         question: question.question,
-        userAnswer: sessionTextQuestionAnswerEntry.answer,
+        userAnswer: questionAnswer.answer,
         correctAnswer: correctAnswer,
-        skip: sessionTextQuestionAnswerEntry.skip,
-        yPosition: sessionTextQuestionAnswerEntry.yPosition,
-        time: sessionTextQuestionAnswerEntry.time,
+        skip: questionAnswer.skip,
+        yPosition: questionAnswer.yPosition,
+        time: questionAnswer.time,
       });
-    }
+    });
 
     createCsv(questionAnswers, `scrollText_${textNumber + 1}_questionAnswers`);
     textNumber++;
