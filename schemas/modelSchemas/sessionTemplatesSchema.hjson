@@ -1,0 +1,25 @@
+{
+  name: String,
+  speedTest: {
+    texts: {
+      {
+        fileID: String,
+        styleID: String,
+      },
+    ],
+    instructions: String,
+  },
+  scrollTexts: [
+    {
+      fileID: String,
+      instructions: {
+        main: String,
+        hasFamiliarityQuestion: String,
+        hasInterestQuestion: String,
+      },
+      questionIDs: [String],
+      styleID: String,
+    },
+  ],
+  createdAt: Date,
+});

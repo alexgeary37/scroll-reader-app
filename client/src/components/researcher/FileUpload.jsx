@@ -25,7 +25,6 @@ const FileUpload = ({ uploadSubmitted }) => {
           text: event.target.result,
           fileName: file.name,
           questions: [],
-          questionFormat: "",
           styles: [defaultStyle],
           createdAt: new Date(),
         };
@@ -37,7 +36,6 @@ const FileUpload = ({ uploadSubmitted }) => {
               value: response.data._id,
               name: response.data.fileName,
               questions: [],
-              questionFormat: "",
               styles: [defaultStyle],
               uploadedAt: response.data.createdAt,
             };

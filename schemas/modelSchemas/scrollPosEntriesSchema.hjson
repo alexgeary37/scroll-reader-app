@@ -1,0 +1,6 @@
+{
+  yPos: Number,
+  time: Date,
+  sessionID: String,
+  textNumber: Number,
+}

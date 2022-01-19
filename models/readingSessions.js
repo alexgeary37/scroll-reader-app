@@ -7,16 +7,14 @@ const textSchema = mongoose.Schema(
     familiarity: { type: String, required: false },
     interest: { type: String, required: false },
     pauses: [
-      mongoose.Schema(
-        {
-          action: { type: String, required: true },
-          time: { type: Date, required: true },
-        },
-        { _id: false }
-      ),
+      {
+        action: { type: String, required: true },
+        time: { type: Date, required: true },
+      },
     ],
     questionAnswers: [
       {
+        questionNumber: { type: Number, required: true },
         answer: { type: mongoose.Schema.Types.Mixed, required: true },
         skip: { type: Boolean, required: true },
         yPosition: { type: Number, required: true },

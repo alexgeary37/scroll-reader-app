@@ -1,0 +1,4 @@
+sessionContext.questionAnswers: {
+  answerRegion: {Number, Number},
+  questionFormat: String,
+}

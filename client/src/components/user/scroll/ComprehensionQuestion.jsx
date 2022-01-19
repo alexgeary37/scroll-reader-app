@@ -38,6 +38,7 @@ const ComprehensionQuestion = ({
   };
 
   const handleSubmit = () => {
+    console.log("answer::", answer);
     submitAnswer(answer, false);
     setAnswer("");
   };

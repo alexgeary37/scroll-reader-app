@@ -233,6 +233,7 @@ router.put("/api/updateCurrentScrollTextPauses", async (req, res) => {
 router.put("/api/addCurrentScrollTextQuestionAnswer", async (req, res) => {
   const sessionID = req.body.sessionID;
   const fileID = req.body.fileID;
+  const questionNumber = req.body.questionNumber;
   const answer = req.body.answer;
   const skip = req.body.skip;
   const yPos = req.body.yPos;
@@ -243,6 +244,7 @@ router.put("/api/addCurrentScrollTextQuestionAnswer", async (req, res) => {
     {
       $push: {
         "scrollTexts.$[elem].questionAnswers": {
+          questionNumber: questionNumber,
           answer: answer,
           skip: skip,
           yPosition: yPos,
@@ -250,7 +252,10 @@ router.put("/api/addCurrentScrollTextQuestionAnswer", async (req, res) => {
         },
       },
     },
-    { arrayFilters: [{ "elem.fileID": fileID }], new: true },
+    {
+      arrayFilters: [{ "elem.fileID": fileID }],
+      new: true,
+    },
     (err, session) => {
       if (err) {
         res.send(err);

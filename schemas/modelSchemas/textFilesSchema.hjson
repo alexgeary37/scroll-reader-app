@@ -1,0 +1,22 @@
+{
+  text: String,
+  fileName: String,
+  questions: [
+    {
+      question: String,
+      questionFormat: String,
+      answerRegion: {
+        startIndex: Number,
+        endIndex: Number,
+      },
+    }
+  ],
+  styles: [
+    {
+      fontFamily: String,
+      fontSize: Number,
+      lineHeight: Number,
+    },
+  ],
+  createdAt: Date,
+};

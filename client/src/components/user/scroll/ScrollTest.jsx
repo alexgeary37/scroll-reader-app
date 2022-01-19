@@ -176,17 +176,18 @@ const ScrollTest = () => {
   };
 
   const handleAnswerQuestion = (answer, skip) => {
-    const isInlineQuestion = sessionContext.questionFormat === "inline";
+    const isInlineQuestion =
+      sessionContext.questionAnswers[scrollQuestionNumber].questionFormat ===
+      "inline";
     const sessionID = sessionContext.sessionID;
     const currentTime = new Date();
     const yPos = parseInt(getScrollPosition().y);
-
-    console.log("HANDLE ANSWER QUESTION");
 
     axios
       .put("/api/addCurrentScrollTextQuestionAnswer", {
         sessionID: sessionID,
         fileID: currentText.fileID,
+        questionNumber: scrollQuestionNumber + 1,
         answer: answer,
         skip: skip,
         yPos: yPos,
@@ -194,24 +195,29 @@ const ScrollTest = () => {
       })
       .then(() => {
         if (isInlineQuestion) {
+          console.log("isInLineQuestion");
           let isCorrect = false;
           if (
-            sessionContext.questionAnswers[scrollQuestionNumber].startIndex <=
-              answer &&
+            sessionContext.questionAnswers[scrollQuestionNumber].answerRegion
+              .startIndex <= answer &&
             answer <=
-              sessionContext.questionAnswers[scrollQuestionNumber].endIndex
+              sessionContext.questionAnswers[scrollQuestionNumber].answerRegion
+                .endIndex
           ) {
+            console.log("isCorrect");
             setScrollQuestionNumber(scrollQuestionNumber + 1);
             isCorrect = true;
           }
 
-          console.log("skip::", skip);
           if (skip) {
+            console.log("skip");
             setScrollQuestionNumber(scrollQuestionNumber + 1);
           } else {
+            console.log("display answer response window");
             setAnswerResponseWindow({ display: true, isCorrect: isCorrect });
           }
         } else {
+          console.log("isComprehensionQuestion");
           setScrollQuestionNumber(scrollQuestionNumber + 1);
         }
       })
@@ -286,7 +292,10 @@ const ScrollTest = () => {
   };
 
   const displayQuestions = () => {
-    if (scrollQuestionNumber < currentText.questionIDs.length) {
+    if (
+      scrollQuestionNumber < currentText.questionIDs.length &&
+      sessionContext.questionAnswers.length > 0
+    ) {
       return (
         <div
           style={{
@@ -296,7 +305,8 @@ const ScrollTest = () => {
             position: "fixed",
           }}
         >
-          {sessionContext.questionFormat === "comprehension" ? (
+          {sessionContext.questionAnswers[scrollQuestionNumber]
+            .questionFormat === "comprehension" ? (
             <ComprehensionQuestion
               currentText={currentText}
               questionNumber={scrollQuestionNumber}

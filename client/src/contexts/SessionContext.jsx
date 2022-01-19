@@ -20,9 +20,6 @@ export const SessionProvider = ({ children }) => {
   const [scrollPosEntries, setScrollPosEntries] = useState(
     JSON.parse(localStorage.getItem("scrollPosEntries"))
   );
-  const [questionFormat, setQuestionFormat] = useState(
-    localStorage.getItem("questionFormat")
-  );
   const [questionAnswers, setQuestionAnswers] = useState(
     JSON.parse(localStorage.getItem("questionAnswers"))
   );
@@ -45,7 +42,6 @@ export const SessionProvider = ({ children }) => {
     setHasStartedReading(false);
     setFileNumber(0);
     setScrollPosEntries([]);
-    setQuestionFormat("");
     setQuestionAnswers([]);
     setSessionID("");
   };
@@ -74,10 +70,6 @@ export const SessionProvider = ({ children }) => {
   }, [scrollPosEntries]);
 
   useEffect(() => {
-    localStorage.setItem("questionFormat", questionFormat);
-  }, [questionFormat]);
-
-  useEffect(() => {
     localStorage.setItem("questionAnswers", JSON.stringify(questionAnswers));
   }, [questionAnswers]);
 
@@ -98,8 +90,6 @@ export const SessionProvider = ({ children }) => {
         setFileNumber,
         scrollPosEntries,
         setScrollPosEntries,
-        questionFormat,
-        setQuestionFormat,
         questionAnswers,
         setQuestionAnswers,
         sessionID,

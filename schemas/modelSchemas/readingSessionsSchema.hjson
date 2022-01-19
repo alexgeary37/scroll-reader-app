@@ -1,0 +1,36 @@
+{
+  userName: String,
+  viewportDimensions: [
+    {
+      width: Number,
+      height: Number,
+      time: Date,
+    },
+  ],
+  templateID: String,
+  startTime: Date,
+  endTime: Date // optional,
+  speedTexts: [{
+    fileID: String,
+    startTime: Date,
+    familiarity: String // optional,
+    interest: String // optional,
+    pauses: [
+      {
+        action: String,
+        time: Date,
+      },
+    ],
+    questionAnswers: [
+      {
+        questionNumber: Number, // Indexing starts at 1
+        answer: Mixed,
+        skip: Boolean,
+        yPosition: Number,
+        time: Date,
+      },
+    ],
+    endTime: Date // optional,
+  }],
+  scrollTexts: [^^ same as speedtexts],
+}
