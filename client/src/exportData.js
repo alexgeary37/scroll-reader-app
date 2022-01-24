@@ -117,7 +117,6 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     scrollText.startTime = sessionText.startTime;
     scrollText.endTime = sessionText.endTime;
     scrollText.instructions = scrollText.instructions.main;
-    scrollText.questionFormat = text.questionFormat;
     scrollText.userFamiliarity = sessionText.familiarity;
     scrollText.userInterest = sessionText.interest;
     scrollText.fontFamily = style.fontFamily;
@@ -132,11 +131,12 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     const questionAnswers = [];
 
     sessionText.questionAnswers.forEach((questionAnswer) => {
-      const question = text.questions.find((q) => q._id === questionAnswer._id);
+      const question = text.questions[questionAnswer.questionNumber];
       const correctAnswer = `[${question.answerRegion.startIndex}, ${question.answerRegion.endIndex}]`;
 
       questionAnswers.push({
         question: question.question,
+        questionFormat: question.questionFormat,
         userAnswer: questionAnswer.answer,
         correctAnswer: correctAnswer,
         skip: questionAnswer.skip,

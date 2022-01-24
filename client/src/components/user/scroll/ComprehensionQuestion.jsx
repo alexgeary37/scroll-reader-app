@@ -13,6 +13,7 @@ const ComprehensionQuestion = ({
   const [answer, setAnswer] = useState("");
 
   useEffect(() => {
+    let isMounted = true;
     const fileID = currentText.fileID;
     const questionID = currentText.questionIDs[questionNumber];
 
@@ -21,16 +22,21 @@ const ComprehensionQuestion = ({
         params: { _id: fileID },
       })
       .then((response) => {
-        const questionObj = response.data.questions.find(
-          (q) => q._id === questionID
-        );
-        if (typeof questionObj !== "undefined") {
-          setQuestion(questionObj.question);
+        if (isMounted) {
+          const questionObj = response.data.questions.find(
+            (q) => q._id === questionID
+          );
+          if (typeof questionObj !== "undefined") {
+            setQuestion(questionObj.question);
+          }
         }
       })
       .catch((error) => {
         console.error("Error fetching text in ScrollText:", error);
       });
+    return () => {
+      isMounted = false;
+    };
   }, [currentText, questionNumber]);
 
   const handleChangeAnswer = (event) => {
@@ -38,7 +44,6 @@ const ComprehensionQuestion = ({
   };
 
   const handleSubmit = () => {
-    console.log("answer::", answer);
     submitAnswer(answer, false);
     setAnswer("");
   };

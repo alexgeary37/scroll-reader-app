@@ -200,17 +200,25 @@ const SpeedTest = () => {
     }
   };
 
+  const displayMessages = () => {
+    return (
+      <div>
+        <SpeedTestInstructions
+          isOpen={sessionContext.hasStartedReading === false}
+          instructions={instructions}
+          fileID={currentText.fileID}
+        />
+
+        <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
+      </div>
+    );
+  };
+
   return (
     <div>
       {displayButtons()}
       {displaySpeedText()}
-
-      <SpeedTestInstructions
-        isOpen={sessionContext.hasStartedReading === false}
-        instructions={instructions}
-        fileID={currentText.fileID}
-      />
-      <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
+      {displayMessages()}
     </div>
   );
 };

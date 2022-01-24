@@ -2,7 +2,7 @@ import { Item, Button } from "semantic-ui-react";
 import { useState } from "react";
 import DeleteReadingSessionModal from "./readingSessions/DeleteReadingSessionModal.jsx";
 import ConfirmExportModal from "./readingSessions/ConfirmExportModal.jsx";
-import { exportData } from "./exportData.js";
+import { exportData } from "../../exportData.js";
 
 const ReadingSession = ({ session, textFiles, deleteReadingSession }) => {
   const [openDeleteReadingSessionModal, setOpenDeleteReadingSessionModal] =

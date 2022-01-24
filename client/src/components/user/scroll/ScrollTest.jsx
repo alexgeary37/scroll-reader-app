@@ -18,6 +18,7 @@ import ClickQuestion from "./ClickQuestion.jsx";
 import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
 import ConfirmDoneWindow from "../ConfirmDoneWindow.jsx";
 import AnswerResponseWindow from "./AnswerResponseWindow.jsx";
+import AnswersCompleteWindow from "./AnswersCompleteWindow.jsx";
 import { debounce } from "debounce";
 
 const ScrollTest = () => {
@@ -35,6 +36,8 @@ const ScrollTest = () => {
     isCorrect: false,
   });
   const [displayConfirmSkipMessage, setDisplayConfirmSkipMessage] =
+    useState(false);
+  const [displayAnswersCompleteMessage, setDisplayAnswersCompleteMessage] =
     useState(false);
   const [displayConfirmDoneMessage, setDisplayConfirmDoneMessage] =
     useState(false);
@@ -176,9 +179,9 @@ const ScrollTest = () => {
   };
 
   const handleAnswerQuestion = (answer, skip) => {
-    const isInlineQuestion =
-      sessionContext.questionAnswers[scrollQuestionNumber].questionFormat ===
-      "inline";
+    const isInlineQuestion = sessionContext.questionAnswers.find(
+      (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
+    ).questionFormat;
     const sessionID = sessionContext.sessionID;
     const currentTime = new Date();
     const yPos = parseInt(getScrollPosition().y);
@@ -187,7 +190,7 @@ const ScrollTest = () => {
       .put("/api/addCurrentScrollTextQuestionAnswer", {
         sessionID: sessionID,
         fileID: currentText.fileID,
-        questionNumber: scrollQuestionNumber + 1,
+        questionNumber: scrollQuestionNumber,
         answer: answer,
         skip: skip,
         yPos: yPos,
@@ -195,29 +198,32 @@ const ScrollTest = () => {
       })
       .then(() => {
         if (isInlineQuestion) {
-          console.log("isInLineQuestion");
           let isCorrect = false;
           if (
-            sessionContext.questionAnswers[scrollQuestionNumber].answerRegion
-              .startIndex <= answer &&
+            sessionContext.questionAnswers.find(
+              (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
+            ).answerRegion.startIndex <= answer &&
             answer <=
-              sessionContext.questionAnswers[scrollQuestionNumber].answerRegion
-                .endIndex
+              sessionContext.questionAnswers.find(
+                (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
+              ).answerRegion.endIndex
           ) {
-            console.log("isCorrect");
             setScrollQuestionNumber(scrollQuestionNumber + 1);
             isCorrect = true;
           }
 
           if (skip) {
-            console.log("skip");
+            if (scrollQuestionNumber + 1 >= currentText.questionIDs.length) {
+              setDisplayAnswersCompleteMessage(true);
+            }
             setScrollQuestionNumber(scrollQuestionNumber + 1);
           } else {
-            console.log("display answer response window");
             setAnswerResponseWindow({ display: true, isCorrect: isCorrect });
           }
         } else {
-          console.log("isComprehensionQuestion");
+          if (scrollQuestionNumber + 1 >= currentText.questionIDs.length) {
+            setDisplayAnswersCompleteMessage(true);
+          }
           setScrollQuestionNumber(scrollQuestionNumber + 1);
         }
       })
@@ -294,7 +300,10 @@ const ScrollTest = () => {
   const displayQuestions = () => {
     if (
       scrollQuestionNumber < currentText.questionIDs.length &&
-      sessionContext.questionAnswers.length > 0
+      sessionContext.questionAnswers.length > 0 &&
+      typeof sessionContext.questionAnswers.find(
+        (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
+      ) !== "undefined"
     ) {
       return (
         <div
@@ -305,8 +314,9 @@ const ScrollTest = () => {
             position: "fixed",
           }}
         >
-          {sessionContext.questionAnswers[scrollQuestionNumber]
-            .questionFormat === "comprehension" ? (
+          {sessionContext.questionAnswers.find(
+            (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
+          ).questionFormat === "comprehension" ? (
             <ComprehensionQuestion
               currentText={currentText}
               questionNumber={scrollQuestionNumber}
@@ -329,43 +339,56 @@ const ScrollTest = () => {
     }
   };
 
+  const displayMessages = () => {
+    return (
+      <div>
+        <ScrollTestInstructions
+          isOpen={sessionContext.hasStartedReading === false}
+          text={currentText}
+          close={handleCloseScrollTestInstructions}
+        />
+        <AnswerResponseWindow
+          isOpen={answerResponseWindow.display}
+          isCorrect={answerResponseWindow.isCorrect}
+          tryAgain={() =>
+            setAnswerResponseWindow({ display: false, isCorrect: false })
+          }
+          continueReading={() => {
+            const answerWasCorrect = answerResponseWindow.isCorrect;
+            setAnswerResponseWindow({ display: false, isCorrect: false });
+            setSelectAnswerEnabled(false);
+            if (
+              answerWasCorrect &&
+              scrollQuestionNumber >= currentText.questionIDs.length
+            ) {
+              setDisplayAnswersCompleteMessage(true);
+            }
+          }}
+        />
+        <ConfirmSkipQuestionWindow
+          isOpen={displayConfirmSkipMessage}
+          skip={skipQuestion}
+          cancel={() => setDisplayConfirmSkipMessage(false)}
+        />
+        <AnswersCompleteWindow
+          isOpen={displayAnswersCompleteMessage}
+          close={() => setDisplayAnswersCompleteMessage(false)}
+        />
+        <ConfirmDoneWindow
+          isOpen={displayConfirmDoneMessage}
+          close={() => setDisplayConfirmDoneMessage(false)}
+        />
+        <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
+      </div>
+    );
+  };
+
   return (
     <div>
       {displayButtons()}
-
       {displayScrollText()}
-
       {displayQuestions()}
-
-      <AnswerResponseWindow
-        isOpen={answerResponseWindow.display}
-        isCorrect={answerResponseWindow.isCorrect}
-        tryAgain={() =>
-          setAnswerResponseWindow({ display: false, isCorrect: false })
-        }
-        continueReading={() => {
-          setAnswerResponseWindow({ display: false, isCorrect: false });
-          setSelectAnswerEnabled(false);
-        }}
-      />
-
-      <ConfirmSkipQuestionWindow
-        isOpen={displayConfirmSkipMessage}
-        skip={skipQuestion}
-        cancel={() => setDisplayConfirmSkipMessage(false)}
-      />
-
-      <ConfirmDoneWindow
-        isOpen={displayConfirmDoneMessage}
-        close={() => setDisplayConfirmDoneMessage(false)}
-      />
-
-      <ScrollTestInstructions
-        isOpen={sessionContext.hasStartedReading === false}
-        text={currentText}
-        close={handleCloseScrollTestInstructions}
-      />
-      <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
+      {displayMessages()}
     </div>
   );
 };

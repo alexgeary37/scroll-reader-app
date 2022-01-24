@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button, Dropdown, Modal } from "semantic-ui-react";
-import { exportData } from "./exportData.js";
+import { exportData } from "../../exportData.js";
 
 const DownloadData = ({ isOpen, readingSessions, textFiles, close }) => {
   const [sessionID, setSessionID] = useState("");
