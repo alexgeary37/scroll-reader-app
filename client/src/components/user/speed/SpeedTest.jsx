@@ -12,6 +12,7 @@ import {
   scrollToTop,
 } from "../../../utilities.js";
 import { debounce } from "debounce";
+import StartNextSpeedWindow from "./StartNextSpeedWindow.jsx";
 
 const SpeedTest = () => {
   const sessionContext = useContext(SessionContext);
@@ -21,6 +22,8 @@ const SpeedTest = () => {
     sessionContext.template.speedTest.texts[sessionContext.fileNumber]
   );
   const [textIsComplete, setTextIsComplete] = useState(false);
+  const [displayStartNextSpeedWindow, setDisplayStartNextSpeedWindow] =
+    useState(false);
 
   useEffect(() => {
     setInstructions(sessionContext.template.speedTest.instructions);
@@ -58,14 +61,20 @@ const SpeedTest = () => {
   };
 
   const startNextText = (fileID) => {
+    setDisplayStartNextSpeedWindow(false);
     const sessionID = sessionContext.sessionID;
     const startTime = new Date();
 
+    // Add a new entry to session.speedTexts.
     axios
       .put("/api/addNewSpeedText", {
         id: sessionID,
         fileID: fileID,
         startTime: startTime,
+      })
+      .then(() => {
+        sessionContext.setFileNumber(sessionContext.fileNumber + 1);
+        scrollToTop();
       })
       .catch((error) => {
         console.error(
@@ -104,20 +113,13 @@ const SpeedTest = () => {
     // Update session.speedTexts[currentFileID] with an end time.
     const sessionUpdated = finishCurrentText();
 
-    const fileNumber = sessionContext.fileNumber;
-
     if (sessionUpdated) {
       if (isLastText("speed", sessionContext)) {
         sessionContext.setFileNumber(0);
         sessionContext.setHasStartedReading(false);
         startTask2Ref.current.click();
       } else {
-        // Add a new entry to session.speedTexts.
-        startNextText(
-          sessionContext.template.speedTest.texts[fileNumber + 1].fileID
-        );
-        sessionContext.setFileNumber(fileNumber + 1);
-        scrollToTop();
+        setDisplayStartNextSpeedWindow(true);
       }
     }
   };
@@ -208,7 +210,16 @@ const SpeedTest = () => {
           instructions={instructions}
           fileID={currentText.fileID}
         />
-
+        <StartNextSpeedWindow
+          isOpen={displayStartNextSpeedWindow}
+          close={() =>
+            startNextText(
+              sessionContext.template.speedTest.texts[
+                sessionContext.fileNumber + 1
+              ].fileID
+            )
+          }
+        />
         <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
       </div>
     );
