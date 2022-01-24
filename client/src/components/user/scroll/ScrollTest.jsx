@@ -152,7 +152,6 @@ const ScrollTest = () => {
     const currentTime = new Date();
     const action = isPaused ? "pause" : "resume";
 
-    // Update session with the time the current file was finished.
     axios
       .put("/api/updateCurrentScrollTextPauses", {
         id: sessionID,

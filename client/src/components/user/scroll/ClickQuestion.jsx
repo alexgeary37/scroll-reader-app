@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Card, Button, Grid, Message, Transition } from "semantic-ui-react";
 import axios from "axios";
+import { SessionContext } from "../../../contexts/SessionContext";
 
 const ClickQuestion = ({
   currentText,
@@ -10,6 +11,7 @@ const ClickQuestion = ({
   enableAnswer,
   skip,
 }) => {
+  const sessionContext = useContext(SessionContext);
   const [question, setQuestion] = useState("");
 
   useEffect(() => {
@@ -39,6 +41,29 @@ const ClickQuestion = ({
     };
   }, [currentText, questionNumber]);
 
+  const handleEnableAnswer = () => {
+    const sessionID = sessionContext.sessionID;
+    const currentTime = new Date();
+    const action = answerIsEnabled ? "deactivate" : "activate";
+
+    axios
+      .put("/api/addAnswerButtonClick", {
+        sessionID: sessionID,
+        fileID: currentText.fileID,
+        questionNumber: questionNumber,
+        action: action,
+        time: currentTime,
+      })
+      .catch((error) => {
+        console.error(
+          "Error updating readingSession.scrollTexts[fileID].answerButtonClicks",
+          error
+        );
+      });
+
+    enableAnswer();
+  };
+
   return (
     <Card fluid>
       <Card.Content>
@@ -52,7 +77,7 @@ const ClickQuestion = ({
               positive
               disabled={disable}
               content="Answer"
-              onClick={enableAnswer}
+              onClick={handleEnableAnswer}
             />
           </Grid.Column>
           <Grid.Column width="8">

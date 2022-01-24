@@ -6,7 +6,7 @@ import axios from "axios";
 import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./FileUpload.jsx";
 import ReadingSession from "./ReadingSession.jsx";
-import DownloadData from "./DownloadData.jsx";
+// import DownloadData from "./DownloadData.jsx";
 
 const ResearcherView = () => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
@@ -16,7 +16,7 @@ const ResearcherView = () => {
     isFetching: true,
   });
   const [openTemplateCreator, setOpenTemplateCreator] = useState(false);
-  const [openDownloadDataModal, setOpenDownloadDataModal] = useState(false);
+  // const [openDownloadDataModal, setOpenDownloadDataModal] = useState(false);
 
   useEffect(() => {
     // Fetch text files only on first render.
@@ -418,7 +418,7 @@ const ResearcherView = () => {
             <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
             <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
           </Grid.Row>
-          <Grid.Row>
+          {/* <Grid.Row>
             <Button
               primary
               content="Download data"
@@ -430,7 +430,7 @@ const ResearcherView = () => {
               textFiles={textFiles.data}
               close={() => setOpenDownloadDataModal(false)}
             />
-          </Grid.Row>
+          </Grid.Row> */}
           <Grid.Row>
             <Grid.Column width={16}>{displayReadingSessions()}</Grid.Column>
           </Grid.Row>

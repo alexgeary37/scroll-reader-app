@@ -230,6 +230,39 @@ router.put("/api/updateCurrentScrollTextPauses", async (req, res) => {
   );
 });
 
+router.put("/api/addAnswerButtonClick", async (req, res) => {
+  const sessionID = req.body.sessionID;
+  const fileID = req.body.fileID;
+  const questionNumber = req.body.questionNumber;
+  const action = req.body.action;
+  const time = req.body.time;
+
+  ReadingSessionModel.findByIdAndUpdate(
+    sessionID,
+    {
+      $push: {
+        "scrollTexts.$[elem].answerButtonClicks": {
+          questionNumber: questionNumber,
+          action: action,
+          time: time,
+        },
+      },
+    },
+    {
+      arrayFilters: [{ "elem.fileID": fileID }],
+      new: true,
+    },
+    (err, session) => {
+      if (err) {
+        res.send(err);
+      } else {
+        session.save();
+        res.send("Updated answerButtonClicks in current scrollText");
+      }
+    }
+  );
+});
+
 router.put("/api/addCurrentScrollTextQuestionAnswer", async (req, res) => {
   const sessionID = req.body.sessionID;
   const fileID = req.body.fileID;
@@ -260,7 +293,6 @@ router.put("/api/addCurrentScrollTextQuestionAnswer", async (req, res) => {
       if (err) {
         res.send(err);
       } else {
-        // session.markModified("scrollTexts.$[elem].questionAnswers.-1.answer");
         session.save();
         res.send("Updated questionAnswers in current scrollText");
       }

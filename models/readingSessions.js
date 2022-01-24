@@ -12,6 +12,13 @@ const textSchema = mongoose.Schema(
         time: { type: Date, required: true },
       },
     ],
+    answerButtonClicks: [
+      {
+        questionNumber: { type: Number, required: true },
+        action: { type: String, required: true },
+        time: { type: Date, required: true },
+      },
+    ],
     questionAnswers: [
       {
         questionNumber: { type: Number, required: true },

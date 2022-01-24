@@ -21,9 +21,16 @@
         time: Date,
       },
     ],
+    answerButtonClicks: [
+      {
+        questionNumber: Number,
+        action: String,
+        time: Date,
+      },
+    ],
     questionAnswers: [
       {
-        questionNumber: Number, // Indexing starts at 1
+        questionNumber: Number,
         answer: Mixed,
         skip: Boolean,
         yPosition: Number,
