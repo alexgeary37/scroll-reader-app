@@ -17,22 +17,26 @@ class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT || 3002;
-    this.mongoUrl = process.env.ATLAS_URI;
+    // this.mongoUrl = process.env.ATLAS_URI;
+    this.mongoUrl = process.env.MONGO_URI;
     this.middlewares();
     this.routes();
   }
 
   middlewares() {
-    this.app.use(cors(corsOptions));
-    this.app.options("*", cors());
+    // this.app.use(cors(corsOptions));
+    this.app.use(cors())
+    // this.app.options("*", cors());
     this.app.use(express.json({ limit: "50mb" }));
     this.app.use(express.urlencoded({ extended: false, limit: "50mb" }));
 
-    mongoose.connect(this.mongoUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    });
+    mongoose
+      .connect(this.mongoUrl, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+      })
+      .then(() => console.log("Mongodb is connected..."));
 
     // Pick up React index.html file
     this.app.use(express.static(path.join(__dirname, "./client/build")));
