@@ -178,9 +178,12 @@ const ScrollTest = () => {
   };
 
   const handleAnswerQuestion = (answer, skip) => {
-    const isInlineQuestion = sessionContext.questionAnswers.find(
-      (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
-    ).questionFormat;
+    const isInlineQuestion =
+      sessionContext.questionAnswers.find(
+        (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
+      ).questionFormat === "inline";
+
+    console.log("isINLINE::", isInlineQuestion);
     const sessionID = sessionContext.sessionID;
     const currentTime = new Date();
     const yPos = parseInt(getScrollPosition().y);
