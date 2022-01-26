@@ -7,7 +7,7 @@ import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./FileUpload.jsx";
 import ReadingSession from "./ReadingSession.jsx";
 
-const ResearcherView = () => {
+const ResearcherView = ({ onLogout }) => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
   const [templates, setTemplates] = useState({ data: [], isFetching: true });
   const [readingSessions, setReadingSessions] = useState({
@@ -412,6 +412,9 @@ const ResearcherView = () => {
     <div className="researcher">
       <Container>
         <Grid>
+          <Grid.Row>
+            <Button content="Logout" onClick={onLogout} />
+          </Grid.Row>
           <Grid.Row>
             <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
             <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>

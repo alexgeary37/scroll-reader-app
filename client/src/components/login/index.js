@@ -25,6 +25,9 @@ function Login({ onLoginSuccessful }) {
   };
 
   return (
+    <div>
+      <h1>Login</h1>
+    </div>
     // <Container>
     //   <Card className="mt-5">
     //     <Card.Header as="h1">Login</Card.Header>
@@ -65,9 +68,6 @@ function Login({ onLoginSuccessful }) {
     //     </Card.Body>
     //   </Card>
     // </Container>
-    <div>
-      <h1>HI</h1>
-    </div>
   );
 }
 
