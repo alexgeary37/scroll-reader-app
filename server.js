@@ -6,7 +6,6 @@ const textFileRoutes = require("./routes/textFileRoutes");
 const sessionTemplateRoutes = require("./routes/sessionTemplateRoutes");
 const readingSessionRoutes = require("./routes/readingSessionRoutes");
 const scrollPosEntryRoutes = require("./routes/scrollPosEntryRoutes");
-const defaultRoute = require("./routes/defaultRoute");
 
 const corsOptions = {
   origin: "https://scroll-reader-app.herokuapp.com",
@@ -25,7 +24,7 @@ class Server {
 
   middlewares() {
     this.app.use(cors(corsOptions));
-    this.app.use(cors())
+    this.app.use(cors());
     this.app.options("*", cors());
     this.app.use(express.json({ limit: "50mb" }));
     this.app.use(express.urlencoded({ extended: false, limit: "50mb" }));
@@ -47,7 +46,11 @@ class Server {
     this.app.use(sessionTemplateRoutes);
     this.app.use(readingSessionRoutes);
     this.app.use(scrollPosEntryRoutes);
-    this.app.use(defaultRoute);
+
+    // Handle all other requests.
+    this.app.get("*", (req, res) => {
+      res.sendFile(path.join(__dirname, "./client/build/index.html"));
+    });
   }
 
   listen() {
