@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { Container, Form, Button, Alert, Card } from "react-bootstrap";
+import { Input, Button, Container, Header, Segment } from "semantic-ui-react";
 import { login } from "../../api";
 
 function Login({ onLoginSuccessful }) {
@@ -7,17 +7,15 @@ function Login({ onLoginSuccessful }) {
   const [password, setPassword] = useState("");
   const [hasError, setHasError] = useState(false);
 
-  const onEmailChange = (event) => setEmail(event.target.value);
-  const onPasswordChange = (event) => setPassword(event.target.value);
-
   const onSubmit = async (event) => {
     event.preventDefault();
     setHasError(false);
     const loginResult = await login({ email, password });
-    if (!loginResult) setHasError(true);
-    else {
-      const { name, token } = loginResult;
+    if (!loginResult) {
+      setHasError(true);
+    } else {
       // Save user IDs on local storage
+      const { name, token } = loginResult;
       localStorage.setItem("name", name);
       localStorage.setItem("token", token);
       onLoginSuccessful();
@@ -26,48 +24,35 @@ function Login({ onLoginSuccessful }) {
 
   return (
     <div>
-      <h1>Login</h1>
+      <Container>
+        <Header as="h1" content="Login" />
+        <Segment>
+          <Header as="h3" content="Email address:" />
+          <Input
+            type="email"
+            autoFocus
+            fluid
+            placeholder="Enter email..."
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </Segment>
+        <Segment>
+          <Header as="h3" content="Password:" />
+          <Input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </Segment>
+        {hasError && (
+          <label style={{ padding: 10, color: "red" }}>
+            The email address and password you entered don't match any account.
+            Please try again.
+          </label>
+        )}
+        <Button content="Submit" onClick={onSubmit} />
+      </Container>
     </div>
-    // <Container>
-    //   <Card className="mt-5">
-    //     <Card.Header as="h1">Login</Card.Header>
-    //     <Card.Body>
-    //       <Form className="w-100" onSubmit={onSubmit}>
-    //         <Form.Group controlId="formBasicEmail">
-    //           <Form.Label>Email address</Form.Label>
-    //           <Form.Control
-    //             type="email"
-    //             placeholder="Enter email"
-    //             onChange={onEmailChange}
-    //             value={email}
-    //           />
-    //           <Form.Text className="text-muted">
-    //             We'll never share your email with anyone else.
-    //           </Form.Text>
-    //         </Form.Group>
-
-    //         <Form.Group controlId="formBasicPassword">
-    //           <Form.Label>Password</Form.Label>
-    //           <Form.Control
-    //             type="password"
-    //             placeholder="Password"
-    //             onChange={onPasswordChange}
-    //             value={password}
-    //           />
-    //         </Form.Group>
-    //         {hasError && (
-    //           <Alert variant={"danger"}>
-    //             The email address and password you entered don't match any
-    //             account. Please try again.
-    //           </Alert>
-    //         )}
-    //         <Button variant="primary" type="submit">
-    //           Submit
-    //         </Button>
-    //       </Form>
-    //     </Card.Body>
-    //   </Card>
-    // </Container>
   );
 }
 
