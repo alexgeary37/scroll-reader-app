@@ -7,7 +7,7 @@ import PageError from "../PageError";
 
 const MIN_USERNAME_CHARACTERS = 3;
 
-const Home = () => {
+const UserHome = () => {
   const [userName, setUserName] = useState("");
   const [template, setTemplate] = useState(null);
   const [templateError, setTemplateError] = useState(false);
@@ -131,7 +131,7 @@ const Home = () => {
     } else {
       if (sessionContext.sessionID === "") {
         return (
-          <div style={{ textAlign: "center" }}>
+          <div style={{ paddingTop: 10, textAlign: "center" }}>
             <Container text>
               <h1>Welcome!</h1>
               <Segment>
@@ -185,4 +185,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default UserHome;

@@ -26,7 +26,7 @@ const Login = ({ onLoginSuccessful }) => {
   };
 
   return (
-    <div>
+    <div style={{ paddingTop: 10, textAlign: "center" }}>
       <Container>
         <Header as="h1" content="Login" />
         <Segment>
@@ -49,11 +49,10 @@ const Login = ({ onLoginSuccessful }) => {
         </Segment>
         {hasError && (
           <label style={{ padding: 10, color: "red" }}>
-            The email address and password you entered don't match any account.
-            Please try again.
+            Incorrect email or password. Please try again.
           </label>
         )}
-        <Button content="Submit" onClick={onSubmit} />
+        <Button floated="right" content="Submit" onClick={onSubmit} />
       </Container>
     </div>
   );
