@@ -1,8 +1,8 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Input, Button, Container, Header, Segment } from "semantic-ui-react";
-import { login } from "../../api";
 
-function Login({ onLoginSuccessful }) {
+const Login = ({ onLoginSuccessful }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hasError, setHasError] = useState(false);
@@ -10,16 +10,19 @@ function Login({ onLoginSuccessful }) {
   const onSubmit = async (event) => {
     event.preventDefault();
     setHasError(false);
-    const loginResult = await login({ email, password });
-    if (!loginResult) {
-      setHasError(true);
-    } else {
-      // Save user IDs on local storage
-      const { name, token } = loginResult;
-      localStorage.setItem("name", name);
-      localStorage.setItem("token", token);
-      onLoginSuccessful();
-    }
+    axios
+      .post("/api/login", { email: email, password: password })
+      .then((response) => {
+        // Save user IDs on local storage
+        const { name, token } = response.data;
+        localStorage.setItem("name", name);
+        localStorage.setItem("token", token);
+        onLoginSuccessful();
+      })
+      .catch((error) => {
+        setHasError(true);
+        console.error("Error logging in:", error);
+      });
   };
 
   return (
@@ -54,6 +57,6 @@ function Login({ onLoginSuccessful }) {
       </Container>
     </div>
   );
-}
+};
 
 export default Login;

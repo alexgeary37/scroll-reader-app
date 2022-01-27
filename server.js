@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
+
+const auth = require("./routes/auth");
 const textFileRoutes = require("./routes/textFileRoutes");
 const sessionTemplateRoutes = require("./routes/sessionTemplateRoutes");
 const readingSessionRoutes = require("./routes/readingSessionRoutes");
@@ -42,6 +44,7 @@ class Server {
   }
 
   routes() {
+    this.app.use(auth);
     this.app.use(textFileRoutes);
     this.app.use(sessionTemplateRoutes);
     this.app.use(readingSessionRoutes);
