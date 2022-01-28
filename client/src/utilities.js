@@ -1,7 +1,8 @@
 /** Variables and Functions that are used in multiple components in the app */
 import axios from "axios";
 
-export const wordSeparators = /[\s\r\n,]+/;
+// https://medium.com/@shemar.gordon32/how-to-split-and-keep-the-delimiter-s-d433fb697c65
+export const wordSeparators = /(?=[.?!\n])|(?<=[.?!\n])/g;
 
 /** Functions */
 
