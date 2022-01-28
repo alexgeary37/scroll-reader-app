@@ -32,18 +32,18 @@ const TextAnswersConfigurationView = ({
   };
 
   const handleMouseUp = (index) => {
-    if (mouseDownIndex !== index) {
+    // if (mouseDownIndex !== index) {
       selectAnswer(
         Math.min(mouseDownIndex, index),
         Math.max(mouseDownIndex, index)
       );
-    }
+    // }
   };
 
   const wordColor = (index) => {
     const minIndex = Math.min(answerRegion.startIndex, answerRegion.endIndex);
     const maxIndex = Math.max(answerRegion.startIndex, answerRegion.endIndex);
-    if (minIndex <= index && index <= maxIndex && maxIndex > 0) {
+    if (minIndex <= index && index <= maxIndex) {
       return "yellow";
     }
     return "white";
@@ -59,7 +59,7 @@ const TextAnswersConfigurationView = ({
             onMouseUp={() => handleMouseUp(index)}
             style={{ backgroundColor: wordColor(index) }}
           >
-            {word + " "}
+            {word}
           </span>
         ))}
       </p>

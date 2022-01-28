@@ -71,7 +71,7 @@ const ScrollText = ({
   // This is a useLayoutEffect function triggered whenever a scroll event occurs.
   useScrollPosition(addScrollPosEntry, 25);
 
-  const handleWordClick = (index) => {
+  const handleSentenceClick = (index) => {
     if (selectAnswerEnabled) {
       selectAnswer(index, false);
     }
@@ -84,7 +84,7 @@ const ScrollText = ({
       style={textStyle}
     >
       {words.map((word, index) => (
-        <span key={uuid_v4()} onClick={() => handleWordClick(index)}>
+        <span key={uuid_v4()} onClick={() => handleSentenceClick(index)}>
           {word + " "}
         </span>
       ))}
