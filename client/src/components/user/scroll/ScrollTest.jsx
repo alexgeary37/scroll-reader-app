@@ -183,7 +183,6 @@ const ScrollTest = () => {
         (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
       ).questionFormat === "inline";
 
-    console.log("isINLINE::", isInlineQuestion);
     const sessionID = sessionContext.sessionID;
     const currentTime = new Date();
     const yPos = parseInt(getScrollPosition().y);

@@ -60,7 +60,7 @@ const TextFile = ({
         />
         <TextFileStylesView
           isOpen={openViewStyles}
-          fileID={file.value}
+          fileID={file.key}
           styles={file.styles}
           updateFileStyles={updateFileStyles}
           removeStyle={removeStyle}
@@ -68,7 +68,7 @@ const TextFile = ({
         />
         <TextFileTextView
           isOpen={openTextFileTextView}
-          fileID={file.value}
+          fileID={file.key}
           close={() => setOpenTextFileTextView(false)}
         />
         <DeleteTextModal

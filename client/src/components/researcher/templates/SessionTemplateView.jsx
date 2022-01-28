@@ -13,15 +13,15 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
   const styleContent = (text) => {
     return `font-family: ${
       textFiles
-        .find((tf) => tf.value === text.fileID)
+        .find((tf) => tf.key === text.fileID)
         .styles.find((s) => s._id === text.styleID).fontFamily
     }, font-size: ${
       textFiles
-        .find((tf) => tf.value === text.fileID)
+        .find((tf) => tf.key === text.fileID)
         .styles.find((s) => s._id === text.styleID).fontSize
     }, line-height: ${
       textFiles
-        .find((tf) => tf.value === text.fileID)
+        .find((tf) => tf.key === text.fileID)
         .styles.find((s) => s._id === text.styleID).lineHeight
     }`;
   };
@@ -122,7 +122,7 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
                           }. ${
                             // Get the question from the textFile
                             textFiles
-                              .find((tf) => tf.value === text.fileID)
+                              .find((tf) => tf.key === text.fileID)
                               .questions.find((q) => q._id === questionID)
                               .question
                           }`}

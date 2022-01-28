@@ -104,16 +104,16 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const handleSelectSpeedText = (e, data) => {
     if (e.target.className === "delete icon") {
       for (let i = 0; i < data.options.length; i++) {
-        const optionIndex = data.value.indexOf(data.options[i].value);
+        const optionIndex = data.value.indexOf(data.options[i].key);
 
         // IF this element is not found in data.value array, and it is still
         // in speedTexts, remove it from speedTexts.
         if (
           optionIndex === -1 &&
-          speedTexts.some((elem) => elem.fileID === data.options[i].value)
+          speedTexts.some((elem) => elem.fileID === data.options[i].key)
         ) {
           setSpeedTexts(
-            speedTexts.filter((elem) => elem.fileID !== data.options[i].value)
+            speedTexts.filter((elem) => elem.fileID !== data.options[i].key)
           );
           break;
         }
@@ -124,10 +124,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         {
           fileID: data.value[data.value.length - 1],
           fileName: data.options.find(
-            (file) => file.value === data.value[data.value.length - 1]
+            (file) => file.key === data.value[data.value.length - 1]
           ).text,
           styleID: textFiles.find(
-            (tf) => tf.value === data.value[data.value.length - 1]
+            (tf) => tf.key === data.value[data.value.length - 1]
           ).styles[0]._id,
         },
       ]);
@@ -137,16 +137,16 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const handleSelectScrollText = (e, data) => {
     if (e.target.className === "delete icon") {
       for (let i = 0; i < data.options.length; i++) {
-        const optionIndex = data.value.indexOf(data.options[i].value);
+        const optionIndex = data.value.indexOf(data.options[i].key);
 
         // IF this element is not found in data.value array, and it is still
         // in scrollTexts, remove it from scrollTexts.
         if (
           optionIndex === -1 &&
-          scrollTexts.some((elem) => elem.fileID === data.options[i].value)
+          scrollTexts.some((elem) => elem.fileID === data.options[i].key)
         ) {
           setScrollTexts(
-            scrollTexts.filter((elem) => elem.fileID !== data.options[i].value)
+            scrollTexts.filter((elem) => elem.fileID !== data.options[i].key)
           );
           break;
         }
@@ -157,7 +157,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         {
           fileID: data.value[data.value.length - 1],
           fileName: data.options.find(
-            (file) => file.value === data.value[data.value.length - 1]
+            (file) => file.key === data.value[data.value.length - 1]
           ).text,
           instructions: {
             main: "",
@@ -166,7 +166,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           },
           questionIDs: [],
           styleID: textFiles.find(
-            (tf) => tf.value === data.value[data.value.length - 1]
+            (tf) => tf.key === data.value[data.value.length - 1]
           ).styles[0]._id,
         },
       ]);
@@ -231,7 +231,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       responseData.speedTest.texts.forEach((text) => {
         tempSpeedTexts.push({
           fileID: text.fileID,
-          name: textFiles.find((tf) => tf.value === text.fileID).name,
+          name: textFiles.find((tf) => tf.key === text.fileID).name,
           styleID: text.styleID,
         });
       });
@@ -240,7 +240,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
       responseData.scrollTexts.forEach((fileObj) =>
         tempScrollTexts.push({
           fileID: fileObj.fileID,
-          name: textFiles.find((tf) => tf.value === fileObj.fileID).name,
+          name: textFiles.find((tf) => tf.key === fileObj.fileID).name,
           instructions: fileObj.instructions,
           questionIDs: fileObj.questionIDs,
           styleID: fileObj.styleID,

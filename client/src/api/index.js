@@ -1,12 +1,10 @@
 export async function login({ email, password }) {
-  console.log("email:", email, "password:", password);
   return await fetch("/api/auth/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
     headers: { "Content-Type": "application/json" },
   })
     .then((response) => {
-      console.log("response:", response);
       // If request is not successful, display error message
       if (!response.ok) {
         throw new Error("HTTP status " + response.status);
@@ -15,7 +13,7 @@ export async function login({ email, password }) {
       return response.json();
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 }
 
@@ -33,6 +31,6 @@ export async function searchArtworks({ keyword }) {
       return response.json();
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 }

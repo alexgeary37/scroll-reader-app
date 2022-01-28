@@ -77,7 +77,7 @@ const ResearcherView = ({ onLogout }) => {
           temp.speedTest.texts.forEach((text) => {
             speedTexts.push({
               fileID: text.fileID,
-              name: textFiles.data.find((tf) => tf.value === text.fileID).name,
+              name: textFiles.data.find((tf) => tf.key === text.fileID).name,
               styleID: text.styleID,
             });
           });
@@ -85,8 +85,7 @@ const ResearcherView = ({ onLogout }) => {
           temp.scrollTexts.forEach((fileObj) => {
             scrollTexts.push({
               fileID: fileObj.fileID,
-              name: textFiles.data.find((tf) => tf.value === fileObj.fileID)
-                .name,
+              name: textFiles.data.find((tf) => tf.key === fileObj.fileID).name,
               instructions: fileObj.instructions,
               questionIDs: fileObj.questionIDs,
               styleID: fileObj.styleID,
