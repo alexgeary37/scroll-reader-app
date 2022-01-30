@@ -11,8 +11,10 @@ const DeleteReadingSessionModal = ({ isOpen, answerYes, answerNo }) => {
         Are you sure you want to delete this reading session?
         <br />
       </Modal.Header>
-      <Button primary content="Yes" onClick={answerYes} />
-      <Button content="No" onClick={answerNo} />
+      <div style={{ marginTop: 10 }}>
+        <Button content="No" onClick={answerNo} />
+        <Button primary content="Yes" onClick={answerYes} />
+      </div>
     </Modal>
   );
 };

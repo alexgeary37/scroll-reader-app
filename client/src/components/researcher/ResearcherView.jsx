@@ -412,7 +412,12 @@ const ResearcherView = ({ onLogout }) => {
       <Container>
         <Grid>
           <Grid.Row>
-            <Button negative content="Logout" onClick={onLogout} />
+            <Button
+              floated="right"
+              negative
+              content="Logout"
+              onClick={onLogout}
+            />
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>

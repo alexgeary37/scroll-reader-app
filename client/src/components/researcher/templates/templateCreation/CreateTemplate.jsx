@@ -386,7 +386,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           </Segment>
         </Segment>
 
-        <div style={{ position: "absolute", right: 10, bottom: 10 }}>
+        <div style={{ display: "flex", float: "right" }}>
           <Button content="Cancel" onClick={() => handleClose(false, null)} />
           <Button positive content="Create" onClick={handleCreate} />
         </div>

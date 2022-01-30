@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Button, Input, Form } from "semantic-ui-react";
+import { Modal, Button, Input, Form, Segment } from "semantic-ui-react";
 import TextAnswersConfigurationView from "./TextAnswersConfigurationView";
 
 const AddQuestionToTextFile = ({ isOpen, fileID, addQuestion, close }) => {
@@ -155,7 +155,7 @@ const AddQuestionToTextFile = ({ isOpen, fileID, addQuestion, close }) => {
             {displayQuestionFormatErrorMessage()}
           </div>
           {displayInlineComponents()}
-          <div style={{ float: "right" }}>
+          <div>
             <Button content="Cancel" onClick={handleClose} />
             <Button
               primary
