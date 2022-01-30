@@ -123,15 +123,14 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     scrollText.fontSize = style.fontSize;
     scrollText.lineHeight = style.lineHeight;
 
-    delete scrollText.styleID;
-    delete scrollText.questionIDs;
-
     createCsv(sessionText.pauses, `scrollText_${textNumber + 1}_pauses`);
 
     const questionAnswers = [];
 
     sessionText.questionAnswers.forEach((questionAnswer) => {
-      const question = text.questions[questionAnswer.questionNumber];
+      const question = text.questions.find(
+        (q) => q._id === scrollText.questionIDs[questionAnswer.questionNumber]
+      );
       const correctAnswer = `[${question.answerRegion.startIndex}, ${question.answerRegion.endIndex}]`;
 
       questionAnswers.push({
@@ -144,6 +143,9 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
         time: questionAnswer.time,
       });
     });
+
+    delete scrollText.styleID;
+    delete scrollText.questionIDs;
 
     createCsv(questionAnswers, `scrollText_${textNumber + 1}_questionAnswers`);
     textNumber++;

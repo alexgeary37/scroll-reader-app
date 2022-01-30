@@ -267,6 +267,7 @@ router.put("/api/addCurrentScrollTextQuestionAnswer", async (req, res) => {
   const sessionID = req.body.sessionID;
   const fileID = req.body.fileID;
   const questionNumber = req.body.questionNumber;
+  const questionID = req.body.questionID;
   const answer = req.body.answer;
   const skip = req.body.skip;
   const yPos = req.body.yPos;
