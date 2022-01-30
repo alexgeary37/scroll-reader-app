@@ -21,6 +21,12 @@ const UserHome = () => {
     fetchSessionTemplate();
   }, []);
 
+  useEffect(() => {
+    if (sessionContext.template !== null) {
+      speedTestRef.current.click();
+    }
+  }, [sessionContext.template]);
+
   const fetchSessionTemplate = () => {
     // Get sessionTemplateID from the url.
     const url = window.location.href.toString();
@@ -83,10 +89,8 @@ const UserHome = () => {
     }
 
     const sessionCreated = createSession();
-
     if (sessionCreated) {
       sessionContext.setTemplate(template);
-      speedTestRef.current.click();
     }
   };
 
