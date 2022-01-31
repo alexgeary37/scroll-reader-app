@@ -3,7 +3,7 @@ import { SessionContext } from "../../../contexts/SessionContext";
 import axios from "axios";
 import { useContext } from "react";
 
-const SpeedTestInstructions = ({ isOpen, instructions, fileID }) => {
+const SpeedTestInstructions = ({ isOpen, instructions, fileID, close }) => {
   const sessionContext = useContext(SessionContext);
 
   const handleStartTest = () => {
@@ -17,8 +17,7 @@ const SpeedTestInstructions = ({ isOpen, instructions, fileID }) => {
         startTime: startTime,
       })
       .then(() => {
-        // Set sessionContext to be in progress, this will close modal.
-        sessionContext.setHasStartedReading(true);
+        close();
       })
       .catch((error) => {
         console.error(
@@ -28,16 +27,35 @@ const SpeedTestInstructions = ({ isOpen, instructions, fileID }) => {
       });
   };
 
+  const displayContent = () => {
+    if (instructions === `Read this text, then click "Done"!`) {
+      return (
+        <div>
+          <Modal.Description as="h4" content={instructions} />
+          <div style={{ marginTop: 10 }}>
+            <Button primary content="Ok" onClick={handleStartTest} />
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Modal.Description as="h4" content={instructions} />
+          <div style={{ marginTop: 10 }}>
+            <Button primary content="Begin" onClick={handleStartTest} />
+          </div>
+        </div>
+      );
+    }
+  };
+
   return (
     <Modal
       size="tiny"
       open={isOpen}
       style={{ overflow: "auto", textAlign: "center", padding: 10 }}
     >
-      <Modal.Description as="h4" content={instructions} />
-      <div style={{ marginTop: 10 }}>
-        <Button primary content="Begin" onClick={handleStartTest} />
-      </div>
+      {displayContent()}
     </Modal>
   );
 };

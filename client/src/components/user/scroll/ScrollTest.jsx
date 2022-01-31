@@ -131,7 +131,6 @@ const ScrollTest = () => {
 
       const fileNumber = sessionContext.fileNumber;
 
-      // if (sessionUpdated) {
       if (isLastText("scroll", sessionContext)) {
         await finishReadingSession(endTime);
         endPageRef.current.click();
@@ -142,7 +141,6 @@ const ScrollTest = () => {
         scrollToTop();
         sessionContext.setHasStartedReading(false);
       }
-      // }
     }
   };
 

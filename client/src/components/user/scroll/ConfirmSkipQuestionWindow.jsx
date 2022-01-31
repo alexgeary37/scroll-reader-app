@@ -9,9 +9,7 @@ const ConfirmSkipQuestionWindow = ({ isOpen, skip, cancel }) => {
     >
       <Modal.Description
         as="h4"
-        content={`Are you sure you want to skip this question?${(
-          <br />
-        )}You will not be able to come back to it later`}
+        content="Are you sure you want to skip this question? You will not be able to come back to it later"
       />
       <div style={{ marginTop: 10 }}>
         <Button content="No" onClick={cancel} />

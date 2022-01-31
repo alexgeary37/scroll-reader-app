@@ -9,9 +9,8 @@ const ConfirmDoneWindow = ({ isOpen, close }) => {
     >
       <Modal.Description
         as="h4"
-        content={`You have not answered all the questions for this text.${(
-          <br />
-        )}Please answer each of the remaining questions, or click "Skip`}
+        content={`You have not answered all the questions for this text.
+        Please answer each of the remaining questions, or click "Skip"`}
       />
       <div style={{ marginTop: 10 }}>
         <Button primary content="Ok" onClick={close} />

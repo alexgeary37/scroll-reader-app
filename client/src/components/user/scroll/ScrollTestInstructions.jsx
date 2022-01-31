@@ -1,4 +1,4 @@
-import { Button, Modal } from "semantic-ui-react";
+import { Button, Form, Header, Modal } from "semantic-ui-react";
 import { SessionContext } from "../../../contexts/SessionContext";
 import axios from "axios";
 import { useContext, useState } from "react";
@@ -83,61 +83,46 @@ const ScrollTestInstructions = ({ isOpen, text, close }) => {
     if (JSON.parse(text.instructions.hasFamiliarityQuestion) === true) {
       return (
         <div>
-          <div className="ui form" style={{ textAlign: "center" }}>
-            <label>How familiar are you with this topic?</label>
-            <div className="inline fields">
-              <div className="field">
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={familiarity === "Very Unfamiliar"}
-                    onChange={(e) => handleFamiliarityChange("Very Unfamiliar")}
-                  />
-                  <label>Very Unfamiliar</label>
-                </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={familiarity === "Unfamiliar"}
-                    onChange={(e) => handleFamiliarityChange("Unfamiliar")}
-                  />
-                  <label>Unfamiliar</label>
-                </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={familiarity === "Neutral"}
-                    onChange={(e) => handleFamiliarityChange("Neutral")}
-                  />
-                  <label>Neutral</label>
-                </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={familiarity === "Familiar"}
-                    onChange={(e) => handleFamiliarityChange("Familiar")}
-                  />
-                  <label>Familiar</label>
-                </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={familiarity === "Very Familiar"}
-                    onChange={(e) => handleFamiliarityChange("Very Familiar")}
-                  />
-                  <label>Very Familiar</label>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Form>
+            <Header as="h4" content="How familiar are you with this topic?" />
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Radio
+                  label="Very Unfamiliar"
+                  checked={familiarity === "Very Unfamiliar"}
+                  onChange={(e) => handleFamiliarityChange("Very Unfamiliar")}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Radio
+                  label="Unfamiliar"
+                  checked={familiarity === "Unfamiliar"}
+                  onChange={(e) => handleFamiliarityChange("Unfamiliar")}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Radio
+                  label="Neutral"
+                  checked={familiarity === "Neutral"}
+                  onChange={(e) => handleFamiliarityChange("Neutral")}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Radio
+                  label="Familiar"
+                  checked={familiarity === "Familiar"}
+                  onChange={(e) => handleFamiliarityChange("Familiar")}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Radio
+                  label="Very Familiar"
+                  checked={familiarity === "Very Familiar"}
+                  onChange={(e) => handleFamiliarityChange("Very Familiar")}
+                />
+              </Form.Field>
+            </Form.Group>
+          </Form>
           {displayFamiliarityError && (
             <span style={{ color: "red" }}>Please select an option above!</span>
           )}
@@ -150,61 +135,46 @@ const ScrollTestInstructions = ({ isOpen, text, close }) => {
     if (JSON.parse(text.instructions.hasInterestQuestion) === true) {
       return (
         <div>
-          <div className="ui form">
-            <label>How interested are you with this topic?</label>
-            <div className="inline fields" style={{textAlign:"center"}}>
-              <div className="field">
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={interest === "Very Uninterested"}
-                    onChange={(e) => handleInterestChange("Very Uninterested")}
-                  />
-                  <label>Very Uninterested</label>
-                </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={interest === "Uninterested"}
-                    onChange={(e) => handleInterestChange("Uninterested")}
-                  />
-                  <label>Uninterested</label>
-                </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={interest === "Neutral"}
-                    onChange={(e) => handleInterestChange("Neutral")}
-                  />
-                  <label>Neutral</label>
-                </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={interest === "Interested"}
-                    onChange={(e) => handleInterestChange("Interested")}
-                  />
-                  <label>Interested</label>
-                </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    checked={interest === "Very Interested"}
-                    onChange={(e) => handleInterestChange("Very Interested")}
-                  />
-                  <label>Very Interested</label>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Form>
+            <Header as="h4" content="How interested are you with this topic?" />
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Radio
+                  label="Very Uninterested"
+                  checked={interest === "Very Uninterested"}
+                  onChange={(e) => handleInterestChange("Very Uninterested")}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Radio
+                  label="Uninterested"
+                  checked={interest === "Uninterested"}
+                  onChange={(e) => handleInterestChange("Uninterested")}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Radio
+                  label="Neutral"
+                  checked={interest === "Neutral"}
+                  onChange={(e) => handleInterestChange("Neutral")}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Radio
+                  label="Interested"
+                  checked={interest === "Interested"}
+                  onChange={(e) => handleInterestChange("Interested")}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Radio
+                  label="Very Interested"
+                  checked={interest === "Very Interested"}
+                  onChange={(e) => handleInterestChange("Very Interested")}
+                />
+              </Form.Field>
+            </Form.Group>
+          </Form>
           {displayInterestError && (
             <span style={{ color: "red" }}>Please select an option above!</span>
           )}
@@ -215,14 +185,13 @@ const ScrollTestInstructions = ({ isOpen, text, close }) => {
 
   return (
     <Modal
-    
       open={isOpen}
       style={{ textAlign: "center", overflow: "auto", padding: 10 }}
     >
       <Modal.Description as="h4" content={text.instructions.main} />
       {displayFamiliarityQuestion()}
       {displayInterestQuestion()}
-      <div style={{ marginTop: 10 }}>
+      <div style={{ marginTop: 20 }}>
         <Button primary content="Begin" onClick={handleStartTest} />
       </div>
     </Modal>

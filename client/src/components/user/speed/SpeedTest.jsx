@@ -12,7 +12,8 @@ import {
   scrollToTop,
 } from "../../../utilities.js";
 import { debounce } from "debounce";
-import StartNextSpeedWindow from "./StartNextSpeedWindow.jsx";
+
+const transitionInstructions = `Read the next text, then click "Done"`;
 
 const SpeedTest = () => {
   const sessionContext = useContext(SessionContext);
@@ -22,11 +23,13 @@ const SpeedTest = () => {
     sessionContext.template.speedTest.texts[sessionContext.fileNumber]
   );
   const [textIsComplete, setTextIsComplete] = useState(false);
-  const [displayStartNextSpeedWindow, setDisplayStartNextSpeedWindow] =
-    useState(false);
 
   useEffect(() => {
-    setInstructions(sessionContext.template.speedTest.instructions);
+    if (sessionContext.fileNumber === 0) {
+      setInstructions(sessionContext.template.speedTest.instructions);
+    } else {
+      setInstructions(transitionInstructions);
+    }
     initialiseTextIsComplete();
     window.onresize = debounce(
       (e) => recordViewportResize(e, sessionContext),
@@ -60,32 +63,7 @@ const SpeedTest = () => {
       });
   };
 
-  const startNextText = (fileID) => {
-    setDisplayStartNextSpeedWindow(false);
-    const sessionID = sessionContext.sessionID;
-    const startTime = new Date();
-
-    // Add a new entry to session.speedTexts.
-    axios
-      .put("/api/addNewSpeedText", {
-        id: sessionID,
-        fileID: fileID,
-        startTime: startTime,
-      })
-      .then(() => {
-        sessionContext.setFileNumber(sessionContext.fileNumber + 1);
-        scrollToTop();
-      })
-      .catch((error) => {
-        console.error(
-          "Error adding new text to readingSession.speedTexts:",
-          error
-        );
-      });
-  };
-
   const finishCurrentText = async () => {
-    let sessionUpdated = false;
     const sessionID = sessionContext.sessionID;
     const endTime = new Date();
 
@@ -97,7 +75,7 @@ const SpeedTest = () => {
         endTime: endTime,
       })
       .then(() => {
-        sessionUpdated = true;
+        setInstructions(transitionInstructions);
       })
       .catch((error) => {
         console.error(
@@ -105,22 +83,22 @@ const SpeedTest = () => {
           error
         );
       });
-
-    return sessionUpdated;
   };
 
   const handleFinishText = async () => {
     // Update session.speedTexts[currentFileID] with an end time.
-    const sessionUpdated = finishCurrentText();
+    finishCurrentText();
 
-    if (sessionUpdated) {
-      if (isLastText("speed", sessionContext)) {
-        sessionContext.setFileNumber(0);
-        sessionContext.setHasStartedReading(false);
-        startTask2Ref.current.click();
-      } else {
-        setDisplayStartNextSpeedWindow(true);
-      }
+    const fileNumber = sessionContext.fileNumber;
+
+    sessionContext.setHasStartedReading(false);
+
+    if (isLastText("speed", sessionContext)) {
+      sessionContext.setFileNumber(0);
+      startTask2Ref.current.click();
+    } else {
+      sessionContext.setFileNumber(fileNumber + 1);
+      scrollToTop();
     }
   };
 
@@ -154,6 +132,10 @@ const SpeedTest = () => {
   const resumeSession = () => {
     updateSpeedTextPauses(false);
     sessionContext.setIsPaused(false);
+  };
+
+  const handleCloseSpeedTestInstructions = () => {
+    sessionContext.setHasStartedReading(true);
   };
 
   const displayButtons = () => {
@@ -209,16 +191,7 @@ const SpeedTest = () => {
           isOpen={sessionContext.hasStartedReading === false}
           instructions={instructions}
           fileID={currentText.fileID}
-        />
-        <StartNextSpeedWindow
-          isOpen={displayStartNextSpeedWindow}
-          close={() =>
-            startNextText(
-              sessionContext.template.speedTest.texts[
-                sessionContext.fileNumber + 1
-              ].fileID
-            )
-          }
+          close={handleCloseSpeedTestInstructions}
         />
         <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
       </div>
