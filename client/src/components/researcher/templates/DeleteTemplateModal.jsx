@@ -7,12 +7,14 @@ const DeleteTemplateModal = ({ isOpen, answerYes, answerNo }) => {
       open={isOpen}
       style={{ textAlign: "center", padding: 10 }}
     >
-      <Modal.Header as="h4">
-        Are you sure you want to delete this template?
-        <br />
-      </Modal.Header>
-      <Button primary content="Yes" onClick={answerYes} />
-      <Button content="No" onClick={answerNo} />
+      <Modal.Description
+        as="h4"
+        content="Are you sure you want to delete this template?"
+      />
+      <div style={{ marginTop: 10 }}>
+        <Button content="No" onClick={answerNo} />
+        <Button primary content="Yes" onClick={answerYes} />
+      </div>
     </Modal>
   );
 };

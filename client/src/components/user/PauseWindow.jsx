@@ -7,8 +7,10 @@ const PauseWindow = ({ isOpen, resume }) => {
       open={isOpen}
       style={{ textAlign: "center", padding: 10 }}
     >
-      <Modal.Header as="h4">Click to resume reading.</Modal.Header>
-      <Button primary content="Reume" onClick={resume} />
+      <Modal.Description as="h4" content="Click to resume reading" />
+      <div style={{ marginTop: 10 }}>
+        <Button primary content="Resume" onClick={resume} />
+      </div>
     </Modal>
   );
 };

@@ -7,8 +7,13 @@ const AnswersCompleteWindow = ({ isOpen, close }) => {
       open={isOpen}
       style={{ textAlign: "center", padding: 10 }}
     >
-      <Modal.Header as="h4">You have answered all the questions!</Modal.Header>
-      <Button floated="right" content="Ok" onClick={close} />
+      <Modal.Description
+        as="h4"
+        content="You have answered all the questions!"
+      />
+      <div style={{ marginTop: 10 }}>
+        <Button primary content="Ok" onClick={close} />
+      </div>
     </Modal>
   );
 };

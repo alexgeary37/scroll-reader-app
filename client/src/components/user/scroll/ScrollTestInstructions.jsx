@@ -152,7 +152,7 @@ const ScrollTestInstructions = ({ isOpen, text, close }) => {
         <div>
           <div className="ui form">
             <label>How interested are you with this topic?</label>
-            <div className="inline fields">
+            <div className="inline fields" style={{textAlign:"center"}}>
               <div className="field">
                 <div className="ui radio checkbox">
                   <input
@@ -215,19 +215,16 @@ const ScrollTestInstructions = ({ isOpen, text, close }) => {
 
   return (
     <Modal
-      size="tiny"
+    
       open={isOpen}
       style={{ textAlign: "center", overflow: "auto", padding: 10 }}
     >
       <Modal.Description as="h4" content={text.instructions.main} />
       {displayFamiliarityQuestion()}
       {displayInterestQuestion()}
-      <Button
-        floated="right"
-        primary
-        content="Begin"
-        onClick={handleStartTest}
-      />
+      <div style={{ marginTop: 10 }}>
+        <Button primary content="Begin" onClick={handleStartTest} />
+      </div>
     </Modal>
   );
 };

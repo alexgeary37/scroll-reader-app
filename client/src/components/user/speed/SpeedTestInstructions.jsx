@@ -29,14 +29,15 @@ const SpeedTestInstructions = ({ isOpen, instructions, fileID }) => {
   };
 
   return (
-    <Modal size="tiny" open={isOpen} style={{ overflow: "auto", padding: 10 }}>
+    <Modal
+      size="tiny"
+      open={isOpen}
+      style={{ overflow: "auto", textAlign: "center", padding: 10 }}
+    >
       <Modal.Description as="h4" content={instructions} />
-      <Button
-        floated="right"
-        primary
-        content="Begin"
-        onClick={handleStartTest}
-      />
+      <div style={{ marginTop: 10 }}>
+        <Button primary content="Begin" onClick={handleStartTest} />
+      </div>
     </Modal>
   );
 };

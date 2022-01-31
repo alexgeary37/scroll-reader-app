@@ -163,7 +163,7 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
 
   return (
     <Modal open={isOpen} style={{ height: "70vh", padding: 10 }}>
-      <Header as="h1" content={template.name} />
+      <Header as="h1" style={{ textAlign: "center" }} content={template.name} />
 
       {displayTemplateInfo()}
       <Button

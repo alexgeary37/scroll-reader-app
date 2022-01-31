@@ -7,10 +7,10 @@ const ConfirmExportModal = ({ isOpen, answerYes, answerNo }) => {
       open={isOpen}
       style={{ textAlign: "center", padding: 10 }}
     >
-      <Modal.Header as="h4">
-        Are you sure you want to export data from this reading session?
-        <br />
-      </Modal.Header>
+      <Modal.Description
+        as="h4"
+        content="Are you sure you want to export data from this reading session?"
+      />
       <div style={{ marginTop: 10 }}>
         <Button content="No" onClick={answerNo} />
         <Button primary content="Yes" onClick={answerYes} />

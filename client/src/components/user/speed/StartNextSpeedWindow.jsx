@@ -7,8 +7,10 @@ const StartNextSpeedWindow = ({ isOpen, close }) => {
       open={isOpen}
       style={{ textAlign: "center", padding: 10 }}
     >
-      <Modal.Header as="h4">Read this text, then click Done!</Modal.Header>
-      <Button floated="right" content="Ok" onClick={close} />
+      <Modal.Description as="h4" content="Read this text, then click Done!" />
+      <div style={{ marginTop: 10 }}>
+        <Button primary content="Ok" onClick={close} />
+      </div>
     </Modal>
   );
 };

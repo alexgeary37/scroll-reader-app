@@ -29,6 +29,7 @@ const StylesView = ({ isOpen, availableStyles, updateStyle }) => {
         options={dropdownStyles}
         onChange={(e, data) => setStyleID(data.value)}
       />
+
       <Item style={{ marginTop: 10 }}>
         <Item.Content>
           <Item.Header as="h5" content="Selected Style:" />
@@ -49,6 +50,7 @@ const StylesView = ({ isOpen, availableStyles, updateStyle }) => {
           />
         </Item.Content>
       </Item>
+
       <Button
         floated="right"
         content="Save"
