@@ -253,26 +253,28 @@ const ScrollTest = () => {
   const displayButtons = () => {
     if (isMobile) {
       return (
-        <Menu fluid style={{ textAlign: "center" }}>
-          <Menu.Item>
-            <Button
-              primary
-              fluid
-              disabled={textIsComplete}
-              content="Done"
-              onClick={handleFinishText}
-            />
-          </Menu.Item>
+        <Menu inverted widths={3} fixed="top">
+          <Menu.Item
+            active
+            disabled={textIsComplete}
+            content="Done"
+            color="blue"
+            onClick={handleFinishText}
+          />
           <Link to="/end" hidden ref={endPageRef}></Link>
-          <Menu.Item>
-            <Button
-              negative
-              fluid
-              disabled={textIsComplete}
-              content="Pause"
-              onClick={() => pauseSession(sessionContext)}
-            />
-          </Menu.Item>
+          <Menu.Item
+            active
+            disabled={textIsComplete}
+            content="Pause"
+            color="red"
+            onClick={() => pauseSession(sessionContext)}
+          />
+          <Menu.Item
+            active
+            disabled={textIsComplete}
+            content="Question"
+            color="green"
+          />
         </Menu>
       );
     } else {
@@ -313,14 +315,27 @@ const ScrollTest = () => {
 
   const displayScrollText = () => {
     if (sessionContext.hasStartedReading) {
-      return (
-        <ScrollText
-          fileID={currentText.fileID}
-          textStyleID={currentText.styleID}
-          selectAnswerEnabled={selectAnswerEnabled}
-          selectAnswer={handleAnswerQuestion}
-        />
-      );
+      if (isMobile) {
+        return (
+          <div style={{ marginTop: 45 }}>
+            <ScrollText
+              fileID={currentText.fileID}
+              textStyleID={currentText.styleID}
+              selectAnswerEnabled={selectAnswerEnabled}
+              selectAnswer={handleAnswerQuestion}
+            />
+          </div>
+        );
+      } else {
+        return (
+          <ScrollText
+            fileID={currentText.fileID}
+            textStyleID={currentText.styleID}
+            selectAnswerEnabled={selectAnswerEnabled}
+            selectAnswer={handleAnswerQuestion}
+          />
+        );
+      }
     }
   };
 
@@ -330,7 +345,8 @@ const ScrollTest = () => {
       sessionContext.questionAnswers.length > 0 &&
       typeof sessionContext.questionAnswers.find(
         (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
-      ) !== "undefined"
+      ) !== "undefined" &&
+      !isMobile
     ) {
       return (
         <div
@@ -363,6 +379,8 @@ const ScrollTest = () => {
           )}
         </div>
       );
+    // } else {
+      // return <ScrollQuestionModal />;
     }
   };
 

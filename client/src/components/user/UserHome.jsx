@@ -6,6 +6,7 @@ import { SessionContext } from "../../contexts/SessionContext";
 import PageError from "../PageError";
 
 const MIN_USERNAME_CHARACTERS = 3;
+const isMobile = window.innerWidth <= 768;
 
 const UserHome = () => {
   const [userName, setUserName] = useState("");
@@ -119,6 +120,36 @@ const UserHome = () => {
     setUserName(event.target.value);
   };
 
+  const displayFieldAndButton = () => {
+    if (isMobile) {
+      return (
+        <div style={{ textAlign: "center" }}>
+          <Input
+            type="text"
+            placeholder="Type your name here..."
+            onChange={handleUserNameChange}
+          />
+          <Button primary content="Start Task 1" onClick={handleStartTask1} />
+
+          {userNameError()}
+        </div>
+      );
+    } else {
+      return (
+        <div className="wrapper" style={{ textAlign: "center" }}>
+          <Input
+            type="text"
+            placeholder="Type your name here..."
+            onChange={handleUserNameChange}
+          />
+          <Button primary content="Start Task 1" onClick={handleStartTask1} />
+
+          {userNameError()}
+        </div>
+      );
+    }
+  };
+
   const userNameError = () => {
     if (displayUserNameError) {
       return (
@@ -142,20 +173,7 @@ const UserHome = () => {
                 Please type your name below, and click on the button to begin
                 the session!
               </Segment>
-              <div className="wrapper" style={{ justifyContent: "center" }}>
-                <Input
-                  type="text"
-                  placeholder="Type your name here..."
-                  onChange={handleUserNameChange}
-                />
-                <Button
-                  primary
-                  content="Start Task 1"
-                  onClick={handleStartTask1}
-                />
-
-                {userNameError()}
-              </div>
+              {displayFieldAndButton()}
             </Container>
           </div>
         );
