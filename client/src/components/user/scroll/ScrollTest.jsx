@@ -242,6 +242,7 @@ const ScrollTest = () => {
     handleAnswerQuestion("", true);
     setSelectAnswerEnabled(false);
     setDisplayConfirmSkipMessage(false);
+    setDisplayMobileQuestionModal(false);
   };
 
   const handleCloseScrollTestInstructions = () => {
@@ -279,6 +280,7 @@ const ScrollTest = () => {
               disabled={textIsComplete}
               content="Question"
               color="green"
+              onClick={() => setDisplayMobileQuestionModal(true)}
             />
           )}
         </Menu>
@@ -373,7 +375,10 @@ const ScrollTest = () => {
               currentText={currentText}
               questionNumber={scrollQuestionNumber}
               disable={textIsComplete}
-              submitAnswer={handleAnswerQuestion}
+              submitAnswer={(answer, skip) => {
+                handleAnswerQuestion(answer, skip);
+                setDisplayMobileQuestionModal(false);
+              }}
               skip={() => setDisplayConfirmSkipMessage(true)}
             />
           ) : (
