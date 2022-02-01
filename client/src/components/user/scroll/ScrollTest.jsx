@@ -24,6 +24,7 @@ import { debounce } from "debounce";
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
   const endPageRef = createRef();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [currentText, setCurrentText] = useState(
     sessionContext.template.scrollTexts[sessionContext.fileNumber]
   );
@@ -48,10 +49,10 @@ const ScrollTest = () => {
       setScrollQuestionNumber(0);
     }
     initialiseTextIsComplete();
-    window.onresize = debounce(
-      (e) => recordViewportResize(e, sessionContext),
-      500
-    );
+    window.onresize = debounce((e) => {
+      recordViewportResize(e, sessionContext);
+      setIsMobile(window.innerWidth <= 768);
+    }, 500);
   }, []);
 
   useEffect(() => {
@@ -250,16 +251,9 @@ const ScrollTest = () => {
   };
 
   const displayButtons = () => {
-    return (
-      <div
-        style={{
-          top: 0,
-          left: 0,
-          width: "15vw",
-          position: "fixed",
-        }}
-      >
-        <Menu vertical fluid style={{ textAlign: "center" }}>
+    if (isMobile) {
+      return (
+        <Menu fluid style={{ textAlign: "center" }}>
           <Menu.Item>
             <Button
               primary
@@ -280,8 +274,41 @@ const ScrollTest = () => {
             />
           </Menu.Item>
         </Menu>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div
+          style={{
+            top: 0,
+            left: 0,
+            width: "15vw",
+            position: "fixed",
+          }}
+        >
+          <Menu vertical fluid style={{ textAlign: "center" }}>
+            <Menu.Item>
+              <Button
+                primary
+                fluid
+                disabled={textIsComplete}
+                content="Done"
+                onClick={handleFinishText}
+              />
+            </Menu.Item>
+            <Link to="/end" hidden ref={endPageRef}></Link>
+            <Menu.Item>
+              <Button
+                negative
+                fluid
+                disabled={textIsComplete}
+                content="Pause"
+                onClick={() => pauseSession(sessionContext)}
+              />
+            </Menu.Item>
+          </Menu>
+        </div>
+      );
+    }
   };
 
   const displayScrollText = () => {

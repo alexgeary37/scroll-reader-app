@@ -140,16 +140,9 @@ const SpeedTest = () => {
   };
 
   const displayButtons = () => {
-    return (
-      <div
-        style={{
-          top: 0,
-          left: 0,
-          width: "15vw",
-          position: "fixed",
-        }}
-      >
-        <Menu vertical fluid style={{ textAlign: "center" }}>
+    if (isMobile) {
+      return (
+        <Menu fluid style={{ textAlign: "center" }}>
           <Menu.Item>
             <Button
               primary
@@ -170,8 +163,41 @@ const SpeedTest = () => {
             />
           </Menu.Item>
         </Menu>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div
+          style={{
+            top: 0,
+            left: 0,
+            width: "15vw",
+            position: "fixed",
+          }}
+        >
+          <Menu vertical fluid style={{ textAlign: "center" }}>
+            <Menu.Item>
+              <Button
+                primary
+                fluid
+                disabled={textIsComplete}
+                content="Done"
+                onClick={handleFinishText}
+              />
+            </Menu.Item>
+            <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
+            <Menu.Item>
+              <Button
+                negative
+                fluid
+                disabled={textIsComplete}
+                content="Pause"
+                onClick={() => pauseSession(sessionContext)}
+              />
+            </Menu.Item>
+          </Menu>
+        </div>
+      );
+    }
   };
 
   const displaySpeedText = () => {
@@ -199,25 +225,13 @@ const SpeedTest = () => {
     );
   };
 
-  const displayContent = () => {
-    if (!isMobile) {
-      return (
-        <div>
-          {displayButtons()}
-          {displaySpeedText()}
-          {displayMessages()}
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <h1>Hello World</h1>
-        </div>
-      );
-    }
-  };
-
-  return displayContent();
+  return (
+    <div>
+      {displayButtons()}
+      {displaySpeedText()}
+      {displayMessages()}
+    </div>
+  );
 };
 
 export default SpeedTest;
