@@ -107,7 +107,7 @@ const ComprehensionQuestion = ({
           open={openModal}
           style={{ textAlign: "center", padding: 10 }}
         >
-          <Header as="h4" content="Question:" />
+          <Header as="h4" content="Question:" dividing={false} />
           <Modal.Description content={question} />
           {displayFormAndButtons()}
         </Modal>

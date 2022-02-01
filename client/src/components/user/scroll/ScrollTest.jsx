@@ -389,7 +389,10 @@ const ScrollTest = () => {
               questionNumber={scrollQuestionNumber}
               disable={textIsComplete}
               answerIsEnabled={selectAnswerEnabled}
-              enableAnswer={() => setSelectAnswerEnabled(!selectAnswerEnabled)}
+              enableAnswer={() => {
+                setSelectAnswerEnabled(!selectAnswerEnabled);
+                setDisplayMobileQuestionModal(false);
+              }}
               skip={() => setDisplayConfirmSkipMessage(true)}
             />
           )}
