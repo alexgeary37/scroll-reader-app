@@ -52,7 +52,7 @@ const Login = ({ onLoginSuccessful }) => {
             Incorrect email or password. Please try again.
           </label>
         )}
-        <Button floated="right" content="Submit" onClick={onSubmit} />
+        <Button positive floated="right" content="Login" onClick={onSubmit} />
       </Container>
     </div>
   );
