@@ -18,6 +18,7 @@ const transitionInstructions = `Read the next text, then click "Done"`;
 const SpeedTest = () => {
   const sessionContext = useContext(SessionContext);
   const startTask2Ref = createRef();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [instructions, setInstructions] = useState("");
   const [currentText, setCurrentText] = useState(
     sessionContext.template.speedTest.texts[sessionContext.fileNumber]
@@ -31,10 +32,10 @@ const SpeedTest = () => {
       setInstructions(transitionInstructions);
     }
     initialiseTextIsComplete();
-    window.onresize = debounce(
-      (e) => recordViewportResize(e, sessionContext),
-      500
-    );
+    window.onresize = debounce((e) => {
+      recordViewportResize(e, sessionContext);
+      setIsMobile(window.innerWidth <= 768);
+    }, 500);
   }, []);
 
   useEffect(() => {
@@ -198,13 +199,25 @@ const SpeedTest = () => {
     );
   };
 
-  return (
-    <div>
-      {displayButtons()}
-      {displaySpeedText()}
-      {displayMessages()}
-    </div>
-  );
+  const displayContent = () => {
+    if (!isMobile) {
+      return (
+        <div>
+          {displayButtons()}
+          {displaySpeedText()}
+          {displayMessages()}
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <h1>Hello World</h1>
+        </div>
+      );
+    }
+  };
+
+  return displayContent();
 };
 
 export default SpeedTest;

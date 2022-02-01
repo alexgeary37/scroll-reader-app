@@ -14,7 +14,7 @@ const Home = () => {
           content="Login"
           onClick={() => loginRef.current.click()}
         />
-        <Link to="/researcher" hidden ref={loginRef}></Link>
+        <Link to="/researcher" hidden ref={loginRef} />
       </Container>
     </div>
   );
