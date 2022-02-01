@@ -140,10 +140,6 @@ const SpeedTest = () => {
   };
 
   const displayButtons = () => {
-    // <Segment>
-    //       <Button fluid primary content="Done" />
-    //       <Button fluid negative content="Pause" />
-    //     </Segment>
     if (isMobile) {
       return (
         <Menu inverted widths={2} fixed="top">
@@ -202,12 +198,23 @@ const SpeedTest = () => {
 
   const displaySpeedText = () => {
     if (sessionContext.hasStartedReading) {
-      return (
-        <SpeedText
-          fileID={currentText.fileID}
-          textStyleID={currentText.styleID}
-        />
-      );
+      if (isMobile) {
+        return (
+          <div style={{ marginTop: 10 }}>
+            <SpeedText
+              fileID={currentText.fileID}
+              textStyleID={currentText.styleID}
+            />
+          </div>
+        );
+      } else {
+        return (
+          <SpeedText
+            fileID={currentText.fileID}
+            textStyleID={currentText.styleID}
+          />
+        );
+      }
     }
   };
 
