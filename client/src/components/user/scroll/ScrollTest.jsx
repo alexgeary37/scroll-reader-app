@@ -252,8 +252,10 @@ const ScrollTest = () => {
 
   const displayButtons = () => {
     if (isMobile) {
+      const displayQuestions =
+        scrollQuestionNumber < currentText.questionIDs.length;
       return (
-        <Menu inverted widths={3} fixed="top">
+        <Menu inverted widths={displayQuestions ? 3 : 2} fixed="top">
           <Menu.Item
             active
             disabled={textIsComplete}
@@ -269,12 +271,14 @@ const ScrollTest = () => {
             color="red"
             onClick={() => pauseSession(sessionContext)}
           />
-          <Menu.Item
-            active
-            disabled={textIsComplete}
-            content="Question"
-            color="green"
-          />
+          {displayQuestions && (
+            <Menu.Item
+              active
+              disabled={textIsComplete}
+              content="Question"
+              color="green"
+            />
+          )}
         </Menu>
       );
     } else {
@@ -345,9 +349,12 @@ const ScrollTest = () => {
       sessionContext.questionAnswers.length > 0 &&
       typeof sessionContext.questionAnswers.find(
         (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
-      ) !== "undefined" &&
-      !isMobile
+      ) !== "undefined"
     ) {
+      const isComprehension =
+        sessionContext.questionAnswers.find(
+          (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
+        ).questionFormat === "comprehension";
       return (
         <div
           style={{
@@ -357,10 +364,9 @@ const ScrollTest = () => {
             position: "fixed",
           }}
         >
-          {sessionContext.questionAnswers.find(
-            (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
-          ).questionFormat === "comprehension" ? (
+          {isComprehension ? (
             <ComprehensionQuestion
+              isMobile={isMobile}
               currentText={currentText}
               questionNumber={scrollQuestionNumber}
               disable={textIsComplete}
@@ -369,6 +375,7 @@ const ScrollTest = () => {
             />
           ) : (
             <ClickQuestion
+              isMobile={isMobile}
               currentText={currentText}
               questionNumber={scrollQuestionNumber}
               disable={textIsComplete}
@@ -379,8 +386,6 @@ const ScrollTest = () => {
           )}
         </div>
       );
-    // } else {
-      // return <ScrollQuestionModal />;
     }
   };
 

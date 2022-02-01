@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Card, Button, Form, Grid, TextArea } from "semantic-ui-react";
 
 const ComprehensionQuestion = ({
+  isMobile,
   currentText,
   questionNumber,
   disable,

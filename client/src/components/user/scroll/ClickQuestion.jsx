@@ -4,6 +4,7 @@ import axios from "axios";
 import { SessionContext } from "../../../contexts/SessionContext";
 
 const ClickQuestion = ({
+  isMobile,
   currentText,
   questionNumber,
   disable,
