@@ -200,7 +200,7 @@ const SpeedTest = () => {
     if (sessionContext.hasStartedReading) {
       if (isMobile) {
         return (
-          <div style={{ marginTop: 50 }}>
+          <div style={{ marginTop: 40 }}>
             <SpeedText
               fileID={currentText.fileID}
               textStyleID={currentText.styleID}
