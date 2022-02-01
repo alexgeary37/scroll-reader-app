@@ -146,32 +146,25 @@ const SpeedTest = () => {
     //     </Segment>
     if (isMobile) {
       return (
-        <Menu inverted widths={2}>
-          <Menu.Item
-            active
-            disabled={textIsComplete}
-            content="Done"
-            color="blue"
-            onClick={handleFinishText}
-          />
-          {/* <Button
-              primary
-              fluid
+        <div style={{ top: 0, position: "fixed" }}>
+          <Menu inverted widths={2}>
+            <Menu.Item
+              active
               disabled={textIsComplete}
               content="Done"
+              color="blue"
               onClick={handleFinishText}
-            /> */}
-
-          <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
-          <Menu.Item
-            active
-            // position="right"
-            disabled={textIsComplete}
-            content="Pause"
-            color="red"
-            onClick={() => pauseSession(sessionContext)}
-          />
-        </Menu>
+            />
+            <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
+            <Menu.Item
+              active
+              disabled={textIsComplete}
+              content="Pause"
+              color="red"
+              onClick={() => pauseSession(sessionContext)}
+            />
+          </Menu>
+        </div>
       );
     } else {
       return (
