@@ -16,7 +16,7 @@ import { getScrollPosition } from "./scrollPosition.jsx";
 import ComprehensionQuestion from "./ComprehensionQuestion.jsx";
 import ClickQuestion from "./ClickQuestion.jsx";
 import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
-import ConfirmDoneWindow from "../ConfirmDoneWindow.jsx";
+import UnfinishedQuestionsWindow from "../UnfinishedQuestionsWindow.jsx";
 import AnswerResponseWindow from "./AnswerResponseWindow.jsx";
 import AnswersCompleteWindow from "./AnswersCompleteWindow.jsx";
 import { debounce } from "debounce";
@@ -374,7 +374,7 @@ const ScrollTest = () => {
           isOpen={displayAnswersCompleteMessage}
           close={() => setDisplayAnswersCompleteMessage(false)}
         />
-        <ConfirmDoneWindow
+        <UnfinishedQuestionsWindow
           isOpen={displayConfirmDoneMessage}
           close={() => setDisplayConfirmDoneMessage(false)}
         />

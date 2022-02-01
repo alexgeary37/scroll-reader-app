@@ -1,6 +1,6 @@
 import { Modal, Button } from "semantic-ui-react";
 
-const ConfirmDoneWindow = ({ isOpen, close }) => {
+const UnfinishedQuestionsWindow = ({ isOpen, close }) => {
   return (
     <Modal
       size="tiny"
@@ -19,4 +19,4 @@ const ConfirmDoneWindow = ({ isOpen, close }) => {
   );
 };
 
-export default ConfirmDoneWindow;
+export default UnfinishedQuestionsWindow;
