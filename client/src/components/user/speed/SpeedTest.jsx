@@ -153,7 +153,7 @@ const SpeedTest = () => {
             />
           </Menu.Item>
           <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
-          <Menu.Item>
+          <Menu.Item position="right">
             <Button
               negative
               fluid
