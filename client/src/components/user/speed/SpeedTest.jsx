@@ -146,7 +146,7 @@ const SpeedTest = () => {
     //     </Segment>
     if (isMobile) {
       return (
-        <Menu inverted widths={8}>
+        <Menu inverted widths={2}>
           <Menu.Item
             active
             disabled={textIsComplete}
@@ -165,10 +165,9 @@ const SpeedTest = () => {
           <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
           <Menu.Item
             active
-            position="right"
+            // position="right"
             disabled={textIsComplete}
             content="Pause"
-            name="Pause"
             color="red"
             onClick={() => pauseSession(sessionContext)}
           />
