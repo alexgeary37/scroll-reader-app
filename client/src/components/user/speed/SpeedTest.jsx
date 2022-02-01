@@ -142,33 +142,37 @@ const SpeedTest = () => {
   const displayButtons = () => {
     if (isMobile) {
       return (
-        <Menu inverted>
-          <Menu.Item
-            active
-            disabled={textIsComplete}
-            content="Done"
-            color="blue"
-            onClick={handleFinishText}
-          />
-          {/* <Button
-              primary
-              fluid
-              disabled={textIsComplete}
-              content="Done"
-              onClick={handleFinishText}
-            /> */}
+        <Segment>
+          <Button fluid primary content="Done" />
+          <Button fluid negative content="Pause" />
+        </Segment>
+        // <Menu inverted>
+        //   <Menu.Item
+        //     active
+        //     disabled={textIsComplete}
+        //     content="Done"
+        //     color="blue"
+        //     onClick={handleFinishText}
+        //   />
+        //   {/* <Button
+        //       primary
+        //       fluid
+        //       disabled={textIsComplete}
+        //       content="Done"
+        //       onClick={handleFinishText}
+        //     /> */}
 
-          <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
-          <Menu.Item
-            active
-            position="right"
-            disabled={textIsComplete}
-            content="Pause"
-            name="Pause"
-            color="red"
-            onClick={() => pauseSession(sessionContext)}
-          />
-        </Menu>
+        //   <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
+        //   <Menu.Item
+        //     active
+        //     position="right"
+        //     disabled={textIsComplete}
+        //     content="Pause"
+        //     name="Pause"
+        //     color="red"
+        //     onClick={() => pauseSession(sessionContext)}
+        //   />
+        // </Menu>
       );
     } else {
       return (
