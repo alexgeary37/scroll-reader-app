@@ -5,6 +5,7 @@ import { SessionContext } from "../../../contexts/SessionContext";
 
 const ClickQuestion = ({
   isMobile,
+  openModal,
   currentText,
   questionNumber,
   disable,

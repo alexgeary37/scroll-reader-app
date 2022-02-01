@@ -25,6 +25,8 @@ const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
   const endPageRef = createRef();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [displayMobileQuestionModal, setDisplayMobileQuestionModal] =
+    useState(false);
   const [currentText, setCurrentText] = useState(
     sessionContext.template.scrollTexts[sessionContext.fileNumber]
   );
@@ -367,6 +369,7 @@ const ScrollTest = () => {
           {isComprehension ? (
             <ComprehensionQuestion
               isMobile={isMobile}
+              openModal={displayMobileQuestionModal}
               currentText={currentText}
               questionNumber={scrollQuestionNumber}
               disable={textIsComplete}
@@ -376,6 +379,7 @@ const ScrollTest = () => {
           ) : (
             <ClickQuestion
               isMobile={isMobile}
+              openModal={displayMobileQuestionModal}
               currentText={currentText}
               questionNumber={scrollQuestionNumber}
               disable={textIsComplete}

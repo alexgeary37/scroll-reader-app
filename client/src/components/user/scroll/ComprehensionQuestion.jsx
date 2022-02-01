@@ -1,9 +1,18 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Card, Button, Form, Grid, TextArea } from "semantic-ui-react";
+import {
+  Card,
+  Button,
+  Form,
+  Grid,
+  TextArea,
+  Modal,
+  Header,
+} from "semantic-ui-react";
 
 const ComprehensionQuestion = ({
   isMobile,
+  openModal,
   currentText,
   questionNumber,
   disable,
@@ -54,11 +63,9 @@ const ComprehensionQuestion = ({
     setAnswer("");
   };
 
-  return (
-    <Card fluid>
-      <Card.Content>
-        <Card.Header content="Question:" />
-        <Card.Description content={question} />
+  const displayFormAndButtons = () => {
+    return (
+      <div>
         <Form style={{ marginTop: 10, marginBottom: 10 }}>
           <Form.Field>
             <TextArea
@@ -88,9 +95,37 @@ const ComprehensionQuestion = ({
             />
           </Grid.Column>
         </Grid>
-      </Card.Content>
-    </Card>
-  );
+      </div>
+    );
+  };
+
+  const displayContent = () => {
+    if (isMobile) {
+      return (
+        <Modal
+          size="tiny"
+          open={openModal}
+          style={{ textAlign: "center", padding: 10 }}
+        >
+          <Header as="h4" content="Question:" />
+          <Modal.Description content={question} />
+          {displayFormAndButtons()}
+        </Modal>
+      );
+    } else {
+      return (
+        <Card fluid>
+          <Card.Content>
+            <Card.Header content="Question:" />
+            <Card.Description content={question} />
+            {displayFormAndButtons()}
+          </Card.Content>
+        </Card>
+      );
+    }
+  };
+
+  return displayContent();
 };
 
 export default ComprehensionQuestion;
