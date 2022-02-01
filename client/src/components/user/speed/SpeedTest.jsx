@@ -142,33 +142,32 @@ const SpeedTest = () => {
   const displayButtons = () => {
     if (isMobile) {
       return (
-        <Menu inverted fluid style={{ textAlign: "center" }}>
-          <Menu.Item>
-            <Button
+        <Menu inverted>
+          <Menu.Item
+            active
+            disabled={textIsComplete}
+            content="Done"
+            color="blue"
+            onClick={handleFinishText}
+          />
+          {/* <Button
               primary
               fluid
               disabled={textIsComplete}
               content="Done"
               onClick={handleFinishText}
-            />
-          </Menu.Item>
+            /> */}
+
           <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
           <Menu.Item
+            active
             position="right"
             disabled={textIsComplete}
             content="Pause"
             name="Pause"
             color="red"
             onClick={() => pauseSession(sessionContext)}
-          >
-            {/* <Button
-              negative
-              fluid
-              disabled={textIsComplete}
-              content="Pause"
-              onClick={() => pauseSession(sessionContext)}
-            /> */}
-          </Menu.Item>
+          />
         </Menu>
       );
     } else {
