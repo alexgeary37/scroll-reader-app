@@ -153,14 +153,21 @@ const SpeedTest = () => {
             />
           </Menu.Item>
           <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
-          <Menu.Item position="right">
-            <Button
+          <Menu.Item
+            position="right"
+            disabled={textIsComplete}
+            content="Pause"
+            name="Pause"
+            color="red"
+            onClick={() => pauseSession(sessionContext)}
+          >
+            {/* <Button
               negative
               fluid
               disabled={textIsComplete}
               content="Pause"
               onClick={() => pauseSession(sessionContext)}
-            />
+            /> */}
           </Menu.Item>
         </Menu>
       );
