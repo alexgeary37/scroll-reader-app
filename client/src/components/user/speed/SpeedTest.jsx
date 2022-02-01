@@ -142,7 +142,7 @@ const SpeedTest = () => {
   const displayButtons = () => {
     if (isMobile) {
       return (
-        <Menu fluid style={{ textAlign: "center" }}>
+        <Menu inverted fluid style={{ textAlign: "center" }}>
           <Menu.Item>
             <Button
               primary
