@@ -103,8 +103,10 @@ const ComprehensionQuestion = ({
     if (isMobile) {
       return (
         <Modal
+          closeIcon
           size="tiny"
           open={openModal}
+          // onClose={}
           style={{ textAlign: "center", padding: 10 }}
         >
           <Modal.Description as="h4" content="Question:" />
