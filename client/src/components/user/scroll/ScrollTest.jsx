@@ -325,7 +325,7 @@ const ScrollTest = () => {
     if (sessionContext.hasStartedReading) {
       if (isMobile) {
         return (
-          <div style={{ marginTop: 45 }}>
+          <div style={{ marginTop: 35 }}>
             <ScrollText
               fileID={currentText.fileID}
               textStyleID={currentText.styleID}

@@ -76,7 +76,7 @@ const ClickQuestion = ({
 
   const displayButtons = () => {
     return (
-      <Grid style={{ marginTop: 10, marginBottom: 10 }}>
+      <Grid style={{ marginTop: 10 }}>
         <Grid.Column width="8">
           <Button
             fluid
