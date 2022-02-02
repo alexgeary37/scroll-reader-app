@@ -75,8 +75,8 @@ const ComprehensionQuestion = ({
             />
           </Form.Field>
         </Form>
-        <Grid>
-          <Grid.Column width="8">
+        <Grid columns="equal">
+          <Grid.Column>
             <Button
               fluid
               negative
@@ -85,7 +85,7 @@ const ComprehensionQuestion = ({
               onClick={handleSkip}
             />
           </Grid.Column>
-          <Grid.Column width="8">
+          <Grid.Column>
             <Button
               fluid
               primary
@@ -107,7 +107,7 @@ const ComprehensionQuestion = ({
           open={openModal}
           style={{ textAlign: "center", padding: 10 }}
         >
-          <Header as="h4" content="Question:" dividing={false} />
+          <Modal.Description as="h4" content="Question:" />
           <Modal.Description style={{ marginTop: 10 }} content={question} />
           {displayFormAndButtons()}
         </Modal>

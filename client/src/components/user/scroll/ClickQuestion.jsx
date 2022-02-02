@@ -76,8 +76,8 @@ const ClickQuestion = ({
 
   const displayButtons = () => {
     return (
-      <Grid style={{ marginTop: 10 }}>
-        <Grid.Column width="8">
+      <Grid columns="equal" style={{ marginTop: 10 }}>
+        <Grid.Column>
           <Button
             fluid
             negative
@@ -86,7 +86,7 @@ const ClickQuestion = ({
             onClick={skip}
           />
         </Grid.Column>
-        <Grid.Column width="8">
+        <Grid.Column>
           <Button
             fluid
             basic={!answerIsEnabled}
