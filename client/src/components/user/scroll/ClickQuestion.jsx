@@ -100,40 +100,40 @@ const ClickQuestion = ({
   };
 
   const displayContent = () => {
-    if (isMobile) {
-      return (
-        <Modal
-          size="tiny"
-          open={openModal}
-          style={{ textAlign: "center", padding: 10 }}
-        >
-          <Header as="h4" content="Question:" dividing={false} />
-          <Modal.Description content={question} />
+    // if (isMobile) {
+    //   return (
+    //     <Modal
+    //       size="tiny"
+    //       open={openModal}
+    //       style={{ textAlign: "center", padding: 10 }}
+    //     >
+    //       <Header as="h4" content="Question:" dividing={false} />
+    //       <Modal.Description content={question} />
+    //       {displayButtons()}
+    //     </Modal>
+    //   );
+    // } else {
+    return (
+      <Card fluid>
+        <Card.Content>
+          <Card.Header content="Question:" />
+          <Card.Description style={{ marginBottom: 10 }} content={question} />
           {displayButtons()}
-        </Modal>
-      );
-    } else {
-      return (
-        <Card fluid>
-          <Card.Content>
-            <Card.Header content="Question:" />
-            <Card.Description style={{ marginBottom: 10 }} content={question} />
-            {displayButtons()}
-            <Transition
-              visible={answerIsEnabled}
-              animation="glow"
-              duration={2000}
-            >
-              <Message
-                info
-                hidden={!answerIsEnabled}
-                content="Click in the text where you think the answer is!"
-              />
-            </Transition>
-          </Card.Content>
-        </Card>
-      );
-    }
+          <Transition
+            visible={answerIsEnabled}
+            animation="glow"
+            duration={2000}
+          >
+            <Message
+              info
+              hidden={!answerIsEnabled}
+              content="Click in the text where you think the answer is!"
+            />
+          </Transition>
+        </Card.Content>
+      </Card>
+    );
+    // }
   };
 
   return displayContent();
