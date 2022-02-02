@@ -59,11 +59,18 @@ export const addScrollPosEntryToSessionContext = (sessionContext, yPos) => {
   ]);
 };
 
-export const clearStorage = (sessionContext) => {
+export const clearStorage = () => {
   localStorage.removeItem("userName");
   localStorage.removeItem("scrollQuestionNumber");
-  sessionContext.initialiseVariables(true);
-}
+
+  localStorage.setItem("sessionTemplate", JSON.stringify(null));
+  localStorage.setItem("isPaused", JSON.stringify(false));
+  localStorage.setItem("hasStartedReading", JSON.stringify(false));
+  localStorage.setItem("fileNumber", JSON.stringify(0));
+  localStorage.setItem("scrollPosEntries", JSON.stringify([]));
+  localStorage.setItem("questionAnswers", JSON.stringify([]));
+  localStorage.setItem("sessionID", "");
+};
 
 // This function should always output the current DateTime in New Zealand.
 // Replace the argument with any epoch Date().getTime().

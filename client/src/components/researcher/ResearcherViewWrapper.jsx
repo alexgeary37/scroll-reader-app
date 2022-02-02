@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Login from "../login";
 import ResearcherView from "./ResearcherView";
+import { clearStorage } from "../../utilities.js";
 
 const ResearcherViewWrapper = () => {
   const [userIsSignedIn, setUserIsSignedIn] = useState(false);
@@ -20,6 +21,8 @@ const ResearcherViewWrapper = () => {
   const onLogout = () => {
     localStorage.removeItem("name");
     localStorage.removeItem("token");
+
+    clearStorage();
     setUserIsSignedIn(false);
   };
 

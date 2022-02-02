@@ -9,7 +9,7 @@ const EndPage = () => {
 
   useEffect(() => {
     if (!variablesCleared) {
-      clearStorage(sessionContext);
+      clearStorage();
       setVariablesCleared(true);
     }
   }, [sessionContext]);

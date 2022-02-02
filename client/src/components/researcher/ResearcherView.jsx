@@ -1,3 +1,4 @@
+import { SessionContext } from "../../contexts/SessionContext.jsx";
 import TextFile from "./TextFile.jsx";
 import { Segment, Container, Grid, Header, Button } from "semantic-ui-react";
 import { useState, useEffect, useContext } from "react";
@@ -7,7 +8,6 @@ import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./FileUpload.jsx";
 import ReadingSession from "./ReadingSession.jsx";
 import { clearStorage } from "../../utilities.js";
-import { SessionContext } from "../../contexts/SessionContext.jsx";
 
 const ResearcherView = ({ onLogout }) => {
   const sessionContext = useContext(SessionContext);
@@ -417,10 +417,7 @@ const ResearcherView = ({ onLogout }) => {
         <Grid>
           <Grid.Row>
             <Button negative content="Logout" onClick={onLogout} />
-            <Button
-              content="Clear Storage"
-              onClick={() => clearStorage(sessionContext)}
-            />
+            <Button content="Clear Storage" onClick={clearStorage} />
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
