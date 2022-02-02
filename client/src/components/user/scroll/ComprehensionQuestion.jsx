@@ -100,29 +100,29 @@ const ComprehensionQuestion = ({
   };
 
   const displayContent = () => {
-    // if (isMobile) {
-    //   return (
-    //     <Modal
-    //       size="tiny"
-    //       open={openModal}
-    //       style={{ textAlign: "center", padding: 10 }}
-    //     >
-    //       <Header as="h4" content="Question:" dividing={false} />
-    //       <Modal.Description content={question} />
-    //       {displayFormAndButtons()}
-    //     </Modal>
-    //   );
-    // } else {
-    return (
-      <Card fluid>
-        <Card.Content>
-          <Card.Header content="Question:" />
-          <Card.Description content={question} />
+    if (isMobile) {
+      return (
+        <Modal
+          size="tiny"
+          open={openModal}
+          style={{ textAlign: "center", padding: 10 }}
+        >
+          <Header as="h4" content="Question:" dividing={false} />
+          <Modal.Description content={question} />
           {displayFormAndButtons()}
-        </Card.Content>
-      </Card>
-    );
-    // }
+        </Modal>
+      );
+    } else {
+      return (
+        <Card fluid>
+          <Card.Content>
+            <Card.Header content="Question:" />
+            <Card.Description content={question} />
+            {displayFormAndButtons()}
+          </Card.Content>
+        </Card>
+      );
+    }
   };
 
   return displayContent();

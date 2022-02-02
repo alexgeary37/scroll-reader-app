@@ -141,7 +141,7 @@ const UserHome = () => {
       );
     } else {
       return (
-        <div className="wrapper" style={{ textAlign: "center" }}>
+        <div className="wrapper" style={{ justifyContent: "center" }}>
           <Input
             type="text"
             placeholder="Type your name here..."
