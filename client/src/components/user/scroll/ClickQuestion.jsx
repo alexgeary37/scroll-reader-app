@@ -76,7 +76,16 @@ const ClickQuestion = ({
 
   const displayButtons = () => {
     return (
-      <Grid>
+      <Grid style={{ marginTop: 10, marginBottom: 10 }}>
+        <Grid.Column width="8">
+          <Button
+            fluid
+            negative
+            disabled={disable}
+            content="Skip"
+            onClick={skip}
+          />
+        </Grid.Column>
         <Grid.Column width="8">
           <Button
             fluid
@@ -85,15 +94,6 @@ const ClickQuestion = ({
             disabled={disable}
             content="Answer"
             onClick={handleEnableAnswer}
-          />
-        </Grid.Column>
-        <Grid.Column width="8">
-          <Button
-            fluid
-            negative
-            disabled={disable}
-            content="Skip"
-            onClick={skip}
           />
         </Grid.Column>
       </Grid>
@@ -108,8 +108,8 @@ const ClickQuestion = ({
           open={openModal}
           style={{ textAlign: "center", padding: 10 }}
         >
-          <Header as="h4" content="Question:" dividing={false} />
-          <Modal.Description content={question} />
+          <Modal.Description as="h4" content="Question:" />
+          <Modal.Description style={{ marginTop: 10 }} content={question} />
           {displayButtons()}
         </Modal>
       );

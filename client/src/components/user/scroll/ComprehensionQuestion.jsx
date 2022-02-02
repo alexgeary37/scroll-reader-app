@@ -79,19 +79,19 @@ const ComprehensionQuestion = ({
           <Grid.Column width="8">
             <Button
               fluid
-              primary
-              disabled={disable || answer === ""}
-              content="Submit"
-              onClick={handleSubmit}
+              negative
+              disabled={disable}
+              content="Skip"
+              onClick={handleSkip}
             />
           </Grid.Column>
           <Grid.Column width="8">
             <Button
               fluid
-              negative
-              disabled={disable}
-              content="Skip"
-              onClick={handleSkip}
+              primary
+              disabled={disable || answer === ""}
+              content="Submit"
+              onClick={handleSubmit}
             />
           </Grid.Column>
         </Grid>
@@ -108,7 +108,7 @@ const ComprehensionQuestion = ({
           style={{ textAlign: "center", padding: 10 }}
         >
           <Header as="h4" content="Question:" dividing={false} />
-          <Modal.Description content={question} />
+          <Modal.Description style={{ marginTop: 10 }} content={question} />
           {displayFormAndButtons()}
         </Modal>
       );
