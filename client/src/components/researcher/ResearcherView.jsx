@@ -1,13 +1,17 @@
 import TextFile from "./TextFile.jsx";
 import { Segment, Container, Grid, Header, Button } from "semantic-ui-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import SessionTemplate from "./SessionTemplate.jsx";
 import axios from "axios";
 import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./FileUpload.jsx";
 import ReadingSession from "./ReadingSession.jsx";
+import { clearStorage } from "../../utilities.js";
+import { SessionContext } from "../../contexts/SessionContext.jsx";
 
 const ResearcherView = ({ onLogout }) => {
+  const sessionContext = useContext(SessionContext);
+
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
   const [templates, setTemplates] = useState({ data: [], isFetching: true });
   const [readingSessions, setReadingSessions] = useState({
@@ -412,11 +416,10 @@ const ResearcherView = ({ onLogout }) => {
       <Container>
         <Grid>
           <Grid.Row>
+            <Button negative content="Logout" onClick={onLogout} />
             <Button
-              floated="right"
-              negative
-              content="Logout"
-              onClick={onLogout}
+              content="Clear Storage"
+              onClick={() => clearStorage(sessionContext)}
             />
           </Grid.Row>
           <Grid.Row>

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Segment, Container, Header } from "semantic-ui-react";
 import { SessionContext } from "../../contexts/SessionContext";
+import { clearStorage } from "../../utilities";
 
 const EndPage = () => {
   const sessionContext = useContext(SessionContext);
@@ -8,16 +9,10 @@ const EndPage = () => {
 
   useEffect(() => {
     if (!variablesCleared) {
-      clearSessionVariables();
-      sessionContext.initialiseVariables(true);
+      clearStorage(sessionContext);
       setVariablesCleared(true);
     }
   }, [sessionContext]);
-
-  const clearSessionVariables = () => {
-    localStorage.removeItem("userName");
-    localStorage.removeItem("scrollQuestionNumber");
-  };
 
   return (
     <div style={{ textAlign: "center" }}>

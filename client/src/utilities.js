@@ -59,6 +59,12 @@ export const addScrollPosEntryToSessionContext = (sessionContext, yPos) => {
   ]);
 };
 
+export const clearStorage = (sessionContext) => {
+  localStorage.removeItem("userName");
+  localStorage.removeItem("scrollQuestionNumber");
+  sessionContext.initialiseVariables(true);
+}
+
 // This function should always output the current DateTime in New Zealand.
 // Replace the argument with any epoch Date().getTime().
 // https://stackoverflow.com/questions/52106990/easiest-way-to-convert-utc-to-new-zealand-date-account-for-daylight-savings
