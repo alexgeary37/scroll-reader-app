@@ -297,8 +297,8 @@ const ScrollTest = () => {
             <Toaster
               toastOptions={{
                 style: {
-                  marginTop: 20,
-                  background: "#ffcba3",
+                  marginTop: 45,
+                  background: "#e3ffff",
                   color: "#000000",
                 },
               }}
