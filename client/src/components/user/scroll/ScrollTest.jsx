@@ -129,7 +129,6 @@ const ScrollTest = () => {
   };
 
   const handleFinishText = async () => {
-    setDisplayConfirmDoneModal(false);
     if (scrollQuestionNumber < currentText.questionIDs.length) {
       setDisplayUnfinishedQuestionsModal(true);
     } else {
@@ -149,6 +148,7 @@ const ScrollTest = () => {
         sessionContext.setHasStartedReading(false);
       }
     }
+    // setDisplayConfirmDoneModal(false);
   };
 
   // Add either a pause or resume action with a timestamp to the session's pauses array.
@@ -317,7 +317,8 @@ const ScrollTest = () => {
               disabled={textIsComplete}
               content="Done"
               color="blue"
-              onClick={() => setDisplayConfirmDoneModal(true)}
+              // onClick={() => setDisplayConfirmDoneModal(true)}
+              onClick={handleFinishText}
             />
             <Link to="/end" hidden ref={endPageRef}></Link>
             <Menu.Item
@@ -356,7 +357,8 @@ const ScrollTest = () => {
                 fluid
                 disabled={textIsComplete}
                 content="Done"
-                onClick={() => setDisplayConfirmDoneModal(true)}
+                // onClick={() => setDisplayConfirmDoneModal(true)}
+                onClick={handleFinishText}
               />
             </Menu.Item>
             <Link to="/end" hidden ref={endPageRef}></Link>

@@ -70,15 +70,14 @@ const SpeedTest = () => {
     const sessionID = sessionContext.sessionID;
     const endTime = new Date();
 
+    setInstructions(transitionInstructions);
+
     // Update session with the time the current file was finished.
     axios
       .put("/api/updateCurrentSpeedText", {
         id: sessionID,
         fileID: currentText.fileID,
         endTime: endTime,
-      })
-      .then(() => {
-        setInstructions(transitionInstructions);
       })
       .catch((error) => {
         console.error(
@@ -89,13 +88,14 @@ const SpeedTest = () => {
   };
 
   const handleFinishText = async () => {
-    setDisplayConfirmDoneModal(false);
     // Update session.speedTexts[currentFileID] with an end time.
     finishCurrentText();
 
     const fileNumber = sessionContext.fileNumber;
 
     sessionContext.setHasStartedReading(false);
+
+    // setDisplayConfirmDoneModal(false);
 
     if (isLastText("speed", sessionContext)) {
       sessionContext.setFileNumber(0);
@@ -151,7 +151,8 @@ const SpeedTest = () => {
             disabled={textIsComplete}
             content="Done"
             color="blue"
-            onClick={() => setDisplayConfirmDoneModal(true)}
+            // onClick={() => setDisplayConfirmDoneModal(true)}
+            onClick={handleFinishText}
           />
           <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
           <Menu.Item
@@ -180,7 +181,8 @@ const SpeedTest = () => {
                 fluid
                 disabled={textIsComplete}
                 content="Done"
-                onClick={() => setDisplayConfirmDoneModal(true)}
+                // onClick={() => setDisplayConfirmDoneModal(true)}
+                onClick={handleFinishText}
               />
             </Menu.Item>
             <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>

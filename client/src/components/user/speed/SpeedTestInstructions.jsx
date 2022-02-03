@@ -28,25 +28,17 @@ const SpeedTestInstructions = ({ isOpen, instructions, fileID, close }) => {
   };
 
   const displayContent = () => {
-    if (instructions === `Read this text, then click "Done"!`) {
-      return (
-        <div>
-          <Modal.Description as="h4" content={instructions} />
-          <div style={{ marginTop: 10 }}>
-            <Button primary content="Ok" onClick={handleStartTest} />
-          </div>
+    const buttonContent =
+      instructions === `Read this text, then click "Done"!` ? "OK" : "Begin";
+
+    return (
+      <div>
+        <Modal.Description as="h4" content={instructions} />
+        <div style={{ marginTop: 10 }}>
+          <Button primary content={buttonContent} onClick={handleStartTest} />
         </div>
-      );
-    } else {
-      return (
-        <div>
-          <Modal.Description as="h4" content={instructions} />
-          <div style={{ marginTop: 10 }}>
-            <Button primary content="Begin" onClick={handleStartTest} />
-          </div>
-        </div>
-      );
-    }
+      </div>
+    );
   };
 
   return (
