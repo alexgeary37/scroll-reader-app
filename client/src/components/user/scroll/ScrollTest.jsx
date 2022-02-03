@@ -294,7 +294,15 @@ const ScrollTest = () => {
                 onClick={abortMobileAnswer}
               />
             </Menu>
-            <Toaster />
+            <Toaster
+              toastOptions={{
+                style: {
+                  marginTop: 20,
+                  background: "#ffcba3",
+                  color: "#000000",
+                },
+              }}
+            />
           </div>
         );
       } else {
