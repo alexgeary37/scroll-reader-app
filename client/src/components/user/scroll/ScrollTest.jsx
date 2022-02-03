@@ -1,7 +1,7 @@
 import { SessionContext } from "../../../contexts/SessionContext.jsx";
 import ScrollText from "./ScrollText.jsx";
 import { useContext, useState, useEffect, createRef } from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
 import PauseWindow from "../PauseWindow.jsx";
@@ -254,71 +254,71 @@ const ScrollTest = () => {
   };
 
   const displayButtons = () => {
-    // if (isMobile) {
-    const displayQuestions =
-      scrollQuestionNumber < currentText.questionIDs.length;
-    return (
-      <Menu inverted widths={displayQuestions ? 3 : 2} fixed="top">
-        <Menu.Item
-          active
-          disabled={textIsComplete}
-          content="Done"
-          color="blue"
-          onClick={handleFinishText}
-        />
-        <Link to="/end" hidden ref={endPageRef}></Link>
-        <Menu.Item
-          active
-          disabled={textIsComplete}
-          content="Pause"
-          color="red"
-          onClick={() => pauseSession(sessionContext)}
-        />
-        {displayQuestions && (
+    if (isMobile) {
+      const displayQuestions =
+        scrollQuestionNumber < currentText.questionIDs.length;
+      return (
+        <Menu inverted widths={displayQuestions ? 3 : 2} fixed="top">
           <Menu.Item
             active
             disabled={textIsComplete}
-            content="Question"
-            color="green"
-            onClick={() => setDisplayMobileQuestionModal(true)}
+            content="Done"
+            color="blue"
+            onClick={handleFinishText}
           />
-        )}
-      </Menu>
-    );
-    // } else {
-    //   return (
-    //     <div
-    //       style={{
-    //         top: 0,
-    //         left: 0,
-    //         width: "15vw",
-    //         position: "fixed",
-    //       }}
-    //     >
-    //       <Menu vertical fluid style={{ textAlign: "center" }}>
-    //         <Menu.Item>
-    //           <Button
-    //             primary
-    //             fluid
-    //             disabled={textIsComplete}
-    //             content="Done"
-    //             onClick={handleFinishText}
-    //           />
-    //         </Menu.Item>
-    //         <Link to="/end" hidden ref={endPageRef}></Link>
-    //         <Menu.Item>
-    //           <Button
-    //             negative
-    //             fluid
-    //             disabled={textIsComplete}
-    //             content="Pause"
-    //             onClick={() => pauseSession(sessionContext)}
-    //           />
-    //         </Menu.Item>
-    //       </Menu>
-    //     </div>
-    //   );
-    // }
+          <Link to="/end" hidden ref={endPageRef}></Link>
+          <Menu.Item
+            active
+            disabled={textIsComplete}
+            content="Pause"
+            color="red"
+            onClick={() => pauseSession(sessionContext)}
+          />
+          {displayQuestions && (
+            <Menu.Item
+              active
+              disabled={textIsComplete}
+              content="Question"
+              color="green"
+              onClick={() => setDisplayMobileQuestionModal(true)}
+            />
+          )}
+        </Menu>
+      );
+    } else {
+      return (
+        <div
+          style={{
+            top: 0,
+            left: 0,
+            width: "15vw",
+            position: "fixed",
+          }}
+        >
+          <Menu vertical fluid style={{ textAlign: "center" }}>
+            <Menu.Item>
+              <Button
+                primary
+                fluid
+                disabled={textIsComplete}
+                content="Done"
+                onClick={handleFinishText}
+              />
+            </Menu.Item>
+            <Link to="/end" hidden ref={endPageRef}></Link>
+            <Menu.Item>
+              <Button
+                negative
+                fluid
+                disabled={textIsComplete}
+                content="Pause"
+                onClick={() => pauseSession(sessionContext)}
+              />
+            </Menu.Item>
+          </Menu>
+        </div>
+      );
+    }
   };
 
   const displayScrollText = () => {
@@ -372,6 +372,7 @@ const ScrollTest = () => {
             <ComprehensionQuestion
               isMobile={isMobile}
               openModal={displayMobileQuestionModal}
+              closeModal={() => setDisplayMobileQuestionModal(false)}
               currentText={currentText}
               questionNumber={scrollQuestionNumber}
               disable={textIsComplete}
@@ -385,6 +386,7 @@ const ScrollTest = () => {
             <ClickQuestion
               isMobile={isMobile}
               openModal={displayMobileQuestionModal}
+              closeModal={() => setDisplayMobileQuestionModal(false)}
               currentText={currentText}
               questionNumber={scrollQuestionNumber}
               disable={textIsComplete}
