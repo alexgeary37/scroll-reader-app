@@ -21,6 +21,7 @@ import AnswerResponseWindow from "./AnswerResponseWindow.jsx";
 import AnswersCompleteWindow from "./AnswersCompleteWindow.jsx";
 import { debounce } from "debounce";
 import toast, { Toaster } from "react-hot-toast";
+import ConfirmDoneModal from "../ConfirmDoneModal.jsx";
 
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
@@ -43,9 +44,10 @@ const ScrollTest = () => {
     useState(false);
   const [displayAnswersCompleteMessage, setDisplayAnswersCompleteMessage] =
     useState(false);
-  const [displayConfirmDoneMessage, setDisplayConfirmDoneMessage] =
+  const [displayUnfinishedQuestionsModal, setDisplayUnfinishedQuestionsModal] =
     useState(false);
   const [textIsComplete, setTextIsComplete] = useState(false);
+  const [displayConfirmDoneModal, setDisplayConfirmDoneModal] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem("scrollQuestionNumber") === null) {
@@ -128,7 +130,7 @@ const ScrollTest = () => {
 
   const handleFinishText = async () => {
     if (scrollQuestionNumber < currentText.questionIDs.length) {
-      setDisplayConfirmDoneMessage(true);
+      setDisplayUnfinishedQuestionsModal(true);
     } else {
       // Update session.scrollTexts[currentText.fileID] with an end time.
       const endTime = await finishCurrentText();
@@ -298,7 +300,8 @@ const ScrollTest = () => {
               toastOptions={{
                 style: {
                   marginTop: 45,
-                  background: "#e3ffff",
+                  padding: 20,
+                  background: "#a8ffff",
                   color: "#000000",
                 },
               }}
@@ -313,7 +316,7 @@ const ScrollTest = () => {
               disabled={textIsComplete}
               content="Done"
               color="blue"
-              onClick={handleFinishText}
+              onClick={() => setDisplayConfirmDoneModal(true)}
             />
             <Link to="/end" hidden ref={endPageRef}></Link>
             <Menu.Item
@@ -352,7 +355,7 @@ const ScrollTest = () => {
                 fluid
                 disabled={textIsComplete}
                 content="Done"
-                onClick={handleFinishText}
+                onClick={() => setDisplayConfirmDoneModal(true)}
               />
             </Menu.Item>
             <Link to="/end" hidden ref={endPageRef}></Link>
@@ -490,10 +493,15 @@ const ScrollTest = () => {
           close={() => setDisplayAnswersCompleteMessage(false)}
         />
         <UnfinishedQuestionsWindow
-          isOpen={displayConfirmDoneMessage}
-          close={() => setDisplayConfirmDoneMessage(false)}
+          isOpen={displayUnfinishedQuestionsModal}
+          close={() => setDisplayUnfinishedQuestionsModal(false)}
         />
         <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
+        <ConfirmDoneModal
+          isOpen={displayConfirmDoneModal}
+          answerYes={handleFinishText}
+          answerNo={() => setDisplayConfirmDoneModal(false)}
+        />
       </div>
     );
   };

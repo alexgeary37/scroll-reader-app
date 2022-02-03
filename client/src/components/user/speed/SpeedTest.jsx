@@ -12,6 +12,7 @@ import {
   scrollToTop,
 } from "../../../utilities.js";
 import { debounce } from "debounce";
+import ConfirmDoneModal from "../ConfirmDoneModal.jsx";
 
 const transitionInstructions = `Read the next text, then click "Done"`;
 
@@ -24,6 +25,7 @@ const SpeedTest = () => {
     sessionContext.template.speedTest.texts[sessionContext.fileNumber]
   );
   const [textIsComplete, setTextIsComplete] = useState(false);
+  const [displayConfirmDoneModal, setDisplayConfirmDoneModal] = useState(false);
 
   useEffect(() => {
     if (sessionContext.fileNumber === 0) {
@@ -148,7 +150,7 @@ const SpeedTest = () => {
             disabled={textIsComplete}
             content="Done"
             color="blue"
-            onClick={handleFinishText}
+            onClick={() => setDisplayConfirmDoneModal(true)}
           />
           <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
           <Menu.Item
@@ -177,7 +179,7 @@ const SpeedTest = () => {
                 fluid
                 disabled={textIsComplete}
                 content="Done"
-                onClick={handleFinishText}
+                onClick={() => setDisplayConfirmDoneModal(true)}
               />
             </Menu.Item>
             <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
@@ -228,6 +230,11 @@ const SpeedTest = () => {
           close={handleCloseSpeedTestInstructions}
         />
         <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
+        <ConfirmDoneModal
+          isOpen={displayConfirmDoneModal}
+          answerYes={handleFinishText}
+          answerNo={() => setDisplayConfirmDoneModal(false)}
+        />
       </div>
     );
   };
