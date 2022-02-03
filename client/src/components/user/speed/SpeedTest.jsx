@@ -89,6 +89,7 @@ const SpeedTest = () => {
   };
 
   const handleFinishText = async () => {
+    setDisplayConfirmDoneModal(false);
     // Update session.speedTexts[currentFileID] with an end time.
     finishCurrentText();
 

@@ -129,6 +129,7 @@ const ScrollTest = () => {
   };
 
   const handleFinishText = async () => {
+    setDisplayConfirmDoneModal(false);
     if (scrollQuestionNumber < currentText.questionIDs.length) {
       setDisplayUnfinishedQuestionsModal(true);
     } else {
