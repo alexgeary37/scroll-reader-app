@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Modal, List, Item, Divider, Button, Header } from "semantic-ui-react";
+import {
+  Modal,
+  List,
+  Item,
+  Divider,
+  Button,
+  Header,
+  Segment,
+} from "semantic-ui-react";
 import AddQuestionToTextFile from "./AddQuestionToTextFile";
 import axios from "axios";
 
@@ -50,35 +58,37 @@ const TextFileQuestionsView = ({
   };
 
   return (
-    <Modal style={{ padding: 10 }} open={isOpen}>
+    <Modal open={isOpen} style={{ height: "70vh", padding: 10 }}>
       <Header as="h4" content="Questions" />
-      <List ordered divided relaxed>
-        {questions.map((question) => (
-          <Item key={question._id}>
-            <div className="wrapper">
-              <Item.Description content={question.question} />
-              <Item.Description content={question.questionFormat} />
-              <Item.Description
-                content={`Word Index Answer Region: [${question.answerRegion.startIndex}...${question.answerRegion.endIndex}]`}
-              />
-              <Button
-                floated="right"
-                disabled={usedQuestionIDs.includes(question._id)}
-                content="Remove"
-                onClick={() => removeQuestion(question)}
-              />
-            </div>
-          </Item>
-        ))}
-      </List>
-      <Divider />
-      <Button
-        positive
-        content="Add Question"
-        onClick={() => setOpenAddQuestion(true)}
-      />
-      <Button floated="right" content="Close" onClick={close} />
-
+      <Segment style={{ overflow: "auto", maxHeight: "75%" }}>
+        <List ordered divided relaxed>
+          {questions.map((question) => (
+            <Item key={question._id}>
+              <div className="wrapper">
+                <Item.Description content={question.question} />
+                <Item.Description content={question.questionFormat} />
+                <Item.Description
+                  content={`Word Index Answer Region: [${question.answerRegion.startIndex}...${question.answerRegion.endIndex}]`}
+                />
+                <Button
+                  floated="right"
+                  disabled={usedQuestionIDs.includes(question._id)}
+                  content="Remove"
+                  onClick={() => removeQuestion(question)}
+                />
+              </div>
+            </Item>
+          ))}
+        </List>
+      </Segment>
+      <div style={{ display: "flex", float: "right" }}>
+        <Button
+          positive
+          content="Add Question"
+          onClick={() => setOpenAddQuestion(true)}
+        />
+        <Button content="Close" onClick={close} />
+      </div>
       <AddQuestionToTextFile
         isOpen={openAddQuestion}
         fileID={fileID}
