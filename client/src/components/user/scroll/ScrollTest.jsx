@@ -253,38 +253,74 @@ const ScrollTest = () => {
     );
   };
 
+  const abortMobileAnswer = () => {
+    const sessionID = sessionContext.sessionID;
+    const currentTime = new Date();
+    const action = "deactivate";
+
+    axios
+      .put("/api/addAnswerButtonClick", {
+        sessionID: sessionID,
+        fileID: currentText.fileID,
+        questionNumber: scrollQuestionNumber,
+        action: action,
+        time: currentTime,
+      })
+      .catch((error) => {
+        console.error(
+          "Error updating readingSession.scrollTexts[fileID].answerButtonClicks",
+          error
+        );
+      });
+
+    setSelectAnswerEnabled(false);
+  };
+
   const displayButtons = () => {
     if (isMobile) {
       const displayQuestions =
         scrollQuestionNumber < currentText.questionIDs.length;
-      return (
-        <Menu inverted widths={displayQuestions ? 3 : 2} fixed="top">
+
+      if (selectAnswerEnabled) {
+        <Menu inverted widths={1} fixed="top">
           <Menu.Item
             active
             disabled={textIsComplete}
-            content="Done"
-            color="blue"
-            onClick={handleFinishText}
-          />
-          <Link to="/end" hidden ref={endPageRef}></Link>
-          <Menu.Item
-            active
-            disabled={textIsComplete}
-            content="Pause"
+            content="Abort Answer"
             color="red"
-            onClick={() => pauseSession(sessionContext)}
+            onClick={abortMobileAnswer}
           />
-          {displayQuestions && (
+        </Menu>;
+      } else {
+        return (
+          <Menu inverted widths={displayQuestions ? 3 : 2} fixed="top">
             <Menu.Item
               active
               disabled={textIsComplete}
-              content="Question"
-              color="green"
-              onClick={() => setDisplayMobileQuestionModal(true)}
+              content="Done"
+              color="blue"
+              onClick={handleFinishText}
             />
-          )}
-        </Menu>
-      );
+            <Link to="/end" hidden ref={endPageRef}></Link>
+            <Menu.Item
+              active
+              disabled={textIsComplete}
+              content="Pause"
+              color="red"
+              onClick={() => pauseSession(sessionContext)}
+            />
+            {displayQuestions && (
+              <Menu.Item
+                active
+                disabled={textIsComplete}
+                content="Question"
+                color="green"
+                onClick={() => setDisplayMobileQuestionModal(true)}
+              />
+            )}
+          </Menu>
+        );
+      }
     } else {
       return (
         <div
