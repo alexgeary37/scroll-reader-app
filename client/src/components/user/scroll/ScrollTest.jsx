@@ -282,15 +282,17 @@ const ScrollTest = () => {
         scrollQuestionNumber < currentText.questionIDs.length;
 
       if (selectAnswerEnabled) {
-        <Menu inverted widths={1} fixed="top">
-          <Menu.Item
-            active
-            disabled={textIsComplete}
-            content="Abort Answer"
-            color="red"
-            onClick={abortMobileAnswer}
-          />
-        </Menu>;
+        return (
+          <Menu inverted widths={1} fixed="top">
+            <Menu.Item
+              active
+              disabled={textIsComplete}
+              content="Abort Answer"
+              color="red"
+              onClick={abortMobileAnswer}
+            />
+          </Menu>
+        );
       } else {
         return (
           <Menu inverted widths={displayQuestions ? 3 : 2} fixed="top">
@@ -429,7 +431,7 @@ const ScrollTest = () => {
               answerIsEnabled={selectAnswerEnabled}
               enableAnswer={() => {
                 setSelectAnswerEnabled(!selectAnswerEnabled);
-                setDisplayMobileQuestionModal(true);
+                setDisplayMobileQuestionModal(false);
               }}
               skip={() => setDisplayConfirmSkipMessage(true)}
             />
