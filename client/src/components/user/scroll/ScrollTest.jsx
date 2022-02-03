@@ -20,6 +20,7 @@ import UnfinishedQuestionsWindow from "../UnfinishedQuestionsWindow.jsx";
 import AnswerResponseWindow from "./AnswerResponseWindow.jsx";
 import AnswersCompleteWindow from "./AnswersCompleteWindow.jsx";
 import { debounce } from "debounce";
+import toast, { Toaster } from "react-hot-toast";
 
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
@@ -283,15 +284,18 @@ const ScrollTest = () => {
 
       if (selectAnswerEnabled) {
         return (
-          <Menu inverted widths={1} fixed="top">
-            <Menu.Item
-              active
-              disabled={textIsComplete}
-              content="Abort Answer"
-              color="red"
-              onClick={abortMobileAnswer}
-            />
-          </Menu>
+          <div>
+            <Menu inverted widths={1} fixed="top">
+              <Menu.Item
+                active
+                disabled={textIsComplete}
+                content="Abort Answer"
+                color="red"
+                onClick={abortMobileAnswer}
+              />
+            </Menu>
+            <Toaster />
+          </div>
         );
       } else {
         return (
@@ -431,6 +435,7 @@ const ScrollTest = () => {
               answerIsEnabled={selectAnswerEnabled}
               enableAnswer={() => {
                 setSelectAnswerEnabled(!selectAnswerEnabled);
+                toast("Hello");
                 setDisplayMobileQuestionModal(false);
               }}
               skip={() => setDisplayConfirmSkipMessage(true)}
