@@ -435,7 +435,7 @@ const ScrollTest = () => {
               answerIsEnabled={selectAnswerEnabled}
               enableAnswer={() => {
                 setSelectAnswerEnabled(!selectAnswerEnabled);
-                toast("Hello");
+                toast("Click in the text where you think the answer is!");
                 setDisplayMobileQuestionModal(false);
               }}
               skip={() => setDisplayConfirmSkipMessage(true)}
