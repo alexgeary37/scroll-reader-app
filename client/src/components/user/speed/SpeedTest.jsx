@@ -12,7 +12,6 @@ import {
   scrollToTop,
 } from "../../../utilities.js";
 import { debounce } from "debounce";
-import ConfirmDoneModal from "../ConfirmDoneModal.jsx";
 
 const transitionInstructions = `Read the next text, then click "Done"`;
 
@@ -89,13 +88,10 @@ const SpeedTest = () => {
 
   const handleFinishText = async () => {
     // Update session.speedTexts[currentFileID] with an end time.
+    setDisplayConfirmDoneModal(false);
     finishCurrentText();
 
     const fileNumber = sessionContext.fileNumber;
-
-    sessionContext.setHasStartedReading(false);
-
-    // setDisplayConfirmDoneModal(false);
 
     if (isLastText("speed", sessionContext)) {
       sessionContext.setFileNumber(0);
@@ -151,8 +147,10 @@ const SpeedTest = () => {
             disabled={textIsComplete}
             content="Done"
             color="blue"
-            // onClick={() => setDisplayConfirmDoneModal(true)}
-            onClick={handleFinishText}
+            onClick={() => {
+              setDisplayConfirmDoneModal(true);
+              sessionContext.setHasStartedReading(false);
+            }}
           />
           <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
           <Menu.Item
@@ -181,8 +179,10 @@ const SpeedTest = () => {
                 fluid
                 disabled={textIsComplete}
                 content="Done"
-                // onClick={() => setDisplayConfirmDoneModal(true)}
-                onClick={handleFinishText}
+                onClick={() => {
+                  setDisplayConfirmDoneModal(true);
+                  sessionContext.setHasStartedReading(false);
+                }}
               />
             </Menu.Item>
             <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
@@ -228,16 +228,13 @@ const SpeedTest = () => {
       <div>
         <SpeedTestInstructions
           isOpen={sessionContext.hasStartedReading === false}
+          displayConfirmMessage={displayConfirmDoneModal}
           instructions={instructions}
           fileID={currentText.fileID}
+          answerYes={handleFinishText}
           close={handleCloseSpeedTestInstructions}
         />
         <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
-        <ConfirmDoneModal
-          isOpen={displayConfirmDoneModal}
-          answerYes={handleFinishText}
-          answerNo={() => setDisplayConfirmDoneModal(false)}
-        />
       </div>
     );
   };

@@ -3,7 +3,13 @@ import { SessionContext } from "../../../contexts/SessionContext";
 import axios from "axios";
 import { useContext, useState } from "react";
 
-const ScrollTestInstructions = ({ isOpen, text, close }) => {
+const ScrollTestInstructions = ({
+  isOpen,
+  displayConfirmMessage,
+  text,
+  answerYes,
+  close,
+}) => {
   const sessionContext = useContext(SessionContext);
   const [familiarity, setFamiliarity] = useState("");
   const [interest, setInterest] = useState("");
@@ -183,17 +189,40 @@ const ScrollTestInstructions = ({ isOpen, text, close }) => {
     }
   };
 
+  const displayContent = () => {
+    if (displayConfirmMessage) {
+      return (
+        <div>
+          <Modal.Description
+            as="h4"
+            content="Are you sure you have finished this text?"
+          />
+          <div style={{ marginTop: 10 }}>
+            <Button content="No" onClick={close} />
+            <Button primary content="Yes" onClick={answerYes} />
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Modal.Description as="h4" content={text.instructions.main} />
+          {displayFamiliarityQuestion()}
+          {displayInterestQuestion()}
+          <div style={{ marginTop: 20 }}>
+            <Button primary content="Begin" onClick={handleStartTest} />
+          </div>
+        </div>
+      );
+    }
+  };
+
   return (
     <Modal
       open={isOpen}
-      style={{ textAlign: "center", overflow: "auto", padding: 10 }}
+      style={{ overflow: "auto", textAlign: "center", padding: 10 }}
     >
-      <Modal.Description as="h4" content={text.instructions.main} />
-      {displayFamiliarityQuestion()}
-      {displayInterestQuestion()}
-      <div style={{ marginTop: 20 }}>
-        <Button primary content="Begin" onClick={handleStartTest} />
-      </div>
+      {displayContent()}
     </Modal>
   );
 };

@@ -1,9 +1,16 @@
 import { Button, Modal } from "semantic-ui-react";
 import { SessionContext } from "../../../contexts/SessionContext";
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
-const SpeedTestInstructions = ({ isOpen, instructions, fileID, close }) => {
+const SpeedTestInstructions = ({
+  isOpen,
+  displayConfirmMessage,
+  instructions,
+  fileID,
+  answerYes,
+  close,
+}) => {
   const sessionContext = useContext(SessionContext);
 
   const handleStartTest = () => {
@@ -28,17 +35,32 @@ const SpeedTestInstructions = ({ isOpen, instructions, fileID, close }) => {
   };
 
   const displayContent = () => {
-    const buttonContent =
-      instructions === `Read this text, then click "Done"!` ? "OK" : "Begin";
-
-    return (
-      <div>
-        <Modal.Description as="h4" content={instructions} />
-        <div style={{ marginTop: 10 }}>
-          <Button primary content={buttonContent} onClick={handleStartTest} />
+    if (displayConfirmMessage) {
+      return (
+        <div>
+          <Modal.Description
+            as="h4"
+            content="Are you sure you have finished this text?"
+          />
+          <div style={{ marginTop: 10 }}>
+            <Button content="No" onClick={close} />
+            <Button primary content="Yes" onClick={answerYes} />
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      const buttonContent =
+        instructions === `Read this text, then click "Done"!` ? "OK" : "Begin";
+
+      return (
+        <div>
+          <Modal.Description as="h4" content={instructions} />
+          <div style={{ marginTop: 10 }}>
+            <Button primary content={buttonContent} onClick={handleStartTest} />
+          </div>
+        </div>
+      );
+    }
   };
 
   return (
