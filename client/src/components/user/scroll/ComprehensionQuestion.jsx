@@ -7,7 +7,6 @@ import {
   Grid,
   TextArea,
   Modal,
-  Header,
 } from "semantic-ui-react";
 
 const ComprehensionQuestion = ({

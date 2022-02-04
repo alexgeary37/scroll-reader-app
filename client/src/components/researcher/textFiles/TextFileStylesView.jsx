@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   Modal,
-  Divider,
   Button,
   Header,
   List,

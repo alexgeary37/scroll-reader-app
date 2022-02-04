@@ -6,7 +6,6 @@ import {
   Message,
   Transition,
   Modal,
-  Header,
 } from "semantic-ui-react";
 import axios from "axios";
 import { SessionContext } from "../../../contexts/SessionContext";

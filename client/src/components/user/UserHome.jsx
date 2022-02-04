@@ -147,7 +147,12 @@ const UserHome = () => {
             placeholder="Type your name here..."
             onChange={handleUserNameChange}
           />
-          <Button primary content="Start Task 1" onClick={handleStartTask1} />
+
+          <Button
+            primary
+            content="Start"
+            onClick={handleStartTask1}
+          />
 
           {userNameError()}
         </div>

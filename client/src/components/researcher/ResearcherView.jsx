@@ -1,7 +1,6 @@
-import { SessionContext } from "../../contexts/SessionContext.jsx";
 import TextFile from "./TextFile.jsx";
 import { Segment, Container, Grid, Header, Button } from "semantic-ui-react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import SessionTemplate from "./SessionTemplate.jsx";
 import axios from "axios";
 import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
@@ -10,8 +9,6 @@ import ReadingSession from "./ReadingSession.jsx";
 import { clearStorage } from "../../utilities.js";
 
 const ResearcherView = ({ onLogout }) => {
-  const sessionContext = useContext(SessionContext);
-
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
   const [templates, setTemplates] = useState({ data: [], isFetching: true });
   const [readingSessions, setReadingSessions] = useState({

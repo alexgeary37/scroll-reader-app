@@ -1,7 +1,7 @@
 import { Button, Modal } from "semantic-ui-react";
 import { SessionContext } from "../../../contexts/SessionContext";
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 const SpeedTestInstructions = ({
   isOpen,

@@ -3,7 +3,6 @@ import {
   Modal,
   List,
   Item,
-  Divider,
   Button,
   Header,
   Segment,
