@@ -1,11 +1,11 @@
-import { Container } from "semantic-ui-react";
+// import { Container } from "semantic-ui-react";
 
 const DisplaySessionCompleted = () => {
   return (
     <div style={{ textAlign: "center" }}>
-      <Container text>
+      {/* <Container text>
         <h1>Session has been completed!</h1>
-      </Container>
+      </Container> */}
     </div>
   );
 };
