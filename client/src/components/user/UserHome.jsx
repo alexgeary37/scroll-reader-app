@@ -148,11 +148,7 @@ const UserHome = () => {
             onChange={handleUserNameChange}
           />
 
-          <Button
-            primary
-            content="Start"
-            onClick={handleStartTask1}
-          />
+          <Button primary content="Start" onClick={handleStartTask1} />
 
           {userNameError()}
         </div>
@@ -190,7 +186,7 @@ const UserHome = () => {
       } else {
         return (
           <div style={{ textAlign: "center" }}>
-            <Container text>
+            {/* <Container text>
               <Segment>
                 You are currently in an active session, Click the button to
                 resume!
@@ -200,7 +196,7 @@ const UserHome = () => {
                 content="Resume Session"
                 onClick={handleResumeSession}
               />
-            </Container>
+            </Container> */}
           </div>
         );
       }
