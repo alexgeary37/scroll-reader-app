@@ -9,9 +9,10 @@ const ConfirmDoneModal = ({ isOpen, answerYes, answerNo }) => {
     >
       <Modal.Description
         as="h4"
+        style={{ margin: "2vh" }}
         content="Are you sure you have finished this text?"
       />
-      <div style={{ marginTop: 10 }}>
+      <div style={{ marginBottom: "1vh" }}>
         <Button content="No" onClick={answerNo} />
         <Button primary content="Yes" onClick={answerYes} />
       </div>

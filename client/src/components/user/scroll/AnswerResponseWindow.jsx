@@ -10,13 +10,13 @@ const AnswerResponseWindow = ({
   const displayButtons = () => {
     if (isCorrect) {
       return (
-        <div style={{ marginTop: 10 }}>
+        <div style={{ marginBottom: "1vh" }}>
           <Button primary content="Ok" onClick={continueReading} />
         </div>
       );
     } else {
       return (
-        <div style={{ marginTop: 10 }}>
+        <div style={{ marginBottom: "1vh" }}>
           <Button content="Continue Reading" onClick={continueReading} />
           <Button primary content="Try Again" onClick={tryAgain} />
         </div>
@@ -30,7 +30,7 @@ const AnswerResponseWindow = ({
       open={isOpen}
       style={{ textAlign: "center", padding: 10 }}
     >
-      <Modal.Description as="h4" content={message} />
+      <Modal.Description as="h4" style={{ margin: "2vh" }} content={message} />
       {displayButtons()}
     </Modal>
   );

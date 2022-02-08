@@ -9,9 +9,10 @@ const AnswersCompleteWindow = ({ isOpen, close }) => {
     >
       <Modal.Description
         as="h4"
+        style={{ margin: "2vh" }}
         content="You have answered all the questions!"
       />
-      <div style={{ marginTop: 10 }}>
+      <div style={{ marginBottom: "1vh" }}>
         <Button primary content="Ok" onClick={close} />
       </div>
     </Modal>

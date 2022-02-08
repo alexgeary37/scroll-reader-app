@@ -1,7 +1,7 @@
 import { SessionContext } from "../../../contexts/SessionContext.jsx";
 import SpeedText from "./SpeedText.jsx";
 import { useContext, createRef, useState, useEffect } from "react";
-import { Button, Menu } from "semantic-ui-react";
+import { Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import SpeedTestInstructions from "./SpeedTestInstructions.jsx";
 import PauseWindow from "../PauseWindow.jsx";

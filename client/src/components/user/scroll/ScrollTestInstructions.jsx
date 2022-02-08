@@ -195,9 +195,10 @@ const ScrollTestInstructions = ({
         <div>
           <Modal.Description
             as="h4"
+            style={{ margin: "2vh" }}
             content="Are you sure you have finished this text?"
           />
-          <div style={{ marginTop: 10 }}>
+          <div style={{ marginBottom: "1vh" }}>
             <Button content="No" onClick={close} />
             <Button primary content="Yes" onClick={answerYes} />
           </div>
@@ -206,10 +207,14 @@ const ScrollTestInstructions = ({
     } else {
       return (
         <div>
-          <Modal.Description as="h4" content={text.instructions.main} />
+          <Modal.Description
+            as="h4"
+            style={{ margin: "2vh" }}
+            content={text.instructions.main}
+          />
           {displayFamiliarityQuestion()}
           {displayInterestQuestion()}
-          <div style={{ marginTop: 20 }}>
+          <div style={{ marginBottom: "1vh" }}>
             <Button primary content="Begin" onClick={handleStartTest} />
           </div>
         </div>

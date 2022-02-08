@@ -59,7 +59,7 @@ const ComprehensionQuestion = ({
   const displayFormAndButtons = () => {
     return (
       <div>
-        <Form style={{ marginTop: 10, marginBottom: 10 }}>
+        <Form>
           <Form.Field>
             <TextArea
               placeholder="Type your answer here..."
@@ -68,7 +68,7 @@ const ComprehensionQuestion = ({
             />
           </Form.Field>
         </Form>
-        <Grid columns="equal">
+        <Grid columns="equal" style={{margin: 1}}>
           <Grid.Column>
             <Button
               fluid
@@ -102,8 +102,8 @@ const ComprehensionQuestion = ({
         onClose={closeModal}
         style={{ textAlign: "center", padding: 10 }}
       >
-        <Modal.Description as="h4" content="Question:" />
-        <Modal.Description style={{ marginTop: 10 }} content={question} />
+        <Modal.Description as="h4" style={{margin: "2vh"}} content="Question:" />
+        <Modal.Description style={{ marginBottom: "2vh" }} content={question} />
         {displayFormAndButtons()}
       </Modal>
     );

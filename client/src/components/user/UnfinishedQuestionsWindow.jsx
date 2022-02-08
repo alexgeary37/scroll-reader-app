@@ -9,10 +9,11 @@ const UnfinishedQuestionsWindow = ({ isOpen, close }) => {
     >
       <Modal.Description
         as="h4"
+        style={{ margin: "2vh" }}
         content={`You have not answered all the questions for this text.
         Please answer each of the remaining questions, or click "Skip"`}
       />
-      <div style={{ marginTop: 10 }}>
+      <div style={{ marginBottom: "1vh" }}>
         <Button primary content="Ok" onClick={close} />
       </div>
     </Modal>

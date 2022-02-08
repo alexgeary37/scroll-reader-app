@@ -9,10 +9,10 @@ const Home = () => {
     <div style={{ textAlign: "center", marginTop: "10vh" }}>
       <Segment>
         <Container text>
-          <Header as="h1" content="Welcome!" />
+          <Header as="h1" style={{ marginBottom: "3vh" }} content="Welcome!" />
           <Button
             primary
-            content="Login"
+            content="Log In"
             onClick={() => loginRef.current.click()}
           />
           <Link to="/researcher" hidden ref={loginRef} />

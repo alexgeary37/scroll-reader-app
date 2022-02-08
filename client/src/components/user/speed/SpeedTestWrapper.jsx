@@ -2,7 +2,6 @@ import { SessionContext } from "../../../contexts/SessionContext.jsx";
 import { useContext, useEffect, useState } from "react";
 import SpeedTest from "./SpeedTest.jsx";
 import DisplaySessionCompleted from "../DisplaySessionCompleted.jsx";
-import { Redirect } from "react-router-dom";
 
 const SpeedTestWrapper = () => {
   const sessionContext = useContext(SessionContext);

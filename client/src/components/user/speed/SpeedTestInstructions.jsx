@@ -40,9 +40,10 @@ const SpeedTestInstructions = ({
         <div>
           <Modal.Description
             as="h4"
+            style={{ margin: "2vh" }}
             content="Are you sure you have finished this text?"
           />
-          <div style={{ marginTop: 10 }}>
+          <div style={{ marginBottom: "1vh" }}>
             <Button content="No" onClick={close} />
             <Button primary content="Yes" onClick={answerYes} />
           </div>
@@ -54,8 +55,12 @@ const SpeedTestInstructions = ({
 
       return (
         <div>
-          <Modal.Description as="h4" content={instructions} />
-          <div style={{ marginTop: 10 }}>
+          <Modal.Description
+            as="h4"
+            style={{ margin: "2vh" }}
+            content={instructions}
+          />
+          <div style={{ marginBottom: "1vh" }}>
             <Button primary content={buttonContent} onClick={handleStartTest} />
           </div>
         </div>

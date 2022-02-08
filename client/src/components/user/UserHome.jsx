@@ -9,11 +9,13 @@ const MIN_USERNAME_CHARACTERS = 3;
 const isMobile = window.innerWidth <= 768;
 
 const UserHome = () => {
+  const sessionContext = useContext(SessionContext);
   const [userName, setUserName] = useState("");
   const [template, setTemplate] = useState(null);
   const [templateError, setTemplateError] = useState(false);
   const [displayUserNameError, setDisplayUserNameError] = useState(false);
-  const sessionContext = useContext(SessionContext);
+  const [startSpeedTest, setStartSpeedTest] = useState(false);
+
   const speedTestRef = createRef();
   const scrollTestRef = createRef();
   const endPageRef = createRef();
@@ -23,10 +25,14 @@ const UserHome = () => {
   }, []);
 
   useEffect(() => {
-    if (sessionContext.template !== null) {
+    if (
+      sessionContext.template !== null &&
+      sessionContext.sessionID !== "" &&
+      startSpeedTest
+    ) {
       speedTestRef.current.click();
     }
-  }, [sessionContext.template]);
+  }, [sessionContext.template, sessionContext.sessionID, startSpeedTest]);
 
   const fetchSessionTemplate = () => {
     // Get sessionTemplateID from the url.
@@ -52,7 +58,6 @@ const UserHome = () => {
 
   // Add new session to database.
   const createSession = async () => {
-    let sessionCreated = false;
     const date = new Date();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
@@ -74,25 +79,20 @@ const UserHome = () => {
       .post("/api/createReadingSession", newReadingSession)
       .then((response) => {
         sessionContext.setSessionID(response.data._id);
-        sessionCreated = true;
+        sessionContext.setTemplate(template);
+        setStartSpeedTest(true);
       })
       .catch((error) => {
         console.error("Error adding session:", error);
       });
-
-    return sessionCreated;
   };
 
-  const handleStartSpeedTest = async () => {
+  const handleStartSpeedTest = () => {
     if (userName.trim().length < MIN_USERNAME_CHARACTERS) {
       setDisplayUserNameError(true);
       return;
     }
-
-    const sessionCreated = await createSession();
-    if (sessionCreated) {
-      sessionContext.setTemplate(template);
-    }
+    createSession();
   };
 
   const handleResumeSession = () => {
@@ -154,38 +154,38 @@ const UserHome = () => {
     if (templateError) {
       return <PageError />;
     } else {
-      if (sessionContext.sessionID === "") {
-        return (
-          <div style={{ textAlign: "center", marginTop: "10vh" }}>
-            <Segment>
-              <Container text>
-                <Header as="h1" content="Welcome!" />
-                <Segment>
-                  Please type your name below, and click on the button to begin
-                  the session!
-                </Segment>
-                {displayFieldAndButton()}
-              </Container>
-            </Segment>
-          </div>
-        );
-      } else {
-        return (
-          <div style={{ textAlign: "center" }}>
+      return (
+        <div style={{ textAlign: "center", marginTop: "10vh" }}>
+          <Segment>
             <Container text>
-              <Segment>
-                You are currently in an active session, Click the button to
-                resume!
-              </Segment>
-              <Button
-                primary
-                content="Resume Session"
-                onClick={handleResumeSession}
-              />
+              {sessionContext.sessionID === "" ? (
+                <div>
+                  <Header as="h1" content="Welcome!" />
+                  <Header
+                    as="h4"
+                    style={{ marginBottom: "3vh" }}
+                    content="Please type your name below, and click on the button to begin the session!"
+                  />
+                  {displayFieldAndButton()}
+                </div>
+              ) : (
+                <div>
+                  <Header
+                    as="h4"
+                    style={{ marginBottom: "3vh" }}
+                    content="You are currently in an active session, Click the button to resume!"
+                  />
+                  <Button
+                    primary
+                    content="Resume Session"
+                    onClick={handleResumeSession}
+                  />
+                </div>
+              )}
             </Container>
-          </div>
-        );
-      }
+          </Segment>
+        </div>
+      );
     }
   };
 

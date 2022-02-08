@@ -76,7 +76,7 @@ const ClickQuestion = ({
 
   const displayButtons = () => {
     return (
-      <Grid columns="equal" style={{ marginTop: 10 }}>
+      <Grid columns="equal" style={{ margin: 1 }}>
         <Grid.Column>
           <Button
             fluid
@@ -110,8 +110,12 @@ const ClickQuestion = ({
         onClose={closeModal}
         style={{ textAlign: "center", padding: 10 }}
       >
-        <Modal.Description as="h4" content="Question:" />
-        <Modal.Description style={{ marginTop: 10 }} content={question} />
+        <Modal.Description
+          as="h4"
+          style={{ margin: "2vh" }}
+          content="Question:"
+        />
+        <Modal.Description style={{ marginBottom: "2vh" }} content={question} />
         {displayButtons()}
       </Modal>
     );
