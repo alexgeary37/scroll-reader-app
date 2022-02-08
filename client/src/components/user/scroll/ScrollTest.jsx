@@ -284,129 +284,80 @@ const ScrollTest = () => {
   };
 
   const displayButtons = () => {
-    if (isMobile) {
-      const displayQuestions =
-        scrollQuestionNumber < currentText.questionIDs.length;
+    const displayQuestions =
+      scrollQuestionNumber < currentText.questionIDs.length;
 
-      if (selectAnswerEnabled) {
-        return (
-          <div>
-            <Menu inverted widths={1} fixed="top">
-              <Menu.Item
-                active
-                disabled={textIsComplete}
-                content="Abort Answer"
-                color="red"
-                onClick={abortMobileAnswer}
-              />
-            </Menu>
-            <Toaster
-              toastOptions={{
-                style: {
-                  marginTop: 45,
-                  padding: 20,
-                  background: "#a8ffff",
-                  color: "#000000",
-                },
-              }}
-            />
-          </div>
-        );
-      } else {
-        return (
-          <Menu inverted widths={displayQuestions ? 3 : 2} fixed="top">
+    if (selectAnswerEnabled) {
+      return (
+        <div>
+          <Menu inverted widths={1} fixed="top">
             <Menu.Item
               active
               disabled={textIsComplete}
-              content="Done"
-              color="blue"
-              onClick={() => {
-                setDisplayConfirmDoneModal(true);
-                sessionContext.setHasStartedReading(false);
-              }}
-            />
-            <Link to="/end" hidden ref={endPageRef}></Link>
-            <Menu.Item
-              active
-              disabled={textIsComplete}
-              content="Pause"
+              content="Cancel"
               color="red"
-              onClick={() => pauseSession(sessionContext)}
+              onClick={abortMobileAnswer}
             />
-            {displayQuestions && (
-              <Menu.Item
-                active
-                disabled={textIsComplete}
-                content="Question"
-                color="green"
-                onClick={() => setDisplayMobileQuestionModal(true)}
-              />
-            )}
           </Menu>
-        );
-      }
+          <Toaster
+            toastOptions={{
+              style: {
+                marginTop: 45,
+                padding: 20,
+                background: "#a8ffff",
+                color: "#000000",
+              },
+            }}
+          />
+        </div>
+      );
     } else {
       return (
-        <div
-          style={{
-            top: 0,
-            left: 0,
-            width: "15vw",
-            position: "fixed",
-          }}
-        >
-          <Menu vertical fluid style={{ textAlign: "center" }}>
-            <Menu.Item>
-              <Button
-                primary
-                fluid
-                disabled={textIsComplete}
-                content="Done"
-                onClick={() => {
-                  setDisplayConfirmDoneModal(true);
-                  sessionContext.setHasStartedReading(false);
-                }}
-              />
-            </Menu.Item>
-            <Link to="/end" hidden ref={endPageRef}></Link>
-            <Menu.Item>
-              <Button
-                negative
-                fluid
-                disabled={textIsComplete}
-                content="Pause"
-                onClick={() => pauseSession(sessionContext)}
-              />
-            </Menu.Item>
-          </Menu>
-        </div>
+        <Menu inverted widths={displayQuestions ? 3 : 2} fixed="top">
+          <Menu.Item
+            active
+            disabled={textIsComplete}
+            content="Done"
+            color="blue"
+            onClick={() => {
+              setDisplayConfirmDoneModal(true);
+              sessionContext.setHasStartedReading(false);
+            }}
+          />
+          <Link to="/end" hidden ref={endPageRef}></Link>
+          <Menu.Item
+            active
+            disabled={textIsComplete}
+            content="Pause"
+            color="red"
+            onClick={() => pauseSession(sessionContext)}
+          />
+          {displayQuestions && (
+            <Menu.Item
+              active
+              disabled={textIsComplete}
+              content="Question"
+              color="green"
+              onClick={() => setDisplayMobileQuestionModal(true)}
+            />
+          )}
+        </Menu>
       );
     }
   };
 
   const displayScrollText = () => {
     if (sessionContext.hasStartedReading) {
-      if (isMobile) {
-        return (
-          <div style={{ marginTop: 45 }}>
-            <ScrollText
-              fileID={currentText.fileID}
-              textStyleID={currentText.styleID}
-              selectAnswerEnabled={selectAnswerEnabled}
-              selectAnswer={handleAnswerQuestion}
-            />
-          </div>
-        );
-      } else {
-        return (
+      return (
+        <div style={{ marginTop: 60 }}>
           <ScrollText
             fileID={currentText.fileID}
             textStyleID={currentText.styleID}
             selectAnswerEnabled={selectAnswerEnabled}
             selectAnswer={handleAnswerQuestion}
           />
-        );
-      }
+        </div>
+      );
     }
   };
 

@@ -17,7 +17,7 @@ const transitionInstructions = `Read the next text, then click "Done"`;
 
 const SpeedTest = () => {
   const sessionContext = useContext(SessionContext);
-  const startTask2Ref = createRef();
+  const scrollTestRef = createRef();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [instructions, setInstructions] = useState("");
   const [currentText, setCurrentText] = useState(
@@ -95,7 +95,8 @@ const SpeedTest = () => {
 
     if (isLastText("speed", sessionContext)) {
       sessionContext.setFileNumber(0);
-      startTask2Ref.current.click();
+      scrollTestRef.current.click();
+      sessionContext.setSpeedTestIsComplete(true);
     } else {
       sessionContext.setFileNumber(fileNumber + 1);
       scrollToTop();
@@ -139,87 +140,40 @@ const SpeedTest = () => {
   };
 
   const displayButtons = () => {
-    if (isMobile) {
-      return (
-        <Menu inverted widths={2} fixed="top">
-          <Menu.Item
-            active
-            disabled={textIsComplete}
-            content="Done"
-            color="blue"
-            onClick={() => {
-              setDisplayConfirmDoneModal(true);
-              sessionContext.setHasStartedReading(false);
-            }}
-          />
-          <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
-          <Menu.Item
-            active
-            disabled={textIsComplete}
-            content="Pause"
-            color="red"
-            onClick={() => pauseSession(sessionContext)}
-          />
-        </Menu>
-      );
-    } else {
-      return (
-        <div
-          style={{
-            top: 0,
-            left: 0,
-            width: "15vw",
-            position: "fixed",
+    return (
+      <Menu inverted widths={2} fixed="top">
+        <Menu.Item
+          active
+          disabled={textIsComplete}
+          content="Done"
+          color="blue"
+          onClick={() => {
+            setDisplayConfirmDoneModal(true);
+            sessionContext.setHasStartedReading(false);
           }}
-        >
-          <Menu vertical fluid style={{ textAlign: "center" }}>
-            <Menu.Item>
-              <Button
-                primary
-                fluid
-                disabled={textIsComplete}
-                content="Done"
-                onClick={() => {
-                  setDisplayConfirmDoneModal(true);
-                  sessionContext.setHasStartedReading(false);
-                }}
-              />
-            </Menu.Item>
-            <Link to="/scrolltest" hidden ref={startTask2Ref}></Link>
-            <Menu.Item>
-              <Button
-                negative
-                fluid
-                disabled={textIsComplete}
-                content="Pause"
-                onClick={() => pauseSession(sessionContext)}
-              />
-            </Menu.Item>
-          </Menu>
-        </div>
-      );
-    }
+        />
+        <Link to="/scrolltest" hidden ref={scrollTestRef}></Link>
+        <Menu.Item
+          active
+          disabled={textIsComplete}
+          content="Pause"
+          color="red"
+          onClick={() => pauseSession(sessionContext)}
+        />
+      </Menu>
+    );
   };
 
   const displaySpeedText = () => {
     if (sessionContext.hasStartedReading) {
-      if (isMobile) {
-        return (
-          <div style={{ marginTop: 45 }}>
-            <SpeedText
-              fileID={currentText.fileID}
-              textStyleID={currentText.styleID}
-            />
-          </div>
-        );
-      } else {
-        return (
+      return (
+        <div style={{ marginTop: 60 }}>
           <SpeedText
             fileID={currentText.fileID}
             textStyleID={currentText.styleID}
           />
-        );
-      }
+        </div>
+      );
     }
   };
 

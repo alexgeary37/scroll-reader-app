@@ -9,13 +9,13 @@ const EndPage = () => {
 
   useEffect(() => {
     if (!variablesCleared) {
-      clearStorage();
+      clearStorage(sessionContext);
       setVariablesCleared(true);
     }
   }, [sessionContext]);
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div style={{ textAlign: "center", marginTop: "30vh" }}>
       <Segment>
         <Container text>
           <Header as="h1" content="Thank you for taking the test!" />

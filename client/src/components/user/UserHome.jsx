@@ -1,4 +1,4 @@
-import { Container, Segment, Input, Button } from "semantic-ui-react";
+import { Container, Segment, Input, Button, Header } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { createRef, useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -83,13 +83,13 @@ const UserHome = () => {
     return sessionCreated;
   };
 
-  const handleStartTask1 = () => {
+  const handleStartSpeedTest = async () => {
     if (userName.trim().length < MIN_USERNAME_CHARACTERS) {
       setDisplayUserNameError(true);
       return;
     }
 
-    const sessionCreated = createSession();
+    const sessionCreated = await createSession();
     if (sessionCreated) {
       sessionContext.setTemplate(template);
     }
@@ -121,39 +121,23 @@ const UserHome = () => {
   };
 
   const displayFieldAndButton = () => {
-    if (isMobile) {
-      return (
-        <div style={{ textAlign: "center" }}>
-          <Input
-            type="text"
-            placeholder="Type your name here..."
-            onChange={handleUserNameChange}
-          />
-          <Button
-            primary
-            style={{ marginTop: 10 }}
-            content="Start Task 1"
-            onClick={handleStartTask1}
-          />
+    return (
+      <div style={{ textAlign: "center" }}>
+        <Input
+          type="text"
+          placeholder="Type your name here..."
+          onChange={handleUserNameChange}
+        />
+        <Button
+          primary
+          style={{ marginTop: 10 }}
+          content="Begin"
+          onClick={handleStartSpeedTest}
+        />
 
-          {userNameError()}
-        </div>
-      );
-    } else {
-      return (
-        <div className="wrapper" style={{ justifyContent: "center" }}>
-          <Input
-            type="text"
-            placeholder="Type your name here..."
-            onChange={handleUserNameChange}
-          />
-
-          <Button primary content="Start" onClick={handleStartTask1} />
-
-          {userNameError()}
-        </div>
-      );
-    }
+        {userNameError()}
+      </div>
+    );
   };
 
   const userNameError = () => {
@@ -172,21 +156,23 @@ const UserHome = () => {
     } else {
       if (sessionContext.sessionID === "") {
         return (
-          <div style={{ paddingTop: 10, textAlign: "center" }}>
-            <Container text>
-              <h1>Welcome!</h1>
-              <Segment>
-                Please type your name below, and click on the button to begin
-                the session!
-              </Segment>
-              {displayFieldAndButton()}
-            </Container>
+          <div style={{ textAlign: "center", marginTop: "10vh" }}>
+            <Segment>
+              <Container text>
+                <Header as="h1" content="Welcome!" />
+                <Segment>
+                  Please type your name below, and click on the button to begin
+                  the session!
+                </Segment>
+                {displayFieldAndButton()}
+              </Container>
+            </Segment>
           </div>
         );
       } else {
         return (
           <div style={{ textAlign: "center" }}>
-            {/* <Container text>
+            <Container text>
               <Segment>
                 You are currently in an active session, Click the button to
                 resume!
@@ -196,7 +182,7 @@ const UserHome = () => {
                 content="Resume Session"
                 onClick={handleResumeSession}
               />
-            </Container> */}
+            </Container>
           </div>
         );
       }

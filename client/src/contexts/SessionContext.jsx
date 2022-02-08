@@ -17,6 +17,9 @@ export const SessionProvider = ({ children }) => {
   const [fileNumber, setFileNumber] = useState(
     JSON.parse(localStorage.getItem("fileNumber"))
   );
+  const [speedTestIsComplete, setSpeedTestIsComplete] = useState(
+    JSON.parse(localStorage.getItem("speedTestIsComplete"))
+  );
   const [scrollPosEntries, setScrollPosEntries] = useState(
     JSON.parse(localStorage.getItem("scrollPosEntries"))
   );
@@ -41,6 +44,7 @@ export const SessionProvider = ({ children }) => {
     setIsPaused(false);
     setHasStartedReading(false);
     setFileNumber(0);
+    setSpeedTestIsComplete(false);
     setScrollPosEntries([]);
     setQuestionAnswers([]);
     setSessionID("");
@@ -66,6 +70,13 @@ export const SessionProvider = ({ children }) => {
   }, [fileNumber]);
 
   useEffect(() => {
+    localStorage.setItem(
+      "speedTestIsComplete",
+      JSON.stringify(speedTestIsComplete)
+    );
+  }, [speedTestIsComplete]);
+
+  useEffect(() => {
     localStorage.setItem("scrollPosEntries", JSON.stringify(scrollPosEntries));
   }, [scrollPosEntries]);
 
@@ -88,6 +99,8 @@ export const SessionProvider = ({ children }) => {
         setHasStartedReading,
         fileNumber,
         setFileNumber,
+        speedTestIsComplete,
+        setSpeedTestIsComplete,
         scrollPosEntries,
         setScrollPosEntries,
         questionAnswers,

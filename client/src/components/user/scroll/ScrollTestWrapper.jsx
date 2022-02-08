@@ -8,14 +8,16 @@ const ScrollTestWrapper = () => {
   const [sessionIsComplete, setSessionIsComplete] = useState(null);
 
   useEffect(() => {
-    setSessionIsComplete(
-      sessionContext.sessionID === null || sessionContext.sessionID === ""
-    );
+    setSessionIsComplete(sessionContext.sessionID === "");
+  }, []);
+
+  useEffect(() => {
+    setSessionIsComplete(sessionContext.sessionID === "");
   }, [sessionContext.sessionID]);
 
   const displayPage = () => {
     if (sessionIsComplete === true) {
-      return <DisplaySessionCompleted />;
+      return <DisplaySessionCompleted thing="Session" />;
     } else if (sessionIsComplete === false) {
       return <ScrollTest />;
     } else {

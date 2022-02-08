@@ -59,17 +59,21 @@ export const addScrollPosEntryToSessionContext = (sessionContext, yPos) => {
   ]);
 };
 
-export const clearStorage = () => {
+export const clearStorage = (sessionContext) => {
+  if (sessionContext) {
+    sessionContext.initialiseVariables();
+  } else {
+    localStorage.setItem("sessionTemplate", JSON.stringify(null));
+    localStorage.setItem("isPaused", JSON.stringify(false));
+    localStorage.setItem("hasStartedReading", JSON.stringify(false));
+    localStorage.setItem("fileNumber", JSON.stringify(0));
+    localStorage.setItem("speedTestIsComplete", JSON.stringify(false));
+    localStorage.setItem("scrollPosEntries", JSON.stringify([]));
+    localStorage.setItem("questionAnswers", JSON.stringify([]));
+    localStorage.setItem("sessionID", "");
+  }
   localStorage.removeItem("userName");
   localStorage.removeItem("scrollQuestionNumber");
-
-  localStorage.setItem("sessionTemplate", JSON.stringify(null));
-  localStorage.setItem("isPaused", JSON.stringify(false));
-  localStorage.setItem("hasStartedReading", JSON.stringify(false));
-  localStorage.setItem("fileNumber", JSON.stringify(0));
-  localStorage.setItem("scrollPosEntries", JSON.stringify([]));
-  localStorage.setItem("questionAnswers", JSON.stringify([]));
-  localStorage.setItem("sessionID", "");
 };
 
 // This function should always output the current DateTime in New Zealand.

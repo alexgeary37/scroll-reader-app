@@ -1,13 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {
-  Card,
-  Button,
-  Form,
-  Grid,
-  TextArea,
-  Modal,
-} from "semantic-ui-react";
+import { Card, Button, Form, Grid, TextArea, Modal } from "semantic-ui-react";
 
 const ComprehensionQuestion = ({
   isMobile,
@@ -100,31 +93,31 @@ const ComprehensionQuestion = ({
   };
 
   const displayContent = () => {
-    if (isMobile) {
-      return (
-        <Modal
-          closeIcon
-          size="tiny"
-          open={openModal}
-          onClose={closeModal}
-          style={{ textAlign: "center", padding: 10 }}
-        >
-          <Modal.Description as="h4" content="Question:" />
-          <Modal.Description style={{ marginTop: 10 }} content={question} />
-          {displayFormAndButtons()}
-        </Modal>
-      );
-    } else {
-      return (
-        <Card fluid>
-          <Card.Content>
-            <Card.Header content="Question:" />
-            <Card.Description content={question} />
-            {displayFormAndButtons()}
-          </Card.Content>
-        </Card>
-      );
-    }
+    // if (isMobile) {
+    return (
+      <Modal
+        closeIcon
+        size="tiny"
+        open={openModal}
+        onClose={closeModal}
+        style={{ textAlign: "center", padding: 10 }}
+      >
+        <Modal.Description as="h4" content="Question:" />
+        <Modal.Description style={{ marginTop: 10 }} content={question} />
+        {displayFormAndButtons()}
+      </Modal>
+    );
+    // } else {
+    //   return (
+    //     <Card fluid>
+    //       <Card.Content>
+    //         <Card.Header content="Question:" />
+    //         <Card.Description content={question} />
+    //         {displayFormAndButtons()}
+    //       </Card.Content>
+    //     </Card>
+    //   );
+    // }
   };
 
   return displayContent();
