@@ -1,19 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import {
-  Card,
-  Button,
-  Grid,
-  Message,
-  Transition,
-  Modal,
-} from "semantic-ui-react";
+import { Button, Header, Icon, Segment } from "semantic-ui-react";
 import axios from "axios";
 import { SessionContext } from "../../../contexts/SessionContext";
 
 const ClickQuestion = ({
-  isMobile,
-  openModal,
-  closeModal,
+  close,
   currentText,
   questionNumber,
   disable,
@@ -76,71 +67,47 @@ const ClickQuestion = ({
 
   const displayButtons = () => {
     return (
-      <Grid columns="equal" style={{ margin: 1 }}>
-        <Grid.Column>
-          <Button
-            fluid
-            negative
-            disabled={disable}
-            content="Skip"
-            onClick={skip}
-          />
-        </Grid.Column>
-        <Grid.Column>
-          <Button
-            fluid
-            basic={!answerIsEnabled}
-            positive
-            disabled={disable}
-            content="Answer"
-            onClick={handleEnableAnswer}
-          />
-        </Grid.Column>
-      </Grid>
+      <Button.Group widths={2}>
+        <Button
+          fluid
+          negative
+          disabled={disable}
+          content="Skip"
+          onClick={skip}
+        />
+        <Button
+          fluid
+          basic={!answerIsEnabled}
+          positive
+          disabled={disable}
+          content="Answer"
+          onClick={handleEnableAnswer}
+        />
+      </Button.Group>
     );
   };
 
   const displayContent = () => {
-    // if (isMobile) {
     return (
-      <Modal
-        closeIcon
-        size="tiny"
-        open={openModal}
-        onClose={closeModal}
-        style={{ textAlign: "center", padding: 10 }}
+      <Segment
+        style={{
+          margin: "auto",
+          maxWidth: "60em",
+          width: "100%",
+          position: "fixed",
+          top: 0,
+        }}
       >
-        <Modal.Description
-          as="h4"
-          style={{ margin: "2vh" }}
-          content="Question:"
-        />
-        <Modal.Description style={{ marginBottom: "2vh" }} content={question} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Header as="h4" content="Question:" />
+          <div onClick={close}>
+            <Icon size="large" name="close" link />
+          </div>
+        </div>
+        <span>{question}</span>
         {displayButtons()}
-      </Modal>
+      </Segment>
     );
-    // } else {
-    //   return (
-    //     <Card fluid>
-    //       <Card.Content>
-    //         <Card.Header content="Question:" />
-    //         <Card.Description style={{ marginBottom: 10 }} content={question} />
-    //         {displayButtons()}
-    //         <Transition
-    //           visible={answerIsEnabled}
-    //           animation="glow"
-    //           duration={2000}
-    //         >
-    //           <Message
-    //             info
-    //             hidden={!answerIsEnabled}
-    //             content="Click in the text where you think the answer is!"
-    //           />
-    //         </Transition>
-    //       </Card.Content>
-    //     </Card>
-    //   );
-    // }
   };
 
   return displayContent();

@@ -102,8 +102,6 @@ const UserHome = () => {
       })
       .then((response) => {
         const currentSession = response.data;
-        console.log("template:", template);
-        // If currentSession.speedTexts.length === template.Speedtext.length && currentSession.speedTexts.at(-1).hasOwnProperty("endTime")
         if (
           currentSession.scrollTexts.length === template.scrollTexts.length &&
           currentSession.scrollTexts.at(-1).hasOwnProperty("endTime")

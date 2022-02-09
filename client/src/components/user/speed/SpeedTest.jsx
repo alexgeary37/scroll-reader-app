@@ -1,7 +1,7 @@
 import { SessionContext } from "../../../contexts/SessionContext.jsx";
 import SpeedText from "./SpeedText.jsx";
 import { useContext, createRef, useState, useEffect } from "react";
-import { Menu } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import SpeedTestInstructions from "./SpeedTestInstructions.jsx";
 import PauseWindow from "../PauseWindow.jsx";
@@ -143,23 +143,31 @@ const SpeedTest = () => {
 
   const displayButtons = () => {
     return (
-      <Menu inverted widths={2} fixed="top">
-        <Menu.Item
-          active
-          disabled={textIsComplete}
-          content="Done"
-          color="blue"
-          onClick={() => setDisplayConfirmDoneModal(true)}
-        />
-        <Link to="/scrolltest" hidden ref={scrollTestRef} />
-        <Menu.Item
-          active
-          disabled={textIsComplete}
-          content="Pause"
-          color="red"
-          onClick={() => pauseSession(sessionContext)}
-        />
-      </Menu>
+      <div
+        style={{
+          margin: "auto",
+          maxWidth: "60em",
+          position: "fixed",
+          top: 0,
+          width: "100%",
+        }}
+      >
+        <Button.Group widths={2}>
+          <Button
+            primary
+            disabled={textIsComplete}
+            content="Done"
+            onClick={() => setDisplayConfirmDoneModal(true)}
+          />
+          <Link to="/scrolltest" hidden ref={scrollTestRef} />
+          <Button
+            negative
+            disabled={textIsComplete}
+            content="Pause"
+            onClick={() => pauseSession(sessionContext)}
+          />
+        </Button.Group>
+      </div>
     );
   };
 
@@ -196,7 +204,7 @@ const SpeedTest = () => {
   };
 
   return (
-    <div>
+    <div style={{ margin: "auto", maxWidth: "60em" }}>
       {displayButtons()}
       {displaySpeedText()}
       {displayMessages()}

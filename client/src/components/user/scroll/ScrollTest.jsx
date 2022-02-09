@@ -1,7 +1,7 @@
 import { SessionContext } from "../../../contexts/SessionContext.jsx";
 import ScrollText from "./ScrollText.jsx";
 import { useContext, useState, useEffect, createRef } from "react";
-import { Menu, Button } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
 import PauseWindow from "../PauseWindow.jsx";
@@ -25,7 +25,6 @@ import toast, { Toaster } from "react-hot-toast";
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
   const endPageRef = createRef();
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [displayMobileQuestionModal, setDisplayMobileQuestionModal] =
     useState(false);
   const [currentText, setCurrentText] = useState(
@@ -53,10 +52,10 @@ const ScrollTest = () => {
       setScrollQuestionNumber(0);
     }
     initialiseTextIsComplete();
-    window.onresize = debounce((e) => {
-      recordViewportResize(e, sessionContext);
-      setIsMobile(window.innerWidth <= 768);
-    }, 500);
+    window.onresize = debounce(
+      (e) => recordViewportResize(e, sessionContext),
+      500
+    );
   }, []);
 
   useEffect(() => {
@@ -228,6 +227,9 @@ const ScrollTest = () => {
             }
             setScrollQuestionNumber(scrollQuestionNumber + 1);
           } else {
+            if (isCorrect) {
+              setDisplayMobileQuestionModal(false);
+            }
             setAnswerResponseWindow({ display: true, isCorrect: isCorrect });
           }
         } else {
@@ -235,6 +237,7 @@ const ScrollTest = () => {
             setDisplayAnswersCompleteMessage(true);
           }
           setScrollQuestionNumber(scrollQuestionNumber + 1);
+          setDisplayMobileQuestionModal(false);
         }
       })
       .catch((error) => {
@@ -261,87 +264,57 @@ const ScrollTest = () => {
     );
   };
 
-  const abortMobileAnswer = () => {
-    const sessionID = sessionContext.sessionID;
-    const currentTime = new Date();
-    const action = "deactivate";
-
-    axios
-      .put("/api/addAnswerButtonClick", {
-        sessionID: sessionID,
-        fileID: currentText.fileID,
-        questionNumber: scrollQuestionNumber,
-        action: action,
-        time: currentTime,
-      })
-      .catch((error) => {
-        console.error(
-          "Error updating readingSession.scrollTexts[fileID].answerButtonClicks",
-          error
-        );
-      });
-
-    setSelectAnswerEnabled(false);
-  };
-
   const displayButtons = () => {
     const displayQuestions =
       scrollQuestionNumber < currentText.questionIDs.length;
 
-    if (selectAnswerEnabled) {
-      return (
-        <div>
-          <Menu inverted widths={1} fixed="top">
-            <Menu.Item
-              active
+    return (
+      <div>
+        <div
+          style={{
+            margin: "auto",
+            maxWidth: "60em",
+            position: "fixed",
+            top: 0,
+            width: "100%",
+          }}
+        >
+          <Button.Group widths={displayQuestions ? 3 : 2}>
+            <Button
+              primary
               disabled={textIsComplete}
-              content="Cancel"
-              color="red"
-              onClick={abortMobileAnswer}
+              content="Done"
+              onClick={() => setDisplayConfirmDoneModal(true)}
             />
-          </Menu>
-          <Toaster
-            toastOptions={{
-              style: {
-                marginTop: 45,
-                padding: 20,
-                background: "#a8ffff",
-                color: "#000000",
-              },
-            }}
-          />
+            <Link to="/end" hidden ref={endPageRef} />
+            <Button
+              negative
+              disabled={textIsComplete}
+              content="Pause"
+              onClick={() => pauseSession(sessionContext)}
+            />
+            {displayQuestions && (
+              <Button
+                positive
+                disabled={textIsComplete}
+                content="Question"
+                onClick={() => setDisplayMobileQuestionModal(true)}
+              />
+            )}
+          </Button.Group>
         </div>
-      );
-    } else {
-      return (
-        <Menu inverted widths={displayQuestions ? 3 : 2} fixed="top">
-          <Menu.Item
-            active
-            disabled={textIsComplete}
-            content="Done"
-            color="blue"
-            onClick={() => setDisplayConfirmDoneModal(true)}
-          />
-          <Link to="/end" hidden ref={endPageRef} />
-          <Menu.Item
-            active
-            disabled={textIsComplete}
-            content="Pause"
-            color="red"
-            onClick={() => pauseSession(sessionContext)}
-          />
-          {displayQuestions && (
-            <Menu.Item
-              active
-              disabled={textIsComplete}
-              content="Question"
-              color="green"
-              onClick={() => setDisplayMobileQuestionModal(true)}
-            />
-          )}
-        </Menu>
-      );
-    }
+        <Toaster
+          toastOptions={{
+            style: {
+              marginTop: 45,
+              padding: 20,
+              background: "#a8ffff",
+              color: "#000000",
+            },
+          }}
+        />
+      </div>
+    );
   };
 
   const displayScrollText = () => {
@@ -371,48 +344,37 @@ const ScrollTest = () => {
         sessionContext.questionAnswers.find(
           (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
         ).questionFormat === "comprehension";
-      return (
-        <div
-          style={{
-            top: "0px",
-            right: "0px",
-            width: "15vw",
-            position: "fixed",
-          }}
-        >
-          {isComprehension ? (
-            <ComprehensionQuestion
-              isMobile={isMobile}
-              openModal={displayMobileQuestionModal}
-              closeModal={() => setDisplayMobileQuestionModal(false)}
-              currentText={currentText}
-              questionNumber={scrollQuestionNumber}
-              disable={textIsComplete}
-              submitAnswer={(answer, skip) => {
-                handleAnswerQuestion(answer, skip);
-                setDisplayMobileQuestionModal(false);
-              }}
-              skip={() => setDisplayConfirmSkipMessage(true)}
-            />
-          ) : (
-            <ClickQuestion
-              isMobile={isMobile}
-              openModal={displayMobileQuestionModal}
-              closeModal={() => setDisplayMobileQuestionModal(false)}
-              currentText={currentText}
-              questionNumber={scrollQuestionNumber}
-              disable={textIsComplete}
-              answerIsEnabled={selectAnswerEnabled}
-              enableAnswer={() => {
-                setSelectAnswerEnabled(!selectAnswerEnabled);
+
+      if (displayMobileQuestionModal) {
+        return isComprehension ? (
+          <ComprehensionQuestion
+            close={() => setDisplayMobileQuestionModal(false)}
+            currentText={currentText}
+            questionNumber={scrollQuestionNumber}
+            disable={textIsComplete}
+            submitAnswer={handleAnswerQuestion}
+            skip={() => setDisplayConfirmSkipMessage(true)}
+          />
+        ) : (
+          <ClickQuestion
+            close={() => {
+              setDisplayMobileQuestionModal(false);
+              setSelectAnswerEnabled(false);
+            }}
+            currentText={currentText}
+            questionNumber={scrollQuestionNumber}
+            disable={textIsComplete}
+            answerIsEnabled={selectAnswerEnabled}
+            enableAnswer={() => {
+              if (!selectAnswerEnabled) {
                 toast("Click in the text where you think the answer is!");
-                setDisplayMobileQuestionModal(false);
-              }}
-              skip={() => setDisplayConfirmSkipMessage(true)}
-            />
-          )}
-        </div>
-      );
+              }
+              setSelectAnswerEnabled(!selectAnswerEnabled);
+            }}
+            skip={() => setDisplayConfirmSkipMessage(true)}
+          />
+        );
+      }
     }
   };
 
@@ -439,6 +401,7 @@ const ScrollTest = () => {
             const answerWasCorrect = answerResponseWindow.isCorrect;
             setAnswerResponseWindow({ display: false, isCorrect: false });
             setSelectAnswerEnabled(false);
+            setDisplayMobileQuestionModal(false);
             if (
               answerWasCorrect &&
               scrollQuestionNumber >= currentText.questionIDs.length
@@ -466,10 +429,10 @@ const ScrollTest = () => {
   };
 
   return (
-    <div>
+    <div style={{ margin: "auto", maxWidth: "60em" }}>
       {displayButtons()}
-      {displayScrollText()}
       {displayQuestions()}
+      {displayScrollText()}
       {displayMessages()}
     </div>
   );

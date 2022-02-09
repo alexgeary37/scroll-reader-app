@@ -1,11 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Card, Button, Form, Grid, TextArea, Modal } from "semantic-ui-react";
+import {
+  Button,
+  Form,
+  TextArea,
+  Header,
+  Segment,
+  Icon,
+} from "semantic-ui-react";
 
 const ComprehensionQuestion = ({
-  isMobile,
-  openModal,
-  closeModal,
+  close,
   currentText,
   questionNumber,
   disable,
@@ -68,56 +73,47 @@ const ComprehensionQuestion = ({
             />
           </Form.Field>
         </Form>
-        <Grid columns="equal" style={{margin: 1}}>
-          <Grid.Column>
-            <Button
-              fluid
-              negative
-              disabled={disable}
-              content="Skip"
-              onClick={handleSkip}
-            />
-          </Grid.Column>
-          <Grid.Column>
-            <Button
-              fluid
-              primary
-              disabled={disable || answer === ""}
-              content="Submit"
-              onClick={handleSubmit}
-            />
-          </Grid.Column>
-        </Grid>
+        <Button.Group widths={2}>
+          <Button
+            fluid
+            negative
+            disabled={disable}
+            content="Skip"
+            onClick={handleSkip}
+          />
+          <Button
+            fluid
+            primary
+            disabled={disable || answer === ""}
+            content="Submit"
+            onClick={handleSubmit}
+          />
+        </Button.Group>
       </div>
     );
   };
 
   const displayContent = () => {
-    // if (isMobile) {
     return (
-      <Modal
-        closeIcon
-        size="tiny"
-        open={openModal}
-        onClose={closeModal}
-        style={{ textAlign: "center", padding: 10 }}
+      <Segment
+        style={{
+          margin: "auto",
+          maxWidth: "60em",
+          width: "100%",
+          position: "fixed",
+          top: 0,
+        }}
       >
-        <Modal.Description as="h4" style={{margin: "2vh"}} content="Question:" />
-        <Modal.Description style={{ marginBottom: "2vh" }} content={question} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Header as="h4" content="Question:" />
+          <div onClick={close}>
+            <Icon size="large" name="close" link />
+          </div>
+        </div>
+        <span>{question}</span>
         {displayFormAndButtons()}
-      </Modal>
+      </Segment>
     );
-    // } else {
-    //   return (
-    //     <Card fluid>
-    //       <Card.Content>
-    //         <Card.Header content="Question:" />
-    //         <Card.Description content={question} />
-    //         {displayFormAndButtons()}
-    //       </Card.Content>
-    //     </Card>
-    //   );
-    // }
   };
 
   return displayContent();
