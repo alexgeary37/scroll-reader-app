@@ -88,6 +88,7 @@ const SpeedTest = () => {
 
   const handleFinishText = async () => {
     // Update session.speedTexts[currentFileID] with an end time.
+    sessionContext.setHasStartedReading(false);
     setDisplayConfirmDoneModal(false);
     finishCurrentText();
 
@@ -137,6 +138,7 @@ const SpeedTest = () => {
 
   const handleCloseSpeedTestInstructions = () => {
     sessionContext.setHasStartedReading(true);
+    setDisplayConfirmDoneModal(false);
   };
 
   const displayButtons = () => {
@@ -147,12 +149,9 @@ const SpeedTest = () => {
           disabled={textIsComplete}
           content="Done"
           color="blue"
-          onClick={() => {
-            setDisplayConfirmDoneModal(true);
-            sessionContext.setHasStartedReading(false);
-          }}
+          onClick={() => setDisplayConfirmDoneModal(true)}
         />
-        <Link to="/scrolltest" hidden ref={scrollTestRef}></Link>
+        <Link to="/scrolltest" hidden ref={scrollTestRef} />
         <Menu.Item
           active
           disabled={textIsComplete}
@@ -181,7 +180,10 @@ const SpeedTest = () => {
     return (
       <div>
         <SpeedTestInstructions
-          isOpen={sessionContext.hasStartedReading === false}
+          isOpen={
+            sessionContext.hasStartedReading === false ||
+            displayConfirmDoneModal
+          }
           displayConfirmMessage={displayConfirmDoneModal}
           instructions={instructions}
           fileID={currentText.fileID}

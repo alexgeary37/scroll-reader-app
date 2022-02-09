@@ -131,8 +131,8 @@ const ScrollTest = () => {
     setDisplayConfirmDoneModal(false);
     if (scrollQuestionNumber < currentText.questionIDs.length) {
       setDisplayUnfinishedQuestionsModal(true);
-      sessionContext.setHasStartedReading(true);
     } else {
+      sessionContext.setHasStartedReading(false);
       const lastText = isLastText("scroll", sessionContext);
 
       if (lastText) {
@@ -254,6 +254,7 @@ const ScrollTest = () => {
 
   const handleCloseScrollTestInstructions = () => {
     sessionContext.setHasStartedReading(true);
+    setDisplayConfirmDoneModal(false);
     addScrollPosEntryToSessionContext(
       sessionContext,
       parseInt(getScrollPosition().y)
@@ -319,12 +320,9 @@ const ScrollTest = () => {
             disabled={textIsComplete}
             content="Done"
             color="blue"
-            onClick={() => {
-              setDisplayConfirmDoneModal(true);
-              sessionContext.setHasStartedReading(false);
-            }}
+            onClick={() => setDisplayConfirmDoneModal(true)}
           />
-          <Link to="/end" hidden ref={endPageRef}></Link>
+          <Link to="/end" hidden ref={endPageRef} />
           <Menu.Item
             active
             disabled={textIsComplete}
@@ -422,7 +420,10 @@ const ScrollTest = () => {
     return (
       <div>
         <ScrollTestInstructions
-          isOpen={sessionContext.hasStartedReading === false}
+          isOpen={
+            sessionContext.hasStartedReading === false ||
+            displayConfirmDoneModal
+          }
           displayConfirmMessage={displayConfirmDoneModal}
           text={currentText}
           answerYes={handleFinishText}
