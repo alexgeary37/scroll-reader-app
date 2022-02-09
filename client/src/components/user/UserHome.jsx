@@ -102,12 +102,18 @@ const UserHome = () => {
       })
       .then((response) => {
         const currentSession = response.data;
+        console.log("template:", template);
+        // If currentSession.speedTexts.length === template.Speedtext.length && currentSession.speedTexts.at(-1).hasOwnProperty("endTime")
         if (
           currentSession.scrollTexts.length === template.scrollTexts.length &&
           currentSession.scrollTexts.at(-1).hasOwnProperty("endTime")
         ) {
           endPageRef.current.click();
-        } else if (currentSession.scrollTexts.length > 0) {
+        } else if (
+          currentSession.speedTexts.length ===
+            template.speedTest.texts.length &&
+          currentSession.speedTexts.at(-1).hasOwnProperty("endTime")
+        ) {
           scrollTestRef.current.click();
         } else {
           speedTestRef.current.click();
