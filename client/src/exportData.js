@@ -1,5 +1,7 @@
 import axios from "axios";
 import { ExportToCsv } from "export-to-csv";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 const getScrollPositionData = async (sessionID) => {
   return axios
@@ -56,12 +58,20 @@ const exportScrollData = async (scrollPosEntries) => {
     entries: scrollPosEntries.slice(scrollPosIndex),
   });
 
+  const csvs = [];
+
   // Export a csv file for each text.
   for (let i = 0; i < entriesByText.length; i++) {
     // Format scroll position entries for exporting to csv.
     const data = formatScrollPosEntriesForCsv(entriesByText[i].entries);
-    createCsv(data, `scrollText_${entriesByText[i].textNumber + 1}_positions`);
+
+    csvs.push({
+      data: createCsv(data),
+      filename: `scrollText_${entriesByText[i].textNumber + 1}_positions`,
+    });
   }
+
+  return csvs;
 };
 
 const exportReadingSessionData = (readingSessionData, templateData) => {
@@ -73,13 +83,19 @@ const exportReadingSessionData = (readingSessionData, templateData) => {
     speedTestInstructions: templateData.speedTest.instructions,
   };
 
-  createCsv([readingSession], `readingSession_${readingSessionData._id}`);
+  const csv = {
+    data: createCsv([readingSession]),
+    filename: `readingSession_${readingSessionData._id}`,
+  };
+
+  return csv;
 };
 
 const exportSpeedTextData = (readingSessionData, textFiles, templateData) => {
   // Deep copy this array to not change the objects in it through changes to the speedTexts variable.
   const speedTexts = JSON.parse(JSON.stringify(templateData.speedTest.texts));
 
+  const csvs = [];
   let textNumber = 0;
   speedTexts.forEach((speedText) => {
     const text = textFiles.find((t) => t.key === speedText.fileID);
@@ -95,11 +111,20 @@ const exportSpeedTextData = (readingSessionData, textFiles, templateData) => {
     speedText.lineHeight = style.lineHeight;
     delete speedText.styleID;
 
-    createCsv(sessionText.pauses, `speedText_${textNumber + 1}_pauses`);
+    csvs.push({
+      data: createCsv(sessionText.pauses),
+      filename: `speedText_${textNumber + 1}_pauses`,
+    });
+
     textNumber++;
   });
 
-  createCsv(speedTexts, "speedTexts");
+  csvs.push({
+    data: createCsv(speedTexts),
+    filename: "speedTexts",
+  });
+
+  return csvs;
 };
 
 const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
@@ -179,7 +204,7 @@ const formatScrollPosEntriesForCsv = (entries) => {
     return {
       yPos: entry.yPos,
       time: entry.time,
-      elapsedTime: Date.parse(entry.time) - firstEntryTime,
+      "elapsedTime(milliseconds)": Date.parse(entry.time) - firstEntryTime,
     };
   });
 };
@@ -190,7 +215,33 @@ const formatViewportDimensionsForCsv = (dimensions) => {
   });
 };
 
-const createCsv = (data, filename) => {
+const createCsv = (data) => {
+  if (data.length > 0) {
+    let csv = ``;
+
+    Object.keys(data[0]).forEach((col) => (csv += col + `,`));
+    csv += `\n`;
+
+    data.forEach((row) => {
+      Object.values(row).forEach((col) => (csv += col + `,`));
+      csv += `\n`;
+    });
+
+    return csv;
+  }
+};
+
+const downloadZip = (csvs) => {
+  let zip = new JSZip();
+  csvs.forEach((csv) => {
+    zip.file(`${csv.filename}.csv`, csv.data);
+  });
+  zip.generateAsync({ type: "blob" }).then(function (content) {
+    saveAs(content, `${new Date().toDateString()}.zip`);
+  });
+};
+
+const createCsv2 = (data, filename) => {
   if (data.length > 0) {
     const options = {
       filename: filename,
@@ -203,13 +254,16 @@ const createCsv = (data, filename) => {
     };
 
     const csvExporter = new ExportToCsv(options);
-    csvExporter.generateCsv(data);
+    csvExporter.csvExporter.generateCsv(data);
   }
 };
 
 export const exportData = async (sessionID, textFiles) => {
+  let csvs = [];
+
   const scrollPositionData = await getScrollPositionData(sessionID);
-  exportScrollData(scrollPositionData);
+  const scrollDataCsvs = await exportScrollData(scrollPositionData);
+  csvs = csvs.concat(scrollDataCsvs);
 
   const readingSessionData = await getReadingSessionData(sessionID);
   const templateData = await getTemplateData(readingSessionData.templateID);
@@ -217,9 +271,26 @@ export const exportData = async (sessionID, textFiles) => {
   const viewportDimensions = formatViewportDimensionsForCsv(
     readingSessionData.viewportDimensions
   );
-  createCsv(viewportDimensions, "viewportDimensions");
+  const viewPortDimsCsv = {
+    data: createCsv(viewportDimensions),
+    filename: "viewportDimensions",
+  };
+  csvs = csvs.concat(viewPortDimsCsv);
 
-  exportReadingSessionData(readingSessionData, templateData);
-  exportSpeedTextData(readingSessionData, textFiles, templateData);
-  exportScrollTextData(readingSessionData, textFiles, templateData);
+  const readingSessionCsv = exportReadingSessionData(
+    readingSessionData,
+    templateData
+  );
+  csvs = csvs.concat(readingSessionCsv);
+
+  const speedTestCsvs = exportSpeedTextData(
+    readingSessionData,
+    textFiles,
+    templateData
+  );
+  csvs = csvs.concat(speedTestCsvs);
+
+  // exportScrollTextData(readingSessionData, textFiles, templateData);
+
+  downloadZip(csvs);
 };
