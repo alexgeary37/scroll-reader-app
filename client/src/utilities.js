@@ -2,7 +2,8 @@
 import axios from "axios";
 
 // https://medium.com/@shemar.gordon32/how-to-split-and-keep-the-delimiter-s-d433fb697c65
-export const wordSeparators = /(?=[.?!\n])|(?<=[.?!\n])/g;
+export const wordSeparators =
+  /(?=[?!\n\r])|(?<=[?!\n\r])|(?=\. )|(?<=\. )|(?=\.\n)|(?<=\.\n)|(?=\.\r)|(?<=\.\r)/g;
 
 /** Functions */
 
