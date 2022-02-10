@@ -125,6 +125,25 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
 
     createCsv(sessionText.pauses, `scrollText_${textNumber + 1}_pauses`);
 
+    const answerButtonClicks = [];
+
+    sessionText.answerButtonClicks.forEach((bc) => {
+      const question = text.questions.find(
+        (q) => q._id === scrollText.questionIDs[bc.questionNumber]
+      );
+
+      answerButtonClicks.push({
+        question: question.question,
+        action: bc.action,
+        time: bc.time,
+      });
+    });
+
+    createCsv(
+      answerButtonClicks,
+      `scrollText_${textNumber + 1}_answerButtonClicks`
+    );
+
     const questionAnswers = [];
 
     sessionText.questionAnswers.forEach((questionAnswer) => {

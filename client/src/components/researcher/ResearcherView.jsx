@@ -247,6 +247,14 @@ const ResearcherView = ({ onLogout }) => {
     setReadingSessions({ data: sessions, isFetching: false });
 
     axios
+      .put("/api/deleteScrollPosEntries", {
+        sessionID: session.key,
+      })
+      .catch((error) => {
+        console.error("Error deleting scroll position entries", error);
+      });
+
+    axios
       .put("/api/deleteReadingSession", {
         readingSessionID: session.key,
       })
