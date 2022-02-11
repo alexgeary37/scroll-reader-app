@@ -32,7 +32,8 @@ const ScrollText = ({
 
         const style = response.data.styles.find((s) => s._id === textStyleID);
         setTextStyle({
-          marginTop: 10,
+          marginLeft: 20,
+          marginRight: 20,
           fontFamily: style.fontFamily,
           fontSize: `${style.fontSize}px`,
           lineHeight: `${style.lineHeight}px`,

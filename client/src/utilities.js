@@ -29,6 +29,9 @@ export const scrollToTop = () => {
 
 // Adds the latest viewport width and height to ReadingSession.viewportDimensions array.
 export const recordViewportResize = (e, sessionContext) => {
+  console.log(window.innerWidth);
+  console.log(window.innerHeight);
+
   const sessionID = sessionContext.sessionID;
   const time = new Date();
 

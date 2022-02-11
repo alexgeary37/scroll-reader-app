@@ -22,8 +22,11 @@ import AnswersCompleteWindow from "./AnswersCompleteWindow.jsx";
 import { debounce } from "debounce";
 import toast, { Toaster } from "react-hot-toast";
 
+const DEFAULT_QUESTION_HEIGHT = 60;
+
 const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
+  const [questionHeight, setQuestionHeight] = useState(DEFAULT_QUESTION_HEIGHT);
   const endPageRef = createRef();
   const [displayMobileQuestionModal, setDisplayMobileQuestionModal] =
     useState(false);
@@ -229,6 +232,7 @@ const ScrollTest = () => {
           } else {
             if (isCorrect) {
               setDisplayMobileQuestionModal(false);
+              setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
             }
             setAnswerResponseWindow({ display: true, isCorrect: isCorrect });
           }
@@ -238,6 +242,7 @@ const ScrollTest = () => {
           }
           setScrollQuestionNumber(scrollQuestionNumber + 1);
           setDisplayMobileQuestionModal(false);
+          setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
         }
       })
       .catch((error) => {
@@ -253,6 +258,7 @@ const ScrollTest = () => {
     setSelectAnswerEnabled(false);
     setDisplayConfirmSkipMessage(false);
     setDisplayMobileQuestionModal(false);
+    setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
   };
 
   const handleCloseScrollTestInstructions = () => {
@@ -306,7 +312,7 @@ const ScrollTest = () => {
         <Toaster
           toastOptions={{
             style: {
-              marginTop: 45,
+              marginTop: questionHeight,
               padding: 20,
               background: "#a8ffff",
               color: "#000000",
@@ -320,7 +326,7 @@ const ScrollTest = () => {
   const displayScrollText = () => {
     if (sessionContext.hasStartedReading) {
       return (
-        <div style={{ marginTop: 60 }}>
+        <div style={{ marginTop: questionHeight }}>
           <ScrollText
             fileID={currentText.fileID}
             textStyleID={currentText.styleID}
@@ -348,7 +354,11 @@ const ScrollTest = () => {
       if (displayMobileQuestionModal) {
         return isComprehension ? (
           <ComprehensionQuestion
-            close={() => setDisplayMobileQuestionModal(false)}
+            componentHeight={(height) => setQuestionHeight(height + 15)}
+            close={() => {
+              setDisplayMobileQuestionModal(false);
+              setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
+            }}
             currentText={currentText}
             questionNumber={scrollQuestionNumber}
             disable={textIsComplete}
@@ -357,9 +367,11 @@ const ScrollTest = () => {
           />
         ) : (
           <ClickQuestion
+            componentHeight={(height) => setQuestionHeight(height + 15)}
             close={() => {
               setDisplayMobileQuestionModal(false);
               setSelectAnswerEnabled(false);
+              setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
             }}
             currentText={currentText}
             questionNumber={scrollQuestionNumber}
@@ -402,6 +414,7 @@ const ScrollTest = () => {
             setAnswerResponseWindow({ display: false, isCorrect: false });
             setSelectAnswerEnabled(false);
             setDisplayMobileQuestionModal(false);
+            setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
             if (
               answerWasCorrect &&
               scrollQuestionNumber >= currentText.questionIDs.length

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import {
   Button,
   Form,
@@ -10,6 +10,7 @@ import {
 } from "semantic-ui-react";
 
 const ComprehensionQuestion = ({
+  componentHeight,
   close,
   currentText,
   questionNumber,
@@ -17,6 +18,7 @@ const ComprehensionQuestion = ({
   submitAnswer,
   skip,
 }) => {
+  const ref = createRef();
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
@@ -47,6 +49,10 @@ const ComprehensionQuestion = ({
     };
   }, [currentText, questionNumber]);
 
+  useEffect(() => {
+    componentHeight(ref.current.offsetHeight);
+  }, [ref]);
+
   const handleChangeAnswer = (event) => {
     setAnswer(event.target.value);
   };
@@ -64,7 +70,7 @@ const ComprehensionQuestion = ({
   const displayFormAndButtons = () => {
     return (
       <div>
-        <Form>
+        <Form style={{margin: 10}}>
           <Form.Field>
             <TextArea
               placeholder="Type your answer here..."
@@ -95,7 +101,8 @@ const ComprehensionQuestion = ({
 
   const displayContent = () => {
     return (
-      <Segment
+      <div
+        ref={ref}
         style={{
           margin: "auto",
           maxWidth: "60em",
@@ -104,15 +111,17 @@ const ComprehensionQuestion = ({
           top: 0,
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Header as="h4" content="Question:" />
-          <div onClick={close}>
-            <Icon size="large" name="close" link />
+        <Segment>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Header as="h4" content="Question:" />
+            <div onClick={close}>
+              <Icon size="large" name="close" link />
+            </div>
           </div>
-        </div>
-        <span>{question}</span>
-        {displayFormAndButtons()}
-      </Segment>
+          <span>{question}</span>
+          {displayFormAndButtons()}
+        </Segment>
+      </div>
     );
   };
 
