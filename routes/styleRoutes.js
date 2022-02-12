@@ -13,6 +13,17 @@ router.post("/api/createStyle", async (req, res) => {
   });
 });
 
+router.get("/api/getStyle", async (req, res) => {
+  const id = req.query;
+  StyleModel.findOne({ _id: id }, (err, result) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 router.get("/api/getStyles", async (req, res) => {
   StyleModel.find({}, (err, result) => {
     if (err) {

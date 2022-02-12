@@ -22,6 +22,10 @@ const ScrollText = ({
     fetchText();
   }, [fileID]);
 
+  useEffect(() => {
+    fetchStyle();
+  }, [textStyleID]);
+
   const fetchText = () => {
     axios
       .get("/api/getTextFile", {
@@ -29,21 +33,30 @@ const ScrollText = ({
       })
       .then((response) => {
         setWords(response.data.text.split(wordSeparators));
+        sessionContext.setQuestionAnswers(response.data.questions);
+      })
+      .catch((error) =>
+        console.error("Error fetching text in ScrollText:", error)
+      );
+  };
 
-        const style = response.data.styles.find((s) => s._id === textStyleID);
+  const fetchStyle = () => {
+    axios
+      .get("/api/getStyle", {
+        params: { _id: textStyleID },
+      })
+      .then((response) => {
+        const style = response.data;
+        const fontWeight = style.bold ? "bold" : "normal";
         setTextStyle({
           marginLeft: 20,
           marginRight: 20,
           fontFamily: style.fontFamily,
           fontSize: `${style.fontSize}px`,
           lineHeight: `${style.lineHeight}px`,
+          fontWeight: fontWeight,
         });
-
-        sessionContext.setQuestionAnswers(response.data.questions);
-      })
-      .catch((error) =>
-        console.error("Error fetching text in ScrollText:", error)
-      );
+      });
   };
 
   // This useEffect runs whenever sessionContext.scrollPosEntries changes.
