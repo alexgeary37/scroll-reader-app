@@ -41,9 +41,9 @@ const ScrollText = ({
 
         sessionContext.setQuestionAnswers(response.data.questions);
       })
-      .catch((error) => {
-        console.error("Error fetching text in ScrollText:", error);
-      });
+      .catch((error) =>
+        console.error("Error fetching text in ScrollText:", error)
+      );
   };
 
   // This useEffect runs whenever sessionContext.scrollPosEntries changes.
@@ -55,9 +55,9 @@ const ScrollText = ({
         sessionContext.setScrollPosEntries([]);
         axios
           .post("/api/insertScrollPosEntries", entriesToInsert)
-          .catch((error) => {
-            console.error("Error adding scrollPosEntry:", error);
-          });
+          .catch((error) =>
+            console.error("Error adding scrollPosEntry:", error)
+          );
       }
     }, 500);
     return () => clearInterval(intervalID);

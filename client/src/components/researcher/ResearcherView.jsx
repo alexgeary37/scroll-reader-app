@@ -7,6 +7,7 @@ import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./FileUpload.jsx";
 import ReadingSession from "./ReadingSession.jsx";
 import { clearStorage } from "../../utilities.js";
+import TextFileStylesView from "./textFiles/TextFileStylesView.jsx";
 
 const ResearcherView = ({ onLogout }) => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
@@ -15,6 +16,7 @@ const ResearcherView = ({ onLogout }) => {
     data: [],
     isFetching: true,
   });
+  const [openStylesModal, setOpenStylesModal] = useState(false);
   const [openTemplateCreator, setOpenTemplateCreator] = useState(false);
 
   useEffect(() => {
@@ -50,7 +52,6 @@ const ResearcherView = ({ onLogout }) => {
             value: file._id,
             name: file.fileName,
             questions: file.questions,
-            styles: file.styles,
             uploadedAt: file.createdAt, // TODO make this Date() object to use new utilities.js function
           };
           files.push(textFile);
@@ -59,9 +60,7 @@ const ResearcherView = ({ onLogout }) => {
         // Set textFiles for rendering, and indicate that they are no longer being fetched.
         setTextFiles({ data: files, isFetching: false });
       })
-      .catch((error) => {
-        console.error("Error fetching files:", error);
-      });
+      .catch((error) => console.error("Error fetching files:", error));
   };
 
   const fetchSessionTemplates = () => {
@@ -111,9 +110,9 @@ const ResearcherView = ({ onLogout }) => {
         // Set templates for rendering, and indicate that they are no longer being fetched.
         setTemplates({ data: options, isFetching: false });
       })
-      .catch((error) => {
-        console.error("Error fetching session templates:", error);
-      });
+      .catch((error) =>
+        console.error("Error fetching session templates:", error)
+      );
   };
 
   const fetchReadingSessions = () => {
@@ -142,9 +141,9 @@ const ResearcherView = ({ onLogout }) => {
         // Set readingSessions for rendering, and indicate that they are no longer being fetched.
         setReadingSessions({ data: options, isFetching: false });
       })
-      .catch((error) => {
-        console.error("Error fetching reading sessions:", error);
-      });
+      .catch((error) =>
+        console.error("Error fetching reading sessions:", error)
+      );
   };
 
   const handleCreateTemplate = () => {
@@ -183,34 +182,9 @@ const ResearcherView = ({ onLogout }) => {
         fileID: file.key,
         questionID: question._id,
       })
-      .catch((error) => {
-        console.error("Error removing question from file.questions:", error);
-      });
-  };
-
-  const handleUpdateFileStyles = (file, newStyle) => {
-    const files = textFiles.data;
-    const index = files.indexOf(file);
-    files[index].styles.push(newStyle);
-
-    setTextFiles({ data: files, isFetching: false });
-  };
-
-  const handleRemoveFileStyle = (file, style) => {
-    const files = textFiles.data;
-    const index = files.indexOf(file);
-    files[index].styles = files[index].styles.filter((s) => s !== style);
-
-    setTextFiles({ data: files, isFetching: false });
-
-    axios
-      .put("/api/removeTextFileStyle", {
-        fileID: file.key,
-        styleID: style._id,
-      })
-      .catch((error) => {
-        console.error("Error removing style from file.styles:", error);
-      });
+      .catch((error) =>
+        console.error("Error removing question from file.questions:", error)
+      );
   };
 
   const handleDeleteFile = (file) => {
@@ -222,9 +196,7 @@ const ResearcherView = ({ onLogout }) => {
       .put("/api/deleteTextFile", {
         fileID: file.key,
       })
-      .catch((error) => {
-        console.error("Error deleting file:", error);
-      });
+      .catch((error) => console.error("Error deleting file:", error));
   };
 
   const handleDeleteTemplate = (template) => {
@@ -236,9 +208,7 @@ const ResearcherView = ({ onLogout }) => {
       .put("/api/deleteTemplate", {
         templateID: template.key,
       })
-      .catch((error) => {
-        console.error("Error deleting template:", error);
-      });
+      .catch((error) => console.error("Error deleting template:", error));
   };
 
   const handleDeleteReadingSession = (session) => {
@@ -250,17 +220,17 @@ const ResearcherView = ({ onLogout }) => {
       .put("/api/deleteScrollPosEntries", {
         sessionID: session.key,
       })
-      .catch((error) => {
-        console.error("Error deleting scroll position entries", error);
-      });
+      .catch((error) =>
+        console.error("Error deleting scroll position entries", error)
+      );
 
     axios
       .put("/api/deleteReadingSession", {
         readingSessionID: session.key,
       })
-      .catch((error) => {
-        console.error("Error deleting reading session:", error);
-      });
+      .catch((error) =>
+        console.error("Error deleting reading session:", error)
+      );
   };
 
   const fileUsedInTemplate = (fileID) => {
@@ -304,16 +274,16 @@ const ResearcherView = ({ onLogout }) => {
         params: { _id: file.key },
       })
       .then((response) => {
-        const newFile = file;
-        newFile.styles[0]._id = response.data.styles[0]._id;
+        // const newFile = file;
+        // newFile.styles[0]._id = response.data.styles[0]._id;
         setTextFiles({
-          data: [...textFiles.data, newFile],
+          data: [...textFiles.data, file],
           isFetching: false,
         });
       })
-      .catch((error) => {
-        console.error("Error fetching text in ScrollText:", error);
-      });
+      .catch((error) =>
+        console.error("Error fetching text in ScrollText:", error)
+      );
   };
 
   const displayTextFiles = () => {
@@ -336,10 +306,6 @@ const ResearcherView = ({ onLogout }) => {
                   removeQuestion={(question) =>
                     handleRemoveFileQuestion(file, question)
                   }
-                  updateFileStyles={(style) =>
-                    handleUpdateFileStyles(file, style)
-                  }
-                  removeStyle={(style) => handleRemoveFileStyle(file, style)}
                   deleteFile={() => handleDeleteFile(file)}
                 />
               ))}
@@ -426,6 +392,7 @@ const ResearcherView = ({ onLogout }) => {
               content="Clear Storage"
               onClick={() => clearStorage(null)}
             />
+            <Button content="Styles" onClick={() => setOpenStylesModal(true)} />
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
@@ -436,6 +403,10 @@ const ResearcherView = ({ onLogout }) => {
           </Grid.Row>
         </Grid>
       </Container>
+      <TextFileStylesView
+        isOpen={openStylesModal}
+        close={() => setOpenStylesModal(false)}
+      />
     </div>
   );
 };

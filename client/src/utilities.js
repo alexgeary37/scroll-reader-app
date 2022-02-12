@@ -29,9 +29,6 @@ export const scrollToTop = () => {
 
 // Adds the latest viewport width and height to ReadingSession.viewportDimensions array.
 export const recordViewportResize = (e, sessionContext) => {
-  console.log(window.innerWidth);
-  console.log(window.innerHeight);
-
   const sessionID = sessionContext.sessionID;
   const time = new Date();
 
@@ -42,9 +39,9 @@ export const recordViewportResize = (e, sessionContext) => {
       height: window.innerHeight,
       time: time,
     })
-    .catch((error) => {
-      console.error("Error updating readingSession.viewportDimensions:", error);
-    });
+    .catch((error) =>
+      console.error("Error updating readingSession.viewportDimensions:", error)
+    );
 };
 
 export const addScrollPosEntryToSessionContext = (sessionContext, yPos) => {

@@ -20,6 +20,14 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [displayMissingInputError, setDisplayMissingInputError] =
     useState(false);
   const [dropdownTextFiles, setDropdownTextFiles] = useState([]);
+  const [styles, setStyles] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/getStyles")
+      .then((response) => setStyles(response.data))
+      .catch((error) => console.error("Error fetching styles:", error));
+  }, []);
 
   useEffect(() => {
     setDropdownTextFiles(formatDropdownTextFiles(textFiles));
@@ -95,9 +103,9 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         .then((response) => {
           handleClose(true, response.data);
         })
-        .catch((error) => {
-          console.error("Error creating session template:", error);
-        });
+        .catch((error) =>
+          console.error("Error creating session template:", error)
+        );
     }
   };
 
@@ -126,9 +134,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           fileName: data.options.find(
             (file) => file.key === data.value[data.value.length - 1]
           ).text,
-          styleID: textFiles.find(
-            (tf) => tf.key === data.value[data.value.length - 1]
-          ).styles[0]._id,
+          styleID: styles[0]._id,
         },
       ]);
     }
@@ -165,9 +171,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             hasInterestQuestion: true,
           },
           questionIDs: [],
-          styleID: textFiles.find(
-            (tf) => tf.key === data.value[data.value.length - 1]
-          ).styles[0]._id,
+          styleID: styles[0]._id,
         },
       ]);
     }
@@ -272,9 +276,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           <SpeedTextListItem
             key={text.fileID}
             text={text}
-            availableStyles={
-              textFiles.find((file) => file.key === text.fileID).styles
-            }
+            styles={styles}
             selectStyle={handleSelectSpeedTextStyle}
           />
         ))}
@@ -292,9 +294,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             availableQuestions={
               textFiles.find((file) => file.key === text.fileID).questions
             }
-            availableStyles={
-              textFiles.find((file) => file.key === text.fileID).styles
-            }
+            styles={styles}
             addQuestions={handleAddQuestions}
             selectStyle={handleSelectScrollTextStyle}
             setInstructions={setScrollTextInstructions}

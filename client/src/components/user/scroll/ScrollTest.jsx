@@ -105,12 +105,12 @@ const ScrollTest = () => {
         fileID: currentText.fileID,
         endTime: endTime,
       })
-      .catch((error) => {
+      .catch((error) =>
         console.error(
           "Error updating readingSession.scrollTexts[currentText.fileID].endTime:",
           error
-        );
-      });
+        )
+      );
 
     return endTime;
   };
@@ -124,9 +124,9 @@ const ScrollTest = () => {
         id: sessionID,
         time: endTime,
       })
-      .catch((error) => {
-        console.error("Error updating readingSession.endTime:", error);
-      });
+      .catch((error) =>
+        console.error("Error updating readingSession.endTime:", error)
+      );
   };
 
   const handleFinishText = async () => {
@@ -169,12 +169,12 @@ const ScrollTest = () => {
         action: action,
         time: currentTime,
       })
-      .catch((error) => {
+      .catch((error) =>
         console.error(
           "Error updating readingSession.scrollTexts[fileID].pauses",
           error
-        );
-      });
+        )
+      );
   };
 
   const pauseSession = () => {
@@ -245,12 +245,12 @@ const ScrollTest = () => {
           setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
         }
       })
-      .catch((error) => {
+      .catch((error) =>
         console.error(
           "Error updating readingSession.scrollTexts[fileID].questionAnswers",
           error
-        );
-      });
+        )
+      );
   };
 
   const skipQuestion = () => {

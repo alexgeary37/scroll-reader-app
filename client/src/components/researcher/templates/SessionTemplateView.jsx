@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import {
   Button,
   Header,
@@ -9,20 +11,20 @@ import {
 } from "semantic-ui-react";
 
 const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
+  const [styles, setStyles] = useState({ data: [], isFetching: true });
+
+  useEffect(() => {
+    axios
+      .get("/api/getStyles")
+      .then((response) => setStyles(response.data))
+      .catch((error) => console.error("Error fetching styles:", error));
+  }, []);
+
   const styleContent = (text) => {
-    return `font-family: ${
-      textFiles
-        .find((tf) => tf.key === text.fileID)
-        .styles.find((s) => s._id === text.styleID).fontFamily
-    }, font-size: ${
-      textFiles
-        .find((tf) => tf.key === text.fileID)
-        .styles.find((s) => s._id === text.styleID).fontSize
-    }, line-height: ${
-      textFiles
-        .find((tf) => tf.key === text.fileID)
-        .styles.find((s) => s._id === text.styleID).lineHeight
-    }`;
+    if (!styles.isFetching) {
+      const style = styles.find((s) => s._id === text.styleID);
+      return `font-family: ${style.fontFamily}, font-size: ${style.fontSize}, line-height: ${style.lineHeight}, bold: ${style.bold}`;
+    }
   };
 
   const speedTestInfo = () => {

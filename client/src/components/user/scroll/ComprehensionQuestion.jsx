@@ -41,9 +41,9 @@ const ComprehensionQuestion = ({
           }
         }
       })
-      .catch((error) => {
-        console.error("Error fetching text in ScrollText:", error);
-      });
+      .catch((error) =>
+        console.error("Error fetching text in ScrollText:", error)
+      );
     return () => {
       isMounted = false;
     };
@@ -70,7 +70,7 @@ const ComprehensionQuestion = ({
   const displayFormAndButtons = () => {
     return (
       <div>
-        <Form style={{margin: 10}}>
+        <Form style={{ margin: 10 }}>
           <Form.Field>
             <TextArea
               placeholder="Type your answer here..."

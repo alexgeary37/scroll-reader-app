@@ -12,9 +12,7 @@ export async function login({ email, password }) {
 
       return response.json();
     })
-    .catch((err) => {
-      console.error(err);
-    });
+    .catch((err) => console.error(err));
 }
 
 export async function searchArtworks({ keyword }) {
@@ -30,7 +28,5 @@ export async function searchArtworks({ keyword }) {
 
       return response.json();
     })
-    .catch((err) => {
-      console.error(err);
-    });
+    .catch((err) => console.error(err));
 }

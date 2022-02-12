@@ -6,7 +6,7 @@ import StylesView from "./StylesView";
 const ScrollTextListItem = ({
   text,
   availableQuestions,
-  availableStyles,
+  styles,
   addQuestions,
   selectStyle,
   setInstructions,
@@ -79,7 +79,7 @@ const ScrollTextListItem = ({
 
           <StylesView
             isOpen={viewStyles}
-            availableStyles={availableStyles}
+            styles={styles}
             updateStyle={updateStyle}
           />
         </div>

@@ -71,12 +71,12 @@ const ScrollTestInstructions = ({
           clearData();
           close();
         })
-        .catch((error) => {
+        .catch((error) =>
           console.error(
             "Error updating readingSession.scrollTexts[text.fileID].startTime:",
             error
-          );
-        });
+          )
+        );
     }
   };
 

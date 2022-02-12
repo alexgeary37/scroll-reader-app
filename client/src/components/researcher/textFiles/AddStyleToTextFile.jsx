@@ -8,6 +8,7 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
   const [family, setFamily] = useState("");
   const [size, setSize] = useState(-1);
   const [lineHeight, setLineHeight] = useState(-1);
+  const [bold, setBold] = useState(false);
   const [displayFamilyError, setDisplayFamilyError] = useState(false);
   const [displaySizeError, setDisplaySizeError] = useState(false);
   const [displayLineHeightError, setDisplayLineHeightError] = useState(false);
@@ -54,6 +55,7 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
         fontFamily: family.trim(),
         fontSize: size,
         lineHeight: lineHeight,
+        bold: bold,
       };
 
       addStyle(style);
@@ -61,8 +63,7 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
       setFamily("");
       setSize(-1);
       setLineHeight(-1);
-
-      close();
+      setBold(false);
     }
   };
 
@@ -70,6 +71,7 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
     setFamily("");
     setSize(-1);
     setLineHeight(-1);
+    setBold(false);
     setDisplayFamilyError(false);
     setDisplaySizeError(false);
     setDisplayLineHeightError(false);
@@ -104,6 +106,10 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
           placeholder="Line height (pixels)"
           onChange={handleLineHeightChange}
         />
+        <div className="ui checkbox">
+          <input type="checkbox" onClick={() => setBold(!bold)} />
+          <label>Bold</label>
+        </div>
 
         <div style={{ display: "flex", float: "right" }}>
           <Button content="Cancel" onClick={handleCancel} />

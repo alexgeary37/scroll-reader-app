@@ -36,9 +36,9 @@ const ClickQuestion = ({
           }
         }
       })
-      .catch((error) => {
-        console.error("Error fetching text in ScrollText:", error);
-      });
+      .catch((error) =>
+        console.error("Error fetching text in ScrollText:", error)
+      );
     return () => {
       isMounted = false;
     };
@@ -61,12 +61,12 @@ const ClickQuestion = ({
         action: action,
         time: currentTime,
       })
-      .catch((error) => {
+      .catch((error) =>
         console.error(
           "Error updating readingSession.scrollTexts[fileID].answerButtonClicks",
           error
-        );
-      });
+        )
+      );
 
     enableAnswer();
   };

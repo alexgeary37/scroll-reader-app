@@ -26,18 +26,16 @@ const TextAnswersConfigurationView = ({
       .then((response) => {
         setWords(response.data.text.split(wordSeparators));
       })
-      .catch((error) => {
-        console.error("Error fetching text in ScrollText:", error);
-      });
+      .catch((error) =>
+        console.error("Error fetching text in ScrollText:", error)
+      );
   };
 
   const handleMouseUp = (index) => {
-    // if (mouseDownIndex !== index) {
-      selectAnswer(
-        Math.min(mouseDownIndex, index),
-        Math.max(mouseDownIndex, index)
-      );
-    // }
+    selectAnswer(
+      Math.min(mouseDownIndex, index),
+      Math.max(mouseDownIndex, index)
+    );
   };
 
   const wordColor = (index) => {

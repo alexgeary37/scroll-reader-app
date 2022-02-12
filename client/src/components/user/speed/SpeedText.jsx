@@ -25,9 +25,9 @@ const SpeedText = ({ fileID, textStyleID }) => {
           lineHeight: `${style.lineHeight}px`,
         });
       })
-      .catch((error) => {
-        console.error("Error fetching text in SpeedText:", error);
-      });
+      .catch((error) =>
+        console.error("Error fetching text in SpeedText:", error)
+      );
   };
 
   return <div style={textStyle}>{text}</div>;

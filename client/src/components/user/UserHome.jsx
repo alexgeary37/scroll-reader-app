@@ -51,9 +51,9 @@ const UserHome = () => {
           setTemplate(response.data);
         }
       })
-      .catch((error) => {
-        console.error("Error fetching SessionTemplate:", error);
-      });
+      .catch((error) =>
+        console.error("Error fetching SessionTemplate:", error)
+      );
   };
 
   // Add new session to database.
@@ -82,9 +82,7 @@ const UserHome = () => {
         sessionContext.setTemplate(template);
         setStartSpeedTest(true);
       })
-      .catch((error) => {
-        console.error("Error adding session:", error);
-      });
+      .catch((error) => console.error("Error adding session:", error));
   };
 
   const handleStartSpeedTest = () => {

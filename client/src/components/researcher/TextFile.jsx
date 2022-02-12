@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Item, Icon, Button } from "semantic-ui-react";
 import DeleteTextModal from "./textFiles/DeleteTextModal";
 import TextFileQuestionsView from "./textFiles/TextFileQuestionsView";
-import TextFileStylesView from "./textFiles/TextFileStylesView";
 import TextFileTextView from "./textFiles/TextFileTextView";
 
 const TextFile = ({
@@ -10,12 +9,9 @@ const TextFile = ({
   usedInTemplate,
   updateFileQuestions,
   removeQuestion,
-  updateFileStyles,
-  removeStyle,
   deleteFile,
 }) => {
   const [openViewQuestions, setOpenViewQuestions] = useState(false);
-  const [openViewStyles, setOpenViewStyles] = useState(false);
   const [openTextFileTextView, setOpenTextFileTextView] = useState(false);
   const [openDeleteTextModal, setOpenDeleteTextModal] = useState(false);
 
@@ -34,7 +30,6 @@ const TextFile = ({
               content="Questions"
               onClick={() => setOpenViewQuestions(true)}
             />
-            <Button content="Styles" onClick={() => setOpenViewStyles(true)} />
           </div>
 
           <div className="ui vertical buttons" style={{ marginLeft: 5 }}>
@@ -57,14 +52,6 @@ const TextFile = ({
           updateFileQuestions={updateFileQuestions}
           removeQuestion={removeQuestion}
           close={() => setOpenViewQuestions(false)}
-        />
-        <TextFileStylesView
-          isOpen={openViewStyles}
-          fileID={file.key}
-          styles={file.styles}
-          updateFileStyles={updateFileStyles}
-          removeStyle={removeStyle}
-          close={() => setOpenViewStyles(false)}
         />
         <TextFileTextView
           isOpen={openTextFileTextView}

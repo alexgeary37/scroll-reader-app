@@ -1,31 +1,26 @@
 import { useEffect, useState } from "react";
-import {
-  Modal,
-  Button,
-  Header,
-  List,
-  Item,
-  Segment,
-} from "semantic-ui-react";
+import { Modal, Button, Header, List, Item, Segment } from "semantic-ui-react";
 import AddStyleToTextFile from "./AddStyleToTextFile";
 import axios from "axios";
 
-const TextFileStylesView = ({
-  isOpen,
-  fileID,
-  styles,
-  updateFileStyles,
-  removeStyle,
-  close,
-}) => {
+const TextFileStylesView = ({ isOpen, close }) => {
   const [openAddStyle, setOpenAddStyle] = useState(false);
+  const [styles, setStyles] = useState([]);
   const [usedStyleIDs, setUsedStyleIDs] = useState([]);
 
   useEffect(() => {
     if (isOpen) {
+      fetchStyles();
       fetchTemplateStyles();
     }
   }, [isOpen]);
+
+  const fetchStyles = () => {
+    axios
+      .get("/api/getStyles")
+      .then((response) => setStyles(response.data))
+      .catch((error) => console.error("Error fetching used styles:", error));
+  };
 
   const fetchTemplateStyles = () => {
     axios
@@ -33,25 +28,31 @@ const TextFileStylesView = ({
       .then((response) => {
         setUsedStyleIDs(response.data);
       })
-      .catch((error) => {
-        console.error("Error fetching used styles:", error);
-      });
+      .catch((error) => console.error("Error fetching used styles:", error));
   };
 
   const addStyle = (style) => {
+    setOpenAddStyle(false);
     axios
-      .put("/api/addTextFileStyle", {
-        id: fileID,
+      .post("/api/createStyle", {
         style: style,
       })
       .then((response) => {
-        // Return the latest style just added.
-        const newStyle = response.data.styles.at(-1);
-        updateFileStyles(newStyle);
+        setStyles([...styles, response.data]);
       })
-      .catch((error) => {
-        console.error("Error updating file.styles:", error);
-      });
+      .catch((error) => console.error("Error updating file.styles:", error));
+  };
+
+  const removeStyle = (style) => {
+    let displayedStyles = styles;
+    displayedStyles = displayedStyles.filter((s) => s !== style);
+    setStyles(displayedStyles);
+
+    axios
+      .put("/api/deleteStyle", {
+        styleID: style._id,
+      })
+      .catch((error) => console.error("Error deleting style:", error));
   };
 
   return (
@@ -69,6 +70,7 @@ const TextFileStylesView = ({
                 <Item.Description
                   content={`line-height: ${style.lineHeight}`}
                 />
+                <Item.Description content={`bold: ${style.bold}`} />
 
                 <Button
                   floated="right"
@@ -93,7 +95,6 @@ const TextFileStylesView = ({
       </div>
       <AddStyleToTextFile
         isOpen={openAddStyle}
-        fileID={fileID}
         addStyle={addStyle}
         close={() => setOpenAddStyle(false)}
       />

@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Modal,
-  List,
-  Item,
-  Button,
-  Header,
-  Segment,
-} from "semantic-ui-react";
+import { Modal, List, Item, Button, Header, Segment } from "semantic-ui-react";
 import AddQuestionToTextFile from "./AddQuestionToTextFile";
 import axios from "axios";
 
@@ -33,9 +26,7 @@ const TextFileQuestionsView = ({
       .then((response) => {
         setUsedQuestionIDs(response.data);
       })
-      .catch((error) => {
-        console.error("Error fetching used questions:", error);
-      });
+      .catch((error) => console.error("Error fetching used questions:", error));
   };
 
   const addQuestion = (question, questionFormat, answerRegion) => {
@@ -51,9 +42,7 @@ const TextFileQuestionsView = ({
         const newQuestion = response.data.questions.at(-1);
         updateFileQuestions(newQuestion);
       })
-      .catch((error) => {
-        console.error("Error updating file.questions:", error);
-      });
+      .catch((error) => console.error("Error updating file.questions:", error));
   };
 
   return (

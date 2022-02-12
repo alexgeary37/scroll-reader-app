@@ -26,12 +26,12 @@ const SpeedTestInstructions = ({
       .then(() => {
         close();
       })
-      .catch((error) => {
+      .catch((error) =>
         console.error(
           "Error updating readingSession.speedTest.startTime:",
           error
-        );
-      });
+        )
+      );
   };
 
   const displayContent = () => {

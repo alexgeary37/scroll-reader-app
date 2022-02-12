@@ -78,12 +78,12 @@ const SpeedTest = () => {
         fileID: currentText.fileID,
         endTime: endTime,
       })
-      .catch((error) => {
+      .catch((error) =>
         console.error(
           "Error updating readingSession.speedTexts[currentFileID].endTime:",
           error
-        );
-      });
+        )
+      );
   };
 
   const handleFinishText = async () => {
@@ -118,12 +118,12 @@ const SpeedTest = () => {
         action: action,
         time: currentTime,
       })
-      .catch((error) => {
+      .catch((error) =>
         console.error(
           "Error updating readingSession.speedTexts[fileID].pauses",
           error
-        );
-      });
+        )
+      );
   };
 
   const pauseSession = () => {

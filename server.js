@@ -8,6 +8,7 @@ const textFileRoutes = require("./routes/textFileRoutes");
 const sessionTemplateRoutes = require("./routes/sessionTemplateRoutes");
 const readingSessionRoutes = require("./routes/readingSessionRoutes");
 const scrollPosEntryRoutes = require("./routes/scrollPosEntryRoutes");
+const styleRoutes = require("./routes/styleRoutes");
 
 const corsOptions = {
   origin: "https://scroll-reader-app.herokuapp.com",
@@ -49,6 +50,7 @@ class Server {
     this.app.use(sessionTemplateRoutes);
     this.app.use(readingSessionRoutes);
     this.app.use(scrollPosEntryRoutes);
+    this.app.use(styleRoutes);
 
     // Handle all other requests.
     this.app.get("*", (req, res) => {

@@ -14,9 +14,9 @@ const TextFileTextView = ({ isOpen, fileID, close }) => {
         .then((response) => {
           setText(response.data.text);
         })
-        .catch((error) => {
-          console.error("Error fetching text in TextFileTextView:", error);
-        });
+        .catch((error) =>
+          console.error("Error fetching text in TextFileTextView:", error)
+        );
     }
   }, [isOpen]);
 

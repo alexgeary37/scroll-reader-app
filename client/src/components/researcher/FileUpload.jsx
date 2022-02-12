@@ -3,12 +3,6 @@ import { useRef } from "react";
 import { Button } from "semantic-ui-react";
 
 const FileUpload = ({ uploadSubmitted }) => {
-  const defaultStyle = {
-    fontFamily: "sans-serif",
-    fontSize: 15,
-    lineHeight: 20,
-  };
-
   const fileRef = useRef();
 
   const handleButtonClick = () => {
@@ -25,7 +19,6 @@ const FileUpload = ({ uploadSubmitted }) => {
           text: event.target.result,
           fileName: file.name,
           questions: [],
-          styles: [defaultStyle],
           createdAt: new Date(),
         };
         axios
@@ -36,14 +29,11 @@ const FileUpload = ({ uploadSubmitted }) => {
               value: response.data._id,
               name: response.data.fileName,
               questions: [],
-              styles: [defaultStyle],
               uploadedAt: response.data.createdAt,
             };
             uploadSubmitted(doc);
           })
-          .catch((error) => {
-            console.error("Error uploading text file:", error);
-          });
+          .catch((error) => console.error("Error uploading text file:", error));
       };
       reader.readAsText(file);
     }
