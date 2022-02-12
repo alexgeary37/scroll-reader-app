@@ -38,7 +38,7 @@ const SpeedText = ({ fileID, textStyleID }) => {
           fontFamily: style.fontFamily,
           fontSize: `${style.fontSize}px`,
           lineHeight: `${style.lineHeight}px`,
-          // fontWeight: fontWeight,
+          fontWeight: fontWeight,
         });
       });
   };

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Header, List, Item, Segment } from "semantic-ui-react";
-import AddStyleToTextFile from "./AddStyleToTextFile";
+import CreateStyle from "./CreateStyle";
 import axios from "axios";
 
-const TextFileStylesView = ({ isOpen, close }) => {
+const StylesView = ({ isOpen, close }) => {
   const [openAddStyle, setOpenAddStyle] = useState(false);
   const [styles, setStyles] = useState([]);
   const [usedStyleIDs, setUsedStyleIDs] = useState([]);
@@ -93,7 +93,7 @@ const TextFileStylesView = ({ isOpen, close }) => {
         />
         <Button floated="right" content="Close" onClick={close} />
       </div>
-      <AddStyleToTextFile
+      <CreateStyle
         isOpen={openAddStyle}
         addStyle={addStyle}
         close={() => setOpenAddStyle(false)}
@@ -102,4 +102,4 @@ const TextFileStylesView = ({ isOpen, close }) => {
   );
 };
 
-export default TextFileStylesView;
+export default StylesView;

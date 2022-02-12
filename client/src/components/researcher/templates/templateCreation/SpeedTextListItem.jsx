@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Item, Button } from "semantic-ui-react";
-import StylesView from "./StylesView";
+import TextStylesView from "./TextStylesView";
 
 const SpeedTextListItem = ({ text, styles, selectStyle }) => {
   const [viewStyles, setViewStyles] = useState(false);
@@ -18,7 +18,7 @@ const SpeedTextListItem = ({ text, styles, selectStyle }) => {
             <Item.Header style={{ margin: 5 }} content={text.fileName} />
           </div>
           <Button content="Styles" onClick={() => setViewStyles(true)} />
-          <StylesView
+          <TextStylesView
             isOpen={viewStyles}
             styles={styles}
             updateStyle={updateStyle}

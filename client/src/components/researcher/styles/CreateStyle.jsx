@@ -4,7 +4,7 @@ import { Input, Button, Modal } from "semantic-ui-react";
 const MINIMUM_FONT_SIZE = 5;
 const MINIMUM_LINE_HEIGHT = 6;
 
-const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
+const CreateStyle = ({ isOpen, addStyle, close }) => {
   const [family, setFamily] = useState("");
   const [size, setSize] = useState(-1);
   const [lineHeight, setLineHeight] = useState(-1);
@@ -126,4 +126,4 @@ const AddStyleToTextFile = ({ isOpen, addStyle, close }) => {
   );
 };
 
-export default AddStyleToTextFile;
+export default CreateStyle;

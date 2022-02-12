@@ -7,7 +7,7 @@ import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
 import FileUpload from "./FileUpload.jsx";
 import ReadingSession from "./ReadingSession.jsx";
 import { clearStorage } from "../../utilities.js";
-import TextFileStylesView from "./textFiles/TextFileStylesView.jsx";
+import StylesView from "./styles/StylesView.jsx";
 
 const ResearcherView = ({ onLogout }) => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
@@ -403,7 +403,7 @@ const ResearcherView = ({ onLogout }) => {
           </Grid.Row>
         </Grid>
       </Container>
-      <TextFileStylesView
+      <StylesView
         isOpen={openStylesModal}
         close={() => setOpenStylesModal(false)}
       />

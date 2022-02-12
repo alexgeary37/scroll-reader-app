@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Input, Item, Button } from "semantic-ui-react";
 import QuestionsView from "./QuestionsView";
-import StylesView from "./StylesView";
+import TextStylesView from "./TextStylesView";
 
 const ScrollTextListItem = ({
   text,
@@ -77,7 +77,7 @@ const ScrollTextListItem = ({
             updateQuestions={updateQuestions}
           />
 
-          <StylesView
+          <TextStylesView
             isOpen={viewStyles}
             styles={styles}
             updateStyle={updateStyle}
