@@ -17,7 +17,7 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
     if (isOpen) {
       // Fetch styles
       axios
-        .get("/api/getStyles")
+        .get("/api/getAllStyles")
         .then((response) =>
           setStyles({ data: response.data, isFetching: false })
         )

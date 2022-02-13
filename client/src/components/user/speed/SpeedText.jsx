@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const SpeedText = ({ fileID, textStyleID }) => {
+const SpeedText = ({ fileID, style }) => {
   const [text, setText] = useState("");
   const [textStyle, setTextStyle] = useState(null);
 
@@ -11,7 +11,7 @@ const SpeedText = ({ fileID, textStyleID }) => {
 
   useEffect(() => {
     fetchStyle();
-  }, [textStyleID]);
+  }, [style]);
 
   const fetchText = () => {
     axios
@@ -26,18 +26,26 @@ const SpeedText = ({ fileID, textStyleID }) => {
 
   const fetchStyle = () => {
     axios
-      .get("/api/getStyle", {
-        params: { _id: textStyleID },
+      .get("/api/getStyles", {
+        params: {
+          styleIDs: Object.values(style),
+        },
       })
       .then((response) => {
-        const style = response.data;
-        const fontWeight = style.bold ? "bold" : "normal";
+        const h1Style = response.data.find((s) => s._id === style.h1ID);
+        const h2Style = response.data.find((s) => s._id === style.h2ID);
+        const h3Style = response.data.find((s) => s._id === style.h3ID);
+        const paragraphStyle = response.data.find(
+          (s) => s._id === style.paragraphID
+        );
+
+        const fontWeight = h1Style.bold ? "bold" : "normal";
         setTextStyle({
           marginLeft: 20,
           marginRight: 20,
-          fontFamily: style.fontFamily,
-          fontSize: `${style.fontSize}px`,
-          lineHeight: `${style.lineHeight}px`,
+          fontFamily: h1Style.fontFamily,
+          fontSize: `${h1Style.fontSize}px`,
+          lineHeight: `${h1Style.lineHeight}px`,
           fontWeight: fontWeight,
         });
       });

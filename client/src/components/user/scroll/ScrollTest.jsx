@@ -329,7 +329,7 @@ const ScrollTest = () => {
         <div style={{ marginTop: questionHeight }}>
           <ScrollText
             fileID={currentText.fileID}
-            textStyleID={currentText.styleID}
+            style={currentText.style}
             selectAnswerEnabled={selectAnswerEnabled}
             selectAnswer={handleAnswerQuestion}
           />

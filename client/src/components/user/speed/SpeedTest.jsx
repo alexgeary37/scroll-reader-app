@@ -18,7 +18,6 @@ const transitionInstructions = `Read the next text, then click "Done"`;
 const SpeedTest = () => {
   const sessionContext = useContext(SessionContext);
   const scrollTestRef = createRef();
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [instructions, setInstructions] = useState("");
   const [currentText, setCurrentText] = useState(
     sessionContext.template.speedTest.texts[sessionContext.fileNumber]
@@ -33,10 +32,10 @@ const SpeedTest = () => {
       setInstructions(transitionInstructions);
     }
     initialiseTextIsComplete();
-    window.onresize = debounce((e) => {
-      recordViewportResize(e, sessionContext);
-      setIsMobile(window.innerWidth <= 768);
-    }, 500);
+    window.onresize = debounce(
+      (e) => recordViewportResize(e, sessionContext),
+      500
+    );
   }, []);
 
   useEffect(() => {
@@ -177,7 +176,7 @@ const SpeedTest = () => {
         <div style={{ marginTop: 60 }}>
           <SpeedText
             fileID={currentText.fileID}
-            textStyleID={currentText.styleID}
+            style={currentText.style}
           />
         </div>
       );

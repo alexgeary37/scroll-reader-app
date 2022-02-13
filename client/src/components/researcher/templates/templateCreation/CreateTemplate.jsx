@@ -26,7 +26,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     if (isOpen) {
       // Fetch styles
       axios
-        .get("/api/getStyles")
+        .get("/api/getAllStyles")
         .then((response) => setStyles(response.data))
         .catch((error) => console.error("Error fetching styles:", error));
     }

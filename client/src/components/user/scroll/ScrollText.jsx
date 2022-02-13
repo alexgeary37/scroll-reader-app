@@ -8,12 +8,7 @@ import {
   wordSeparators,
 } from "../../../utilities.js";
 
-const ScrollText = ({
-  fileID,
-  textStyleID,
-  selectAnswerEnabled,
-  selectAnswer,
-}) => {
+const ScrollText = ({ fileID, style, selectAnswerEnabled, selectAnswer }) => {
   const sessionContext = useContext(SessionContext);
   const [words, setWords] = useState([]);
   const [textStyle, setTextStyle] = useState(null);
@@ -24,7 +19,7 @@ const ScrollText = ({
 
   useEffect(() => {
     fetchStyle();
-  }, [textStyleID]);
+  }, [style]);
 
   const fetchText = () => {
     axios
@@ -42,18 +37,26 @@ const ScrollText = ({
 
   const fetchStyle = () => {
     axios
-      .get("/api/getStyle", {
-        params: { _id: textStyleID },
+      .get("/api/getStyles", {
+        params: {
+          styleIDs: Object.values(style),
+        },
       })
       .then((response) => {
-        const style = response.data;
-        const fontWeight = style.bold ? "bold" : "normal";
+        const h1Style = response.data.find((s) => s._id === style.h1ID);
+        const h2Style = response.data.find((s) => s._id === style.h2ID);
+        const h3Style = response.data.find((s) => s._id === style.h3ID);
+        const paragraphStyle = response.data.find(
+          (s) => s._id === style.paragraphID
+        );
+
+        const fontWeight = h1Style.bold ? "bold" : "normal";
         setTextStyle({
           marginLeft: 20,
           marginRight: 20,
-          fontFamily: style.fontFamily,
-          fontSize: `${style.fontSize}px`,
-          lineHeight: `${style.lineHeight}px`,
+          fontFamily: h1Style.fontFamily,
+          fontSize: `${h1Style.fontSize}px`,
+          lineHeight: `${h1Style.lineHeight}px`,
           fontWeight: fontWeight,
         });
       });

@@ -17,7 +17,7 @@ const StylesView = ({ isOpen, close }) => {
 
   const fetchStyles = () => {
     axios
-      .get("/api/getStyles")
+      .get("/api/getAllStyles")
       .then((response) => setStyles(response.data))
       .catch((error) => console.error("Error fetching used styles:", error));
   };
