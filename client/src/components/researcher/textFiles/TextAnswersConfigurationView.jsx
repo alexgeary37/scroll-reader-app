@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { v4 as uuid_v4 } from "uuid";
-import { wordSeparators } from "../../../utilities.js";
+import { scrollTextSeparators } from "../../../utilities.js";
 import { Segment } from "semantic-ui-react";
 
 const TextAnswersConfigurationView = ({
@@ -24,7 +24,7 @@ const TextAnswersConfigurationView = ({
         params: { _id: fileID },
       })
       .then((response) => {
-        setWords(response.data.text.split(wordSeparators));
+        setWords(response.data.text.split(scrollTextSeparators));
       })
       .catch((error) =>
         console.error("Error fetching text in ScrollText:", error)

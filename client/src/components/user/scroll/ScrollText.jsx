@@ -5,13 +5,13 @@ import axios from "axios";
 import { SessionContext } from "../../../contexts/SessionContext.jsx";
 import {
   addScrollPosEntryToSessionContext,
-  wordSeparators,
+  scrollTextSeparators,
 } from "../../../utilities.js";
 
-const ScrollText = ({ fileID, style, selectAnswerEnabled, selectAnswer }) => {
+const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
   const sessionContext = useContext(SessionContext);
-  const [words, setWords] = useState([]);
-  const [textStyle, setTextStyle] = useState(null);
+  const [sentences, setSentences] = useState([]);
+  const [style, setStyle] = useState(null);
 
   useEffect(() => {
     fetchText();
@@ -19,7 +19,7 @@ const ScrollText = ({ fileID, style, selectAnswerEnabled, selectAnswer }) => {
 
   useEffect(() => {
     fetchStyle();
-  }, [style]);
+  }, [styles]);
 
   const fetchText = () => {
     axios
@@ -27,7 +27,7 @@ const ScrollText = ({ fileID, style, selectAnswerEnabled, selectAnswer }) => {
         params: { _id: fileID },
       })
       .then((response) => {
-        setWords(response.data.text.split(wordSeparators));
+        setSentences(response.data.text.split(scrollTextSeparators));
         sessionContext.setQuestionAnswers(response.data.questions);
       })
       .catch((error) =>
@@ -39,19 +39,19 @@ const ScrollText = ({ fileID, style, selectAnswerEnabled, selectAnswer }) => {
     axios
       .get("/api/getStyles", {
         params: {
-          styleIDs: Object.values(style),
+          styleIDs: Object.values(styles),
         },
       })
       .then((response) => {
-        const h1Style = response.data.find((s) => s._id === style.h1ID);
-        const h2Style = response.data.find((s) => s._id === style.h2ID);
-        const h3Style = response.data.find((s) => s._id === style.h3ID);
+        const h1Style = response.data.find((s) => s._id === styles.h1ID);
+        const h2Style = response.data.find((s) => s._id === styles.h2ID);
+        const h3Style = response.data.find((s) => s._id === styles.h3ID);
         const paragraphStyle = response.data.find(
-          (s) => s._id === style.paragraphID
+          (s) => s._id === styles.paragraphID
         );
 
         const fontWeight = h1Style.bold ? "bold" : "normal";
-        setTextStyle({
+        setStyle({
           marginLeft: 20,
           marginRight: 20,
           fontFamily: h1Style.fontFamily,
@@ -95,10 +95,10 @@ const ScrollText = ({ fileID, style, selectAnswerEnabled, selectAnswer }) => {
   };
 
   return (
-    <div className={selectAnswerEnabled ? "hand-cursor" : ""} style={textStyle}>
-      {words.map((word, index) => (
+    <div className={selectAnswerEnabled ? "hand-cursor" : ""} style={style}>
+      {sentences.map((s, index) => (
         <span key={uuid_v4()} onClick={() => handleSentenceClick(index)}>
-          {word + " "}
+          {s + " "}
         </span>
       ))}
     </div>

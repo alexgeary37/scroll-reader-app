@@ -176,7 +176,7 @@ const SpeedTest = () => {
         <div style={{ marginTop: 60 }}>
           <SpeedText
             fileID={currentText.fileID}
-            style={currentText.style}
+            styles={currentText.style}
           />
         </div>
       );
