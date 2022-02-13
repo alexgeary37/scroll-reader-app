@@ -23,11 +23,14 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
   const [styles, setStyles] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("/api/getStyles")
-      .then((response) => setStyles(response.data))
-      .catch((error) => console.error("Error fetching styles:", error));
-  }, []);
+    if (isOpen) {
+      // Fetch styles
+      axios
+        .get("/api/getStyles")
+        .then((response) => setStyles(response.data))
+        .catch((error) => console.error("Error fetching styles:", error));
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     setDropdownTextFiles(formatDropdownTextFiles(textFiles));
@@ -84,7 +87,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           fileID: scrollTexts[i].fileID,
           instructions: scrollTexts[i].instructions,
           questionIDs: scrollTexts[i].questionIDs,
-          styleID: scrollTexts[i].styleID,
+          style: scrollTexts[i].style,
         });
       }
 
@@ -134,7 +137,12 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           fileName: data.options.find(
             (file) => file.key === data.value[data.value.length - 1]
           ).text,
-          styleID: styles[0]._id,
+          style: {
+            h1ID: styles[0]._id,
+            h2ID: styles[0]._id,
+            h3ID: styles[0]._id,
+            paragraphID: styles[0]._id,
+          },
         },
       ]);
     }
@@ -171,7 +179,12 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             hasInterestQuestion: true,
           },
           questionIDs: [],
-          styleID: styles[0]._id,
+          style: {
+            h1ID: styles[0]._id,
+            h2ID: styles[0]._id,
+            h3ID: styles[0]._id,
+            paragraphID: styles[0]._id,
+          },
         },
       ]);
     }
@@ -184,17 +197,27 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setScrollTexts(tempScrollTexts);
   };
 
-  const handleSelectSpeedTextStyle = (text, styleID) => {
+  const handleSelectSpeedTextStyles = (text, h1, h2, h3, paragraph) => {
     const index = speedTexts.indexOf(text);
     const tempSpeedTexts = speedTexts;
-    tempSpeedTexts[index].styleID = styleID;
+    tempSpeedTexts[index].style = {
+      h1ID: h1,
+      h2ID: h2,
+      h3ID: h3,
+      paragraphID: paragraph,
+    };
     setSpeedTexts(tempSpeedTexts);
   };
 
-  const handleSelectScrollTextStyle = (text, styleID) => {
+  const handleSelectScrollTextStyles = (text, h1, h2, h3, paragraph) => {
     const index = scrollTexts.indexOf(text);
     const tempScrollTexts = scrollTexts;
-    tempScrollTexts[index].styleID = styleID;
+    tempScrollTexts[index].style = {
+      h1ID: h1,
+      h2ID: h2,
+      h3ID: h3,
+      paragraphID: paragraph,
+    };
     setScrollTexts(tempScrollTexts);
   };
 
@@ -236,7 +259,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
         tempSpeedTexts.push({
           fileID: text.fileID,
           name: textFiles.find((tf) => tf.key === text.fileID).name,
-          styleID: text.styleID,
+          style: text.style,
         });
       });
 
@@ -247,7 +270,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           name: textFiles.find((tf) => tf.key === fileObj.fileID).name,
           instructions: fileObj.instructions,
           questionIDs: fileObj.questionIDs,
-          styleID: fileObj.styleID,
+          style: fileObj.style,
         })
       );
 
@@ -277,7 +300,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             key={text.fileID}
             text={text}
             styles={styles}
-            selectStyle={handleSelectSpeedTextStyle}
+            selectStyles={handleSelectSpeedTextStyles}
           />
         ))}
       </List>
@@ -296,7 +319,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             }
             styles={styles}
             addQuestions={handleAddQuestions}
-            selectStyle={handleSelectScrollTextStyle}
+            selectStyles={handleSelectScrollTextStyles}
             setInstructions={setScrollTextInstructions}
             instructionsError={
               text.instructions.main === "" && displayMissingInputError

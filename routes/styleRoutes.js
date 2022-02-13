@@ -4,11 +4,11 @@ const StyleModel = require("../models/styles");
 
 router.post("/api/createStyle", async (req, res) => {
   const style = req.body.style;
-  StyleModel.create(style, (err, s) => {
+  StyleModel.create(style, (err, response) => {
     if (err) {
       res.send(err);
     } else {
-      res.send(s);
+      res.send(response);
     }
   });
 });

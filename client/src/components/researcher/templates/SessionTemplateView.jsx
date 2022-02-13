@@ -14,17 +14,21 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
   const [styles, setStyles] = useState({ data: [], isFetching: true });
 
   useEffect(() => {
-    axios
-      .get("/api/getStyles")
-      .then((response) => setStyles(response.data))
-      .catch((error) => console.error("Error fetching styles:", error));
-  }, []);
-
-  const styleContent = (text) => {
-    if (!styles.isFetching) {
-      const style = styles.find((s) => s._id === text.styleID);
-      return `font-family: ${style.fontFamily}, font-size: ${style.fontSize}, line-height: ${style.lineHeight}, bold: ${style.bold}`;
+    if (isOpen) {
+      // Fetch styles
+      axios
+        .get("/api/getStyles")
+        .then((response) =>
+          setStyles({ data: response.data, isFetching: false })
+        )
+        .catch((error) => console.error("Error fetching styles:", error));
     }
+  }, [isOpen]);
+
+  const styleContent = (textStyle, type) => {
+    const style = styles.data.find((s) => s._id === textStyle);
+    return `${type} - font-family: ${style.fontFamily}, font-size: 
+    ${style.fontSize}, line-height: ${style.lineHeight}, bold: ${style.bold}`;
   };
 
   const speedTestInfo = () => {
@@ -52,10 +56,29 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
                       style={{ marginTop: 5, marginBottom: 0 }}
                       content="Style"
                     />
-                    <Item.Description
-                      style={{ marginLeft: 20 }}
-                      content={styleContent(text)}
-                    />
+                    {!styles.isFetching && (
+                      <div>
+                        <Item.Description
+                          style={{ marginLeft: 20 }}
+                          content={styleContent(text.style.h1ID, "h1")}
+                        />
+                        <Item.Description
+                          style={{ marginLeft: 20 }}
+                          content={styleContent(text.style.h2ID, "h2")}
+                        />
+                        <Item.Description
+                          style={{ marginLeft: 20 }}
+                          content={styleContent(text.style.h3ID, "h3")}
+                        />
+                        <Item.Description
+                          style={{ marginLeft: 20 }}
+                          content={styleContent(
+                            text.style.paragraphID,
+                            "paragraph"
+                          )}
+                        />
+                      </div>
+                    )}
                   </Item.Content>
                 </Item>
               ))}
@@ -104,10 +127,30 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
                   style={{ marginTop: 5, marginBottom: 0 }}
                   content="Style"
                 />
-                <Item.Description
-                  style={{ marginLeft: 20 }}
-                  content={styleContent(text)}
-                />
+                {!styles.isFetching && (
+                  <div>
+                    <Item.Description
+                      style={{ marginLeft: 20 }}
+                      content={styleContent(text.style.h1ID, "h1")}
+                    />
+                    <Item.Description
+                      style={{ marginLeft: 20 }}
+                      content={styleContent(text.style.h2ID, "h2")}
+                    />
+                    <Item.Description
+                      style={{ marginLeft: 20 }}
+                      content={styleContent(text.style.h3ID, "h3")}
+                    />
+                    <Item.Description
+                      style={{ marginLeft: 20 }}
+                      content={styleContent(
+                        text.style.paragraphID,
+                        "paragraph"
+                      )}
+                    />
+                  </div>
+                )}
+
                 <Item.Description
                   as="h5"
                   style={{ marginTop: 5, marginBottom: 0 }}

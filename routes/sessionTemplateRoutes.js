@@ -57,8 +57,26 @@ router.get("/api/getUsedStyles", async (req, res) => {
     } else {
       const styles = [];
       result.forEach((template) => {
-        template.speedTest.texts.forEach((text) => styles.push(text.styleID));
-        template.scrollTexts.forEach((text) => styles.push(text.styleID));
+        template.speedTest.texts.forEach((text) => {
+          // Create array of distinct ids
+          // https://www.codegrepper.com/code-examples/javascript/distinct+string+in+array+javascript
+          const textStyles = [
+            text.style.h1ID,
+            text.style.h2ID,
+            text.style.h3ID,
+            text.style.paragraphID,
+          ].filter((value, index, arr) => arr.indexOf(value) === index);
+          styles = styles.concat(textStyles);
+        });
+        template.scrollTexts.forEach((text) => {
+          const textStyles = [
+            text.style.h1ID,
+            text.style.h2ID,
+            text.style.h3ID,
+            text.style.paragraphID,
+          ].filter((value, index, arr) => arr.indexOf(value) === index);
+          styles = styles.concat(textStyles);
+        });
       });
       res.send(styles);
     }

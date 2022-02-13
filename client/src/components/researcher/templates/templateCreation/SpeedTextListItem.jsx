@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Item, Button } from "semantic-ui-react";
 import TextStylesView from "./TextStylesView";
 
-const SpeedTextListItem = ({ text, styles, selectStyle }) => {
+const SpeedTextListItem = ({ text, styles, selectStyles }) => {
   const [viewStyles, setViewStyles] = useState(false);
 
-  const updateStyle = (style) => {
+  const updateStyles = (h1, h2, h3, paragraph) => {
     setViewStyles(false);
-    selectStyle(text, style);
+    selectStyles(text, h1, h2, h3, paragraph);
   };
 
   return (
@@ -21,7 +21,7 @@ const SpeedTextListItem = ({ text, styles, selectStyle }) => {
           <TextStylesView
             isOpen={viewStyles}
             styles={styles}
-            updateStyle={updateStyle}
+            updateStyles={updateStyles}
           />
         </div>
       </Item.Content>

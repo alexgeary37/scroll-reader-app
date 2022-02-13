@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Modal, Item, Button, Header, Dropdown, List } from "semantic-ui-react";
 import { v4 as uuid_v4 } from "uuid";
 
-const TextStylesView = ({ isOpen, styles, updateStyle }) => {
+const TextStylesView = ({ isOpen, styles, updateStyles }) => {
   const [dropdownStyles, setDropdownStyles] = useState([]);
   const [h1, setH1] = useState(styles[0]._id);
   const [h2, setH2] = useState(styles[0]._id);
@@ -102,7 +102,11 @@ const TextStylesView = ({ isOpen, styles, updateStyle }) => {
       {displayDropdownSelections()}
       {displaySetStyles()}
 
-      <Button floated="right" content="Save" onClick={() => updateStyle(h1)} />
+      <Button
+        floated="right"
+        content="Save"
+        onClick={() => updateStyles(h1, h2, h3, paragraph)}
+      />
     </Modal>
   );
 };

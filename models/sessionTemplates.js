@@ -7,7 +7,12 @@ const SessionTemplateSchema = mongoose.Schema({
       mongoose.Schema(
         {
           fileID: { type: String, required: true },
-          styleID: { type: String, required: true },
+          style: {
+            h1ID: { type: String, required: true },
+            h2ID: { type: String, required: true },
+            h3ID: { type: String, required: true },
+            paragraphID: { type: String, required: true },
+          },
         },
         { _id: false }
       ),
@@ -24,7 +29,12 @@ const SessionTemplateSchema = mongoose.Schema({
           hasInterestQuestion: { type: String, required: true },
         },
         questionIDs: [{ type: String, required: true }],
-        styleID: { type: String, required: true },
+        style: {
+          h1ID: { type: String, required: true },
+          h2ID: { type: String, required: true },
+          h3ID: { type: String, required: true },
+          paragraphID: { type: String, required: true },
+        },
       },
       { _id: false }
     ),

@@ -78,7 +78,7 @@ const ResearcherView = ({ onLogout }) => {
             speedTexts.push({
               fileID: text.fileID,
               name: textFiles.data.find((tf) => tf.key === text.fileID).name,
-              styleID: text.styleID,
+              style: text.style,
             });
           });
           const scrollTexts = [];
@@ -88,7 +88,7 @@ const ResearcherView = ({ onLogout }) => {
               name: textFiles.data.find((tf) => tf.key === fileObj.fileID).name,
               instructions: fileObj.instructions,
               questionIDs: fileObj.questionIDs,
-              styleID: fileObj.styleID,
+              style: fileObj.style,
             });
           });
 
@@ -273,9 +273,7 @@ const ResearcherView = ({ onLogout }) => {
       .get("/api/getTextFile", {
         params: { _id: file.key },
       })
-      .then((response) => {
-        // const newFile = file;
-        // newFile.styles[0]._id = response.data.styles[0]._id;
+      .then(() => {
         setTextFiles({
           data: [...textFiles.data, file],
           isFetching: false,

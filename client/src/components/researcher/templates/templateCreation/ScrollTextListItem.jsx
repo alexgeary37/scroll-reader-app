@@ -8,7 +8,7 @@ const ScrollTextListItem = ({
   availableQuestions,
   styles,
   addQuestions,
-  selectStyle,
+  selectStyles,
   setInstructions,
   instructionsError,
   toggleHasFamiliarityQuestion,
@@ -28,9 +28,9 @@ const ScrollTextListItem = ({
     addQuestions(text, selectedQuestions);
   };
 
-  const updateStyle = (style) => {
+  const updateStyles = (h1, h2, h3, paragraph) => {
     setViewStyles(false);
-    selectStyle(text, style);
+    selectStyles(text, h1, h2, h3, paragraph);
   };
 
   return (
@@ -80,7 +80,7 @@ const ScrollTextListItem = ({
           <TextStylesView
             isOpen={viewStyles}
             styles={styles}
-            updateStyle={updateStyle}
+            updateStyles={updateStyles}
           />
         </div>
       </Item.Content>
