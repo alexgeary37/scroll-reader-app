@@ -55,25 +55,25 @@ router.get("/api/getUsedStyles", async (req, res) => {
     if (err) {
       res.send(err);
     } else {
-      const styles = [];
+      let styles = [];
       result.forEach((template) => {
         template.speedTest.texts.forEach((text) => {
           // Create array of distinct ids
           // https://www.codegrepper.com/code-examples/javascript/distinct+string+in+array+javascript
           const textStyles = [
-            text.style.h1ID,
-            text.style.h2ID,
-            text.style.h3ID,
-            text.style.paragraphID,
+            text.style.h1,
+            text.style.h2,
+            text.style.h3,
+            text.style.paragraph,
           ].filter((value, index, arr) => arr.indexOf(value) === index);
           styles = styles.concat(textStyles);
         });
         template.scrollTexts.forEach((text) => {
           const textStyles = [
-            text.style.h1ID,
-            text.style.h2ID,
-            text.style.h3ID,
-            text.style.paragraphID,
+            text.style.h1,
+            text.style.h2,
+            text.style.h3,
+            text.style.paragraph,
           ].filter((value, index, arr) => arr.indexOf(value) === index);
           styles = styles.concat(textStyles);
         });

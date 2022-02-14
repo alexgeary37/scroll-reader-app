@@ -5,8 +5,10 @@ import TextStylesView from "./TextStylesView";
 const SpeedTextListItem = ({ text, styles, selectStyles }) => {
   const [viewStyles, setViewStyles] = useState(false);
 
-  const updateStyles = (h1, h2, h3, paragraph) => {
-    setViewStyles(false);
+  const updateStyles = (h1, h2, h3, paragraph, closeViewStyles) => {
+    if (closeViewStyles) {
+      setViewStyles(false);
+    }
     selectStyles(text, h1, h2, h3, paragraph);
   };
 

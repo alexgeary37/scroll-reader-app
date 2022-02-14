@@ -138,10 +138,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
             (file) => file.key === data.value[data.value.length - 1]
           ).text,
           style: {
-            h1ID: styles[0]._id,
-            h2ID: styles[0]._id,
-            h3ID: styles[0]._id,
-            paragraphID: styles[0]._id,
+            h1: styles[0]._id,
+            h2: styles[0]._id,
+            h3: styles[0]._id,
+            paragraph: styles[0]._id,
           },
         },
       ]);
@@ -180,10 +180,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
           },
           questionIDs: [],
           style: {
-            h1ID: styles[0]._id,
-            h2ID: styles[0]._id,
-            h3ID: styles[0]._id,
-            paragraphID: styles[0]._id,
+            h1: styles[0]._id,
+            h2: styles[0]._id,
+            h3: styles[0]._id,
+            paragraph: styles[0]._id,
           },
         },
       ]);
@@ -201,10 +201,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     const index = speedTexts.indexOf(text);
     const tempSpeedTexts = speedTexts;
     tempSpeedTexts[index].style = {
-      h1ID: h1,
-      h2ID: h2,
-      h3ID: h3,
-      paragraphID: paragraph,
+      h1: h1,
+      h2: h2,
+      h3: h3,
+      paragraph: paragraph,
     };
     setSpeedTexts(tempSpeedTexts);
   };
@@ -213,10 +213,10 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     const index = scrollTexts.indexOf(text);
     const tempScrollTexts = scrollTexts;
     tempScrollTexts[index].style = {
-      h1ID: h1,
-      h2ID: h2,
-      h3ID: h3,
-      paragraphID: paragraph,
+      h1: h1,
+      h2: h2,
+      h3: h3,
+      paragraph: paragraph,
     };
     setScrollTexts(tempScrollTexts);
   };

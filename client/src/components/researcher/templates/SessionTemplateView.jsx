@@ -26,9 +26,8 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
   }, [isOpen]);
 
   const styleContent = (textStyle, type) => {
-    const style = styles.data.find((s) => s._id === textStyle);
-    return `${type} - font-family: ${style.fontFamily}, font-size: 
-    ${style.fontSize}, line-height: ${style.lineHeight}, bold: ${style.bold}`;
+    return `${type} - font-family: ${textStyle.fontFamily}, font-size: ${textStyle.fontSize},
+        line-height: ${textStyle.lineHeight}, bold: ${textStyle.fontWeight}`;
   };
 
   const speedTestInfo = () => {
@@ -60,20 +59,20 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
                       <div>
                         <Item.Description
                           style={{ marginLeft: 20 }}
-                          content={styleContent(text.style.h1ID, "h1")}
+                          content={styleContent(text.style.h1, "h1")}
                         />
                         <Item.Description
                           style={{ marginLeft: 20 }}
-                          content={styleContent(text.style.h2ID, "h2")}
+                          content={styleContent(text.style.h2, "h2")}
                         />
                         <Item.Description
                           style={{ marginLeft: 20 }}
-                          content={styleContent(text.style.h3ID, "h3")}
+                          content={styleContent(text.style.h3, "h3")}
                         />
                         <Item.Description
                           style={{ marginLeft: 20 }}
                           content={styleContent(
-                            text.style.paragraphID,
+                            text.style.paragraph,
                             "paragraph"
                           )}
                         />
@@ -131,22 +130,19 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
                   <div>
                     <Item.Description
                       style={{ marginLeft: 20 }}
-                      content={styleContent(text.style.h1ID, "h1")}
+                      content={styleContent(text.style.h1, "h1")}
                     />
                     <Item.Description
                       style={{ marginLeft: 20 }}
-                      content={styleContent(text.style.h2ID, "h2")}
+                      content={styleContent(text.style.h2, "h2")}
                     />
                     <Item.Description
                       style={{ marginLeft: 20 }}
-                      content={styleContent(text.style.h3ID, "h3")}
+                      content={styleContent(text.style.h3, "h3")}
                     />
                     <Item.Description
                       style={{ marginLeft: 20 }}
-                      content={styleContent(
-                        text.style.paragraphID,
-                        "paragraph"
-                      )}
+                      content={styleContent(text.style.paragraph, "paragraph")}
                     />
                   </div>
                 )}

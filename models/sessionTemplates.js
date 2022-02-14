@@ -8,10 +8,30 @@ const SessionTemplateSchema = mongoose.Schema({
         {
           fileID: { type: String, required: true },
           style: {
-            h1ID: { type: String, required: true },
-            h2ID: { type: String, required: true },
-            h3ID: { type: String, required: true },
-            paragraphID: { type: String, required: true },
+            h1: {
+              fontFamily: { type: String, required: true },
+              fontSize: { type: Number, required: true },
+              fontWeight: { type: Boolean, required: true },
+              lineHeight: { type: Number, required: true },
+            },
+            h2: {
+              fontFamily: { type: String, required: true },
+              fontSize: { type: Number, required: true },
+              fontWeight: { type: Boolean, required: true },
+              lineHeight: { type: Number, required: true },
+            },
+            h3: {
+              fontFamily: { type: String, required: true },
+              fontSize: { type: Number, required: true },
+              fontWeight: { type: Boolean, required: true },
+              lineHeight: { type: Number, required: true },
+            },
+            paragraph: {
+              fontFamily: { type: String, required: true },
+              fontSize: { type: Number, required: true },
+              fontWeight: { type: Boolean, required: true },
+              lineHeight: { type: Number, required: true },
+            },
           },
         },
         { _id: false }
@@ -30,10 +50,30 @@ const SessionTemplateSchema = mongoose.Schema({
         },
         questionIDs: [{ type: String, required: true }],
         style: {
-          h1ID: { type: String, required: true },
-          h2ID: { type: String, required: true },
-          h3ID: { type: String, required: true },
-          paragraphID: { type: String, required: true },
+          h1: {
+            fontFamily: { type: String, required: true },
+            fontSize: { type: Number, required: true },
+            fontWeight: { type: Boolean, required: true },
+            lineHeight: { type: Number, required: true },
+          },
+          h2: {
+            fontFamily: { type: String, required: true },
+            fontSize: { type: Number, required: true },
+            fontWeight: { type: Boolean, required: true },
+            lineHeight: { type: Number, required: true },
+          },
+          h3: {
+            fontFamily: { type: String, required: true },
+            fontSize: { type: Number, required: true },
+            fontWeight: { type: Boolean, required: true },
+            lineHeight: { type: Number, required: true },
+          },
+          paragraph: {
+            fontFamily: { type: String, required: true },
+            fontSize: { type: Number, required: true },
+            fontWeight: { type: Boolean, required: true },
+            lineHeight: { type: Number, required: true },
+          },
         },
       },
       { _id: false }

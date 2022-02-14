@@ -41,44 +41,50 @@ const SpeedText = ({ fileID, styles }) => {
         },
       })
       .then((response) => {
-        const h1Style = response.data.find((s) => s._id === styles.h1ID);
-        const h2Style = response.data.find((s) => s._id === styles.h2ID);
-        const h3Style = response.data.find((s) => s._id === styles.h3ID);
+        const h1Style = response.data.find(
+          (s) => s._id === styles.h1.fontFamily
+        );
+        const h2Style = response.data.find(
+          (s) => s._id === styles.h2.fontFamily
+        );
+        const h3Style = response.data.find(
+          (s) => s._id === styles.h3.fontFamily
+        );
         const paragraphStyle = response.data.find(
-          (s) => s._id === styles.paragraphID
+          (s) => s._id === styles.paragraph.fontFamily
         );
 
-        const h1FontWeight = h1Style.bold ? "bold" : "normal";
-        const h2FontWeight = h2Style.bold ? "bold" : "normal";
-        const h3FontWeight = h3Style.bold ? "bold" : "normal";
-        const paragraphFontWeight = paragraphStyle.bold ? "bold" : "normal";
+        // const h1FontWeight = h1Style.bold ? "bold" : "normal";
+        // const h2FontWeight = h2Style.bold ? "bold" : "normal";
+        // const h3FontWeight = h3Style.bold ? "bold" : "normal";
+        // const paragraphFontWeight = paragraphStyle.bold ? "bold" : "normal";
 
         setStyle({
           style: {
             general: {
               marginLeft: 20,
               marginRight: 20,
-              lineHeight: `${h1Style.lineHeight}px`,
+              // lineHeight: `${h1Style.lineHeight}px`,
             },
             h1: {
               fontFamily: h1Style.fontFamily,
-              fontSize: `${h1Style.fontSize}px`,
-              fontWeight: h1FontWeight,
+              // fontSize: `${h1Style.fontSize}px`,
+              // fontWeight: h1FontWeight,
             },
             h2: {
               fontFamily: h2Style.fontFamily,
-              fontSize: `${h2Style.fontSize}px`,
-              fontWeight: h2FontWeight,
+              // fontSize: `${h2Style.fontSize}px`,
+              // fontWeight: h2FontWeight,
             },
             h3: {
               fontFamily: h3Style.fontFamily,
-              fontSize: `${h3Style.fontSize}px`,
-              fontWeight: h3FontWeight,
+              // fontSize: `${h3Style.fontSize}px`,
+              // fontWeight: h3FontWeight,
             },
             span: {
               fontFamily: paragraphStyle.fontFamily,
-              fontSize: `${paragraphStyle.fontSize}px`,
-              fontWeight: paragraphFontWeight,
+              // fontSize: `${paragraphStyle.fontSize}px`,
+              // fontWeight: paragraphFontWeight,
             },
           },
           isInitialized: true,

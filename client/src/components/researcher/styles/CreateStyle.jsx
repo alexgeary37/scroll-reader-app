@@ -1,32 +1,32 @@
 import { useState } from "react";
 import { Input, Button, Modal } from "semantic-ui-react";
 
-const MINIMUM_FONT_SIZE = 5;
-const MINIMUM_LINE_HEIGHT = 6;
+// const MINIMUM_FONT_SIZE = 5;
+// const MINIMUM_LINE_HEIGHT = 6;
 
 const CreateStyle = ({ isOpen, addStyle, close }) => {
   const [family, setFamily] = useState("");
-  const [size, setSize] = useState(-1);
-  const [lineHeight, setLineHeight] = useState(-1);
-  const [bold, setBold] = useState(false);
+  // const [size, setSize] = useState(-1);
+  // const [lineHeight, setLineHeight] = useState(-1);
+  // const [bold, setBold] = useState(false);
   const [displayFamilyError, setDisplayFamilyError] = useState(false);
-  const [displaySizeError, setDisplaySizeError] = useState(false);
-  const [displayLineHeightError, setDisplayLineHeightError] = useState(false);
+  // const [displaySizeError, setDisplaySizeError] = useState(false);
+  // const [displayLineHeightError, setDisplayLineHeightError] = useState(false);
 
   const handleFamilyChange = (event) => {
     setDisplayFamilyError(false);
     setFamily(event.target.value);
   };
 
-  const handleSizeChange = (event) => {
-    setDisplaySizeError(false);
-    setSize(event.target.value);
-  };
+  // const handleSizeChange = (event) => {
+  //   setDisplaySizeError(false);
+  //   setSize(event.target.value);
+  // };
 
-  const handleLineHeightChange = (event) => {
-    setDisplayLineHeightError(false);
-    setLineHeight(event.target.value);
-  };
+  // const handleLineHeightChange = (event) => {
+  //   setDisplayLineHeightError(false);
+  //   setLineHeight(event.target.value);
+  // };
 
   const checkFormInputs = () => {
     let emptyFields = false;
@@ -35,14 +35,14 @@ const CreateStyle = ({ isOpen, addStyle, close }) => {
       setDisplayFamilyError(true);
       emptyFields = true;
     }
-    if (size === -1) {
-      setDisplaySizeError(true);
-      emptyFields = true;
-    }
-    if (lineHeight === -1) {
-      setDisplayLineHeightError(true);
-      emptyFields = true;
-    }
+    // if (size === -1) {
+    //   setDisplaySizeError(true);
+    //   emptyFields = true;
+    // }
+    // if (lineHeight === -1) {
+    //   setDisplayLineHeightError(true);
+    //   emptyFields = true;
+    // }
 
     return emptyFields;
   };
@@ -53,28 +53,28 @@ const CreateStyle = ({ isOpen, addStyle, close }) => {
     if (!emptyFields) {
       const style = {
         fontFamily: family.trim(),
-        fontSize: size,
-        lineHeight: lineHeight,
-        bold: bold,
+        // fontSize: size,
+        // lineHeight: lineHeight,
+        // bold: bold,
       };
 
       addStyle(style);
 
       setFamily("");
-      setSize(-1);
-      setLineHeight(-1);
-      setBold(false);
+      // setSize(-1);
+      // setLineHeight(-1);
+      // setBold(false);
     }
   };
 
   const handleCancel = () => {
     setFamily("");
-    setSize(-1);
-    setLineHeight(-1);
-    setBold(false);
+    // setSize(-1);
+    // setLineHeight(-1);
+    // setBold(false);
     setDisplayFamilyError(false);
-    setDisplaySizeError(false);
-    setDisplayLineHeightError(false);
+    // setDisplaySizeError(false);
+    // setDisplayLineHeightError(false);
     close();
   };
 
@@ -90,7 +90,7 @@ const CreateStyle = ({ isOpen, addStyle, close }) => {
           placeholder="Type a font family here..."
           onChange={handleFamilyChange}
         />
-        <Input
+        {/* <Input
           style={{ marginBottom: 10 }}
           error={displaySizeError}
           type="Number"
@@ -109,7 +109,7 @@ const CreateStyle = ({ isOpen, addStyle, close }) => {
         <div className="ui checkbox">
           <input type="checkbox" onClick={() => setBold(!bold)} />
           <label>Bold</label>
-        </div>
+        </div> */}
 
         <div style={{ display: "flex", float: "right" }}>
           <Button content="Cancel" onClick={handleCancel} />

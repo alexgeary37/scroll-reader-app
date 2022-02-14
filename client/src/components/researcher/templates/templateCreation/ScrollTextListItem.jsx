@@ -28,8 +28,10 @@ const ScrollTextListItem = ({
     addQuestions(text, selectedQuestions);
   };
 
-  const updateStyles = (h1, h2, h3, paragraph) => {
-    setViewStyles(false);
+  const updateStyles = (h1, h2, h3, paragraph, closeViewStyles) => {
+    if (closeViewStyles) {
+      setViewStyles(false);
+    }
     selectStyles(text, h1, h2, h3, paragraph);
   };
 
