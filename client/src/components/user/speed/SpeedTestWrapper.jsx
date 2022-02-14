@@ -31,7 +31,7 @@ const SpeedTestWrapper = () => {
         return <SpeedTest />;
       }
     } else {
-      return <div></div>;
+      return <div />;
     }
   };
 

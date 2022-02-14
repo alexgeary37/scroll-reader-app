@@ -21,7 +21,7 @@ const ScrollTestWrapper = () => {
     } else if (sessionIsComplete === false) {
       return <ScrollTest />;
     } else {
-      return <div></div>;
+      return <div />;
     }
   };
 

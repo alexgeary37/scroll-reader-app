@@ -10,8 +10,11 @@ import {
 
 const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
   const sessionContext = useContext(SessionContext);
-  const [sentences, setSentences] = useState([]);
-  const [style, setStyle] = useState(null);
+  const [text, setText] = useState({
+    sections: [],
+    isFetching: true,
+  });
+  const [style, setStyle] = useState({ style: {}, isInitialized: false });
 
   useEffect(() => {
     fetchText();
@@ -22,12 +25,16 @@ const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
   }, [styles]);
 
   const fetchText = () => {
+    setText({ sections: text.sections, isFetching: true });
     axios
       .get("/api/getTextFile", {
         params: { _id: fileID },
       })
       .then((response) => {
-        setSentences(response.data.text.split(scrollTextSeparators));
+        setText({
+          sections: response.data.text.split(scrollTextSeparators),
+          isFetching: false,
+        });
         sessionContext.setQuestionAnswers(response.data.questions);
       })
       .catch((error) =>
@@ -36,6 +43,7 @@ const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
   };
 
   const fetchStyle = () => {
+    setStyle({ style: style.style, isInitialized: false });
     axios
       .get("/api/getStyles", {
         params: {
@@ -50,16 +58,45 @@ const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
           (s) => s._id === styles.paragraphID
         );
 
-        const fontWeight = h1Style.bold ? "bold" : "normal";
+        const h1FontWeight = h1Style.bold ? "bold" : "normal";
+        const h2FontWeight = h2Style.bold ? "bold" : "normal";
+        const h3FontWeight = h3Style.bold ? "bold" : "normal";
+        const paragraphFontWeight = paragraphStyle.bold ? "bold" : "normal";
+
         setStyle({
-          marginLeft: 20,
-          marginRight: 20,
-          fontFamily: h1Style.fontFamily,
-          fontSize: `${h1Style.fontSize}px`,
-          lineHeight: `${h1Style.lineHeight}px`,
-          fontWeight: fontWeight,
+          style: {
+            general: {
+              marginLeft: 20,
+              marginRight: 20,
+              lineHeight: `${h1Style.lineHeight}px`,
+            },
+            h1: {
+              fontFamily: h1Style.fontFamily,
+              fontSize: `${h1Style.fontSize}px`,
+              fontWeight: h1FontWeight,
+            },
+            h2: {
+              fontFamily: h2Style.fontFamily,
+              fontSize: `${h2Style.fontSize}px`,
+              fontWeight: h2FontWeight,
+            },
+            h3: {
+              fontFamily: h3Style.fontFamily,
+              fontSize: `${h3Style.fontSize}px`,
+              fontWeight: h3FontWeight,
+            },
+            span: {
+              fontFamily: paragraphStyle.fontFamily,
+              fontSize: `${paragraphStyle.fontSize}px`,
+              fontWeight: paragraphFontWeight,
+            },
+          },
+          isInitialized: true,
         });
-      });
+      })
+      .catch((error) =>
+        console.error("Error fetching styles in scrollText", error)
+      );
   };
 
   // This useEffect runs whenever sessionContext.scrollPosEntries changes.
@@ -94,15 +131,80 @@ const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
     }
   };
 
-  return (
-    <div className={selectAnswerEnabled ? "hand-cursor" : ""} style={style}>
-      {sentences.map((s, index) => (
-        <span key={uuid_v4()} onClick={() => handleSentenceClick(index)}>
-          {s + " "}
-        </span>
-      ))}
-    </div>
-  );
+  const displayContent = () => {
+    if (!text.isFetching && style.isInitialized) {
+      return (
+        <div
+          className={selectAnswerEnabled ? "hand-cursor" : ""}
+          style={style.style.general}
+        >
+          {text.sections.map((s, index) => {
+            const sSubstring = s.substring(4);
+
+            if (s.includes("<h1>")) {
+              return (
+                <h1 key={uuid_v4()} style={style.style.h1}>
+                  {sSubstring}
+                </h1>
+              );
+            } else if (s.includes("<h2>")) {
+              return (
+                <h2 key={uuid_v4()} style={style.style.h2}>
+                  {sSubstring}
+                </h2>
+              );
+            } else if (s.includes("<h3>")) {
+              return (
+                <h3 key={uuid_v4()} style={style.style.h3}>
+                  {sSubstring}
+                </h3>
+              );
+            } else if (s.includes("<p>")) {
+              const startPString = s.substring(3);
+              return (
+                <span
+                  key={uuid_v4()}
+                  style={style.style.span}
+                  onClick={() => handleSentenceClick(index)}
+                >
+                  {startPString}
+                </span>
+              );
+            } else if (s.includes("</p>")) {
+              const endPString = s.substring(0, s.length - 4);
+              return (
+                <span
+                  key={uuid_v4()}
+                  style={style.style.span}
+                  onClick={() => handleSentenceClick(index)}
+                >
+                  {endPString}
+                  <br />
+                  <br />
+                </span>
+              );
+            } else if (s === "\n" || s === "") {
+              // Do not display the newline
+            } else {
+              return (
+                <span
+                  key={uuid_v4()}
+                  style={style.style.span}
+                  onClick={() => handleSentenceClick(index)}
+                >
+                  {s}
+                </span>
+              );
+            }
+          })}
+        </div>
+      );
+    } else {
+      return <div />;
+    }
+  };
+
+  return displayContent();
 };
 
 export default ScrollText;
