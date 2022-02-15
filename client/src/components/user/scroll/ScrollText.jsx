@@ -136,7 +136,7 @@ const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
                 </span>
               );
             } else if (s === "\n" || s === "") {
-              // Do not display the newline
+              return <span></span>;
             } else {
               return (
                 <span

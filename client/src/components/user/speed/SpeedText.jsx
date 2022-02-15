@@ -74,7 +74,7 @@ const SpeedText = ({ fileID, styles }) => {
                 </span>
               );
             } else if (s === "\n" || s === "") {
-              // Do not display the newline
+              return <span></span>;
             } else {
               return (
                 <span key={uuid_v4()} style={style.style.paragraph}>

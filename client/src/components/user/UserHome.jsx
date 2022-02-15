@@ -6,7 +6,6 @@ import { SessionContext } from "../../contexts/SessionContext";
 import PageError from "../PageError";
 
 const MIN_USERNAME_CHARACTERS = 3;
-const isMobile = window.innerWidth <= 768;
 
 const UserHome = () => {
   const sessionContext = useContext(SessionContext);
