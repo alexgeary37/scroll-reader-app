@@ -1,17 +1,18 @@
 import { Item, Button } from "semantic-ui-react";
 import { useState } from "react";
-import DeleteReadingSessionModal from "./readingSessions/DeleteReadingSessionModal.jsx";
-import ConfirmExportModal from "./readingSessions/ConfirmExportModal.jsx";
+import ConfirmDeleteReadingSessionMessage from "./readingSessions/ConfirmDeleteReadingSessionMessage.jsx";
+import ConfirmExportMessage from "./readingSessions/ConfirmExportMessage.jsx";
 import { exportData } from "../../exportData.js";
 
 const ReadingSession = ({ session, textFiles, deleteReadingSession }) => {
-  const [openDeleteReadingSessionModal, setOpenDeleteReadingSessionModal] =
+  const [openDeleteReadingSessionMessage, setOpenDeleteReadingSessionMessage] =
     useState(false);
-  const [openConfirmExportModal, setOpenConfirmExportModal] = useState(false);
+  const [openConfirmExportMessage, setOpenConfirmExportMessage] =
+    useState(false);
 
   const handleAnswerYesExport = () => {
     exportData(session.key, textFiles);
-    setOpenConfirmExportModal(false);
+    setOpenConfirmExportMessage(false);
   };
 
   return (
@@ -33,24 +34,24 @@ const ReadingSession = ({ session, textFiles, deleteReadingSession }) => {
               primary
               content="Export Session Data"
               icon="download"
-              onClick={() => setOpenConfirmExportModal(true)}
+              onClick={() => setOpenConfirmExportMessage(true)}
             />
             <Button
               content="Delete"
-              onClick={() => setOpenDeleteReadingSessionModal(true)}
+              onClick={() => setOpenDeleteReadingSessionMessage(true)}
             />
           </div>
         </div>
 
-        <DeleteReadingSessionModal
-          isOpen={openDeleteReadingSessionModal}
+        <ConfirmDeleteReadingSessionMessage
+          isOpen={openDeleteReadingSessionMessage}
           answerYes={deleteReadingSession}
-          answerNo={() => setOpenDeleteReadingSessionModal(false)}
+          answerNo={() => setOpenDeleteReadingSessionMessage(false)}
         />
-        <ConfirmExportModal
-          isOpen={openConfirmExportModal}
+        <ConfirmExportMessage
+          isOpen={openConfirmExportMessage}
           answerYes={handleAnswerYesExport}
-          answerNo={() => setOpenConfirmExportModal(false)}
+          answerNo={() => setOpenConfirmExportMessage(false)}
         />
       </Item.Content>
     </Item>

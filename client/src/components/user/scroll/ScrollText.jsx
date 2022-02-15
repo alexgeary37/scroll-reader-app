@@ -136,7 +136,7 @@ const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
                 </span>
               );
             } else if (s === "\n" || s === "") {
-              return <span></span>;
+              return <span key={uuid_v4()} />;
             } else {
               return (
                 <span

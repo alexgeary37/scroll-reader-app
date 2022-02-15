@@ -16,7 +16,7 @@ const ResearcherView = ({ onLogout }) => {
     data: [],
     isFetching: true,
   });
-  const [openStylesModal, setOpenStylesModal] = useState(false);
+  const [openStylesView, setOpenStylesView] = useState(false);
   const [openTemplateCreator, setOpenTemplateCreator] = useState(false);
 
   useEffect(() => {
@@ -390,7 +390,7 @@ const ResearcherView = ({ onLogout }) => {
               content="Clear Storage"
               onClick={() => clearStorage(null)}
             />
-            <Button content="Styles" onClick={() => setOpenStylesModal(true)} />
+            <Button content="Styles" onClick={() => setOpenStylesView(true)} />
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
@@ -402,8 +402,8 @@ const ResearcherView = ({ onLogout }) => {
         </Grid>
       </Container>
       <StylesView
-        isOpen={openStylesModal}
-        close={() => setOpenStylesModal(false)}
+        isOpen={openStylesView}
+        close={() => setOpenStylesView(false)}
       />
     </div>
   );

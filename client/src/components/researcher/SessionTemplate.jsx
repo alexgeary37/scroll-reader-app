@@ -1,7 +1,7 @@
 import { List, Item, Button } from "semantic-ui-react";
 import SessionTemplateView from "./templates/SessionTemplateView.jsx";
 import { useState } from "react";
-import DeleteTemplateModal from "./templates/DeleteTemplateModal.jsx";
+import ConfirmDeleteTemplateMessage from "./templates/ConfirmDeleteTemplateMessage.jsx";
 
 const SessionTemplate = ({
   template,
@@ -10,7 +10,10 @@ const SessionTemplate = ({
   deleteTemplate,
 }) => {
   const [openTemplateView, setOpenTemplateView] = useState(false);
-  const [openDeleteTemplateModal, setOpenDeleteTemplateModal] = useState(false);
+  const [
+    openConfirmDeleteTemplateMessage,
+    setOpenConfirmDeleteTemplateMessage,
+  ] = useState(false);
 
   return (
     <Item>
@@ -69,7 +72,7 @@ const SessionTemplate = ({
           <Button
             disabled={usedInReadingSession}
             content="Delete"
-            onClick={() => setOpenDeleteTemplateModal(true)}
+            onClick={() => setOpenConfirmDeleteTemplateMessage(true)}
           />
         </div>
 
@@ -79,10 +82,10 @@ const SessionTemplate = ({
           textFiles={textFiles}
           close={() => setOpenTemplateView(false)}
         />
-        <DeleteTemplateModal
-          isOpen={openDeleteTemplateModal}
+        <ConfirmDeleteTemplateMessage
+          isOpen={openConfirmDeleteTemplateMessage}
           answerYes={deleteTemplate}
-          answerNo={() => setOpenDeleteTemplateModal(false)}
+          answerNo={() => setOpenConfirmDeleteTemplateMessage(false)}
         />
       </Item.Content>
     </Item>

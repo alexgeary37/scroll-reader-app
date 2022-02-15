@@ -4,7 +4,7 @@ import { useContext, useState, useEffect, createRef } from "react";
 import { Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import ScrollTestInstructions from "./ScrollTestInstructions.jsx";
-import PauseWindow from "../PauseWindow.jsx";
+import PauseMessage from "../PauseMessage.jsx";
 import axios from "axios";
 import {
   addScrollPosEntryToSessionContext,
@@ -15,10 +15,10 @@ import {
 import { getScrollPosition } from "./scrollPosition.jsx";
 import ComprehensionQuestion from "./ComprehensionQuestion.jsx";
 import ClickQuestion from "./ClickQuestion.jsx";
-import ConfirmSkipQuestionWindow from "./ConfirmSkipQuestionWindow.jsx";
-import UnfinishedQuestionsWindow from "../UnfinishedQuestionsWindow.jsx";
-import AnswerResponseWindow from "./AnswerResponseWindow.jsx";
-import AnswersCompleteWindow from "./AnswersCompleteWindow.jsx";
+import ConfirmSkipQuestionMessage from "./ConfirmSkipQuestionMessage.jsx";
+import UnfinishedQuestionsMessage from "../UnfinishedQuestionsMessage.jsx";
+import AnswerResponseMessage from "./AnswerResponseMessage.jsx";
+import AnswersCompleteMessage from "./AnswersCompleteMessage.jsx";
 import { debounce } from "debounce";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -28,8 +28,7 @@ const ScrollTest = () => {
   const sessionContext = useContext(SessionContext);
   const [questionHeight, setQuestionHeight] = useState(DEFAULT_QUESTION_HEIGHT);
   const endPageRef = createRef();
-  const [displayMobileQuestionModal, setDisplayMobileQuestionModal] =
-    useState(false);
+  const [displayQuestion, setDisplayQuestion] = useState(false);
   const [currentText, setCurrentText] = useState(
     sessionContext.template.scrollTexts[sessionContext.fileNumber]
   );
@@ -37,7 +36,7 @@ const ScrollTest = () => {
     JSON.parse(localStorage.getItem("scrollQuestionNumber"))
   );
   const [selectAnswerEnabled, setSelectAnswerEnabled] = useState(false);
-  const [answerResponseWindow, setAnswerResponseWindow] = useState({
+  const [answerResponseMessage, setAnswerResponseMessage] = useState({
     display: false,
     isCorrect: false,
   });
@@ -45,10 +44,13 @@ const ScrollTest = () => {
     useState(false);
   const [displayAnswersCompleteMessage, setDisplayAnswersCompleteMessage] =
     useState(false);
-  const [displayUnfinishedQuestionsModal, setDisplayUnfinishedQuestionsModal] =
-    useState(false);
+  const [
+    displayUnfinishedQuestionsMessage,
+    setDisplayUnfinishedQuestionsMessage,
+  ] = useState(false);
   const [textIsComplete, setTextIsComplete] = useState(false);
-  const [displayConfirmDoneModal, setDisplayConfirmDoneModal] = useState(false);
+  const [displayConfirmDoneMessage, setDisplayConfirmDoneMessage] =
+    useState(false);
 
   useEffect(() => {
     if (localStorage.getItem("scrollQuestionNumber") === null) {
@@ -130,9 +132,9 @@ const ScrollTest = () => {
   };
 
   const handleFinishText = async () => {
-    setDisplayConfirmDoneModal(false);
+    setDisplayConfirmDoneMessage(false);
     if (scrollQuestionNumber < currentText.questionIDs.length) {
-      setDisplayUnfinishedQuestionsModal(true);
+      setDisplayUnfinishedQuestionsMessage(true);
     } else {
       sessionContext.setHasStartedReading(false);
       const lastText = isLastText("scroll", sessionContext);
@@ -231,17 +233,17 @@ const ScrollTest = () => {
             setScrollQuestionNumber(scrollQuestionNumber + 1);
           } else {
             if (isCorrect) {
-              setDisplayMobileQuestionModal(false);
+              setDisplayQuestion(false);
               setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
             }
-            setAnswerResponseWindow({ display: true, isCorrect: isCorrect });
+            setAnswerResponseMessage({ display: true, isCorrect: isCorrect });
           }
         } else {
           if (scrollQuestionNumber + 1 >= currentText.questionIDs.length) {
             setDisplayAnswersCompleteMessage(true);
           }
           setScrollQuestionNumber(scrollQuestionNumber + 1);
-          setDisplayMobileQuestionModal(false);
+          setDisplayQuestion(false);
           setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
         }
       })
@@ -257,13 +259,13 @@ const ScrollTest = () => {
     handleAnswerQuestion("", true);
     setSelectAnswerEnabled(false);
     setDisplayConfirmSkipMessage(false);
-    setDisplayMobileQuestionModal(false);
+    setDisplayQuestion(false);
     setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
   };
 
   const handleCloseScrollTestInstructions = () => {
     sessionContext.setHasStartedReading(true);
-    setDisplayConfirmDoneModal(false);
+    setDisplayConfirmDoneMessage(false);
     addScrollPosEntryToSessionContext(
       sessionContext,
       parseInt(getScrollPosition().y)
@@ -290,7 +292,7 @@ const ScrollTest = () => {
               primary
               disabled={textIsComplete}
               content="Done"
-              onClick={() => setDisplayConfirmDoneModal(true)}
+              onClick={() => setDisplayConfirmDoneMessage(true)}
             />
             <Link to="/end" hidden ref={endPageRef} />
             <Button
@@ -304,7 +306,7 @@ const ScrollTest = () => {
                 positive
                 disabled={textIsComplete}
                 content="Question"
-                onClick={() => setDisplayMobileQuestionModal(true)}
+                onClick={() => setDisplayQuestion(true)}
               />
             )}
           </Button.Group>
@@ -351,12 +353,12 @@ const ScrollTest = () => {
           (q) => q._id === currentText.questionIDs[scrollQuestionNumber]
         ).questionFormat === "comprehension";
 
-      if (displayMobileQuestionModal) {
+      if (displayQuestion) {
         return isComprehension ? (
           <ComprehensionQuestion
             componentHeight={(height) => setQuestionHeight(height + 15)}
             close={() => {
-              setDisplayMobileQuestionModal(false);
+              setDisplayQuestion(false);
               setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
             }}
             currentText={currentText}
@@ -369,7 +371,7 @@ const ScrollTest = () => {
           <ClickQuestion
             componentHeight={(height) => setQuestionHeight(height + 15)}
             close={() => {
-              setDisplayMobileQuestionModal(false);
+              setDisplayQuestion(false);
               setSelectAnswerEnabled(false);
               setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
             }}
@@ -396,24 +398,24 @@ const ScrollTest = () => {
         <ScrollTestInstructions
           isOpen={
             sessionContext.hasStartedReading === false ||
-            displayConfirmDoneModal
+            displayConfirmDoneMessage
           }
-          displayConfirmMessage={displayConfirmDoneModal}
+          displayConfirmMessage={displayConfirmDoneMessage}
           text={currentText}
           answerYes={handleFinishText}
           close={handleCloseScrollTestInstructions}
         />
-        <AnswerResponseWindow
-          isOpen={answerResponseWindow.display}
-          isCorrect={answerResponseWindow.isCorrect}
+        <AnswerResponseMessage
+          isOpen={answerResponseMessage.display}
+          isCorrect={answerResponseMessage.isCorrect}
           tryAgain={() =>
-            setAnswerResponseWindow({ display: false, isCorrect: false })
+            setAnswerResponseMessage({ display: false, isCorrect: false })
           }
           continueReading={() => {
-            const answerWasCorrect = answerResponseWindow.isCorrect;
-            setAnswerResponseWindow({ display: false, isCorrect: false });
+            const answerWasCorrect = answerResponseMessage.isCorrect;
+            setAnswerResponseMessage({ display: false, isCorrect: false });
             setSelectAnswerEnabled(false);
-            setDisplayMobileQuestionModal(false);
+            setDisplayQuestion(false);
             setQuestionHeight(DEFAULT_QUESTION_HEIGHT);
             if (
               answerWasCorrect &&
@@ -423,20 +425,20 @@ const ScrollTest = () => {
             }
           }}
         />
-        <ConfirmSkipQuestionWindow
+        <ConfirmSkipQuestionMessage
           isOpen={displayConfirmSkipMessage}
           skip={skipQuestion}
           cancel={() => setDisplayConfirmSkipMessage(false)}
         />
-        <AnswersCompleteWindow
+        <AnswersCompleteMessage
           isOpen={displayAnswersCompleteMessage}
           close={() => setDisplayAnswersCompleteMessage(false)}
         />
-        <UnfinishedQuestionsWindow
-          isOpen={displayUnfinishedQuestionsModal}
-          close={() => setDisplayUnfinishedQuestionsModal(false)}
+        <UnfinishedQuestionsMessage
+          isOpen={displayUnfinishedQuestionsMessage}
+          close={() => setDisplayUnfinishedQuestionsMessage(false)}
         />
-        <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
+        <PauseMessage isOpen={sessionContext.isPaused} resume={resumeSession} />
       </div>
     );
   };

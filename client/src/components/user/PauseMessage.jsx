@@ -1,6 +1,6 @@
-import { Modal, Button } from "semantic-ui-react";
+import { Button, Modal } from "semantic-ui-react";
 
-const AnswersCompleteWindow = ({ isOpen, close }) => {
+const PauseMessage = ({ isOpen, resume }) => {
   return (
     <Modal
       size="tiny"
@@ -10,13 +10,13 @@ const AnswersCompleteWindow = ({ isOpen, close }) => {
       <Modal.Description
         as="h4"
         style={{ margin: "2vh" }}
-        content="You have answered all the questions!"
+        content="Click to resume reading"
       />
       <div style={{ marginBottom: "1vh" }}>
-        <Button primary content="Ok" onClick={close} />
+        <Button primary content="Resume" onClick={resume} />
       </div>
     </Modal>
   );
 };
 
-export default AnswersCompleteWindow;
+export default PauseMessage;

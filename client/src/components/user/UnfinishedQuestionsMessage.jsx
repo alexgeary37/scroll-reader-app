@@ -1,6 +1,6 @@
 import { Modal, Button } from "semantic-ui-react";
 
-const ConfirmSkipQuestionWindow = ({ isOpen, skip, cancel }) => {
+const UnfinishedQuestionsMessage = ({ isOpen, close }) => {
   return (
     <Modal
       size="tiny"
@@ -10,14 +10,14 @@ const ConfirmSkipQuestionWindow = ({ isOpen, skip, cancel }) => {
       <Modal.Description
         as="h4"
         style={{ margin: "2vh" }}
-        content="Are you sure you want to skip this question? You will not be able to come back to it later"
+        content={`You have not answered all the questions for this text.
+        Please answer each of the remaining questions, or click "Skip"`}
       />
       <div style={{ marginBottom: "1vh" }}>
-        <Button content="No" onClick={cancel} />
-        <Button primary content="Yes" onClick={skip} />
+        <Button primary content="Ok" onClick={close} />
       </div>
     </Modal>
   );
 };
 
-export default ConfirmSkipQuestionWindow;
+export default UnfinishedQuestionsMessage;

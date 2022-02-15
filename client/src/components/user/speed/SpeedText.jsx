@@ -74,7 +74,7 @@ const SpeedText = ({ fileID, styles }) => {
                 </span>
               );
             } else if (s === "\n" || s === "") {
-              return <span></span>;
+              return <span key={uuid_v4()} />;
             } else {
               return (
                 <span key={uuid_v4()} style={style.style.paragraph}>

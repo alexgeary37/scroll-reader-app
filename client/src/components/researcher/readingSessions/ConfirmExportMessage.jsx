@@ -1,6 +1,6 @@
 import { Modal, Button } from "semantic-ui-react";
 
-const DeleteTextModal = ({ isOpen, answerYes, answerNo }) => {
+const ConfirmExportMessage = ({ isOpen, answerYes, answerNo }) => {
   return (
     <Modal
       size="tiny"
@@ -9,7 +9,7 @@ const DeleteTextModal = ({ isOpen, answerYes, answerNo }) => {
     >
       <Modal.Description
         as="h4"
-        content="Are you sure you want to delete this text?"
+        content="Are you sure you want to export data from this reading session?"
       />
       <div style={{ marginTop: 10 }}>
         <Button content="No" onClick={answerNo} />
@@ -19,4 +19,4 @@ const DeleteTextModal = ({ isOpen, answerYes, answerNo }) => {
   );
 };
 
-export default DeleteTextModal;
+export default ConfirmExportMessage;

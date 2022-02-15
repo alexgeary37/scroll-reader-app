@@ -1,6 +1,6 @@
 import { Modal, Button } from "semantic-ui-react";
 
-const DeleteReadingSessionModal = ({ isOpen, answerYes, answerNo }) => {
+const ConfirmDeleteTextMessage = ({ isOpen, answerYes, answerNo }) => {
   return (
     <Modal
       size="tiny"
@@ -9,7 +9,7 @@ const DeleteReadingSessionModal = ({ isOpen, answerYes, answerNo }) => {
     >
       <Modal.Description
         as="h4"
-        content="Are you sure you want to delete this reading session?"
+        content="Are you sure you want to delete this text?"
       />
       <div style={{ marginTop: 10 }}>
         <Button content="No" onClick={answerNo} />
@@ -19,4 +19,4 @@ const DeleteReadingSessionModal = ({ isOpen, answerYes, answerNo }) => {
   );
 };
 
-export default DeleteReadingSessionModal;
+export default ConfirmDeleteTextMessage;

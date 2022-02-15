@@ -4,7 +4,7 @@ import { useContext, createRef, useState, useEffect } from "react";
 import { Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import SpeedTestInstructions from "./SpeedTestInstructions.jsx";
-import PauseWindow from "../PauseWindow.jsx";
+import PauseMessage from "../PauseMessage.jsx";
 import axios from "axios";
 import {
   isLastText,
@@ -23,7 +23,8 @@ const SpeedTest = () => {
     sessionContext.template.speedTest.texts[sessionContext.fileNumber]
   );
   const [textIsComplete, setTextIsComplete] = useState(false);
-  const [displayConfirmDoneModal, setDisplayConfirmDoneModal] = useState(false);
+  const [displayConfirmDoneMessage, setDisplayConfirmDoneMessage] =
+    useState(false);
 
   useEffect(() => {
     if (sessionContext.fileNumber === 0) {
@@ -88,7 +89,7 @@ const SpeedTest = () => {
   const handleFinishText = async () => {
     // Update session.speedTexts[currentFileID] with an end time.
     sessionContext.setHasStartedReading(false);
-    setDisplayConfirmDoneModal(false);
+    setDisplayConfirmDoneMessage(false);
     finishCurrentText();
 
     const fileNumber = sessionContext.fileNumber;
@@ -137,7 +138,7 @@ const SpeedTest = () => {
 
   const handleCloseSpeedTestInstructions = () => {
     sessionContext.setHasStartedReading(true);
-    setDisplayConfirmDoneModal(false);
+    setDisplayConfirmDoneMessage(false);
   };
 
   const displayButtons = () => {
@@ -156,7 +157,7 @@ const SpeedTest = () => {
             primary
             disabled={textIsComplete}
             content="Done"
-            onClick={() => setDisplayConfirmDoneModal(true)}
+            onClick={() => setDisplayConfirmDoneMessage(true)}
           />
           <Link to="/scrolltest" hidden ref={scrollTestRef} />
           <Button
@@ -174,10 +175,7 @@ const SpeedTest = () => {
     if (sessionContext.hasStartedReading) {
       return (
         <div style={{ marginTop: 60 }}>
-          <SpeedText
-            fileID={currentText.fileID}
-            styles={currentText.style}
-          />
+          <SpeedText fileID={currentText.fileID} styles={currentText.style} />
         </div>
       );
     }
@@ -189,15 +187,15 @@ const SpeedTest = () => {
         <SpeedTestInstructions
           isOpen={
             sessionContext.hasStartedReading === false ||
-            displayConfirmDoneModal
+            displayConfirmDoneMessage
           }
-          displayConfirmMessage={displayConfirmDoneModal}
+          displayConfirmMessage={displayConfirmDoneMessage}
           instructions={instructions}
           fileID={currentText.fileID}
           answerYes={handleFinishText}
           close={handleCloseSpeedTestInstructions}
         />
-        <PauseWindow isOpen={sessionContext.isPaused} resume={resumeSession} />
+        <PauseMessage isOpen={sessionContext.isPaused} resume={resumeSession} />
       </div>
     );
   };

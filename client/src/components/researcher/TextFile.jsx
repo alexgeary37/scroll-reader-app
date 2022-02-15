@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Item, Icon, Button } from "semantic-ui-react";
-import DeleteTextModal from "./textFiles/DeleteTextModal";
+import ConfirmDeleteTextMessage from "./textFiles/ConfirmDeleteTextMessage";
 import TextFileQuestionsView from "./textFiles/TextFileQuestionsView";
 import TextFileTextView from "./textFiles/TextFileTextView";
 
@@ -11,9 +11,11 @@ const TextFile = ({
   removeQuestion,
   deleteFile,
 }) => {
-  const [openViewQuestions, setOpenViewQuestions] = useState(false);
+  const [openTextFileQuestionsView, setOpenTextFileQuestionsView] =
+    useState(false);
   const [openTextFileTextView, setOpenTextFileTextView] = useState(false);
-  const [openDeleteTextModal, setOpenDeleteTextModal] = useState(false);
+  const [openConfirmDeleteTextMessage, setOpenConfirmDeleteTextMessage] =
+    useState(false);
 
   return (
     <Item>
@@ -28,7 +30,7 @@ const TextFile = ({
           <div className="ui vertical buttons">
             <Button
               content="Questions"
-              onClick={() => setOpenViewQuestions(true)}
+              onClick={() => setOpenTextFileQuestionsView(true)}
             />
           </div>
 
@@ -40,28 +42,28 @@ const TextFile = ({
             <Button
               disabled={usedInTemplate}
               content="Delete"
-              onClick={() => setOpenDeleteTextModal(true)}
+              onClick={() => setOpenConfirmDeleteTextMessage(true)}
             />
           </div>
         </div>
 
         <TextFileQuestionsView
-          isOpen={openViewQuestions}
+          isOpen={openTextFileQuestionsView}
           fileID={file.key}
           questions={file.questions}
           updateFileQuestions={updateFileQuestions}
           removeQuestion={removeQuestion}
-          close={() => setOpenViewQuestions(false)}
+          close={() => setOpenTextFileQuestionsView(false)}
         />
         <TextFileTextView
           isOpen={openTextFileTextView}
           fileID={file.key}
           close={() => setOpenTextFileTextView(false)}
         />
-        <DeleteTextModal
-          isOpen={openDeleteTextModal}
+        <ConfirmDeleteTextMessage
+          isOpen={openConfirmDeleteTextMessage}
           answerYes={deleteFile}
-          answerNo={() => setOpenDeleteTextModal(false)}
+          answerNo={() => setOpenConfirmDeleteTextMessage(false)}
         />
       </Item.Content>
     </Item>

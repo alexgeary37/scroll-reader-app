@@ -1,6 +1,6 @@
 import { Modal, Button } from "semantic-ui-react";
 
-const AnswerResponseWindow = ({
+const AnswerResponseMessage = ({
   isOpen,
   isCorrect,
   tryAgain,
@@ -36,4 +36,4 @@ const AnswerResponseWindow = ({
   );
 };
 
-export default AnswerResponseWindow;
+export default AnswerResponseMessage;
