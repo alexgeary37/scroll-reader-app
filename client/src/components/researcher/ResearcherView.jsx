@@ -233,7 +233,7 @@ const ResearcherView = ({ onLogout }) => {
       );
   };
 
-  const fileUsedInTemplate = (fileID) => {
+  const fileUsedInTemplates = (fileID) => {
     if (!templates.isFetching) {
       const usedAsSpeed =
         templates.data.find((template) =>
@@ -297,7 +297,7 @@ const ResearcherView = ({ onLogout }) => {
                 <TextFile
                   key={file.key}
                   file={file}
-                  usedInTemplate={fileUsedInTemplate(file.key)}
+                  usedInTemplate={fileUsedInTemplates(file.key)}
                   updateFileQuestions={(newQuestion) =>
                     handleUpdateFileQuestions(file, newQuestion)
                   }

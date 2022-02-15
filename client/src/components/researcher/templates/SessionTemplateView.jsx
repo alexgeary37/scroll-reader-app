@@ -1,5 +1,3 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import {
   Button,
   Header,
@@ -11,20 +9,6 @@ import {
 } from "semantic-ui-react";
 
 const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
-  const [styles, setStyles] = useState({ data: [], isFetching: true });
-
-  useEffect(() => {
-    if (isOpen) {
-      // Fetch styles
-      axios
-        .get("/api/getAllStyles")
-        .then((response) =>
-          setStyles({ data: response.data, isFetching: false })
-        )
-        .catch((error) => console.error("Error fetching styles:", error));
-    }
-  }, [isOpen]);
-
   const styleContent = (textStyle, type) => {
     return `${type} - font-family: ${textStyle.fontFamily}, font-size: ${textStyle.fontSize}px,
         line-height: ${textStyle.lineHeight}%, font-weight: ${textStyle.fontWeight}`;
@@ -55,29 +39,27 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
                       style={{ marginTop: 5, marginBottom: 0 }}
                       content="Style"
                     />
-                    {!styles.isFetching && (
-                      <div>
-                        <Item.Description
-                          style={{ marginLeft: 20 }}
-                          content={styleContent(text.style.h1, "h1")}
-                        />
-                        <Item.Description
-                          style={{ marginLeft: 20 }}
-                          content={styleContent(text.style.h2, "h2")}
-                        />
-                        <Item.Description
-                          style={{ marginLeft: 20 }}
-                          content={styleContent(text.style.h3, "h3")}
-                        />
-                        <Item.Description
-                          style={{ marginLeft: 20 }}
-                          content={styleContent(
-                            text.style.paragraph,
-                            "paragraph"
-                          )}
-                        />
-                      </div>
-                    )}
+                    <div>
+                      <Item.Description
+                        style={{ marginLeft: 20 }}
+                        content={styleContent(text.style.h1, "h1")}
+                      />
+                      <Item.Description
+                        style={{ marginLeft: 20 }}
+                        content={styleContent(text.style.h2, "h2")}
+                      />
+                      <Item.Description
+                        style={{ marginLeft: 20 }}
+                        content={styleContent(text.style.h3, "h3")}
+                      />
+                      <Item.Description
+                        style={{ marginLeft: 20 }}
+                        content={styleContent(
+                          text.style.paragraph,
+                          "paragraph"
+                        )}
+                      />
+                    </div>
                   </Item.Content>
                 </Item>
               ))}
@@ -126,27 +108,24 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
                   style={{ marginTop: 5, marginBottom: 0 }}
                   content="Style"
                 />
-                {!styles.isFetching && (
-                  <div>
-                    <Item.Description
-                      style={{ marginLeft: 20 }}
-                      content={styleContent(text.style.h1, "h1")}
-                    />
-                    <Item.Description
-                      style={{ marginLeft: 20 }}
-                      content={styleContent(text.style.h2, "h2")}
-                    />
-                    <Item.Description
-                      style={{ marginLeft: 20 }}
-                      content={styleContent(text.style.h3, "h3")}
-                    />
-                    <Item.Description
-                      style={{ marginLeft: 20 }}
-                      content={styleContent(text.style.paragraph, "paragraph")}
-                    />
-                  </div>
-                )}
-
+                <div>
+                  <Item.Description
+                    style={{ marginLeft: 20 }}
+                    content={styleContent(text.style.h1, "h1")}
+                  />
+                  <Item.Description
+                    style={{ marginLeft: 20 }}
+                    content={styleContent(text.style.h2, "h2")}
+                  />
+                  <Item.Description
+                    style={{ marginLeft: 20 }}
+                    content={styleContent(text.style.h3, "h3")}
+                  />
+                  <Item.Description
+                    style={{ marginLeft: 20 }}
+                    content={styleContent(text.style.paragraph, "paragraph")}
+                  />
+                </div>
                 <Item.Description
                   as="h5"
                   style={{ marginTop: 5, marginBottom: 0 }}

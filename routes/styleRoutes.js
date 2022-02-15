@@ -24,17 +24,6 @@ router.get("/api/getStyle", async (req, res) => {
   });
 });
 
-router.get("/api/getStyles", async (req, res) => {
-  const styleIDs = req.query.styleIDs;
-  StyleModel.find({ _id: { $in: styleIDs } }, (err, result) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(result);
-    }
-  });
-});
-
 router.get("/api/getAllStyles", async (req, res) => {
   StyleModel.find({}, (err, result) => {
     if (err) {

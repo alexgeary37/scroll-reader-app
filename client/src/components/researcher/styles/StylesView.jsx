@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import { Modal, Button, Header, List, Item, Segment } from "semantic-ui-react";
+import { Modal, Button, Header, List, Segment } from "semantic-ui-react";
 import CreateStyle from "./CreateStyle";
 import axios from "axios";
+import Style from "./Style";
 
 const StylesView = ({ isOpen, close }) => {
   const [openAddStyle, setOpenAddStyle] = useState(false);
   const [styles, setStyles] = useState([]);
-  const [usedStyleIDs, setUsedStyleIDs] = useState([]);
+  const [usedStyleIDs, setUsedStyleIDs] = useState({
+    data: [],
+    isFetching: true,
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -23,10 +27,11 @@ const StylesView = ({ isOpen, close }) => {
   };
 
   const fetchTemplateStyles = () => {
+    setUsedStyleIDs({ data: usedStyleIDs.data, isFetching: true });
     axios
       .get("/api/getUsedStyles")
       .then((response) => {
-        setUsedStyleIDs(response.data);
+        setUsedStyleIDs({ data: response.data, isFetching: false });
       })
       .catch((error) => console.error("Error fetching used styles:", error));
   };
@@ -43,7 +48,7 @@ const StylesView = ({ isOpen, close }) => {
       .catch((error) => console.error("Error updating file.styles:", error));
   };
 
-  const removeStyle = (style) => {
+  const handleDeleteStyle = (style) => {
     let displayedStyles = styles;
     displayedStyles = displayedStyles.filter((s) => s !== style);
     setStyles(displayedStyles);
@@ -61,21 +66,11 @@ const StylesView = ({ isOpen, close }) => {
       <Segment style={{ overflow: "auto", maxHeight: "75%" }}>
         <List ordered divided relaxed>
           {styles.map((style) => (
-            <Item key={style._id}>
-              <div className="wrapper">
-                <Item.Description
-                  content={`font-family: ${style.fontFamily}`}
-                />
-                <Button
-                  floated="right"
-                  disabled={
-                    usedStyleIDs.includes(style._id) || styles.length < 2
-                  }
-                  content="Remove"
-                  onClick={() => removeStyle(style)}
-                />
-              </div>
-            </Item>
+            <Style
+              key={style._id}
+              style={style}
+              deleteStyle={() => handleDeleteStyle(style)}
+            />
           ))}
         </List>
       </Segment>
