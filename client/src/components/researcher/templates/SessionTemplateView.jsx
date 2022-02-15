@@ -26,8 +26,8 @@ const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
   }, [isOpen]);
 
   const styleContent = (textStyle, type) => {
-    return `${type} - font-family: ${textStyle.fontFamily}, font-size: ${textStyle.fontSize},
-        line-height: ${textStyle.lineHeight}, bold: ${textStyle.fontWeight}`;
+    return `${type} - font-family: ${textStyle.fontFamily}, font-size: ${textStyle.fontSize}px,
+        line-height: ${textStyle.lineHeight}%, font-weight: ${textStyle.fontWeight}`;
   };
 
   const speedTestInfo = () => {

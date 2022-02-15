@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { v4 as uuid_v4 } from "uuid";
-import { speedTextSeparators } from "../../../utilities.js";
+import { initializeStyles, speedTextSeparators } from "../../../utilities.js";
 
 const SpeedText = ({ fileID, styles }) => {
   const [text, setText] = useState({ sections: [], isFetching: true });
@@ -12,7 +12,7 @@ const SpeedText = ({ fileID, styles }) => {
   }, [fileID]);
 
   useEffect(() => {
-    fetchStyle();
+    initializeStyle();
   }, [styles]);
 
   const fetchText = () => {
@@ -32,73 +32,18 @@ const SpeedText = ({ fileID, styles }) => {
       );
   };
 
-  const fetchStyle = () => {
+  const initializeStyle = () => {
     setStyle({ style: style.style, isInitialized: false });
-    axios
-      .get("/api/getStyles", {
-        params: {
-          styleIDs: Object.values(styles),
-        },
-      })
-      .then((response) => {
-        const h1Style = response.data.find(
-          (s) => s._id === styles.h1.fontFamily
-        );
-        const h2Style = response.data.find(
-          (s) => s._id === styles.h2.fontFamily
-        );
-        const h3Style = response.data.find(
-          (s) => s._id === styles.h3.fontFamily
-        );
-        const paragraphStyle = response.data.find(
-          (s) => s._id === styles.paragraph.fontFamily
-        );
-
-        // const h1FontWeight = h1Style.bold ? "bold" : "normal";
-        // const h2FontWeight = h2Style.bold ? "bold" : "normal";
-        // const h3FontWeight = h3Style.bold ? "bold" : "normal";
-        // const paragraphFontWeight = paragraphStyle.bold ? "bold" : "normal";
-
-        setStyle({
-          style: {
-            general: {
-              marginLeft: 20,
-              marginRight: 20,
-              // lineHeight: `${h1Style.lineHeight}px`,
-            },
-            h1: {
-              fontFamily: h1Style.fontFamily,
-              // fontSize: `${h1Style.fontSize}px`,
-              // fontWeight: h1FontWeight,
-            },
-            h2: {
-              fontFamily: h2Style.fontFamily,
-              // fontSize: `${h2Style.fontSize}px`,
-              // fontWeight: h2FontWeight,
-            },
-            h3: {
-              fontFamily: h3Style.fontFamily,
-              // fontSize: `${h3Style.fontSize}px`,
-              // fontWeight: h3FontWeight,
-            },
-            span: {
-              fontFamily: paragraphStyle.fontFamily,
-              // fontSize: `${paragraphStyle.fontSize}px`,
-              // fontWeight: paragraphFontWeight,
-            },
-          },
-          isInitialized: true,
-        });
-      })
-      .catch((error) =>
-        console.error("Error fetching styles in SpeedText:", error)
-      );
+    setStyle({
+      style: initializeStyles(styles),
+      isInitialized: true,
+    });
   };
 
   const displayContent = () => {
     if (!text.isFetching && style.isInitialized) {
       return (
-        <div style={style.style.general}>
+        <div style={{ marginLeft: 20, marginRight: 20 }}>
           {text.sections.map((s) => {
             const sSubstring = s.substring(4, s.length - 5);
             if (s.includes("<h1>")) {
@@ -122,7 +67,7 @@ const SpeedText = ({ fileID, styles }) => {
             } else if (s.includes("<p>")) {
               const startPString = s.substring(3, s.length - 4);
               return (
-                <span key={uuid_v4()} style={style.style.span}>
+                <span key={uuid_v4()} style={style.style.paragraph}>
                   {startPString}
                   <br />
                   <br />
@@ -132,7 +77,7 @@ const SpeedText = ({ fileID, styles }) => {
               // Do not display the newline
             } else {
               return (
-                <span key={uuid_v4()} style={style.style.span}>
+                <span key={uuid_v4()} style={style.style.paragraph}>
                   {s}
                 </span>
               );

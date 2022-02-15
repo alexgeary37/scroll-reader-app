@@ -66,12 +66,6 @@ const StylesView = ({ isOpen, close }) => {
                 <Item.Description
                   content={`font-family: ${style.fontFamily}`}
                 />
-                {/* <Item.Description content={`font-size: ${style.fontSize}`} />
-                <Item.Description
-                  content={`line-height: ${style.lineHeight}`}
-                />
-                <Item.Description content={`bold: ${style.bold}`} /> */}
-
                 <Button
                   floated="right"
                   disabled={

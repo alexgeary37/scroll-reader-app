@@ -5,6 +5,7 @@ import axios from "axios";
 import { SessionContext } from "../../../contexts/SessionContext.jsx";
 import {
   addScrollPosEntryToSessionContext,
+  initializeStyles,
   scrollTextSeparators,
 } from "../../../utilities.js";
 
@@ -21,7 +22,7 @@ const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
   }, [fileID]);
 
   useEffect(() => {
-    fetchStyle();
+    initializeStyle();
   }, [styles]);
 
   const fetchText = () => {
@@ -42,61 +43,12 @@ const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
       );
   };
 
-  const fetchStyle = () => {
+  const initializeStyle = () => {
     setStyle({ style: style.style, isInitialized: false });
-    axios
-      .get("/api/getStyles", {
-        params: {
-          styleIDs: Object.values(styles),
-        },
-      })
-      .then((response) => {
-        const h1Style = response.data.find((s) => s._id === styles.h1ID);
-        const h2Style = response.data.find((s) => s._id === styles.h2ID);
-        const h3Style = response.data.find((s) => s._id === styles.h3ID);
-        const paragraphStyle = response.data.find(
-          (s) => s._id === styles.paragraphID
-        );
-
-        // const h1FontWeight = h1Style.bold ? "bold" : "normal";
-        // const h2FontWeight = h2Style.bold ? "bold" : "normal";
-        // const h3FontWeight = h3Style.bold ? "bold" : "normal";
-        // const paragraphFontWeight = paragraphStyle.bold ? "bold" : "normal";
-
-        setStyle({
-          style: {
-            general: {
-              marginLeft: 20,
-              marginRight: 20,
-              // lineHeight: `${h1Style.lineHeight}px`,
-            },
-            h1: {
-              fontFamily: h1Style.fontFamily,
-              // fontSize: `${h1Style.fontSize}px`,
-              // fontWeight: h1FontWeight,
-            },
-            h2: {
-              fontFamily: h2Style.fontFamily,
-              // fontSize: `${h2Style.fontSize}px`,
-              // fontWeight: h2FontWeight,
-            },
-            h3: {
-              fontFamily: h3Style.fontFamily,
-              // fontSize: `${h3Style.fontSize}px`,
-              // fontWeight: h3FontWeight,
-            },
-            span: {
-              fontFamily: paragraphStyle.fontFamily,
-              // fontSize: `${paragraphStyle.fontSize}px`,
-              // fontWeight: paragraphFontWeight,
-            },
-          },
-          isInitialized: true,
-        });
-      })
-      .catch((error) =>
-        console.error("Error fetching styles in scrollText", error)
-      );
+    setStyle({
+      style: initializeStyles(styles),
+      isInitialized: true,
+    });
   };
 
   // This useEffect runs whenever sessionContext.scrollPosEntries changes.

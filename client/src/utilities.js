@@ -8,6 +8,28 @@ export const scrollTextSeparators =
 
 /** Functions */
 
+// Take styles from template and format them into json for rendering.
+export const initializeStyles = (styles) => {
+  const h1 = styles.h1;
+  const h2 = styles.h2;
+  const h3 = styles.h3;
+  const paragraph = styles.paragraph;
+
+  h1.fontSize = `${h1.fontSize}px`;
+  h1.lineHeight = `${h1.lineHeight}%`;
+
+  h2.fontSize = `${h2.fontSize}px`;
+  h2.lineHeight = `${h2.lineHeight}%`;
+
+  h3.fontSize = `${h3.fontSize}px`;
+  h3.lineHeight = `${h3.lineHeight}%`;
+
+  paragraph.fontSize = `${paragraph.fontSize}px`;
+  paragraph.lineHeight = `${paragraph.lineHeight}%`;
+
+  return { h1, h2, h3, paragraph };
+};
+
 // Check if this is the last text.
 // Used in SpeedTest and ScrollTest.
 export const isLastText = (testType, context) => {
