@@ -8,6 +8,7 @@ import FileUpload from "./FileUpload.jsx";
 import ReadingSession from "./ReadingSession.jsx";
 import { clearStorage } from "../../utilities.js";
 import StylesView from "./styles/StylesView.jsx";
+import ConfirmDeleteReadingSessionMessage from "./readingSessions/ConfirmDeleteReadingSessionMessage.jsx";
 
 const ResearcherView = ({ onLogout }) => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
@@ -16,8 +17,11 @@ const ResearcherView = ({ onLogout }) => {
     data: [],
     isFetching: true,
   });
+  const [selectedReadingSessions, setSelectedReadingSessions] = useState([]);
   const [openStylesView, setOpenStylesView] = useState(false);
   const [openTemplateCreator, setOpenTemplateCreator] = useState(false);
+  const [openDeleteReadingSessionMessage, setOpenDeleteReadingSessionMessage] =
+    useState(false);
 
   useEffect(() => {
     // Fetch text files only on first render.
@@ -211,25 +215,27 @@ const ResearcherView = ({ onLogout }) => {
       .catch((error) => console.error("Error deleting template:", error));
   };
 
-  const handleDeleteReadingSession = (session) => {
+  const handleDeleteReadingSessions = (sessionsToDelete) => {
+    setOpenDeleteReadingSessionMessage(false);
     let sessions = readingSessions.data;
-    sessions = sessions.filter((s) => s !== session);
+    sessions = sessions.filter((s) => !sessionsToDelete.includes(s.key));
     setReadingSessions({ data: sessions, isFetching: false });
 
     axios
       .put("/api/deleteScrollPosEntries", {
-        sessionID: session.key,
+        sessionIDs: sessionsToDelete,
       })
       .catch((error) =>
         console.error("Error deleting scroll position entries", error)
       );
 
     axios
-      .put("/api/deleteReadingSession", {
-        readingSessionID: session.key,
+      .put("/api/deleteReadingSessions", {
+        readingSessionIDs: sessionsToDelete,
       })
+      .then(() => setSelectedReadingSessions([]))
       .catch((error) =>
-        console.error("Error deleting reading session:", error)
+        console.error("Error deleting reading sessions:", error)
       );
   };
 
@@ -282,6 +288,16 @@ const ResearcherView = ({ onLogout }) => {
       .catch((error) =>
         console.error("Error fetching text in ScrollText:", error)
       );
+  };
+
+  const handleSelectReadingSession = (sessionID) => {
+    if (selectedReadingSessions.includes(sessionID)) {
+      setSelectedReadingSessions(
+        selectedReadingSessions.filter((r) => r !== sessionID)
+      );
+    } else {
+      setSelectedReadingSessions([...selectedReadingSessions, sessionID]);
+    }
   };
 
   const displayTextFiles = () => {
@@ -364,7 +380,12 @@ const ResearcherView = ({ onLogout }) => {
       return (
         <div>
           <Header as="h1" textAlign="center" content="Reading Sessions" />
-
+          <Button
+            negative
+            disabled={selectedReadingSessions.length < 1}
+            content="Delete Selected Reading Sessions"
+            onClick={() => setOpenDeleteReadingSessionMessage(true)}
+          />
           <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
             <div className="ui link divided relaxed items">
               {readingSessions.data.map((session) => (
@@ -372,13 +393,21 @@ const ResearcherView = ({ onLogout }) => {
                   key={session.key}
                   session={session}
                   textFiles={textFiles.data}
+                  toggleSelect={() => handleSelectReadingSession(session.key)}
                   deleteReadingSession={() =>
-                    handleDeleteReadingSession(session)
+                    handleDeleteReadingSessions([session.key])
                   }
                 />
               ))}
             </div>
           </Segment>
+          <ConfirmDeleteReadingSessionMessage
+            isOpen={openDeleteReadingSessionMessage}
+            answerYes={() =>
+              handleDeleteReadingSessions(selectedReadingSessions)
+            }
+            answerNo={() => setOpenDeleteReadingSessionMessage(false)}
+          />
         </div>
       );
     }

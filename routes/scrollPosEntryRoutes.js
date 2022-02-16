@@ -26,15 +26,18 @@ router.get("/api/getScrollPosEntries", async (req, res) => {
 });
 
 router.put("/api/deleteScrollPosEntries", async (req, res) => {
-  const sessionID = req.body.sessionID;
+  const sessionIDs = req.body.sessionIDs;
 
-  ScrollPosEntryModel.deleteMany({ sessionID: sessionID }, (err, result) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send("Deleted scrollPosEntries");
+  ScrollPosEntryModel.deleteMany(
+    { sessionID: { $in: sessionIDs } },
+    (err, response) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send("Deleted scrollPosEntries");
+      }
     }
-  });
+  );
 });
 
 module.exports = router;

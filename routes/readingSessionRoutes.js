@@ -301,16 +301,19 @@ router.put("/api/addCurrentScrollTextQuestionAnswer", async (req, res) => {
   );
 });
 
-router.put("/api/deleteReadingSession", async (req, res) => {
-  const sessionID = req.body.readingSessionID;
+router.put("/api/deleteReadingSessions", async (req, res) => {
+  const sessionIDs = req.body.readingSessionIDs;
 
-  ReadingSessionModel.findByIdAndDelete(sessionID, (err, session) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send("Deleted session");
+  ReadingSessionModel.deleteMany(
+    { _id: { $in: sessionIDs } },
+    (err, response) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send("Deleted sessions");
+      }
     }
-  });
+  );
 });
 
 module.exports = router;

@@ -1,10 +1,15 @@
-import { Item, Button } from "semantic-ui-react";
+import { Item, Button, Checkbox } from "semantic-ui-react";
 import { useState } from "react";
 import ConfirmDeleteReadingSessionMessage from "./readingSessions/ConfirmDeleteReadingSessionMessage.jsx";
 import ConfirmExportMessage from "./readingSessions/ConfirmExportMessage.jsx";
 import { exportData } from "../../exportData.js";
 
-const ReadingSession = ({ session, textFiles, deleteReadingSession }) => {
+const ReadingSession = ({
+  session,
+  textFiles,
+  toggleSelect,
+  deleteReadingSession,
+}) => {
   const [openDeleteReadingSessionMessage, setOpenDeleteReadingSessionMessage] =
     useState(false);
   const [openConfirmExportMessage, setOpenConfirmExportMessage] =
@@ -29,17 +34,21 @@ const ReadingSession = ({ session, textFiles, deleteReadingSession }) => {
             <Item.Description content={`Start time: ${session.startTime}`} />
             <Item.Description content={`End time: ${session.endTime}`} />
           </div>
-          <div className="ui vertical buttons">
-            <Button
-              primary
-              content="Export Session Data"
-              icon="download"
-              onClick={() => setOpenConfirmExportMessage(true)}
-            />
-            <Button
-              content="Delete"
-              onClick={() => setOpenDeleteReadingSessionMessage(true)}
-            />
+          <div>
+            <div className="ui vertical buttons">
+              <Button
+                primary
+                content="Export Session Data"
+                icon="download"
+                onClick={() => setOpenConfirmExportMessage(true)}
+              />
+              <Button
+                content="Delete"
+                onClick={() => setOpenDeleteReadingSessionMessage(true)}
+              />
+            </div>
+
+            <Checkbox style={{ marginLeft: 10 }} onClick={toggleSelect} />
           </div>
         </div>
 
