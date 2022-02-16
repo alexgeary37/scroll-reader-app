@@ -1,5 +1,12 @@
 import TextFile from "./TextFile.jsx";
-import { Segment, Container, Grid, Header, Button } from "semantic-ui-react";
+import {
+  Segment,
+  Tab,
+  Container,
+  Grid,
+  Header,
+  Button,
+} from "semantic-ui-react";
 import { useState, useEffect } from "react";
 import SessionTemplate from "./SessionTemplate.jsx";
 import axios from "axios";
@@ -9,6 +16,14 @@ import ReadingSession from "./ReadingSession.jsx";
 import { clearStorage } from "../../utilities.js";
 import StylesView from "./styles/StylesView.jsx";
 import ConfirmDeleteReadingSessionMessage from "./readingSessions/ConfirmDeleteReadingSessionMessage.jsx";
+
+// const panes = [
+//   { menuItem: "Tab 1", render: () => <Tab.Pane>Tab 1 Content</Tab.Pane> },
+//   { menuItem: "Tab 2", render: () => <Tab.Pane>Tab 2 Content</Tab.Pane> },
+//   { menuItem: "Tab 3", render: () => <Tab.Pane>Tab 3 Content</Tab.Pane> },
+// ];
+
+// const TabExampleBasic = () => <Tab panes={panes} />;
 
 const ResearcherView = ({ onLogout }) => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
