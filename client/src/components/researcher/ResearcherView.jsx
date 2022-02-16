@@ -310,7 +310,10 @@ const ResearcherView = ({ onLogout }) => {
             </div>
           </Segment>
 
-          <FileUpload uploadSubmitted={handleFileUpload} />
+          <FileUpload
+            textFiles={textFiles.data}
+            uploadSubmitted={handleFileUpload}
+          />
         </div>
       );
     }
@@ -347,6 +350,7 @@ const ResearcherView = ({ onLogout }) => {
           />
           <CreateTemplate
             isOpen={openTemplateCreator}
+            templates={templates.data}
             close={closeTemplateCreator}
             textFiles={textFiles.data}
           />

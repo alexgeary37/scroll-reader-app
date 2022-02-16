@@ -1,9 +1,12 @@
 import axios from "axios";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Button } from "semantic-ui-react";
+import DuplicateFileMessage from "./textFiles/DuplicateFileMessage";
 
-const FileUpload = ({ uploadSubmitted }) => {
+const FileUpload = ({ textFiles, uploadSubmitted }) => {
   const fileRef = useRef();
+  const [openDuplicateFileMessage, setOpenDuplicateFileMessage] =
+    useState(false);
 
   const handleButtonClick = () => {
     fileRef.current.click();
@@ -13,29 +16,36 @@ const FileUpload = ({ uploadSubmitted }) => {
     // https://stackoverflow.com/questions/51272255/how-to-use-filereader-in-react/51278185
     const file = event.target.files[0];
     if (typeof file !== "undefined") {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const textFile = {
-          text: event.target.result,
-          fileName: file.name,
-          questions: [],
-          createdAt: new Date(),
+      if (!textFiles.some((t) => t.name === file.name)) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const textFile = {
+            text: event.target.result,
+            fileName: file.name,
+            questions: [],
+            createdAt: new Date(),
+          };
+          axios
+            .post("/api/uploadTextFile", textFile)
+            .then((response) => {
+              const doc = {
+                key: response.data._id,
+                value: response.data._id,
+                name: response.data.fileName,
+                questions: [],
+                uploadedAt: response.data.createdAt,
+              };
+              uploadSubmitted(doc);
+            })
+            .catch((error) =>
+              console.error("Error uploading text file:", error)
+            );
         };
-        axios
-          .post("/api/uploadTextFile", textFile)
-          .then((response) => {
-            const doc = {
-              key: response.data._id,
-              value: response.data._id,
-              name: response.data.fileName,
-              questions: [],
-              uploadedAt: response.data.createdAt,
-            };
-            uploadSubmitted(doc);
-          })
-          .catch((error) => console.error("Error uploading text file:", error));
-      };
-      reader.readAsText(file);
+        reader.readAsText(file);
+      } else {
+        fileRef.current.value = null;
+        setOpenDuplicateFileMessage(true);
+      }
     }
   };
 
@@ -54,8 +64,16 @@ const FileUpload = ({ uploadSubmitted }) => {
         type="file"
         name="file"
         accept=".txt"
+        multiple={false}
         hidden
         onChange={handleFileSelect}
+      />
+      <DuplicateFileMessage
+        isOpen={openDuplicateFileMessage}
+        close={() => {
+          setOpenDuplicateFileMessage(false);
+          handleButtonClick();
+        }}
       />
     </div>
   );

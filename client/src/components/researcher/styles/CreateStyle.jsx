@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Input, Button, Modal } from "semantic-ui-react";
 
-const CreateStyle = ({ isOpen, addStyle, close }) => {
+const CreateStyle = ({ isOpen, styles, addStyle, close }) => {
   const [family, setFamily] = useState("");
   const [displayFamilyError, setDisplayFamilyError] = useState(false);
+  const [displayFamilyDuplicateError, setDisplayFamilyDuplicateError] =
+    useState(false);
 
   const handleFamilyChange = (event) => {
     setDisplayFamilyError(false);
+    setDisplayFamilyDuplicateError(false);
     setFamily(event.target.value);
   };
 
@@ -27,9 +30,12 @@ const CreateStyle = ({ isOpen, addStyle, close }) => {
         fontFamily: family.trim(),
       };
 
-      addStyle(style);
-
-      setFamily("");
+      if (styles.some((s) => s.fontFamily === family)) {
+        setDisplayFamilyDuplicateError(true);
+      } else {
+        addStyle(style);
+        setFamily("");
+      }
     }
   };
 
@@ -37,6 +43,16 @@ const CreateStyle = ({ isOpen, addStyle, close }) => {
     setFamily("");
     setDisplayFamilyError(false);
     close();
+  };
+
+  const displayFamilyDuplicateErrorMessage = () => {
+    if (displayFamilyDuplicateError) {
+      return (
+        <label style={{ padding: 10, color: "red" }}>
+          This font-family has already been created.
+        </label>
+      );
+    }
   };
 
   const displayStyleAndButtons = () => {
@@ -51,6 +67,7 @@ const CreateStyle = ({ isOpen, addStyle, close }) => {
           placeholder="Type a font family here..."
           onChange={handleFamilyChange}
         />
+        {displayFamilyDuplicateErrorMessage()}
         <div style={{ display: "flex", float: "right" }}>
           <Button content="Cancel" onClick={handleCancel} />
           <Button primary content="Add Style" onClick={handleAddStyle} />

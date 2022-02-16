@@ -7,15 +7,10 @@ import Style from "./Style";
 const StylesView = ({ isOpen, close }) => {
   const [openAddStyle, setOpenAddStyle] = useState(false);
   const [styles, setStyles] = useState([]);
-  const [usedStyleIDs, setUsedStyleIDs] = useState({
-    data: [],
-    isFetching: true,
-  });
 
   useEffect(() => {
     if (isOpen) {
       fetchStyles();
-      fetchTemplateStyles();
     }
   }, [isOpen]);
 
@@ -23,16 +18,6 @@ const StylesView = ({ isOpen, close }) => {
     axios
       .get("/api/getAllStyles")
       .then((response) => setStyles(response.data))
-      .catch((error) => console.error("Error fetching used styles:", error));
-  };
-
-  const fetchTemplateStyles = () => {
-    setUsedStyleIDs({ data: usedStyleIDs.data, isFetching: true });
-    axios
-      .get("/api/getUsedStyles")
-      .then((response) => {
-        setUsedStyleIDs({ data: response.data, isFetching: false });
-      })
       .catch((error) => console.error("Error fetching used styles:", error));
   };
 
@@ -84,6 +69,7 @@ const StylesView = ({ isOpen, close }) => {
       </div>
       <CreateStyle
         isOpen={openAddStyle}
+        styles={styles}
         addStyle={addStyle}
         close={() => setOpenAddStyle(false)}
       />

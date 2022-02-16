@@ -12,13 +12,17 @@ import axios from "axios";
 import ScrollTextListItem from "./ScrollTextListItem";
 import SpeedTextListItem from "./SpeedTextListItem";
 
-const CreateTemplate = ({ isOpen, close, textFiles }) => {
+const CreateTemplate = ({ isOpen, templates, close, textFiles }) => {
   const [templateName, setTemplateName] = useState("");
   const [speedTexts, setSpeedTexts] = useState([]);
   const [speedTestInstructions, setSpeedTestInstructions] = useState("");
   const [scrollTexts, setScrollTexts] = useState([]);
   const [displayMissingInputError, setDisplayMissingInputError] =
     useState(false);
+  const [
+    displayDuplicateTemplateNameError,
+    setDisplayDuplicateTemplateNameError,
+  ] = useState(false);
   const [dropdownTextFiles, setDropdownTextFiles] = useState([]);
   const [styles, setStyles] = useState([]);
 
@@ -46,12 +50,21 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     });
   };
 
+  const handleTemplateNameChange = (event) => {
+    setTemplateName(event.target.value);
+    setDisplayDuplicateTemplateNameError(false);
+  };
+
   const checkFormInputs = () => {
     let emptyFields = false;
 
     if (templateName.trim() === "") {
       setDisplayMissingInputError(true);
       emptyFields = true;
+    }
+    if (templates.some((t) => t.name === templateName)) {
+      setDisplayMissingInputError(true);
+      setDisplayDuplicateTemplateNameError(true);
     }
     if (speedTexts.length === 0) {
       setDisplayMissingInputError(true);
@@ -248,6 +261,7 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     setScrollTexts([]);
     setSpeedTestInstructions("");
     setDisplayMissingInputError(false);
+    setDisplayDuplicateTemplateNameError(false);
   };
 
   const handleClose = (templateCreated, responseData) => {
@@ -334,6 +348,16 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
     );
   };
 
+  const displayDuplicateTemplateNameErrorMessage = () => {
+    if (displayDuplicateTemplateNameError) {
+      return (
+        <label style={{ padding: 10, color: "red" }}>
+          Template name already exists.
+        </label>
+      );
+    }
+  };
+
   return (
     <div>
       <Modal open={isOpen} style={{ height: "70vh", padding: 10 }}>
@@ -351,8 +375,9 @@ const CreateTemplate = ({ isOpen, close, textFiles }) => {
               autoFocus
               fluid
               placeholder="Type template name here..."
-              onChange={(e) => setTemplateName(e.target.value)}
+              onChange={handleTemplateNameChange}
             />
+            {displayDuplicateTemplateNameErrorMessage()}
           </Segment>
 
           <Segment>
