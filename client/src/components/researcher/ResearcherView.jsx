@@ -1,4 +1,3 @@
-import TextFile from "./TextFile.jsx";
 import {
   Segment,
   Tab,
@@ -8,13 +7,14 @@ import {
   Button,
 } from "semantic-ui-react";
 import { useState, useEffect } from "react";
-import SessionTemplate from "./SessionTemplate.jsx";
-import axios from "axios";
+import TextFile from "./textFiles/TextFile.jsx";
+import FileUpload from "./textFiles/FileUpload.jsx";
+import SessionTemplate from "./templates/SessionTemplate.jsx";
 import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
-import FileUpload from "./FileUpload.jsx";
-import ReadingSession from "./ReadingSession.jsx";
-import { clearStorage } from "../../utilities.js";
+import ReadingSession from "./readingSessions/ReadingSession.jsx";
 import StylesView from "./styles/StylesView.jsx";
+import axios from "axios";
+import { clearStorage } from "../../utilities.js";
 import ConfirmDeleteReadingSessionMessage from "./readingSessions/ConfirmDeleteReadingSessionMessage.jsx";
 
 // const panes = [

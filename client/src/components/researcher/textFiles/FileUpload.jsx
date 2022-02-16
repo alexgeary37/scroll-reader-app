@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import { Button } from "semantic-ui-react";
-import DuplicateFileMessage from "./textFiles/DuplicateFileMessage";
+import DuplicateFileMessage from "./DuplicateFileMessage";
 
 const FileUpload = ({ textFiles, uploadSubmitted }) => {
   const fileRef = useRef();

@@ -1,8 +1,8 @@
 import { Item, Button, Checkbox } from "semantic-ui-react";
 import { useState } from "react";
-import ConfirmDeleteReadingSessionMessage from "./readingSessions/ConfirmDeleteReadingSessionMessage.jsx";
-import ConfirmExportMessage from "./readingSessions/ConfirmExportMessage.jsx";
-import { exportData } from "../../exportData.js";
+import ConfirmDeleteReadingSessionMessage from "./ConfirmDeleteReadingSessionMessage.jsx";
+import ConfirmExportMessage from "./ConfirmExportMessage.jsx";
+import { exportData } from "../../../exportData.js";
 
 const ReadingSession = ({
   session,

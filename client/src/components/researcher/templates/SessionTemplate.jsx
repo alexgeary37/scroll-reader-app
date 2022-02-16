@@ -1,7 +1,7 @@
 import { List, Item, Button } from "semantic-ui-react";
-import SessionTemplateView from "./templates/SessionTemplateView.jsx";
+import SessionTemplateView from "./SessionTemplateView.jsx";
 import { useState } from "react";
-import ConfirmDeleteTemplateMessage from "./templates/ConfirmDeleteTemplateMessage.jsx";
+import ConfirmDeleteTemplateMessage from "./ConfirmDeleteTemplateMessage.jsx";
 
 const SessionTemplate = ({
   template,

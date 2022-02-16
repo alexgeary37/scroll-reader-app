@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Item, Icon, Button } from "semantic-ui-react";
-import ConfirmDeleteTextMessage from "./textFiles/ConfirmDeleteTextMessage";
-import TextFileQuestionsView from "./textFiles/TextFileQuestionsView";
-import TextFileTextView from "./textFiles/TextFileTextView";
+import ConfirmDeleteTextMessage from "./ConfirmDeleteTextMessage";
+import TextFileQuestionsView from "./TextFileQuestionsView";
+import TextFileTextView from "./TextFileTextView";
 
 const TextFile = ({
   file,
