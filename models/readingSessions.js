@@ -47,6 +47,7 @@ const ReadingSessionSchema = new mongoose.Schema({
   endTime: { type: Date, required: false },
   speedTexts: [textSchema],
   scrollTexts: [textSchema],
+  hasBeenExported: { type: Boolean, required: true },
 });
 
 const ReadingSessionModel = mongoose.model(

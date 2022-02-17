@@ -72,6 +72,7 @@ const UserHome = () => {
       ],
       templateID: template._id,
       startTime: date,
+      hasBeenExported: false,
     };
 
     await axios

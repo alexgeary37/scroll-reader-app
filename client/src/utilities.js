@@ -10,6 +10,7 @@ export const scrollTextSeparators =
 
 // Take styles from template and format them into json for rendering.
 export const initializeStyles = (styles) => {
+  const general = { marginLeft: 20, marginRight: 20 };
   const h1 = styles.h1;
   const h2 = styles.h2;
   const h3 = styles.h3;
@@ -27,7 +28,7 @@ export const initializeStyles = (styles) => {
   paragraph.fontSize = `${paragraph.fontSize}px`;
   paragraph.lineHeight = `${paragraph.lineHeight}%`;
 
-  return { h1, h2, h3, paragraph };
+  return { general, h1, h2, h3, paragraph };
 };
 
 // Check if this is the last text.

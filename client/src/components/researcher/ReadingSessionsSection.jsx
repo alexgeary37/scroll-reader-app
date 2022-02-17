@@ -1,16 +1,8 @@
-// const panes = [
-//   { menuItem: "Tab 1", render: () => <Tab.Pane>Tab 1 Content</Tab.Pane> },
-//   { menuItem: "Tab 2", render: () => <Tab.Pane>Tab 2 Content</Tab.Pane> },
-//   { menuItem: "Tab 3", render: () => <Tab.Pane>Tab 3 Content</Tab.Pane> },
-// ];
-
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Header, Segment } from "semantic-ui-react";
+import { Button, Header, Segment, Tab } from "semantic-ui-react";
 import ConfirmDeleteReadingSessionMessage from "./readingSessions/ConfirmDeleteReadingSessionMessage";
 import ReadingSession from "./readingSessions/ReadingSession";
-
-// const TabExampleBasic = () => <Tab panes={panes} />;
 
 const ReadingSessionsSection = ({
   textFiles,
@@ -47,6 +39,7 @@ const ReadingSessionsSection = ({
             ).name,
             startTime: session.startTime,
             endTime: session.endTime,
+            hasBeenExported: session.hasBeenExported,
           };
 
           options.push(option);
@@ -94,11 +87,11 @@ const ReadingSessionsSection = ({
       );
   };
 
-  const displayContent = () => {
-    if (!readingSessions.isFetching) {
-      return (
-        <div>
-          <Header as="h1" textAlign="center" content="Reading Sessions" />
+  const panes = [
+    {
+      menuItem: "New Reading Sessions",
+      render: () => (
+        <Tab.Pane>
           <Button
             negative={!selectedReadingSessions.length < 1}
             disabled={selectedReadingSessions.length < 1}
@@ -127,6 +120,21 @@ const ReadingSessionsSection = ({
             }
             answerNo={() => setOpenDeleteReadingSessionMessage(false)}
           />
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: "Exported Sessions",
+      render: () => <Tab.Pane>Tab 2 Content</Tab.Pane>,
+    },
+  ];
+
+  const displayContent = () => {
+    if (!readingSessions.isFetching) {
+      return (
+        <div>
+          <Header as="h1" textAlign="center" content="Reading Sessions" />
+          <Tab panes={panes} />
         </div>
       );
     } else {

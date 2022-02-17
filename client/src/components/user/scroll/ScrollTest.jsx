@@ -204,7 +204,6 @@ const ScrollTest = () => {
         sessionID: sessionID,
         fileID: currentText.fileID,
         questionNumber: scrollQuestionNumber,
-        questionID: currentText.questionIDs[scrollQuestionNumber],
         answer: answer,
         skip: skip,
         yPos: yPos,

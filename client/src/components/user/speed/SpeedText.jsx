@@ -43,7 +43,7 @@ const SpeedText = ({ fileID, styles }) => {
   const displayContent = () => {
     if (!text.isFetching && style.isInitialized) {
       return (
-        <div style={{ marginLeft: 20, marginRight: 20 }}>
+        <div style={style.style.general}>
           {text.sections.map((s) => {
             const sSubstring = s.substring(4, s.length - 5);
             if (s.includes("<h1>")) {
