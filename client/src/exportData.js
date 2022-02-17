@@ -99,16 +99,39 @@ const exportSpeedTextData = (readingSessionData, textFiles, templateData) => {
   let textNumber = 0;
   speedTexts.forEach((speedText) => {
     const text = textFiles.find((t) => t.key === speedText.fileID);
-    const style = text.styles.find((s) => s._id === speedText.styleID);
     const sessionText = readingSessionData.speedTexts.find(
       (t) => t.fileID === speedText.fileID
     );
+
+    const h1Style = speedText.style.h1;
+    const h2Style = speedText.style.h2;
+    const h3Style = speedText.style.h3;
+    const paragraphStyle = speedText.style.paragraph;
+
     speedText.name = text.name;
     speedText.startTime = sessionText.startTime;
     speedText.endTime = sessionText.endTime;
-    speedText.fontFamily = style.fontFamily;
-    speedText.fontSize = style.fontSize;
-    speedText.lineHeight = style.lineHeight;
+
+    speedText.h1FontFamily = h1Style.fontFamily;
+    speedText.h1FontSize = h1Style.fontSize;
+    speedText.h1FontWeight = h1Style.fontWeight;
+    speedText.h1LineHeight = h1Style.lineHeight;
+
+    speedText.h2FontFamily = h2Style.fontFamily;
+    speedText.h2FontSize = h2Style.fontSize;
+    speedText.h2FontWeight = h2Style.fontWeight;
+    speedText.h2LineHeight = h2Style.lineHeight;
+
+    speedText.h3FontFamily = h3Style.fontFamily;
+    speedText.h3FontSize = h3Style.fontSize;
+    speedText.h3FontWeight = h3Style.fontWeight;
+    speedText.h3LineHeight = h3Style.lineHeight;
+
+    speedText.paragraphFontFamily = paragraphStyle.fontFamily;
+    speedText.paragraphFontSize = paragraphStyle.fontSize;
+    speedText.paragraphFontWeight = paragraphStyle.fontWeight;
+    speedText.paragraphLineHeight = paragraphStyle.lineHeight;
+
     delete speedText.styleID;
 
     if (sessionText.pauses.length > 0) {
@@ -137,19 +160,41 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
   let textNumber = 0;
   scrollTexts.forEach((scrollText) => {
     const text = textFiles.find((t) => t.key === scrollText.fileID);
-    const style = text.styles.find((s) => s._id === scrollText.styleID);
     const sessionText = readingSessionData.scrollTexts.find(
       (t) => t.fileID === scrollText.fileID
     );
+
+    const h1Style = scrollText.style.h1;
+    const h2Style = scrollText.style.h2;
+    const h3Style = scrollText.style.h3;
+    const paragraphStyle = scrollText.style.paragraph;
+
     scrollText.name = text.name;
     scrollText.startTime = sessionText.startTime;
     scrollText.endTime = sessionText.endTime;
     scrollText.instructions = scrollText.instructions.main;
     scrollText.userFamiliarity = sessionText.familiarity;
     scrollText.userInterest = sessionText.interest;
-    scrollText.fontFamily = style.fontFamily;
-    scrollText.fontSize = style.fontSize;
-    scrollText.lineHeight = style.lineHeight;
+
+    scrollText.h1FontFamily = h1Style.fontFamily;
+    scrollText.h1FontSize = h1Style.fontSize;
+    scrollText.h1FontWeight = h1Style.fontWeight;
+    scrollText.h1LineHeight = h1Style.lineHeight;
+
+    scrollText.h2FontFamily = h2Style.fontFamily;
+    scrollText.h2FontSize = h2Style.fontSize;
+    scrollText.h2FontWeight = h2Style.fontWeight;
+    scrollText.h2LineHeight = h2Style.lineHeight;
+
+    scrollText.h3FontFamily = h3Style.fontFamily;
+    scrollText.h3FontSize = h3Style.fontSize;
+    scrollText.h3FontWeight = h3Style.fontWeight;
+    scrollText.h3LineHeight = h3Style.lineHeight;
+
+    scrollText.paragraphFontFamily = paragraphStyle.fontFamily;
+    scrollText.paragraphFontSize = paragraphStyle.fontSize;
+    scrollText.paragraphFontWeight = paragraphStyle.fontWeight;
+    scrollText.paragraphLineHeight = paragraphStyle.lineHeight;
 
     if (sessionText.pauses.length > 0) {
       csvs.push({
@@ -251,13 +296,13 @@ const createCsv = (data) => {
   }
 };
 
-const downloadZip = (csvs) => {
+const downloadZip = async (csvs, sessionID) => {
   let zip = new JSZip();
   csvs.forEach((csv) => {
     zip.file(`${csv.filename}.csv`, csv.data);
   });
   zip.generateAsync({ type: "blob" }).then(function (content) {
-    saveAs(content, `scroll_app_export.zip`);
+    saveAs(content, `${sessionID}_export.zip`);
   });
 };
 
@@ -300,5 +345,5 @@ export const exportData = async (sessionID, textFiles) => {
   );
   csvs = csvs.concat(scrollTextCsvs);
 
-  downloadZip(csvs);
+  await downloadZip(csvs, sessionID);
 };

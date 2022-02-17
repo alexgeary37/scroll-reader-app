@@ -8,6 +8,7 @@ const ReadingSession = ({
   session,
   textFiles,
   toggleSelect,
+  exportSession,
   deleteReadingSession,
 }) => {
   const [openDeleteReadingSessionMessage, setOpenDeleteReadingSessionMessage] =
@@ -15,8 +16,9 @@ const ReadingSession = ({
   const [openConfirmExportMessage, setOpenConfirmExportMessage] =
     useState(false);
 
-  const handleAnswerYesExport = () => {
-    exportData(session.key, textFiles);
+  const handleExport = async () => {
+    await exportData(session.key, textFiles);
+    exportSession();
     setOpenConfirmExportMessage(false);
   };
 
@@ -59,7 +61,7 @@ const ReadingSession = ({
         />
         <ConfirmExportMessage
           isOpen={openConfirmExportMessage}
-          answerYes={handleAnswerYesExport}
+          answerYes={handleExport}
           answerNo={() => setOpenConfirmExportMessage(false)}
         />
       </Item.Content>

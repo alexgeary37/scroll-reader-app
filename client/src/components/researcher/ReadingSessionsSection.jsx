@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Header, Segment, Tab } from "semantic-ui-react";
+import { exportData } from "../../exportData";
 import ConfirmDeleteReadingSessionMessage from "./readingSessions/ConfirmDeleteReadingSessionMessage";
+import ConfirmExportMessage from "./readingSessions/ConfirmExportMessage";
 import ReadingSession from "./readingSessions/ReadingSession";
 
 const ReadingSessionsSection = ({
@@ -11,6 +13,8 @@ const ReadingSessionsSection = ({
   setReadingSessions,
 }) => {
   const [openDeleteReadingSessionMessage, setOpenDeleteReadingSessionMessage] =
+    useState(false);
+  const [openConfirmExportMessage, setOpenConfirmExportMessage] =
     useState(false);
   const [selectedReadingSessions, setSelectedReadingSessions] = useState([]);
 
@@ -63,6 +67,42 @@ const ReadingSessionsSection = ({
     }
   };
 
+  const handleSingleExport = (sessionID) => {
+    let sessions = readingSessions.data;
+    const session = sessions.find((s) => s.key === sessionID);
+    const index = sessions.indexOf(session);
+    sessions[index].hasBeenExported = true;
+    setReadingSessions({ data: sessions, isFetching: false });
+
+    axios
+      .put("/api/setHasBeenExported", { id: sessionID })
+      .catch((error) =>
+        console.error("Error updating readingSession.hasBeenExported:", error)
+      );
+  };
+
+  const handleMultipleExport = () => {
+    setOpenConfirmExportMessage(false);
+    selectedReadingSessions.forEach((s) => {
+      exportData(s, textFiles.data);
+    });
+    let sessions = readingSessions.data;
+    sessions.forEach((s) => {
+      if (selectedReadingSessions.includes(s.key)) {
+        s.hasBeenExported = true;
+      }
+    });
+    setReadingSessions({ data: sessions, isFetching: false });
+    axios
+      .put("/api/setHasBeenExportedMultiple", { ids: selectedReadingSessions })
+      .catch((error) =>
+        console.error(
+          "Error updating readingSession.hasBeenExported for multiple sessions:",
+          error
+        )
+      );
+  };
+
   const handleDeleteReadingSessions = (sessionsToDelete) => {
     setOpenDeleteReadingSessionMessage(false);
     let sessions = readingSessions.data;
@@ -87,54 +127,70 @@ const ReadingSessionsSection = ({
       );
   };
 
-  const panes = [
-    {
-      menuItem: "New Reading Sessions",
-      render: () => (
-        <Tab.Pane>
-          <Button
-            negative={!selectedReadingSessions.length < 1}
-            disabled={selectedReadingSessions.length < 1}
-            content="Delete Selected Reading Sessions"
-            onClick={() => setOpenDeleteReadingSessionMessage(true)}
-          />
-          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
-            <div className="ui link divided relaxed items">
-              {readingSessions.data.map((session) => (
+  const tabPane = (displayExported) => {
+    return (
+      <Tab.Pane>
+        <Button
+          negative={!selectedReadingSessions.length < 1}
+          disabled={selectedReadingSessions.length < 1}
+          content="Delete Selected Reading Sessions"
+          onClick={() => setOpenDeleteReadingSessionMessage(true)}
+        />
+        <Button
+          primary={!selectedReadingSessions.length < 1}
+          disabled={selectedReadingSessions.length < 1}
+          content="Export Selected Reading Sessions"
+          onClick={() => setOpenConfirmExportMessage(true)}
+        />
+        <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
+          <div className="ui link divided relaxed items">
+            {readingSessions.data
+              .filter((s) => s.hasBeenExported === displayExported)
+              .map((session) => (
                 <ReadingSession
                   key={session.key}
                   session={session}
                   textFiles={textFiles.data}
                   toggleSelect={() => handleSelectReadingSession(session.key)}
+                  exportSession={() => handleSingleExport(session.key)}
                   deleteReadingSession={() =>
                     handleDeleteReadingSessions([session.key])
                   }
                 />
               ))}
-            </div>
-          </Segment>
-          <ConfirmDeleteReadingSessionMessage
-            isOpen={openDeleteReadingSessionMessage}
-            answerYes={() =>
-              handleDeleteReadingSessions(selectedReadingSessions)
-            }
-            answerNo={() => setOpenDeleteReadingSessionMessage(false)}
-          />
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: "Exported Sessions",
-      render: () => <Tab.Pane>Tab 2 Content</Tab.Pane>,
-    },
-  ];
+          </div>
+        </Segment>
+        <ConfirmDeleteReadingSessionMessage
+          isOpen={openDeleteReadingSessionMessage}
+          answerYes={() => handleDeleteReadingSessions(selectedReadingSessions)}
+          answerNo={() => setOpenDeleteReadingSessionMessage(false)}
+        />
+        <ConfirmExportMessage
+          isOpen={openConfirmExportMessage}
+          answerYes={handleMultipleExport}
+          answerNo={() => setOpenConfirmExportMessage(false)}
+        />
+      </Tab.Pane>
+    );
+  };
 
   const displayContent = () => {
     if (!readingSessions.isFetching) {
       return (
         <div>
           <Header as="h1" textAlign="center" content="Reading Sessions" />
-          <Tab panes={panes} />
+          <Tab
+            panes={[
+              {
+                menuItem: "New Reading Sessions",
+                render: () => tabPane(false),
+              },
+              {
+                menuItem: "Exported Sessions",
+                render: () => tabPane(true),
+              },
+            ]}
+          />
         </div>
       );
     } else {
