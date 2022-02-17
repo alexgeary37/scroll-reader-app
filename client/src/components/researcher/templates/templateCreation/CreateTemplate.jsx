@@ -57,6 +57,7 @@ const CreateTemplate = ({ isOpen, templates, close, textFiles }) => {
 
   const checkFormInputs = () => {
     let emptyFields = false;
+    let duplicateName = false;
 
     if (templateName.trim() === "") {
       setDisplayMissingInputError(true);
@@ -65,6 +66,7 @@ const CreateTemplate = ({ isOpen, templates, close, textFiles }) => {
     if (templates.some((t) => t.name === templateName)) {
       setDisplayMissingInputError(true);
       setDisplayDuplicateTemplateNameError(true);
+      duplicateName = true;
     }
     if (speedTexts.length === 0) {
       setDisplayMissingInputError(true);
@@ -86,13 +88,13 @@ const CreateTemplate = ({ isOpen, templates, close, textFiles }) => {
       }
     }
 
-    return emptyFields;
+    return emptyFields || duplicateName;
   };
 
   const handleCreate = () => {
-    const emptyFields = checkFormInputs();
+    const validInput = checkFormInputs();
 
-    if (!emptyFields) {
+    if (!validInput) {
       // Create scrollTexts field.
       const files = [];
       for (let i = 0; i < scrollTexts.length; i++) {

@@ -1,29 +1,12 @@
-import {
-  Segment,
-  Tab,
-  Container,
-  Grid,
-  Header,
-  Button,
-} from "semantic-ui-react";
+import { Segment, Container, Grid, Header, Button } from "semantic-ui-react";
 import { useState, useEffect } from "react";
-import TextFile from "./textFiles/TextFile.jsx";
-import FileUpload from "./textFiles/FileUpload.jsx";
-import SessionTemplate from "./templates/SessionTemplate.jsx";
-import CreateTemplate from "./templates/templateCreation/CreateTemplate.jsx";
 import ReadingSession from "./readingSessions/ReadingSession.jsx";
 import StylesView from "./styles/StylesView.jsx";
 import axios from "axios";
 import { clearStorage } from "../../utilities.js";
 import ConfirmDeleteReadingSessionMessage from "./readingSessions/ConfirmDeleteReadingSessionMessage.jsx";
-
-// const panes = [
-//   { menuItem: "Tab 1", render: () => <Tab.Pane>Tab 1 Content</Tab.Pane> },
-//   { menuItem: "Tab 2", render: () => <Tab.Pane>Tab 2 Content</Tab.Pane> },
-//   { menuItem: "Tab 3", render: () => <Tab.Pane>Tab 3 Content</Tab.Pane> },
-// ];
-
-// const TabExampleBasic = () => <Tab panes={panes} />;
+import TextFilesSection from "./TextFilesSection.jsx";
+import TemplatesSection from "./TemplatesSection.jsx";
 
 const ResearcherView = ({ onLogout }) => {
   const [textFiles, setTextFiles] = useState({ data: [], isFetching: true });
@@ -34,21 +17,8 @@ const ResearcherView = ({ onLogout }) => {
   });
   const [selectedReadingSessions, setSelectedReadingSessions] = useState([]);
   const [openStylesView, setOpenStylesView] = useState(false);
-  const [openTemplateCreator, setOpenTemplateCreator] = useState(false);
   const [openDeleteReadingSessionMessage, setOpenDeleteReadingSessionMessage] =
     useState(false);
-
-  useEffect(() => {
-    // Fetch text files only on first render.
-    fetchTextFiles();
-  }, []);
-
-  useEffect(() => {
-    // Fetch session templates only after text files have been fetched.
-    if (!textFiles.isFetching) {
-      fetchSessionTemplates();
-    }
-  }, [textFiles.isFetching]);
 
   useEffect(() => {
     // Fetch reading sessions only after templates have been fetched.
@@ -56,83 +26,6 @@ const ResearcherView = ({ onLogout }) => {
       fetchReadingSessions();
     }
   }, [templates.isFetching]);
-
-  const fetchTextFiles = () => {
-    setTextFiles({ data: textFiles.data, isFetching: true });
-
-    axios
-      .get("/api/getAllTextFiles")
-      .then((response) => {
-        const data = response.data;
-        const files = [];
-        data.forEach((file) => {
-          const textFile = {
-            key: file._id,
-            value: file._id,
-            name: file.fileName,
-            questions: file.questions,
-            uploadedAt: file.createdAt, // TODO make this Date() object to use new utilities.js function
-          };
-          files.push(textFile);
-        });
-
-        // Set textFiles for rendering, and indicate that they are no longer being fetched.
-        setTextFiles({ data: files, isFetching: false });
-      })
-      .catch((error) => console.error("Error fetching files:", error));
-  };
-
-  const fetchSessionTemplates = () => {
-    setTemplates({ data: templates.data, isFetching: true });
-
-    axios
-      .get("/api/getSessionTemplates")
-      .then((templatesResponse) => {
-        const options = [];
-        const data = templatesResponse.data;
-        data.forEach((temp) => {
-          // Get names of text files this template references.
-          const speedTexts = [];
-          temp.speedTest.texts.forEach((text) => {
-            speedTexts.push({
-              fileID: text.fileID,
-              name: textFiles.data.find((tf) => tf.key === text.fileID).name,
-              style: text.style,
-            });
-          });
-          const scrollTexts = [];
-          temp.scrollTexts.forEach((fileObj) => {
-            scrollTexts.push({
-              fileID: fileObj.fileID,
-              name: textFiles.data.find((tf) => tf.key === fileObj.fileID).name,
-              instructions: fileObj.instructions,
-              questionIDs: fileObj.questionIDs,
-              style: fileObj.style,
-            });
-          });
-
-          const option = {
-            key: temp._id,
-            name: temp.name,
-            speedTest: {
-              texts: speedTexts,
-              instructions: temp.speedTest.instructions,
-            },
-            scrollTexts: scrollTexts,
-            createdAt: temp.createdAt,
-            url: temp._id,
-          };
-
-          options.push(option);
-        });
-
-        // Set templates for rendering, and indicate that they are no longer being fetched.
-        setTemplates({ data: options, isFetching: false });
-      })
-      .catch((error) =>
-        console.error("Error fetching session templates:", error)
-      );
-  };
 
   const fetchReadingSessions = () => {
     setReadingSessions({ data: readingSessions.data, isFetching: false });
@@ -165,71 +58,6 @@ const ResearcherView = ({ onLogout }) => {
       );
   };
 
-  const handleCreateTemplate = () => {
-    setOpenTemplateCreator(true);
-  };
-
-  const closeTemplateCreator = (templateCreated, template) => {
-    if (templateCreated) {
-      setTemplates({
-        data: [...templates.data, template],
-        isFetching: false,
-      });
-    }
-    setOpenTemplateCreator(false);
-  };
-
-  const handleUpdateFileQuestions = (file, newQuestion) => {
-    const files = textFiles.data;
-    const index = files.indexOf(file);
-    files[index].questions.push(newQuestion);
-
-    setTextFiles({ data: files, isFetching: false });
-  };
-
-  const handleRemoveFileQuestion = (file, question) => {
-    const files = textFiles.data;
-    const index = files.indexOf(file);
-    files[index].questions = files[index].questions.filter(
-      (q) => q !== question
-    );
-
-    setTextFiles({ data: files, isFetching: false });
-
-    axios
-      .put("/api/removeTextFileQuestion", {
-        fileID: file.key,
-        questionID: question._id,
-      })
-      .catch((error) =>
-        console.error("Error removing question from file.questions:", error)
-      );
-  };
-
-  const handleDeleteFile = (file) => {
-    let files = textFiles.data;
-    files = files.filter((f) => f !== file);
-    setTextFiles({ data: files, isFetching: false });
-
-    axios
-      .put("/api/deleteTextFile", {
-        fileID: file.key,
-      })
-      .catch((error) => console.error("Error deleting file:", error));
-  };
-
-  const handleDeleteTemplate = (template) => {
-    let sessionTemplates = templates.data;
-    sessionTemplates = sessionTemplates.filter((t) => t !== template);
-    setTemplates({ data: sessionTemplates, isFetching: false });
-
-    axios
-      .put("/api/deleteTemplate", {
-        templateID: template.key,
-      })
-      .catch((error) => console.error("Error deleting template:", error));
-  };
-
   const handleDeleteReadingSessions = (sessionsToDelete) => {
     setOpenDeleteReadingSessionMessage(false);
     let sessions = readingSessions.data;
@@ -254,57 +82,6 @@ const ResearcherView = ({ onLogout }) => {
       );
   };
 
-  const fileUsedInTemplates = (fileID) => {
-    if (!templates.isFetching) {
-      const usedAsSpeed =
-        templates.data.find((template) =>
-          template.speedTest.texts.some((text) => text.fileID === fileID)
-        ) !== undefined;
-
-      const usedAsScroll = fileUsedAsScrollText(fileID);
-      return usedAsSpeed || usedAsScroll;
-    }
-    return false;
-  };
-
-  const fileUsedAsScrollText = (fileID) => {
-    if (!templates.isFetching) {
-      return (
-        templates.data.find((template) =>
-          template.scrollTexts.some((text) => text.fileID === fileID)
-        ) !== undefined
-      );
-    }
-    return false;
-  };
-
-  const templateUsedInReadingSession = (templateID) => {
-    if (!readingSessions.isFetching) {
-      return (
-        readingSessions.data.find(
-          (session) => session.templateID === templateID
-        ) !== undefined
-      );
-    }
-    return false;
-  };
-
-  const handleFileUpload = (file) => {
-    axios
-      .get("/api/getTextFile", {
-        params: { _id: file.key },
-      })
-      .then(() => {
-        setTextFiles({
-          data: [...textFiles.data, file],
-          isFetching: false,
-        });
-      })
-      .catch((error) =>
-        console.error("Error fetching text in ScrollText:", error)
-      );
-  };
-
   const handleSelectReadingSession = (sessionID) => {
     if (selectedReadingSessions.includes(sessionID)) {
       setSelectedReadingSessions(
@@ -312,81 +89,6 @@ const ResearcherView = ({ onLogout }) => {
       );
     } else {
       setSelectedReadingSessions([...selectedReadingSessions, sessionID]);
-    }
-  };
-
-  const displayTextFiles = () => {
-    // Only rendern text files once they have been fetched.
-    if (!textFiles.isFetching) {
-      return (
-        <div>
-          <Header as="h1" textAlign="center" content="Uploaded Texts" />
-
-          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
-            <div className="ui link divided relaxed items">
-              {textFiles.data.map((file) => (
-                <TextFile
-                  key={file.key}
-                  file={file}
-                  usedInTemplate={fileUsedInTemplates(file.key)}
-                  updateFileQuestions={(newQuestion) =>
-                    handleUpdateFileQuestions(file, newQuestion)
-                  }
-                  removeQuestion={(question) =>
-                    handleRemoveFileQuestion(file, question)
-                  }
-                  deleteFile={() => handleDeleteFile(file)}
-                />
-              ))}
-            </div>
-          </Segment>
-
-          <FileUpload
-            textFiles={textFiles.data}
-            uploadSubmitted={handleFileUpload}
-          />
-        </div>
-      );
-    }
-  };
-
-  const displaySessionTemplates = () => {
-    // Only render sessionTemplates if they have been fetched.
-    if (!templates.isFetching) {
-      return (
-        <div>
-          <Header as="h1" textAlign="center" content="Existing Templates" />
-
-          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
-            <div className="ui link divided relaxed items">
-              {templates.data.map((template) => (
-                <SessionTemplate
-                  key={template.key}
-                  template={template}
-                  usedInReadingSession={templateUsedInReadingSession(
-                    template.key
-                  )}
-                  textFiles={textFiles.data}
-                  deleteTemplate={() => handleDeleteTemplate(template)}
-                />
-              ))}
-            </div>
-          </Segment>
-
-          <Button
-            style={{ display: "flex", float: "right" }}
-            positive
-            content="Create Template"
-            onClick={handleCreateTemplate}
-          />
-          <CreateTemplate
-            isOpen={openTemplateCreator}
-            templates={templates.data}
-            close={closeTemplateCreator}
-            textFiles={textFiles.data}
-          />
-        </div>
-      );
     }
   };
 
@@ -441,8 +143,21 @@ const ResearcherView = ({ onLogout }) => {
             <Button content="Styles" onClick={() => setOpenStylesView(true)} />
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={8}>{displayTextFiles()}</Grid.Column>
-            <Grid.Column width={8}>{displaySessionTemplates()}</Grid.Column>
+            <Grid.Column width={8}>
+              <TextFilesSection
+                textFiles={textFiles}
+                setTextFiles={setTextFiles}
+                templates={templates}
+              />
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <TemplatesSection
+                textFiles={textFiles}
+                templates={templates}
+                setTemplates={setTemplates}
+                readingSessions={readingSessions}
+              />
+            </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={16}>{displayReadingSessions()}</Grid.Column>
