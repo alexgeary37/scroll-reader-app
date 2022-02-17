@@ -302,7 +302,8 @@ const downloadZip = async (csvs, sessionID) => {
     zip.file(`${csv.filename}.csv`, csv.data);
   });
   zip.generateAsync({ type: "blob" }).then(function (content) {
-    saveAs(content, `${sessionID}_export.zip`);
+    saveAs(content, `export_${sessionID}.zip`);
+    return true;
   });
 };
 
@@ -345,5 +346,5 @@ export const exportData = async (sessionID, textFiles) => {
   );
   csvs = csvs.concat(scrollTextCsvs);
 
-  await downloadZip(csvs, sessionID);
+  return await downloadZip(csvs, sessionID);
 };

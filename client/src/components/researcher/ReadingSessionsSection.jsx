@@ -65,6 +65,7 @@ const ReadingSessionsSection = ({
     } else {
       setSelectedReadingSessions([...selectedReadingSessions, sessionID]);
     }
+    console.log(selectedReadingSessions);
   };
 
   const handleSingleExport = (sessionID) => {
@@ -81,11 +82,11 @@ const ReadingSessionsSection = ({
       );
   };
 
-  const handleMultipleExport = () => {
+  const handleMultipleExport = async () => {
     setOpenConfirmExportMessage(false);
-    selectedReadingSessions.forEach((s) => {
-      exportData(s, textFiles.data);
-    });
+    for (let i = 0; i < selectedReadingSessions.length; i++) {
+      await exportData(selectedReadingSessions[i], textFiles.data);
+    }
     let sessions = readingSessions.data;
     sessions.forEach((s) => {
       if (selectedReadingSessions.includes(s.key)) {
@@ -180,6 +181,7 @@ const ReadingSessionsSection = ({
         <div>
           <Header as="h1" textAlign="center" content="Reading Sessions" />
           <Tab
+            onTabChange={() => setSelectedReadingSessions([])}
             panes={[
               {
                 menuItem: "New Reading Sessions",
