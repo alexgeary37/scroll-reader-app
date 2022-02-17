@@ -298,6 +298,8 @@ const createCsv = (data) => {
 
 const downloadZip = async (csvs, sessionID) => {
   let zip = new JSZip();
+  let folder = zip.folder("speedTest");
+  folder.file("smile.csv", csvs[0].data);
   csvs.forEach((csv) => {
     zip.file(`${csv.filename}.csv`, csv.data);
   });
