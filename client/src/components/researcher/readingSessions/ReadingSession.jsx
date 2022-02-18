@@ -2,11 +2,9 @@ import { Item, Button, Checkbox } from "semantic-ui-react";
 import { useState } from "react";
 import ConfirmDeleteReadingSessionMessage from "./ConfirmDeleteReadingSessionMessage.jsx";
 import ConfirmExportMessage from "./ConfirmExportMessage.jsx";
-import { exportData } from "../../../exportData.js";
 
 const ReadingSession = ({
   session,
-  textFiles,
   toggleSelect,
   exportSession,
   deleteReadingSession,
@@ -15,12 +13,6 @@ const ReadingSession = ({
     useState(false);
   const [openConfirmExportMessage, setOpenConfirmExportMessage] =
     useState(false);
-
-  const handleExport = async () => {
-    await exportData(session.key, textFiles);
-    exportSession();
-    setOpenConfirmExportMessage(false);
-  };
 
   return (
     <Item>
@@ -61,7 +53,7 @@ const ReadingSession = ({
         />
         <ConfirmExportMessage
           isOpen={openConfirmExportMessage}
-          answerYes={handleExport}
+          answerYes={exportSession}
           answerNo={() => setOpenConfirmExportMessage(false)}
         />
       </Item.Content>

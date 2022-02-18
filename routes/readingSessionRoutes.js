@@ -83,24 +83,6 @@ router.put("/api/addEndTime", async (req, res) => {
 });
 
 router.put("/api/setHasBeenExported", async (req, res) => {
-  const id = req.body.id;
-
-  ReadingSessionModel.findByIdAndUpdate(
-    id,
-    { $set: { hasBeenExported: true } },
-    { new: true },
-    (err, session) => {
-      if (err) {
-        res.send(err);
-      } else {
-        session.save();
-        res.send("Set readingSession.hasBeenExported to true");
-      }
-    }
-  );
-});
-
-router.put("/api/setHasBeenExportedMultiple", async (req, res) => {
   const ids = req.body.ids;
 
   ReadingSessionModel.updateMany(

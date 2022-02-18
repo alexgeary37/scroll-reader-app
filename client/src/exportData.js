@@ -67,7 +67,7 @@ const exportScrollData = async (scrollPosEntries) => {
 
     csvs.push({
       data: createCsv(data),
-      filename: `scrollText_${entriesByText[i].textNumber + 1}_positions`,
+      filename: `scroll_${entriesByText[i].textNumber + 1}_positions`,
     });
   }
 
@@ -140,7 +140,7 @@ const exportSpeedTextData = (readingSessionData, textFiles, templateData) => {
 
     csvs.push({
       data: createCsv(styles),
-      filename: `scrollText_${textNumber + 1}_styles`,
+      filename: `speed_${textNumber + 1}_styles`,
     });
 
     delete speedText.styleID;
@@ -149,7 +149,7 @@ const exportSpeedTextData = (readingSessionData, textFiles, templateData) => {
     if (sessionText.pauses.length > 0) {
       csvs.push({
         data: createCsv(sessionText.pauses),
-        filename: `speedText_${textNumber + 1}_pauses`,
+        filename: `speed_${textNumber + 1}_pauses`,
       });
     }
 
@@ -216,13 +216,13 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
 
     csvs.push({
       data: createCsv(styles),
-      filename: `scrollText_${textNumber + 1}_styles`,
+      filename: `scroll_${textNumber + 1}_styles`,
     });
 
     if (sessionText.pauses.length > 0) {
       csvs.push({
         data: createCsv(sessionText.pauses),
-        filename: `scrollText_${textNumber + 1}_pauses`,
+        filename: `scroll_${textNumber + 1}_pauses`,
       });
     }
 
@@ -243,7 +243,7 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     if (answerButtonClicks.length > 0) {
       csvs.push({
         data: createCsv(answerButtonClicks),
-        filename: `scrollText_${textNumber + 1}_answerButtonClicks`,
+        filename: `scroll_${textNumber + 1}_answerButtonClicks`,
       });
     }
 
@@ -273,7 +273,7 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     if (questionAnswers.length > 0) {
       csvs.push({
         data: createCsv(questionAnswers),
-        filename: `scrollText_${textNumber + 1}_questionAnswers`,
+        filename: `scroll_${textNumber + 1}_questionAnswers`,
       });
     }
 
@@ -322,22 +322,43 @@ const createCsv = (data) => {
 
 const downloadZip = async (csvs, sessionID) => {
   let zip = new JSZip();
-  let speedTestFolder = zip.folder("speedTest");
   let scrollTestFolder = zip.folder("scrollTest");
-  const speedTestFiles = csvs.filter((c) => c.filename.includes("speedText_"));
-  const scrollTestFiles = csvs.filter((c) =>
-    c.filename.includes("scrollText_")
-  );
+  const speedTestFiles = csvs.filter((c) => c.filename.includes("speed_"));
+  const scrollTestFiles = csvs.filter((c) => c.filename.includes("scroll_"));
   const otherFiles = csvs.filter(
-    (c) =>
-      !c.filename.includes("speedText_") && !c.filename.includes("scrollText_")
+    (c) => !c.filename.includes("speed_") && !c.filename.includes("scroll_")
   );
-  speedTestFiles.forEach((csv) => {
-    speedTestFolder.file(`${csv.filename}.csv`, csv.data);
-  });
-  scrollTestFiles.forEach((csv) => {
-    scrollTestFolder.file(`${csv.filename}.csv`, csv.data);
-  });
+  let i = 1;
+  while (true) {
+    const files = speedTestFiles.filter((f) =>
+      f.filename.includes(`speed_${i}`)
+    );
+    if (files.length === 0) {
+      break;
+    } else {
+      let speedTextFolder = zip.folder(`speedTest/speed_${i}`);
+      files.forEach((csv) =>
+        speedTextFolder.file(`${csv.filename}.csv`, csv.data)
+      );
+    }
+    i++;
+  }
+
+  i = 1;
+  while (true) {
+    const files = scrollTestFiles.filter((f) =>
+      f.filename.includes(`scroll_${i}`)
+    );
+    if (files.length === 0) {
+      break;
+    } else {
+      let scrollTextFolder = zip.folder(`scrollTest/scroll_${i}`);
+      files.forEach((csv) =>
+        scrollTextFolder.file(`${csv.filename}.csv`, csv.data)
+      );
+    }
+    i++;
+  }
   otherFiles.forEach((csv) => {
     zip.file(`${csv.filename}.csv`, csv.data);
   });

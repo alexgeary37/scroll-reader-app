@@ -67,7 +67,8 @@ const ReadingSessionsSection = ({
     }
   };
 
-  const handleSingleExport = (sessionID) => {
+  const handleSingleExport = async (sessionID) => {
+    await exportData(sessionID, textFiles.data);
     let sessions = readingSessions.data;
     const session = sessions.find((s) => s.key === sessionID);
     const index = sessions.indexOf(session);
@@ -75,7 +76,7 @@ const ReadingSessionsSection = ({
     setReadingSessions({ data: sessions, isFetching: false });
 
     axios
-      .put("/api/setHasBeenExported", { id: sessionID })
+      .put("/api/setHasBeenExported", { ids: [sessionID] })
       .catch((error) =>
         console.error("Error updating readingSession.hasBeenExported:", error)
       );
@@ -93,8 +94,9 @@ const ReadingSessionsSection = ({
       }
     });
     setReadingSessions({ data: sessions, isFetching: false });
+
     axios
-      .put("/api/setHasBeenExportedMultiple", { ids: selectedReadingSessions })
+      .put("/api/setHasBeenExported", { ids: selectedReadingSessions })
       .catch((error) =>
         console.error(
           "Error updating readingSession.hasBeenExported for multiple sessions:",
@@ -150,7 +152,6 @@ const ReadingSessionsSection = ({
                 <ReadingSession
                   key={session.key}
                   session={session}
-                  textFiles={textFiles.data}
                   toggleSelect={() => handleSelectReadingSession(session.key)}
                   exportSession={() => handleSingleExport(session.key)}
                   deleteReadingSession={() =>
