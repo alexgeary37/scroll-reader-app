@@ -65,7 +65,6 @@ const ReadingSessionsSection = ({
     } else {
       setSelectedReadingSessions([...selectedReadingSessions, sessionID]);
     }
-    console.log(selectedReadingSessions);
   };
 
   const handleSingleExport = (sessionID) => {

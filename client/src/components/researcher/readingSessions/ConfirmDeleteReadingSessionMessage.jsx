@@ -13,7 +13,7 @@ const ConfirmDeleteReadingSessionMessage = ({
     >
       <Modal.Description
         as="h4"
-        content="Are you sure you want to delete this reading session?"
+        content="Are you sure you want to delete these reading sessions?"
       />
       <div style={{ marginTop: 10 }}>
         <Button content="No" onClick={answerNo} />

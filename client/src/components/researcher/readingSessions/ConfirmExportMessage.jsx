@@ -9,7 +9,7 @@ const ConfirmExportMessage = ({ isOpen, answerYes, answerNo }) => {
     >
       <Modal.Description
         as="h4"
-        content="Are you sure you want to export data from this reading session?"
+        content="Are you sure you want to export data from these reading sessions?"
       />
       <div style={{ marginTop: 10 }}>
         <Button content="No" onClick={answerNo} />

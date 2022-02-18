@@ -103,36 +103,48 @@ const exportSpeedTextData = (readingSessionData, textFiles, templateData) => {
       (t) => t.fileID === speedText.fileID
     );
 
-    const h1Style = speedText.style.h1;
-    const h2Style = speedText.style.h2;
-    const h3Style = speedText.style.h3;
-    const paragraphStyle = speedText.style.paragraph;
-
     speedText.name = text.name;
     speedText.startTime = sessionText.startTime;
     speedText.endTime = sessionText.endTime;
 
-    speedText.h1FontFamily = h1Style.fontFamily;
-    speedText.h1FontSize = h1Style.fontSize;
-    speedText.h1FontWeight = h1Style.fontWeight;
-    speedText.h1LineHeight = h1Style.lineHeight;
+    const styles = [
+      {
+        type: "h1",
+        "font-family": speedText.style.h1.fontFamily,
+        "font-size": speedText.style.h1.fontSize,
+        "font-weight": speedText.style.h1.fontWeight,
+        "line-height": speedText.style.h1.lineHeight,
+      },
+      {
+        type: "h2",
+        "font-family": speedText.style.h2.fontFamily,
+        "font-size": speedText.style.h2.fontSize,
+        "font-weight": speedText.style.h2.fontWeight,
+        "line-height": speedText.style.h2.lineHeight,
+      },
+      {
+        type: "h3",
+        "font-family": speedText.style.h3.fontFamily,
+        "font-size": speedText.style.h3.fontSize,
+        "font-weight": speedText.style.h3.fontWeight,
+        "line-height": speedText.style.h3.lineHeight,
+      },
+      {
+        type: "paragraph",
+        "font-family": speedText.style.paragraph.fontFamily,
+        "font-size": speedText.style.paragraph.fontSize,
+        "font-weight": speedText.style.paragraph.fontWeight,
+        "line-height": speedText.style.paragraph.lineHeight,
+      },
+    ];
 
-    speedText.h2FontFamily = h2Style.fontFamily;
-    speedText.h2FontSize = h2Style.fontSize;
-    speedText.h2FontWeight = h2Style.fontWeight;
-    speedText.h2LineHeight = h2Style.lineHeight;
-
-    speedText.h3FontFamily = h3Style.fontFamily;
-    speedText.h3FontSize = h3Style.fontSize;
-    speedText.h3FontWeight = h3Style.fontWeight;
-    speedText.h3LineHeight = h3Style.lineHeight;
-
-    speedText.paragraphFontFamily = paragraphStyle.fontFamily;
-    speedText.paragraphFontSize = paragraphStyle.fontSize;
-    speedText.paragraphFontWeight = paragraphStyle.fontWeight;
-    speedText.paragraphLineHeight = paragraphStyle.lineHeight;
+    csvs.push({
+      data: createCsv(styles),
+      filename: `scrollText_${textNumber + 1}_styles`,
+    });
 
     delete speedText.styleID;
+    delete speedText.style;
 
     if (sessionText.pauses.length > 0) {
       csvs.push({
@@ -164,11 +176,6 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
       (t) => t.fileID === scrollText.fileID
     );
 
-    const h1Style = scrollText.style.h1;
-    const h2Style = scrollText.style.h2;
-    const h3Style = scrollText.style.h3;
-    const paragraphStyle = scrollText.style.paragraph;
-
     scrollText.name = text.name;
     scrollText.startTime = sessionText.startTime;
     scrollText.endTime = sessionText.endTime;
@@ -176,25 +183,41 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     scrollText.userFamiliarity = sessionText.familiarity;
     scrollText.userInterest = sessionText.interest;
 
-    scrollText.h1FontFamily = h1Style.fontFamily;
-    scrollText.h1FontSize = h1Style.fontSize;
-    scrollText.h1FontWeight = h1Style.fontWeight;
-    scrollText.h1LineHeight = h1Style.lineHeight;
+    const styles = [
+      {
+        type: "h1",
+        "font-family": scrollText.style.h1.fontFamily,
+        "font-size": scrollText.style.h1.fontSize,
+        "font-weight": scrollText.style.h1.fontWeight,
+        "line-height": scrollText.style.h1.lineHeight,
+      },
+      {
+        type: "h2",
+        "font-family": scrollText.style.h2.fontFamily,
+        "font-size": scrollText.style.h2.fontSize,
+        "font-weight": scrollText.style.h2.fontWeight,
+        "line-height": scrollText.style.h2.lineHeight,
+      },
+      {
+        type: "h3",
+        "font-family": scrollText.style.h3.fontFamily,
+        "font-size": scrollText.style.h3.fontSize,
+        "font-weight": scrollText.style.h3.fontWeight,
+        "line-height": scrollText.style.h3.lineHeight,
+      },
+      {
+        type: "paragraph",
+        "font-family": scrollText.style.paragraph.fontFamily,
+        "font-size": scrollText.style.paragraph.fontSize,
+        "font-weight": scrollText.style.paragraph.fontWeight,
+        "line-height": scrollText.style.paragraph.lineHeight,
+      },
+    ];
 
-    scrollText.h2FontFamily = h2Style.fontFamily;
-    scrollText.h2FontSize = h2Style.fontSize;
-    scrollText.h2FontWeight = h2Style.fontWeight;
-    scrollText.h2LineHeight = h2Style.lineHeight;
-
-    scrollText.h3FontFamily = h3Style.fontFamily;
-    scrollText.h3FontSize = h3Style.fontSize;
-    scrollText.h3FontWeight = h3Style.fontWeight;
-    scrollText.h3LineHeight = h3Style.lineHeight;
-
-    scrollText.paragraphFontFamily = paragraphStyle.fontFamily;
-    scrollText.paragraphFontSize = paragraphStyle.fontSize;
-    scrollText.paragraphFontWeight = paragraphStyle.fontWeight;
-    scrollText.paragraphLineHeight = paragraphStyle.lineHeight;
+    csvs.push({
+      data: createCsv(styles),
+      filename: `scrollText_${textNumber + 1}_styles`,
+    });
 
     if (sessionText.pauses.length > 0) {
       csvs.push({
@@ -244,6 +267,7 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     });
 
     delete scrollText.styleID;
+    delete scrollText.style;
     delete scrollText.questionIDs;
 
     if (questionAnswers.length > 0) {
@@ -298,9 +322,23 @@ const createCsv = (data) => {
 
 const downloadZip = async (csvs, sessionID) => {
   let zip = new JSZip();
-  let folder = zip.folder("speedTest");
-  folder.file("smile.csv", csvs[0].data);
-  csvs.forEach((csv) => {
+  let speedTestFolder = zip.folder("speedTest");
+  let scrollTestFolder = zip.folder("scrollTest");
+  const speedTestFiles = csvs.filter((c) => c.filename.includes("speedText_"));
+  const scrollTestFiles = csvs.filter((c) =>
+    c.filename.includes("scrollText_")
+  );
+  const otherFiles = csvs.filter(
+    (c) =>
+      !c.filename.includes("speedText_") && !c.filename.includes("scrollText_")
+  );
+  speedTestFiles.forEach((csv) => {
+    speedTestFolder.file(`${csv.filename}.csv`, csv.data);
+  });
+  scrollTestFiles.forEach((csv) => {
+    scrollTestFolder.file(`${csv.filename}.csv`, csv.data);
+  });
+  otherFiles.forEach((csv) => {
     zip.file(`${csv.filename}.csv`, csv.data);
   });
   zip.generateAsync({ type: "blob" }).then(function (content) {
