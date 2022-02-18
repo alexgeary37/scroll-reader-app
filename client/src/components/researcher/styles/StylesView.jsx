@@ -1,25 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Modal, Button, Header, List, Segment } from "semantic-ui-react";
 import CreateStyle from "./CreateStyle";
 import axios from "axios";
 import Style from "./Style";
 
-const StylesView = ({ isOpen, close }) => {
+const StylesView = ({ isOpen, styles, setStyles, close }) => {
   const [openAddStyle, setOpenAddStyle] = useState(false);
-  const [styles, setStyles] = useState([]);
-
-  useEffect(() => {
-    if (isOpen) {
-      fetchStyles();
-    }
-  }, [isOpen]);
-
-  const fetchStyles = () => {
-    axios
-      .get("/api/getAllStyles")
-      .then((response) => setStyles(response.data))
-      .catch((error) => console.error("Error fetching used styles:", error));
-  };
 
   const addStyle = (style) => {
     setOpenAddStyle(false);
@@ -28,15 +14,15 @@ const StylesView = ({ isOpen, close }) => {
         style: style,
       })
       .then((response) => {
-        setStyles([...styles, response.data]);
+        setStyles({ data: [...styles.data, response.data], isFetching: false });
       })
       .catch((error) => console.error("Error updating file.styles:", error));
   };
 
   const handleDeleteStyle = (style) => {
-    let displayedStyles = styles;
+    let displayedStyles = styles.data;
     displayedStyles = displayedStyles.filter((s) => s !== style);
-    setStyles(displayedStyles);
+    setStyles({ data: displayedStyles, isFetching: false });
 
     axios
       .put("/api/deleteStyle", {
@@ -45,12 +31,11 @@ const StylesView = ({ isOpen, close }) => {
       .catch((error) => console.error("Error deleting style:", error));
   };
 
-  return (
-    <Modal style={{ height: "70vh", padding: 10 }} open={isOpen}>
-      <Header as="h4" content="Styles" />
-      <Segment style={{ overflow: "auto", maxHeight: "75%" }}>
+  const displayStylesList = () => {
+    if (!styles.isFetching) {
+      return (
         <List ordered divided relaxed>
-          {styles.map((style) => (
+          {styles.data.map((style) => (
             <Style
               key={style._id}
               style={style}
@@ -58,6 +43,15 @@ const StylesView = ({ isOpen, close }) => {
             />
           ))}
         </List>
+      );
+    }
+  };
+
+  return (
+    <Modal style={{ height: "70vh", padding: 10 }} open={isOpen}>
+      <Header as="h4" content="Styles" />
+      <Segment style={{ overflow: "auto", maxHeight: "75%" }}>
+        {displayStylesList()}
       </Segment>
       <div style={{ display: "flex", float: "right" }}>
         <Button
@@ -69,7 +63,7 @@ const StylesView = ({ isOpen, close }) => {
       </div>
       <CreateStyle
         isOpen={openAddStyle}
-        styles={styles}
+        styles={styles.data}
         addStyle={addStyle}
         close={() => setOpenAddStyle(false)}
       />

@@ -18,7 +18,6 @@ const CreateStyle = ({ isOpen, styles, addStyle, close }) => {
       setDisplayFamilyError(true);
       return true;
     }
-
     return false;
   };
 

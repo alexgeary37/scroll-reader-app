@@ -322,7 +322,6 @@ const createCsv = (data) => {
 
 const downloadZip = async (csvs, sessionID) => {
   let zip = new JSZip();
-  let scrollTestFolder = zip.folder("scrollTest");
   const speedTestFiles = csvs.filter((c) => c.filename.includes("speed_"));
   const scrollTestFiles = csvs.filter((c) => c.filename.includes("scroll_"));
   const otherFiles = csvs.filter(

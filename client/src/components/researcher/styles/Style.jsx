@@ -16,7 +16,7 @@ const Style = ({ style, deleteStyle }) => {
             disabled={
               style.fontFamily === `Times, "Times New Roman", Georgia, serif` ||
               style.fontFamily ===
-                `Helvetica, "Helvetica Neue",  Arial, Verdana, sans-serif`
+                `Helvetica, "Helvetica Neue", Arial, Verdana, sans-serif`
             }
             content="Remove"
             onClick={() => setOpenConfirmDeleteStyleMessage(true)}
