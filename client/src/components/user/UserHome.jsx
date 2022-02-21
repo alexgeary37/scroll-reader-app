@@ -136,7 +136,6 @@ const UserHome = () => {
           content="Begin"
           onClick={handleStartSpeedTest}
         />
-
         {userNameError()}
       </div>
     );
