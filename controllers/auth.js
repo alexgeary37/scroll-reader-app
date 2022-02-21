@@ -2,10 +2,12 @@ const { response } = require("express");
 
 const login = async (req, res = response) => {
   const { email, password } = req.body;
+  const correctEmail = process.env.EMAIL;
+  const correctPassword = process.env.PASSWORD;
 
   // Ideally search the user in a database,
   // throw an error if not found.
-  if (email !== "alexgeary37@gmail.com" || password !== "1234") {
+  if (email !== correctEmail || password !== correctPassword) {
     return res.status(400).json({
       msg: "User / Password are incorrect",
     });
