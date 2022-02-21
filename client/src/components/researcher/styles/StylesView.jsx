@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button, Header, List, Segment } from "semantic-ui-react";
 import CreateStyle from "./CreateStyle";
 import axios from "axios";
@@ -6,6 +6,20 @@ import Style from "./Style";
 
 const StylesView = ({ isOpen, styles, setStyles, close }) => {
   const [openAddStyle, setOpenAddStyle] = useState(false);
+
+  useEffect(() => {
+    // Fetch styles only on first render.
+    fetchStyles();
+  }, []);
+
+  const fetchStyles = () => {
+    setStyles({ data: styles.data, isFetching: true });
+
+    axios
+      .get("/api/getAllStyles")
+      .then((response) => setStyles({ data: response.data, isFetching: false }))
+      .catch((error) => console.error("Error fetching used styles:", error));
+  };
 
   const addStyle = (style) => {
     setOpenAddStyle(false);

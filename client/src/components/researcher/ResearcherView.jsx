@@ -16,51 +16,6 @@ const ResearcherView = ({ onLogout }) => {
     isFetching: true,
   });
   const [openStylesView, setOpenStylesView] = useState(false);
-  const [addInitialStyles, setAddInitialStyles] = useState(false);
-
-  useEffect(() => {
-    fetchStyles();
-  }, []);
-
-  useEffect(() => {
-    if (addInitialStyles === true) {
-      createInitialStyles();
-    }
-  }, [addInitialStyles]);
-
-  const fetchStyles = () => {
-    setStyles({ data: styles.data, isFetching: true });
-
-    axios
-      .get("/api/getAllStyles")
-      .then((response) => {
-        if (response.data.length === 0) {
-          setAddInitialStyles(true);
-        } else {
-          setStyles({ data: response.data, isFetching: false });
-        }
-      })
-      .catch((error) => console.error("Error fetching used styles:", error));
-  };
-
-  const createInitialStyles = async () => {
-    setStyles({ data: styles.data, isFetching: true });
-
-    let style1 = {
-      fontFamily: `Times, "Times New Roman", Georgia, serif`,
-    };
-    style1 = await axios.post("/api/createStyle", {
-      style: style1,
-    });
-
-    let style2 = {
-      fontFamily: `Helvetica, "Helvetica Neue", Arial, Verdana, sans-serif`,
-    };
-    style2 = await axios.post("/api/createStyle", { style: style2 });
-
-    setStyles({ data: [style1.data, style2.data], isFetching: false });
-    setAddInitialStyles(false);
-  };
 
   return (
     <div className="researcher">

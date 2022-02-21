@@ -9,6 +9,7 @@ const sessionTemplateRoutes = require("./routes/sessionTemplateRoutes");
 const readingSessionRoutes = require("./routes/readingSessionRoutes");
 const scrollPosEntryRoutes = require("./routes/scrollPosEntryRoutes");
 const styleRoutes = require("./routes/styleRoutes");
+const styleModel = require("./models/styles");
 
 const corsOptions = {
   origin: "https://scroll-reader-app.herokuapp.com",
@@ -23,6 +24,7 @@ class Server {
     // this.mongoUrl = process.env.MONGO_URI;
     this.middlewares();
     this.routes();
+    this.initializeStyles();
   }
 
   middlewares() {
@@ -56,6 +58,21 @@ class Server {
     this.app.get("*", (req, res) => {
       res.sendFile(path.join(__dirname, "./client/build/index.html"));
     });
+  }
+
+  async initializeStyles() {
+    const allStyles = await styleModel.find();
+    if (allStyles.length === 0) {
+      const style1 = new styleModel({
+        fontFamily: `Times, "Times New Roman", Georgia, serif`,
+      });
+      style1.save();
+
+      const style2 = new styleModel({
+        fontFamily: `Helvetica, "Helvetica Neue", Arial, Verdana, sans-serif`,
+      });
+      style2.save();
+    }
   }
 
   listen() {
