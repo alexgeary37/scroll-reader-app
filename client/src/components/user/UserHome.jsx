@@ -157,8 +157,8 @@ const UserHome = () => {
       return <PageError />;
     } else {
       return (
-        <div style={{ textAlign: "center", marginTop: "10vh" }}>
-          <Segment>
+        <div style={{ textAlign: "center", marginTop: "30vh" }}>
+          <Segment basic>
             <Container text>
               {sessionContext.sessionID === "" ? (
                 <div>
@@ -173,7 +173,7 @@ const UserHome = () => {
               ) : (
                 <div>
                   <Header
-                    as="h4"
+                    as="h2"
                     style={{ marginBottom: "3vh" }}
                     content="You are currently in an active session, Click the button to resume!"
                   />

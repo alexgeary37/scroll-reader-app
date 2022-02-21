@@ -121,7 +121,7 @@ const TextFilesSection = ({ textFiles, setTextFiles, templates }) => {
         <div>
           <Header as="h1" textAlign="center" content="Uploaded Texts" />
 
-          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
+          <Segment basic style={{ overflow: "auto", maxHeight: "75vh" }}>
             <div className="ui link divided relaxed items">
               {textFiles.data.map((file) => (
                 <TextFile

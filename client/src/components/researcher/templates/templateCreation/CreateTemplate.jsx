@@ -7,6 +7,7 @@ import {
   Dropdown,
   List,
   Input,
+  Divider,
 } from "semantic-ui-react";
 import axios from "axios";
 import ScrollTextListItem from "./ScrollTextListItem";
@@ -364,8 +365,8 @@ const CreateTemplate = ({ isOpen, templates, close, textFiles }) => {
     <div>
       <Modal open={isOpen} style={{ height: "70vh", padding: 10 }}>
         <Header as="h1" content="Create a Session Template" />
-        <Segment style={{ overflow: "auto", maxHeight: "75%" }}>
-          <Segment>
+        <Segment basic style={{ overflow: "auto", maxHeight: "75%" }}>
+          <Segment basic>
             <Header
               as="h3"
               content="Template Name:"
@@ -382,7 +383,7 @@ const CreateTemplate = ({ isOpen, templates, close, textFiles }) => {
             {displayDuplicateTemplateNameErrorMessage()}
           </Segment>
 
-          <Segment>
+          <Segment basic>
             <Header
               as="h3"
               content="Speed Test Instructions:"
@@ -397,7 +398,7 @@ const CreateTemplate = ({ isOpen, templates, close, textFiles }) => {
             />
           </Segment>
 
-          <Segment>
+          <Segment basic>
             <Header
               as="h3"
               content="Speed Texts:"
@@ -415,8 +416,9 @@ const CreateTemplate = ({ isOpen, templates, close, textFiles }) => {
             />
             {displaySpeedTexts()}
           </Segment>
+          <Divider />
 
-          <Segment>
+          <Segment basic>
             <Header
               as="h3"
               content="Scrollable Texts:"

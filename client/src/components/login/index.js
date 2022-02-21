@@ -29,7 +29,7 @@ const Login = ({ onLoginSuccessful }) => {
     <div style={{ paddingTop: 10, textAlign: "center" }}>
       <Container>
         <Header as="h1" content="Login" />
-        <Segment>
+        <Segment basic>
           <Header as="h3" content="Email address:" />
           <Input
             type="email"
@@ -39,7 +39,7 @@ const Login = ({ onLoginSuccessful }) => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </Segment>
-        <Segment>
+        <Segment basic>
           <Header as="h3" content="Password:" />
           <Input
             type="password"

@@ -150,7 +150,7 @@ const ReadingSessionsSection = ({
           content="Export Selected Reading Sessions"
           onClick={() => setOpenConfirmExportMessage(true)}
         />
-        <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
+        <Segment basic style={{ overflow: "auto", maxHeight: "75vh" }}>
           <div className="ui link divided relaxed items">
             {readingSessions.data
               .filter((s) => s.hasBeenExported === displayExported)

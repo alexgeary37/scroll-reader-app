@@ -111,7 +111,7 @@ const TemplatesSection = ({
         <div>
           <Header as="h1" textAlign="center" content="Existing Templates" />
 
-          <Segment style={{ overflow: "auto", maxHeight: "75vh" }}>
+          <Segment basic style={{ overflow: "auto", maxHeight: "75vh" }}>
             <div className="ui link divided relaxed items">
               {templates.data.map((template) => (
                 <SessionTemplate

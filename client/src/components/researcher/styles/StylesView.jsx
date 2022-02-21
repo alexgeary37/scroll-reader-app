@@ -64,7 +64,7 @@ const StylesView = ({ isOpen, styles, setStyles, close }) => {
   return (
     <Modal style={{ height: "70vh", padding: 10 }} open={isOpen}>
       <Header as="h4" content="Styles" />
-      <Segment style={{ overflow: "auto", maxHeight: "75%" }}>
+      <Segment basic style={{ overflow: "auto", maxHeight: "75%" }}>
         {displayStylesList()}
       </Segment>
       <div style={{ display: "flex", float: "right" }}>

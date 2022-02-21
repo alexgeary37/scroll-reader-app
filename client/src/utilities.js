@@ -10,23 +10,25 @@ export const scrollTextSeparators =
 
 // Take styles from template and format them into json for rendering.
 export const initializeStyles = (styles) => {
-  const general = { marginLeft: 20, marginRight: 20 };
-  const h1 = styles.h1;
-  const h2 = styles.h2;
-  const h3 = styles.h3;
-  const paragraph = styles.paragraph;
+  let general = { marginLeft: 20, marginRight: 20 };
+  let h1 = styles.h1;
+  let h2 = styles.h2;
+  let h3 = styles.h3;
+  let paragraph = styles.paragraph;
 
-  h1.fontSize = `${h1.fontSize}px`;
-  h1.lineHeight = `${h1.lineHeight}%`;
+  if (typeof h1.fontSize === "number") {
+    h1.fontSize = `${h1.fontSize}px`;
+    h1.lineHeight = `${h1.lineHeight}%`;
 
-  h2.fontSize = `${h2.fontSize}px`;
-  h2.lineHeight = `${h2.lineHeight}%`;
+    h2.fontSize = `${h2.fontSize}px`;
+    h2.lineHeight = `${h2.lineHeight}%`;
 
-  h3.fontSize = `${h3.fontSize}px`;
-  h3.lineHeight = `${h3.lineHeight}%`;
+    h3.fontSize = `${h3.fontSize}px`;
+    h3.lineHeight = `${h3.lineHeight}%`;
 
-  paragraph.fontSize = `${paragraph.fontSize}px`;
-  paragraph.lineHeight = `${paragraph.lineHeight}%`;
+    paragraph.fontSize = `${paragraph.fontSize}px`;
+    paragraph.lineHeight = `${paragraph.lineHeight}%`;
+  }
 
   return { general, h1, h2, h3, paragraph };
 };

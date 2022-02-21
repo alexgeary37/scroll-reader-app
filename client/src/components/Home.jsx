@@ -6,8 +6,8 @@ const Home = () => {
   const loginRef = useRef();
 
   return (
-    <div style={{ textAlign: "center", marginTop: "10vh" }}>
-      <Segment>
+    <div style={{ textAlign: "center", marginTop: "30vh" }}>
+      <Segment basic>
         <Container text>
           <Header as="h1" style={{ marginBottom: "3vh" }} content="Welcome!" />
           <Button

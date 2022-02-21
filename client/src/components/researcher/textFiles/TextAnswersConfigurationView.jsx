@@ -171,7 +171,7 @@ const TextAnswersConfigurationView = ({
   };
 
   return (
-    <Segment style={{ overflow: "auto", maxHeight: "65vh" }}>
+    <Segment basic style={{ overflow: "auto", maxHeight: "65vh" }}>
       {displayContent()}
     </Segment>
   );

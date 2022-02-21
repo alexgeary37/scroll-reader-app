@@ -16,9 +16,9 @@ const EndPage = () => {
 
   return (
     <div style={{ textAlign: "center", marginTop: "30vh" }}>
-      <Segment>
+      <Segment basic>
         <Container text>
-          <Header as="h1" content="Thank you for taking the test!" />
+          <Header as="h2" content="Thank you for taking the test!" />
         </Container>
       </Segment>
     </div>

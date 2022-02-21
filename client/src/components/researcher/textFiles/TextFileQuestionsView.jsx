@@ -48,7 +48,7 @@ const TextFileQuestionsView = ({
   return (
     <Modal open={isOpen} style={{ height: "70vh", padding: 10 }}>
       <Header as="h4" content="Questions" />
-      <Segment style={{ overflow: "auto", maxHeight: "75%" }}>
+      <Segment basic style={{ overflow: "auto", maxHeight: "75%" }}>
         <List ordered divided relaxed>
           {questions.map((question) => (
             <Item key={question._id}>

@@ -109,7 +109,7 @@ const TextFileTextView = ({ isOpen, fileID, close }) => {
 
   return (
     <Modal style={{ padding: 10 }} open={isOpen}>
-      <Segment style={{ overflow: "auto", maxHeight: "65vh" }}>
+      <Segment basic style={{ overflow: "auto", maxHeight: "65vh" }}>
         {displayContent()}
       </Segment>
       <Button floated="right" content="Close" onClick={handleClose} />
