@@ -77,6 +77,11 @@ const ReadingSessionsSection = ({
 
     axios
       .put("/api/setHasBeenExported", { ids: [sessionID] })
+      .then(() =>
+        setSelectedReadingSessions(
+          selectedReadingSessions.filter((r) => r !== sessionID)
+        )
+      )
       .catch((error) =>
         console.error("Error updating readingSession.hasBeenExported:", error)
       );
@@ -97,6 +102,7 @@ const ReadingSessionsSection = ({
 
     axios
       .put("/api/setHasBeenExported", { ids: selectedReadingSessions })
+      .then(() => setSelectedReadingSessions([]))
       .catch((error) =>
         console.error(
           "Error updating readingSession.hasBeenExported for multiple sessions:",
