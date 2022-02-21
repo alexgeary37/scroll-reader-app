@@ -6,7 +6,7 @@ const Home = () => {
   const loginRef = useRef();
 
   return (
-    <div style={{ textAlign: "center", marginTop: "30vh" }}>
+    <div style={{ textAlign: "center", marginTop: "25vh" }}>
       <Segment basic>
         <Container text>
           <Header as="h1" style={{ marginBottom: "3vh" }} content="Welcome!" />

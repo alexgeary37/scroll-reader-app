@@ -157,7 +157,7 @@ const UserHome = () => {
       return <PageError />;
     } else {
       return (
-        <div style={{ textAlign: "center", marginTop: "30vh" }}>
+        <div style={{ textAlign: "center", marginTop: "25vh" }}>
           <Segment basic>
             <Container text>
               {sessionContext.sessionID === "" ? (
@@ -169,6 +169,7 @@ const UserHome = () => {
                     content="Please type your name below, and click on the button to begin the session!"
                   />
                   {displayFieldAndButton()}
+                  {`Height: ${window.innerHeight}`}
                 </div>
               ) : (
                 <div>

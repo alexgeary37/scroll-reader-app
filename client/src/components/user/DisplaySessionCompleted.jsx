@@ -20,7 +20,7 @@ const DisplaySessionCompleted = ({ thing }) => {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "30vh" }}>
+    <div style={{ textAlign: "center", marginTop: "25vh" }}>
       <Segment basic >
         <Container text>
           <Header as="h2" style={{ marginBottom: "3vh" }} content={message} />

@@ -15,7 +15,7 @@ const EndPage = () => {
   }, [sessionContext]);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "30vh" }}>
+    <div style={{ textAlign: "center", marginTop: "25vh" }}>
       <Segment basic>
         <Container text>
           <Header as="h2" content="Thank you for taking the test!" />
