@@ -169,7 +169,6 @@ const UserHome = () => {
                     content="Please type your name below, and click on the button to begin the session!"
                   />
                   {displayFieldAndButton()}
-                  {`Height: ${window.innerHeight}`}
                 </div>
               ) : (
                 <div>

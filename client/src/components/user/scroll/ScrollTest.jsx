@@ -61,6 +61,7 @@ const ScrollTest = () => {
       (e) => recordViewportResize(e, sessionContext),
       500
     );
+    recordViewportResize(null, sessionContext);
   }, []);
 
   useEffect(() => {
