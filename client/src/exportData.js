@@ -85,7 +85,7 @@ const exportReadingSessionData = (readingSessionData, templateData) => {
 
   const csv = {
     data: createCsv([readingSession]),
-    filename: `readingSession_${readingSessionData._id}`,
+    filename: `readingSession`,
   };
 
   return csv;
