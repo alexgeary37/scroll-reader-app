@@ -7,7 +7,6 @@ const styles = [
   `{fontFamily: "Times, 'Times New Roman', Georgia, serif", fontSize: "30px"}`,
   `{fontFamily: "Times, 'Times New Roman', Georgia, serif", fontSize: "24px"}`,
   `{fontFamily: "Times, 'Times New Roman', Georgia, serif", fontSize: "15px"}`,
-  `{fontFamily: "Helvetica, 'Helvetica Neue', Arial, Verdana, sans-serif", fontSize: "15px"}`,
 ];
 
 const Style = ({ style, deleteStyle }) => {
