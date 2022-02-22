@@ -53,7 +53,10 @@ const ReadingSession = ({
         />
         <ConfirmExportMessage
           isOpen={openConfirmExportMessage}
-          answerYes={exportSession}
+          answerYes={() => {
+            exportSession();
+            setOpenConfirmExportMessage(false);
+          }}
           answerNo={() => setOpenConfirmExportMessage(false)}
         />
       </Item.Content>

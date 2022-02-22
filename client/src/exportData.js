@@ -110,31 +110,19 @@ const exportSpeedTextData = (readingSessionData, textFiles, templateData) => {
     const styles = [
       {
         type: "h1",
-        "font-family": speedText.style.h1.fontFamily,
-        "font-size": speedText.style.h1.fontSize,
-        "font-weight": speedText.style.h1.fontWeight,
-        "line-height": speedText.style.h1.lineHeight,
+        style: speedText.style.h1,
       },
       {
         type: "h2",
-        "font-family": speedText.style.h2.fontFamily,
-        "font-size": speedText.style.h2.fontSize,
-        "font-weight": speedText.style.h2.fontWeight,
-        "line-height": speedText.style.h2.lineHeight,
+        style: speedText.style.h2,
       },
       {
         type: "h3",
-        "font-family": speedText.style.h3.fontFamily,
-        "font-size": speedText.style.h3.fontSize,
-        "font-weight": speedText.style.h3.fontWeight,
-        "line-height": speedText.style.h3.lineHeight,
+        style: speedText.style.h3,
       },
       {
         type: "paragraph",
-        "font-family": speedText.style.paragraph.fontFamily,
-        "font-size": speedText.style.paragraph.fontSize,
-        "font-weight": speedText.style.paragraph.fontWeight,
-        "line-height": speedText.style.paragraph.lineHeight,
+        style: speedText.style.paragraph,
       },
     ];
 
@@ -186,31 +174,19 @@ const exportScrollTextData = (readingSessionData, textFiles, templateData) => {
     const styles = [
       {
         type: "h1",
-        "font-family": scrollText.style.h1.fontFamily,
-        "font-size": scrollText.style.h1.fontSize,
-        "font-weight": scrollText.style.h1.fontWeight,
-        "line-height": scrollText.style.h1.lineHeight,
+        style: scrollText.style.h1,
       },
       {
         type: "h2",
-        "font-family": scrollText.style.h2.fontFamily,
-        "font-size": scrollText.style.h2.fontSize,
-        "font-weight": scrollText.style.h2.fontWeight,
-        "line-height": scrollText.style.h2.lineHeight,
+        style: scrollText.style.h2,
       },
       {
         type: "h3",
-        "font-family": scrollText.style.h3.fontFamily,
-        "font-size": scrollText.style.h3.fontSize,
-        "font-weight": scrollText.style.h3.fontWeight,
-        "line-height": scrollText.style.h3.lineHeight,
+        style: scrollText.style.h3,
       },
       {
         type: "paragraph",
-        "font-family": scrollText.style.paragraph.fontFamily,
-        "font-size": scrollText.style.paragraph.fontSize,
-        "font-weight": scrollText.style.paragraph.fontWeight,
-        "line-height": scrollText.style.paragraph.lineHeight,
+        style: scrollText.style.paragraph,
       },
     ];
 

@@ -10,12 +10,12 @@ const Style = ({ style, deleteStyle }) => {
     <Item>
       <Item.Content>
         <div className="wrapper">
-          <Item.Description content={`font-family: ${style.fontFamily}`} />
+          <Item.Description content={`${style.style}`} />
           <Button
             floated="right"
             disabled={
-              style.fontFamily === `Times, "Times New Roman", Georgia, serif` ||
-              style.fontFamily ===
+              style.style === `Times, "Times New Roman", Georgia, serif` ||
+              style.style ===
                 `Helvetica, "Helvetica Neue", Arial, Verdana, sans-serif`
             }
             content="Remove"

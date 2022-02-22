@@ -1,49 +1,49 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Header, Dropdown, Input } from "semantic-ui-react";
 
-const MINIMUM_FONT_SIZE = 10;
-const MINIMUM_LINEHEIGHT = 100;
-const FONT_WEIGHTS = [
-  { key: 100, value: 100, text: "100" },
-  { key: 200, value: 200, text: "200" },
-  { key: 300, value: 300, text: "300" },
-  { key: 400, value: 400, text: "400 (normal)" },
-  { key: 500, value: 500, text: "500" },
-  { key: 600, value: 600, text: "600" },
-  { key: 700, value: 700, text: "700 (bold)" },
-  { key: 800, value: 800, text: "800" },
-  { key: 900, value: 900, text: "900" },
-];
+// const MINIMUM_FONT_SIZE = 10;
+// const MINIMUM_LINEHEIGHT = 100;
+// const FONT_WEIGHTS = [
+//   { key: 100, value: 100, text: "100" },
+//   { key: 200, value: 200, text: "200" },
+//   { key: 300, value: 300, text: "300" },
+//   { key: 400, value: 400, text: "400 (normal)" },
+//   { key: 500, value: 500, text: "500" },
+//   { key: 600, value: 600, text: "600" },
+//   { key: 700, value: 700, text: "700 (bold)" },
+//   { key: 800, value: 800, text: "800" },
+//   { key: 900, value: 900, text: "900" },
+// ];
 
 const TextStylesView = ({ isOpen, styles, updateStyles }) => {
   // TODO: Change default styles for h1, h2, h3, paragraph
   // http://zuga.net/articles/html-heading-elements/
 
   const [dropdownFontFamilies, setDropdownFontFamilies] = useState([]);
-  const [h1, setH1] = useState({
-    fontFamily: styles[0].fontFamily,
-    fontSize: 32,
-    lineHeight: 125,
-    fontWeight: 700,
-  });
-  const [h2, setH2] = useState({
-    fontFamily: styles[0].fontFamily,
-    fontSize: 24,
-    lineHeight: 125,
-    fontWeight: 700,
-  });
-  const [h3, setH3] = useState({
-    fontFamily: styles[0].fontFamily,
-    fontSize: 18.72,
-    lineHeight: 125,
-    fontWeight: 700,
-  });
-  const [paragraph, setParagraph] = useState({
-    fontFamily: styles[0].fontFamily,
-    fontSize: 15,
-    lineHeight: 125,
-    fontWeight: 400,
-  });
+  const [h1, setH1] = useState(
+    styles[0].style
+    // fontSize: 32,
+    // lineHeight: 125,
+    // fontWeight: 700,
+  );
+  const [h2, setH2] = useState(
+    styles[1].style
+    // fontSize: 24,
+    // lineHeight: 125,
+    // fontWeight: 700,
+  );
+  const [h3, setH3] = useState(
+    styles[2].style
+    // fontSize: 18.72,
+    // lineHeight: 125,
+    // fontWeight: 700,
+  );
+  const [paragraph, setParagraph] = useState(
+    styles[3].style
+    // fontSize: 15,
+    // lineHeight: 125,
+    // fontWeight: 400,
+  );
 
   useEffect(() => {
     updateStyles(h1, h2, h3, paragraph, false);
@@ -57,8 +57,8 @@ const TextStylesView = ({ isOpen, styles, updateStyles }) => {
     return styles.map((style) => {
       return {
         key: style._id,
-        value: style.fontFamily,
-        text: `family: ${style.fontFamily}`,
+        value: style.style,
+        text: style.style,
       };
     });
   };
@@ -73,15 +73,15 @@ const TextStylesView = ({ isOpen, styles, updateStyles }) => {
             selection
             options={dropdownFontFamilies}
             onChange={(e, data) =>
-              setH1({
-                fontFamily: data.value,
-                fontSize: h1.fontSize,
-                lineHeight: h1.lineHeight,
-                fontWeight: h1.fontWeight,
-              })
+              setH1(
+                data.value
+                // fontSize: h1.fontSize,
+                // lineHeight: h1.lineHeight,
+                // fontWeight: h1.fontWeight,
+              )
             }
           />
-          <Input
+          {/* <Input
             type="Number"
             min={MINIMUM_FONT_SIZE}
             placeholder="h1 font-size (pixels)"
@@ -119,8 +119,8 @@ const TextStylesView = ({ isOpen, styles, updateStyles }) => {
                 lineHeight: h1.lineHeight,
                 fontWeight: data.value,
               })
-            }
-          />
+            } 
+          />*/}
         </div>
         <div style={{ display: "flex", justifyContent: "space-evenly" }}>
           <Dropdown
@@ -129,15 +129,15 @@ const TextStylesView = ({ isOpen, styles, updateStyles }) => {
             selection
             options={dropdownFontFamilies}
             onChange={(e, data) =>
-              setH2({
-                fontFamily: data.value,
-                fontSize: h2.fontSize,
-                lineHeight: h2.lineHeight,
-                fontWeight: h2.fontWeight,
-              })
+              setH2(
+                data.value
+                // fontSize: h2.fontSize,
+                // lineHeight: h2.lineHeight,
+                // fontWeight: h2.fontWeight,
+              )
             }
           />
-          <Input
+          {/* <Input
             type="Number"
             min={MINIMUM_FONT_SIZE}
             placeholder="h2 font-size (pixels)"
@@ -176,7 +176,7 @@ const TextStylesView = ({ isOpen, styles, updateStyles }) => {
                 fontWeight: data.value,
               })
             }
-          />
+          /> */}
         </div>
         <div style={{ display: "flex", justifyContent: "space-evenly" }}>
           <Dropdown
@@ -185,15 +185,15 @@ const TextStylesView = ({ isOpen, styles, updateStyles }) => {
             selection
             options={dropdownFontFamilies}
             onChange={(e, data) =>
-              setH3({
-                fontFamily: data.value,
-                fontSize: h3.fontSize,
-                lineHeight: h3.lineHeight,
-                fontWeight: h3.fontWeight,
-              })
+              setH3(
+                data.value
+                // fontSize: h3.fontSize,
+                // lineHeight: h3.lineHeight,
+                // fontWeight: h3.fontWeight,
+              )
             }
           />
-          <Input
+          {/* <Input
             type="Number"
             min={MINIMUM_FONT_SIZE}
             placeholder="h3 font-size (pixels)"
@@ -232,7 +232,7 @@ const TextStylesView = ({ isOpen, styles, updateStyles }) => {
                 fontWeight: data.value,
               })
             }
-          />
+          /> */}
         </div>
         <div style={{ display: "flex", justifyContent: "space-evenly" }}>
           <Dropdown
@@ -241,15 +241,15 @@ const TextStylesView = ({ isOpen, styles, updateStyles }) => {
             selection
             options={dropdownFontFamilies}
             onChange={(e, data) =>
-              setParagraph({
-                fontFamily: data.value,
-                fontSize: paragraph.fontSize,
-                lineHeight: paragraph.lineHeight,
-                fontWeight: paragraph.fontWeight,
-              })
+              setParagraph(
+                data.value
+                // fontSize: paragraph.fontSize,
+                // lineHeight: paragraph.lineHeight,
+                // fontWeight: paragraph.fontWeight,
+              )
             }
           />
-          <Input
+          {/* <Input
             type="Number"
             min={MINIMUM_FONT_SIZE}
             placeholder="Paragraph font-size (pixels)"
@@ -288,7 +288,7 @@ const TextStylesView = ({ isOpen, styles, updateStyles }) => {
                 fontWeight: data.value,
               })
             }
-          />
+          /> */}
         </div>
       </div>
     );

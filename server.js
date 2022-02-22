@@ -29,7 +29,7 @@ class Server {
 
   middlewares() {
     this.app.use(cors(corsOptions));
-    this.app.use(cors());
+    // this.app.use(cors());
     this.app.options("*", cors());
     this.app.use(express.json({ limit: "50mb" }));
     this.app.use(express.urlencoded({ extended: false, limit: "50mb" }));
@@ -63,15 +63,30 @@ class Server {
   async initializeStyles() {
     const allStyles = await styleModel.find();
     if (allStyles.length === 0) {
-      const style1 = new styleModel({
-        fontFamily: `Times, "Times New Roman", Georgia, serif`,
+      const styleH1 = new styleModel({
+        style: `{fontFamily: "Times, 'Times New Roman', Georgia, serif", fontSize: "36px"}`,
       });
-      style1.save();
+      styleH1.save();
 
-      const style2 = new styleModel({
-        fontFamily: `Helvetica, "Helvetica Neue", Arial, Verdana, sans-serif`,
+      const styleH2 = new styleModel({
+        style: `{fontFamily: "Times, 'Times New Roman', Georgia, serif", fontSize: "30px"}`,
       });
-      style2.save();
+      styleH2.save();
+
+      const styleH3 = new styleModel({
+        style: `{fontFamily: "Times, 'Times New Roman', Georgia, serif", fontSize: "24px"}`,
+      });
+      styleH3.save();
+
+      const styleParagraph = new styleModel({
+        style: `{fontFamily: "Times, 'Times New Roman', Georgia, serif", fontSize: "15px"}`,
+      });
+      styleParagraph.save();
+
+      const styleParagraph2 = new styleModel({
+        style: `{fontFamily: "Helvetica, 'Helvetica Neue', Arial, Verdana, sans-serif", fontSize: "15px"}`,
+      });
+      styleParagraph2.save();
     }
   }
 

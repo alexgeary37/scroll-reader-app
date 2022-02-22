@@ -10,8 +10,7 @@ import {
 
 const SessionTemplateView = ({ isOpen, template, textFiles, close }) => {
   const styleContent = (textStyle, type) => {
-    return `${type} - font-family: ${textStyle.fontFamily}, font-size: ${textStyle.fontSize}px,
-        line-height: ${textStyle.lineHeight}%, font-weight: ${textStyle.fontWeight}`;
+    return `${type} - ${textStyle}`;
   };
 
   const speedTestInfo = () => {

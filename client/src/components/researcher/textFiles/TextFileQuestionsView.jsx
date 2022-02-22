@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Modal, List, Item, Button, Header, Segment } from "semantic-ui-react";
+import {
+  Modal,
+  List,
+  Item,
+  Button,
+  Header,
+  Segment,
+  Grid,
+} from "semantic-ui-react";
 import AddQuestionToTextFile from "./AddQuestionToTextFile";
 import axios from "axios";
 
@@ -47,24 +55,46 @@ const TextFileQuestionsView = ({
 
   return (
     <Modal open={isOpen} style={{ height: "70vh", padding: 10 }}>
-      <Header as="h4" content="Questions" />
       <Segment basic style={{ overflow: "auto", maxHeight: "75%" }}>
+        <Grid columns={4}>
+          <Grid.Column width={7}>
+            <Header as="h4" style={{ marginLeft: 10 }} content="Question" />
+          </Grid.Column>
+          <Grid.Column width={3}>
+            <Header as="h4" style={{ marginLeft: 10 }} content="Type" />
+          </Grid.Column>
+          <Grid.Column width={4}>
+            <Header
+              as="h4"
+              style={{ marginLeft: 10 }}
+              content="Index Answer Range"
+            />
+          </Grid.Column>
+        </Grid>
         <List ordered divided relaxed>
           {questions.map((question) => (
             <Item key={question._id}>
-              <div className="wrapper">
-                <Item.Description content={question.question} />
-                <Item.Description content={question.questionFormat} />
-                <Item.Description
-                  content={`Word Index Answer Region: [${question.answerRegion.startIndex}...${question.answerRegion.endIndex}]`}
-                />
-                <Button
-                  floated="right"
-                  disabled={usedQuestionIDs.includes(question._id)}
-                  content="Remove"
-                  onClick={() => removeQuestion(question)}
-                />
-              </div>
+              <Grid columns={4}>
+                <Grid.Column width={7}>
+                  <Item.Description content={question.question} />
+                </Grid.Column>
+                <Grid.Column width={3}>
+                  <Item.Description content={question.questionFormat} />
+                </Grid.Column>
+                <Grid.Column width={4}>
+                  <Item.Description
+                    content={`[${question.answerRegion.startIndex}...${question.answerRegion.endIndex}]`}
+                  />
+                </Grid.Column>
+                <Grid.Column width={2}>
+                  <Button
+                    floated="right"
+                    disabled={usedQuestionIDs.includes(question._id)}
+                    content="Remove"
+                    onClick={() => removeQuestion(question)}
+                  />
+                </Grid.Column>
+              </Grid>
             </Item>
           ))}
         </List>

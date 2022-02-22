@@ -10,25 +10,27 @@ export const scrollTextSeparators =
 
 // Take styles from template and format them into json for rendering.
 export const initializeStyles = (styles) => {
-  let general = { marginLeft: 20, marginRight: 20 };
-  let h1 = styles.h1;
-  let h2 = styles.h2;
-  let h3 = styles.h3;
-  let paragraph = styles.paragraph;
+  const general = { marginLeft: 20, marginRight: 20 };
 
-  if (typeof h1.fontSize === "number") {
-    h1.fontSize = `${h1.fontSize}px`;
-    h1.lineHeight = `${h1.lineHeight}%`;
+  let jsonStr = styles.h1.replace(/(\w+:)|(\w+ :)/g, function (matchedStr) {
+    return '"' + matchedStr.substring(0, matchedStr.length - 1) + '":';
+  });
+  const h1 = JSON.parse(jsonStr); // converts to a regular object
 
-    h2.fontSize = `${h2.fontSize}px`;
-    h2.lineHeight = `${h2.lineHeight}%`;
+  jsonStr = styles.h2.replace(/(\w+:)|(\w+ :)/g, function (matchedStr) {
+    return '"' + matchedStr.substring(0, matchedStr.length - 1) + '":';
+  });
+  const h2 = JSON.parse(jsonStr); // converts to a regular object
 
-    h3.fontSize = `${h3.fontSize}px`;
-    h3.lineHeight = `${h3.lineHeight}%`;
+  jsonStr = styles.h3.replace(/(\w+:)|(\w+ :)/g, function (matchedStr) {
+    return '"' + matchedStr.substring(0, matchedStr.length - 1) + '":';
+  });
+  const h3 = JSON.parse(jsonStr); // converts to a regular object
 
-    paragraph.fontSize = `${paragraph.fontSize}px`;
-    paragraph.lineHeight = `${paragraph.lineHeight}%`;
-  }
+  jsonStr = styles.paragraph.replace(/(\w+:)|(\w+ :)/g, function (matchedStr) {
+    return '"' + matchedStr.substring(0, matchedStr.length - 1) + '":';
+  });
+  const paragraph = JSON.parse(jsonStr); // converts to a regular object
 
   return { general, h1, h2, h3, paragraph };
 };

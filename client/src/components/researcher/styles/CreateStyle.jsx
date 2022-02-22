@@ -1,21 +1,21 @@
 import { useState } from "react";
-import { Input, Button, Modal } from "semantic-ui-react";
+import { Input, Button, Modal, Header } from "semantic-ui-react";
 
 const CreateStyle = ({ isOpen, styles, addStyle, close }) => {
-  const [family, setFamily] = useState("");
-  const [displayFamilyError, setDisplayFamilyError] = useState(false);
-  const [displayFamilyDuplicateError, setDisplayFamilyDuplicateError] =
+  const [style, setStyle] = useState("");
+  const [displayStyleError, setDisplayStyleError] = useState(false);
+  const [displayStyleDuplicateError, setDisplayStyleDuplicateError] =
     useState(false);
 
-  const handleFamilyChange = (event) => {
-    setDisplayFamilyError(false);
-    setDisplayFamilyDuplicateError(false);
-    setFamily(event.target.value);
+  const handleStyleChange = (event) => {
+    setDisplayStyleError(false);
+    setDisplayStyleDuplicateError(false);
+    setStyle(event.target.value);
   };
 
   const checkFormInputs = () => {
-    if (family === "") {
-      setDisplayFamilyError(true);
+    if (style === "") {
+      setDisplayStyleError(true);
       return true;
     }
     return false;
@@ -25,30 +25,30 @@ const CreateStyle = ({ isOpen, styles, addStyle, close }) => {
     const emptyFields = checkFormInputs();
 
     if (!emptyFields) {
-      const style = {
-        fontFamily: family.trim(),
+      const refinedStyle = {
+        style: style.trim(),
       };
 
-      if (styles.some((s) => s.fontFamily === family)) {
-        setDisplayFamilyDuplicateError(true);
+      if (styles.some((s) => s.style === refinedStyle)) {
+        setDisplayStyleDuplicateError(true);
       } else {
-        addStyle(style);
-        setFamily("");
+        addStyle(refinedStyle);
+        setStyle("");
       }
     }
   };
 
   const handleCancel = () => {
-    setFamily("");
-    setDisplayFamilyError(false);
+    setStyle("");
+    setDisplayStyleError(false);
     close();
   };
 
-  const displayFamilyDuplicateErrorMessage = () => {
-    if (displayFamilyDuplicateError) {
+  const displayStyleDuplicateErrorMessage = () => {
+    if (displayStyleDuplicateError) {
       return (
         <label style={{ padding: 10, color: "red" }}>
-          This font-family has already been created.
+          This style has already been created.
         </label>
       );
     }
@@ -56,17 +56,17 @@ const CreateStyle = ({ isOpen, styles, addStyle, close }) => {
 
   const displayStyleAndButtons = () => {
     return (
-      <div>
+      <div style={{ marginTop: 10 }}>
         <Input
           style={{ marginBottom: 10 }}
-          error={displayFamilyError}
+          error={displayStyleError}
           autoFocus
           type="text"
           fluid
-          placeholder="Type a font family here..."
-          onChange={handleFamilyChange}
+          placeholder={`{fontFamily: '<family(ies)>', fontSize: '15px', ... }`}
+          onChange={handleStyleChange}
         />
-        {displayFamilyDuplicateErrorMessage()}
+        {displayStyleDuplicateErrorMessage()}
         <div style={{ display: "flex", float: "right" }}>
           <Button content="Cancel" onClick={handleCancel} />
           <Button primary content="Add Style" onClick={handleAddStyle} />
@@ -77,6 +77,9 @@ const CreateStyle = ({ isOpen, styles, addStyle, close }) => {
 
   return (
     <Modal open={isOpen} size="tiny" style={{ padding: 10 }}>
+      <span
+        style={{ fontFamily: "Helvetica", fontWeight: 600 }}
+      >{`Format: {propertyOne: "val, 'multiple word val'", propertyTwo: "val", ... }`}</span>
       {displayStyleAndButtons()}
     </Modal>
   );
