@@ -29,7 +29,7 @@ const TextFileTextView = ({ isOpen, fileID, close }) => {
       fontFamily: 'Times, "Times New Roman", Georgia, serif',
       fontSize: "15px",
       fontWeight: 400,
-      lineHeight: "110%",
+      lineHeight: "200%",
     },
   };
 
