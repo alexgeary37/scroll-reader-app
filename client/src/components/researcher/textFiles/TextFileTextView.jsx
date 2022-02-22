@@ -24,7 +24,7 @@ const TextFileTextView = ({ isOpen, fileID, close }) => {
     },
     paragraph: {
       fontFamily: 'Times, "Times New Roman", Georgia, serif',
-      fontSize: "12px",
+      fontSize: "15px",
       fontWeight: 400,
     },
   };
