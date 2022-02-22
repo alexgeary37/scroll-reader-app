@@ -23,25 +23,25 @@ const TextStylesView = ({ isOpen, styles, updateStyles }) => {
   const [h1, setH1] = useState({
     fontFamily: styles[0].fontFamily,
     fontSize: 32,
-    lineHeight: 110,
+    lineHeight: 125,
     fontWeight: 700,
   });
   const [h2, setH2] = useState({
     fontFamily: styles[0].fontFamily,
     fontSize: 24,
-    lineHeight: 110,
+    lineHeight: 125,
     fontWeight: 700,
   });
   const [h3, setH3] = useState({
     fontFamily: styles[0].fontFamily,
     fontSize: 18.72,
-    lineHeight: 110,
+    lineHeight: 125,
     fontWeight: 700,
   });
   const [paragraph, setParagraph] = useState({
     fontFamily: styles[0].fontFamily,
-    fontSize: 12,
-    lineHeight: 110,
+    fontSize: 15,
+    lineHeight: 125,
     fontWeight: 400,
   });
 
