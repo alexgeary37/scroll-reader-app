@@ -11,21 +11,25 @@ const TextFileTextView = ({ isOpen, fileID, close }) => {
       fontFamily: 'Times, "Times New Roman", Georgia, serif',
       fontSize: "32px",
       fontWeight: 700,
+      lineHeight: "110%",
     },
     h2: {
       fontFamily: 'Times, "Times New Roman", Georgia, serif',
       fontSize: "24px",
       fontWeight: 700,
+      lineHeight: "110%",
     },
     h3: {
       fontFamily: 'Times, "Times New Roman", Georgia, serif',
       fontSize: "18.72px",
       fontWeight: 700,
+      lineHeight: "110%",
     },
     paragraph: {
       fontFamily: 'Times, "Times New Roman", Georgia, serif',
       fontSize: "15px",
       fontWeight: 400,
+      lineHeight: "110%",
     },
   };
 
