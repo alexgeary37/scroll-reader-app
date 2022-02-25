@@ -20,16 +20,16 @@ class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT || 3002;
-    this.mongoUrl = process.env.ATLAS_URI;
-    // this.mongoUrl = process.env.MONGO_URI;
+    // this.mongoUrl = process.env.ATLAS_URI;
+    this.mongoUrl = process.env.MONGO_URI;
     this.middlewares();
     this.routes();
     this.initializeStyles();
   }
 
   middlewares() {
-    this.app.use(cors(corsOptions));
-    // this.app.use(cors());
+    // this.app.use(cors(corsOptions));
+    this.app.use(cors());
     this.app.options("*", cors());
     this.app.use(express.json({ limit: "50mb" }));
     this.app.use(express.urlencoded({ extended: false, limit: "50mb" }));
@@ -38,7 +38,12 @@ class Server {
       .connect(this.mongoUrl, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useFindAndModify: false,
+        // useFindAndModify: false,
+        // auth: {
+        //   authSource: "admin",
+        // },
+        // user: "username",
+        // pass: "password",
       })
       .then(() => console.log("Mongodb is connected..."));
 
