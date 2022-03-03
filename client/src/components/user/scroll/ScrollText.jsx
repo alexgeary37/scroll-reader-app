@@ -19,10 +19,12 @@ const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
 
   useEffect(() => {
     fetchText();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileID]);
 
   useEffect(() => {
     initializeStyle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [styles]);
 
   const fetchText = () => {
@@ -66,6 +68,7 @@ const ScrollText = ({ fileID, styles, selectAnswerEnabled, selectAnswer }) => {
       }
     }, 500);
     return () => clearInterval(intervalID);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionContext.scrollPosEntries]);
 
   const addScrollPosEntry = (currPos) => {

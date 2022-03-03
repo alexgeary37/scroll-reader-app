@@ -30,6 +30,7 @@ const TextAnswersConfigurationView = ({
 
   useEffect(() => {
     fetchText();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileID]);
 
   const fetchText = () => {

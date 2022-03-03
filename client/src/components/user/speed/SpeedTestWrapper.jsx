@@ -11,6 +11,7 @@ const SpeedTestWrapper = () => {
   useEffect(() => {
     setSessionIsComplete(sessionContext.sessionID === "");
     setSpeedTestIsComplete(sessionContext.speedTestIsComplete);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

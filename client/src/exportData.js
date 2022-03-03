@@ -3,6 +3,9 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { parse } from "json2csv";
 
+let numSpeedTexts;
+let numScrollTexts;
+
 const getScrollPositionData = async (sessionID) => {
   return axios
     .get("/api/getScrollPosEntries", {
@@ -303,40 +306,31 @@ const downloadZip = async (csvs, sessionID) => {
   const otherFiles = csvs.filter(
     (c) => !c.filename.includes("speed_") && !c.filename.includes("scroll_")
   );
-  let i = 1;
-  while (true) {
+
+  for (let i = 1; i <= numSpeedTexts; i++) {
     const files = speedTestFiles.filter((f) =>
       f.filename.includes(`speed_${i}`)
     );
-    if (files.length === 0) {
-      break;
-    } else {
-      let speedTextFolder = zip.folder(`speedTest/speed_${i}`);
-      files.forEach((csv) =>
-        speedTextFolder.file(`${csv.filename}.csv`, csv.data)
-      );
-    }
-    i++;
+    let speedTextFolder = zip.folder(`speedTest/speed_${i}`);
+    files.forEach((csv) =>
+      speedTextFolder.file(`${csv.filename}.csv`, csv.data)
+    );
   }
 
-  i = 1;
-  while (true) {
+  for (let i = 1; i <= numScrollTexts; i++) {
     const files = scrollTestFiles.filter((f) =>
       f.filename.includes(`scroll_${i}`)
     );
-    if (files.length === 0) {
-      break;
-    } else {
-      let scrollTextFolder = zip.folder(`scrollTest/scroll_${i}`);
-      files.forEach((csv) =>
-        scrollTextFolder.file(`${csv.filename}.csv`, csv.data)
-      );
-    }
-    i++;
+    let scrollTextFolder = zip.folder(`scrollTest/scroll_${i}`);
+    files.forEach((csv) =>
+      scrollTextFolder.file(`${csv.filename}.csv`, csv.data)
+    );
   }
+
   otherFiles.forEach((csv) => {
     zip.file(`${csv.filename}.csv`, csv.data);
   });
+
   zip.generateAsync({ type: "blob" }).then(function (content) {
     saveAs(content, `export_${sessionID}.zip`);
     return true;
@@ -351,6 +345,9 @@ export const exportData = async (sessionID, textFiles) => {
   csvs = csvs.concat(scrollDataCsvs);
 
   const readingSessionData = await getReadingSessionData(sessionID);
+  numSpeedTexts = readingSessionData.speedTexts.length;
+  numScrollTexts = readingSessionData.scrollTexts.length;
+
   const templateData = await getTemplateData(readingSessionData.templateID);
 
   const viewportDimensions = formatViewportDimensionsForCsv(

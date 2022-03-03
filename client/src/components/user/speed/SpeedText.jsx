@@ -9,10 +9,12 @@ const SpeedText = ({ fileID, styles }) => {
 
   useEffect(() => {
     fetchText();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileID]);
 
   useEffect(() => {
     initializeStyle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [styles]);
 
   const fetchText = () => {

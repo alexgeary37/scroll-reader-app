@@ -23,6 +23,7 @@ const ReadingSessionsSection = ({
     if (!templates.isFetching) {
       fetchReadingSessions();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [templates.isFetching]);
 
   const fetchReadingSessions = () => {

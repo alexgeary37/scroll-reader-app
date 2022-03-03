@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
-
 const auth = require("./routes/auth");
 const textFileRoutes = require("./routes/textFileRoutes");
 const sessionTemplateRoutes = require("./routes/sessionTemplateRoutes");
@@ -11,10 +10,10 @@ const scrollPosEntryRoutes = require("./routes/scrollPosEntryRoutes");
 const styleRoutes = require("./routes/styleRoutes");
 const styleModel = require("./models/styles");
 
-const corsOptions = {
-  origin: "https://scroll-reader-app.herokuapp.com",
-  optionsSuccessStatus: 200,
-};
+// const corsOptions = {
+//   origin: "https://scroll-reader-app.herokuapp.com",
+//   optionsSuccessStatus: 200,
+// };
 
 class Server {
   constructor() {
@@ -42,8 +41,8 @@ class Server {
         // auth: {
         //   authSource: "admin",
         // },
-        // user: "username",
-        // pass: "password",
+        // user: process.env.DB_USER,
+        // pass: process.env.DB_PASSWORD,
       })
       .then(() => console.log("Mongodb is connected..."));
 

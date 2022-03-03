@@ -12,6 +12,7 @@ const EndPage = () => {
       clearStorage(sessionContext);
       setVariablesCleared(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionContext]);
 
   return (

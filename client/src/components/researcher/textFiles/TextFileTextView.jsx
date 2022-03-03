@@ -25,6 +25,7 @@ const TextFileTextView = ({ isOpen, fileID, close }) => {
     if (isOpen) {
       fetchText();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   const fetchText = () => {

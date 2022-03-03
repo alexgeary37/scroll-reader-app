@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Modal, Button, Header, Dropdown, Input } from "semantic-ui-react";
+import { Modal, Button, Header, Dropdown } from "semantic-ui-react";
 
 // const MINIMUM_FONT_SIZE = 10;
 // const MINIMUM_LINEHEIGHT = 100;
@@ -47,10 +47,12 @@ const TextStylesView = ({ isOpen, styles, updateStyles }) => {
 
   useEffect(() => {
     updateStyles(h1, h2, h3, paragraph, false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setDropdownFontFamilies(formatDropdownFontFamilies());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [styles]);
 
   const formatDropdownFontFamilies = () => {

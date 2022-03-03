@@ -1,6 +1,5 @@
-import axios from "axios";
 import { Container, Grid, Button } from "semantic-ui-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import StylesView from "./styles/StylesView.jsx";
 import { clearStorage } from "../../utilities.js";
 import TextFilesSection from "./TextFilesSection.jsx";

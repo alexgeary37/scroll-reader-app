@@ -10,6 +10,7 @@ const StylesView = ({ isOpen, styles, setStyles, close }) => {
   useEffect(() => {
     // Fetch styles only on first render.
     fetchStyles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchStyles = () => {

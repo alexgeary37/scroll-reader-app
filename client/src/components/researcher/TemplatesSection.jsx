@@ -17,6 +17,7 @@ const TemplatesSection = ({
     if (!textFiles.isFetching) {
       fetchSessionTemplates();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [textFiles.isFetching]);
 
   const fetchSessionTemplates = () => {

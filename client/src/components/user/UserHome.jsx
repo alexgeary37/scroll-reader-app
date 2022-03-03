@@ -21,6 +21,7 @@ const UserHome = () => {
 
   useEffect(() => {
     fetchSessionTemplate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ const UserHome = () => {
     ) {
       speedTestRef.current.click();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionContext.template, sessionContext.sessionID, startSpeedTest]);
 
   const fetchSessionTemplate = () => {

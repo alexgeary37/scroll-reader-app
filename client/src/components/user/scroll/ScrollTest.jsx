@@ -62,6 +62,7 @@ const ScrollTest = () => {
       500
     );
     recordViewportResize(null, sessionContext);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -75,6 +76,7 @@ const ScrollTest = () => {
     setCurrentText(
       sessionContext.template.scrollTexts[sessionContext.fileNumber]
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionContext.fileNumber]);
 
   const initialiseTextIsComplete = () => {

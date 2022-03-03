@@ -38,12 +38,14 @@ const SpeedTest = () => {
       500
     );
     recordViewportResize(null, sessionContext);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setCurrentText(
       sessionContext.template.speedTest.texts[sessionContext.fileNumber]
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionContext.fileNumber]);
 
   const initialiseTextIsComplete = () => {

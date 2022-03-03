@@ -8,6 +8,7 @@ const TextFilesSection = ({ textFiles, setTextFiles, templates }) => {
   useEffect(() => {
     // Fetch text files only on first render.
     fetchTextFiles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchTextFiles = () => {

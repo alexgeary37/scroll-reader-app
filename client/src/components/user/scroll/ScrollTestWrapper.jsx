@@ -9,6 +9,7 @@ const ScrollTestWrapper = () => {
 
   useEffect(() => {
     setSessionIsComplete(sessionContext.sessionID === "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

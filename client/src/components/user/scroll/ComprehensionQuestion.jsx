@@ -51,6 +51,7 @@ const ComprehensionQuestion = ({
 
   useEffect(() => {
     componentHeight(ref.current.offsetHeight);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref]);
 
   const handleChangeAnswer = (event) => {

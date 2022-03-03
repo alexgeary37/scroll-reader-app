@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Input, Button, Modal, Header } from "semantic-ui-react";
+import { Input, Button, Modal } from "semantic-ui-react";
 
 const CreateStyle = ({ isOpen, styles, addStyle, close }) => {
   const [style, setStyle] = useState("");
