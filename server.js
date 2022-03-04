@@ -32,6 +32,7 @@ class Server {
     this.app.options("*", cors());
     this.app.use(express.json({ limit: "50mb" }));
     this.app.use(express.urlencoded({ extended: false, limit: "50mb" }));
+    this.app.set("trust proxy", "loopback, 130.217.218.13");
 
     mongoose
       .connect(this.mongoUrl, {
