@@ -10,10 +10,10 @@ const scrollPosEntryRoutes = require("./routes/scrollPosEntryRoutes");
 const styleRoutes = require("./routes/styleRoutes");
 const styleModel = require("./models/styles");
 
-// const corsOptions = {
-//   origin: "https://scroll-reader-app.herokuapp.com",
-//   optionsSuccessStatus: 200,
-// };
+const corsOptions = {
+  origin: "https://scrolltoread.cms.waikato.ac.nz",
+  optionsSuccessStatus: 200,
+};
 
 class Server {
   constructor() {
@@ -27,23 +27,21 @@ class Server {
   }
 
   middlewares() {
-    // this.app.use(cors(corsOptions));
     this.app.use(cors());
     this.app.options("*", cors());
     this.app.use(express.json({ limit: "50mb" }));
     this.app.use(express.urlencoded({ extended: false, limit: "50mb" }));
-    this.app.set("trust proxy", "loopback, 130.217.218.13");
 
     mongoose
       .connect(this.mongoUrl, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        // useFindAndModify: false,
-        // auth: {
-        //   authSource: "admin",
-        // },
-        // user: process.env.DB_USER,
-        // pass: process.env.DB_PASSWORD,
+        //useFindAndModify: false,
+        auth: {
+          authSource: "admin",
+        },
+        user: process.env.DB_USER,
+        pass: process.env.DB_PASSWORD,
       })
       .then(() => console.log("Mongodb is connected..."));
 
